@@ -30,6 +30,14 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.1" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="106dp"
+        android:layout_height="47dp"
+        android:text="git test"
+        tools:layout_editor_absoluteX="86dp"
+        tools:layout_editor_absoluteY="265dp" />
+
     "
 
 </androidx.constraintlayout.widget.ConstraintLayout>
