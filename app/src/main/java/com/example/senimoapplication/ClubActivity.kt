@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import com.example.senimoapplication.fragment.BoardFragment
 import com.example.senimoapplication.fragment.ChatFragment
@@ -29,13 +30,35 @@ class ClubActivity : AppCompatActivity() {
         tabLayout.setupWithViewPager(viewPager)
 
         val icBack = findViewById<ImageView>(R.id.icBack)
+        val img = findViewById<ImageView>(R.id.imgLike)
+        val tvClubName = findViewById<TextView>(R.id.tvClubName)
 
+
+
+
+
+        // 1) 앱 바 기능 구현
+        // 뒤로가기 버튼
         icBack.setOnClickListener {
             val intent = Intent(this@ClubActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
+        // 모임명 변경 (데이터 연동 필요)
+        // tvClubName.text = 서버에서 받아온 값
 
+        // 모임 찜 기능 (데이터 연동 필요)
+        var cnt = 0
+        img.setOnClickListener {
+            cnt++
+            if (cnt%2 == 1) {
+                img.setImageResource(R.drawable.ic_like)
+                // 서버로 데이터 보내기
+            }else{
+                img.setImageResource(R.drawable.ic_emptylike)
+                // 서버로 데이터 보내기
+            }
+        }
 
 
 

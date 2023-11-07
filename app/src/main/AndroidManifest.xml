@@ -13,6 +13,9 @@
         android:theme="@style/Theme.SenimoApplication"
         tools:targetApi="34">
         <activity
+            android:name=".ScheduleActivity"
+            android:exported="false" />
+        <activity
             android:name=".ClubActivity"
             android:exported="true">
             <intent-filter>
@@ -23,12 +26,10 @@
         </activity>
         <activity
             android:name=".SplashActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

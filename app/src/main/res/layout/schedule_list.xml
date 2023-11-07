@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/card_shape"
+        android:backgroundTint="#59EBEAEA"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tv_C_ScheduleName"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/spoqabold"
+            android:text="동명동 맛집 탐방"
+            android:textColor="@color/txt_gray90"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_C_dday" />
+
+        <TextView
+            android:id="@+id/tv_C_name"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:fontFamily="@font/spoqabold"
+            android:text="모임이름"
+            android:textColor="@color/bg_darkgray40"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_C_ScheduleName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_C_ScheduleName"
+            app:layout_constraintTop_toBottomOf="@+id/tv_C_ScheduleName" />
+
+        <TextView
+            android:id="@+id/tvRealTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="-1dp"
+            android:fontFamily="@font/spoqabold"
+            android:text="2023.10.30(월) 19:00"
+            android:textColor="@color/txt_gray80"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTime"
+            app:layout_constraintStart_toEndOf="@+id/tvTime"
+            app:layout_constraintTop_toTopOf="@+id/tvTime"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tvRealLoca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="-5dp"
+            android:fontFamily="@font/spoqabold"
+            android:text="광주 동구 동명동 야간비행"
+            android:textColor="@color/txt_gray80"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvLoca"
+            app:layout_constraintStart_toEndOf="@+id/tvLoca"
+            app:layout_constraintTop_toBottomOf="@+id/tvTime"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tvFee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
+            android:fontFamily="@font/spoqabold"
+            android:text="회비"
+            android:textColor="@color/txt_gray80"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/tvLoca"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tvLoca"
+            app:layout_constraintTop_toBottomOf="@+id/tvLoca" />
+
+        <TextView
+            android:id="@+id/tvLoca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-5dp"
+            android:fontFamily="@font/spoqabold"
+            android:text="장소"
+            android:textColor="@color/txt_gray80"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/tvTime"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tvTime"
+            app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:fontFamily="@font/spoqabold"
+            android:text="일시"
+            android:textColor="@color/txt_gray80"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_C_ScheduleName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_C_ScheduleName"
+            app:layout_constraintTop_toBottomOf="@+id/tv_C_ScheduleName" />
+
+        <TextView
+            android:id="@+id/tvRealFee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="-5dp"
+            android:fontFamily="@font/spoqabold"
+            android:text="2만원"
+            android:textColor="@color/txt_gray80"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvFee"
+            app:layout_constraintStart_toEndOf="@+id/tvFee"
+            app:layout_constraintTop_toBottomOf="@+id/tvLoca"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/img_C"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="16dp"
+            android:adjustViewBounds="true"
+            android:backgroundTintMode="add"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_sample"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRealFee"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_C_name"
+            app:layout_constraintVertical_bias="1.0"
+            app:shapeAppearanceOverlay="@style/RoundedImageView" />
+
+        <TextView
+            android:id="@+id/tv_C_dday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/tag_shape_color1"
+            android:fontFamily="@font/spoqaregular"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="20일 남음"
+            android:textColor="@color/bg_darkgray10"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_C_State"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/schedule_tag_shape"
+            android:fontFamily="@font/spoqaregular"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="모집중"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/img_C"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0" />
+
+        <TextView
+            android:id="@+id/tv_C_allMember"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/tag_shape_color1"
+            android:fontFamily="@font/spoqaregular"
+            android:paddingLeft="44dp"
+            android:text="/ 20"
+            android:textColor="@color/bg_darkgray10"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_C_State"
+            app:layout_constraintEnd_toStartOf="@+id/tv_C_State"
+            app:layout_constraintTop_toTopOf="@+id/tv_C_State"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tv_C_attendance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqaregular"
+            android:gravity="right"
+            android:paddingRight="40dp"
+            android:text="33"
+            android:textColor="@color/bg_darkgray10"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_C_allMember"
+            app:layout_constraintEnd_toEndOf="@+id/tv_C_allMember"
+            app:layout_constraintTop_toTopOf="@+id/tv_C_allMember"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginStart="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_C_allMember"
+            app:layout_constraintStart_toStartOf="@+id/tv_C_allMember"
+            app:layout_constraintTop_toTopOf="@+id/tv_C_allMember"
+            app:layout_constraintVertical_bias="0.44"
+            app:srcCompat="@drawable/ic_member_white" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
