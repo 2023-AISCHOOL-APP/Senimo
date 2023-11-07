@@ -13,7 +13,7 @@
         android:theme="@style/Theme.SenimoApplication"
         tools:targetApi="34">
         <activity
-            android:name=".SplashActivity"
+            android:name=".ClubActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,10 +22,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".SplashActivity"
+            android:exported="false">
 
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"></activity>
     </application>
 
 </manifest>

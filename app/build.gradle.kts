@@ -7,7 +7,7 @@ android {
   namespace = "com.example.senimoapplication"
   compileSdk = 34
   viewBinding{
-    enable = true
+    this.enable = true
   }
 
   defaultConfig {
