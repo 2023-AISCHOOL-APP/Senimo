@@ -20,6 +20,9 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".ScheduleActivity"
+            android:exported="false" />
+        <activity
             android:name=".ClubActivity"
             android:exported="true"></activity>
         <activity
