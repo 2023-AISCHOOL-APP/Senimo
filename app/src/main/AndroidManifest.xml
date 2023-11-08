@@ -13,11 +13,18 @@
         android:theme="@style/Theme.SenimoApplication"
         tools:targetApi="34">
         <activity
+<<<<<<< Updated upstream
             android:name=".EnterMyInfoActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
+=======
+            android:name=".Activity_main.CreateMeetingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity_main.SearchActivity"
+>>>>>>> Stashed changes
             android:exported="false" />
         <activity
             android:name=".ScheduleActivity"
@@ -35,6 +42,12 @@
             </intent-filter>
         </activity>
         <activity
+<<<<<<< Updated upstream
+=======
+            android:name=".SplashActivity"
+            android:exported="false" />
+        <activity
+>>>>>>> Stashed changes
             android:name=".MainActivity"
             android:exported="true" />
     </application>
