@@ -13,7 +13,17 @@
         android:theme="@style/Theme.SenimoApplication"
         tools:targetApi="34">
         <activity
+            android:name=".EnterMyInfoActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".ClubActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,13 +32,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SplashActivity"
-            android:exported="false">
-
-        </activity>
-        <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>
