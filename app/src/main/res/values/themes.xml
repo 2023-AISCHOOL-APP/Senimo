@@ -8,9 +8,12 @@
 
     <style name="Theme.SenimoApplication" parent="Base.Theme.SenimoApplication" />
     <!-- 모임페이지 메뉴스타일   -->
+    <style name="tab_text" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textSize">22dp</item>
+    </style>
     <style name="TabLayoutTextStyle">
-        <item name="android:textSize">26sp</item>
-        <item name="android:fontFamily">@font/spoqabold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:color">@color/txt_gray30</item>
     </style>
     <!-- 모임페이지 일정 사진 스타일 -->
@@ -30,7 +33,7 @@
         <item name="android:minWidth">130dp</item>
         <item name="android:background">#FF0000</item>
         <item name="android:height">200dp</item>
-        <item name="android:fontFamily">@font/spoqabold</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
         <item name="android:textSize">18sp</item>
     </style>
 

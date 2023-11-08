@@ -10,7 +10,7 @@
         android:id="@+id/button"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fontFamily="@font/spoqabold"
+        android:fontFamily="@font/pretendard_bold"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:text="시니모"
