@@ -5,8 +5,7 @@
     android:id="@+id/tv_C_schedule_intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/bg_darkgray40"
-    tools:context=".ScheduleActivity">
+    tools:context=".Club.Activity_club.ScheduleActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
@@ -51,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="22dp"
-        android:src="@drawable/ic_more"
+        android:src="@drawable/ic_more_button"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar2" />

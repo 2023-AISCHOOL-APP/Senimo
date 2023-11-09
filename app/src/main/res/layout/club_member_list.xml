@@ -64,7 +64,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/userProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/userProfile"
-        app:srcCompat="@drawable/ic_more" />
+        app:srcCompat="@drawable/ic_more_button" />
 
     <View
         android:layout_width="match_parent"

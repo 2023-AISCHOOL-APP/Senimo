@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
-    tools:context=".fragment_main.HomeMainFragment"
+    tools:context=".MainPage.fragment_main.HomeMainFragment"
     tools:layout_editor_absoluteX="-11dp"
     tools:layout_editor_absoluteY="0dp">
 

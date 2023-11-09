@@ -85,7 +85,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fl"
-        android:name="com.example.senimoapplication.fragment_main.HomeMainFragment"
+        android:name="com.example.senimoapplication.MainPage.fragment_main.HomeMainFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:cardUseCompatPadding="true"

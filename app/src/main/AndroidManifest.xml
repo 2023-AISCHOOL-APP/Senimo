@@ -13,43 +13,36 @@
         android:theme="@style/Theme.SenimoApplication"
         tools:targetApi="34">
         <activity
-<<<<<<< Updated upstream
-            android:name=".EnterMyInfoActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
-=======
-            android:name=".Activity_main.CreateMeetingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity_main.SearchActivity"
->>>>>>> Stashed changes
-            android:exported="false" />
-        <activity
-            android:name=".ScheduleActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ClubActivity"
-            android:exported="true"></activity>
-        <activity
-            android:name=".SplashActivity"
+            android:name=".Login.Activity_login.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-<<<<<<< Updated upstream
-=======
-            android:name=".SplashActivity"
+            android:name=".Login.Activity_login.LoginActivity"
             android:exported="false" />
         <activity
->>>>>>> Stashed changes
-            android:name=".MainActivity"
-            android:exported="true" />
+            android:name=".Login.Activity_login.EnterMyInfoActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
+            android:name=".MainPage.Activity_main.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainPage.Activity_main.SearchActivity"
+            android:exported="false" />
+        <activity android:name=".MainPage.Activity_main.CreateMeetingActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".Club.Activity_club.ScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Club.Activity_club.ClubActivity"
+            android:exported="false"/>
+
+
     </application>
 
 </manifest>
