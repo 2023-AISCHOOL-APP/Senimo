@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    tools:context=".fragment_main.HomeMainFragment"
+    tools:layout_editor_absoluteX="-11dp"
+    tools:layout_editor_absoluteY="0dp">
+
+    <ScrollView
+        android:id="@+id/sv_M_frag1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/Img_M_SearchBar"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/bar_search_main"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/img_M_Searchicon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_search_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_M_Search"
+                app:layout_constraintEnd_toStartOf="@+id/tv_M_Search"
+                app:layout_constraintTop_toTopOf="@+id/tv_M_Search" />
+
+            <ImageView
+                android:id="@+id/imgSixth"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_financial"
+                app:layout_constraintStart_toEndOf="@+id/imgFifth"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_Hobby" />
+
+            <ImageView
+                android:id="@+id/imgFifth"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_selfimprovement"
+                app:layout_constraintStart_toStartOf="@+id/imgFirst"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_Exercise" />
+
+            <ImageView
+                android:id="@+id/imgFourth"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_trip"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgThird"
+                app:layout_constraintTop_toBottomOf="@+id/Img_M_SearchBar" />
+
+            <TextView
+                android:id="@+id/tv_M_Trip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="여행"
+                android:textColor="@color/txt_gray90"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/imgFourth"
+                app:layout_constraintStart_toStartOf="@+id/imgFourth"
+                app:layout_constraintTop_toBottomOf="@+id/imgFourth" />
+
+            <TextView
+                android:id="@+id/tv_M_Selfimprovement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="자기계발"
+                android:textColor="@color/txt_gray90"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/imgFifth"
+                app:layout_constraintStart_toStartOf="@+id/imgFifth"
+                app:layout_constraintTop_toBottomOf="@+id/imgFifth" />
+
+            <TextView
+                android:id="@+id/tv_M_Financial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="재테크"
+                android:textColor="@color/txt_gray90"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/imgSixth"
+                app:layout_constraintStart_toStartOf="@+id/imgSixth"
+                app:layout_constraintTop_toBottomOf="@+id/imgSixth" />
+
+            <ImageView
+                android:id="@+id/imgThird"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_concert"
+                app:layout_constraintStart_toEndOf="@+id/imgSecond"
+                app:layout_constraintTop_toBottomOf="@+id/Img_M_SearchBar" />
+
+            <TextView
+                android:id="@+id/tv_M_Concert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="전시/공연"
+                android:textColor="@color/txt_gray90"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/imgThird"
+                app:layout_constraintStart_toStartOf="@+id/imgThird"
+                app:layout_constraintTop_toBottomOf="@+id/imgThird" />
+
+            <ImageView
+                android:id="@+id/imgSecond"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_hobby"
+                app:layout_constraintStart_toEndOf="@+id/imgFirst"
+                app:layout_constraintTop_toBottomOf="@+id/Img_M_SearchBar" />
+
+            <TextView
+                android:id="@+id/tv_M_Hobby"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="취미"
+                android:textColor="@color/txt_gray90"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/imgSecond"
+                app:layout_constraintStart_toStartOf="@+id/imgSecond"
+                app:layout_constraintTop_toBottomOf="@+id/imgSecond" />
+
+            <TextView
+                android:id="@+id/tv_M_Search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/pretendard_medium"
+                android:hint="어떤 모임을 좋아하세요?"
+                android:textColorHint="@color/txt_gray30"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/Img_M_SearchBar"
+                app:layout_constraintEnd_toEndOf="@+id/Img_M_SearchBar"
+                app:layout_constraintStart_toStartOf="@+id/Img_M_SearchBar"
+                app:layout_constraintTop_toTopOf="@+id/Img_M_SearchBar" />
+
+            <ImageView
+                android:id="@+id/imgFirst"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_exercise"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Img_M_SearchBar" />
+
+            <TextView
+                android:id="@+id/tv_M_Exercise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="운동"
+                android:textColor="@color/txt_gray90"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/imgFirst"
+                app:layout_constraintStart_toStartOf="@+id/imgFirst"
+                app:layout_constraintTop_toBottomOf="@+id/imgFirst" />
+
+            <TextView
+                android:id="@+id/tv_M_Locationmeeting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="내 지역 인기 모임"
+                android:textColor="@color/txt_gray90"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/imgFifth"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_Selfimprovement" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_M_PopularMeeting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tv_M_Locationmeeting"
+                app:layout_constraintStart_toStartOf="@+id/tv_M_Locationmeeting"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_Locationmeeting" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/Img_M_Schecule_Circle"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginEnd="2dp"
+        android:src="@drawable/myschedule_shape_round"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_M_ScheduleBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="0dp"
+            android:layout_height="92dp"
+            android:layout_marginBottom="14dp"
+            android:backgroundTint="#E5908A"
+            app:cornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="15dp"
+            android:backgroundTint="#B87874"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:cornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/button6"
+            app:layout_constraintStart_toStartOf="@+id/button6"
+            app:layout_constraintTop_toTopOf="@+id/button6" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintBottom_toBottomOf="@+id/button4"
+            app:layout_constraintEnd_toEndOf="@+id/button4"
+            app:layout_constraintStart_toStartOf="@+id/button4"
+            app:layout_constraintTop_toTopOf="@+id/button4">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                app:cardCornerRadius="15dp">
+
+                <ImageView
+                    android:id="@+id/Img_M_Meeting"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/tea_img"
+                    app:srcCompat="@drawable/tea_img" />
+
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_M_ScheduleTitle"
+            android:layout_width="150dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center_vertical"
+            android:text="동명동 티 타임"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@+id/button4"
+            app:layout_constraintTop_toTopOf="@+id/button4" />
+
+        <TextView
+            android:id="@+id/tv_M_ScheduleContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_regular"
+            android:gravity="center_vertical"
+            android:text="우리 같이 차 마셔요~"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_M_ScheduleTitle"
+            app:layout_constraintStart_toStartOf="@+id/tv_M_ScheduleTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tv_M_ScheduleTitle" />
+
+        <TextView
+            android:id="@+id/tv_M_ScheduleDday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="D-20"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView41"
+            app:layout_constraintEnd_toEndOf="@+id/imageView41"
+            app:layout_constraintStart_toStartOf="@+id/imageView41"
+            app:layout_constraintTop_toTopOf="@+id/imageView41" />
+
+        <ImageView
+            android:id="@+id/imageView39"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="25dp"
+            android:src="@drawable/ic_myschedule_white"
+            app:layout_constraintBottom_toBottomOf="@+id/button6"
+            app:layout_constraintEnd_toEndOf="@+id/button6"
+            app:layout_constraintTop_toTopOf="@+id/button6" />
+
+        <ImageView
+            android:id="@+id/imageView41"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/shape_homemain_page"
+            app:layout_constraintBottom_toBottomOf="@+id/button4"
+            app:layout_constraintStart_toStartOf="@+id/tv_M_ScheduleContent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_M_ScheduleContent" />
+
+        <TextView
+            android:id="@+id/tv_M_ScheduleDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="11.1(수) - 11.3(금)"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_M_ScheduleDday"
+            app:layout_constraintStart_toEndOf="@+id/imageView41"
+            app:layout_constraintTop_toTopOf="@+id/tv_M_ScheduleDday" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
