@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.VO.ScheduleVO
 
@@ -12,23 +13,21 @@ class ScheduleAdapter(val context: Context, val layout : Int, val data : ArrayLi
 RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
     val inflater = LayoutInflater.from(context)
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val tvClubName : TextView // 모임명
+
         val tvClubScheduleName : TextView // 일정명
         val tvScheduleDay : TextView // D-Day
         val tvScheduleState : TextView // 모집상태
-        val tvScheduleMemNum : TextView // 전체 모집 인원
-        val tvScheduleAttendance : TextView // 참가 신청 인원
+        val tvScheduleMemNum : TextView // 모집 인원
         val tvScheduleLoca : TextView // 장소
         val tvScheduleFee : TextView // 회비
         val tvScheduleDate : TextView // 일시
 
         init {
-            tvClubName = view.findViewById(R.id.tv_C_name)
+
             tvClubScheduleName = view.findViewById(R.id.tv_C_ScheduleName)
             tvScheduleDay = view.findViewById(R.id.tv_C_dday)
             tvScheduleState = view.findViewById(R.id.tv_C_State)
             tvScheduleMemNum = view.findViewById(R.id.tv_C_allMember)
-            tvScheduleAttendance = view.findViewById(R.id.tv_C_attendance)
             tvScheduleLoca = view.findViewById(R.id.tvRealLoca)
             tvScheduleFee = view.findViewById(R.id.tvRealFee)
             tvScheduleDate = view.findViewById(R.id.tvRealTime)
@@ -46,14 +45,45 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvClubName.text = data[position].clubName
+
         holder.tvClubScheduleName.text = data[position].scheduleName
-        holder.tvScheduleDate.text = data[position].scheduleDate
+        holder.tvScheduleDate.text = formatDate(data[position].scheduleDate)
         holder.tvScheduleLoca.text = data[position].scheduleLoca
-        holder.tvScheduleFee.text = data[position].scheduleFee
-        holder.tvScheduleDay.text = "${data[position].dday}일 남음"
-        holder.tvScheduleMemNum.text = "/ ${data[position].allMembers.toString()}"
-        holder.tvScheduleAttendance.text = data[position].attendance.toString()
+        holder.tvScheduleFee.text = "${data[position].scheduleFee}원"
+        holder.tvScheduleDay.text = dDate(data[position].scheduleDate)
+        holder.tvScheduleState.text = data[position].state
+        holder.tvScheduleMemNum.text = "${data[position].attendance}/${data[position].allMembers.toString()}"
+
+
+        val state = holder.tvScheduleState.text
+        val dDay = holder.tvScheduleDay.text
+
+
+        // d-day 스타일 변경
+        val dDayList = mutableListOf<String>()
+        for (i in 0..10) {
+            val dDay = if (i == 0) {
+                "D-day"
+            } else {
+                "D-${i}"
+            }
+            dDayList.add(dDay)
+        }
+
+        if (dDay in dDayList){
+            holder.tvScheduleDay.setBackgroundResource(R.drawable.dday_soon)
+        }
+
+
+        // 모집 상태 태그 스타일 변경
+        if(state == "모집마감"){
+            holder.tvScheduleState.setBackgroundResource(R.drawable.tag_close)
+            holder.tvScheduleState.setTextColor(ContextCompat.getColor(context, R.color.white))
+        }
+
+
 
     }
+
+
 }

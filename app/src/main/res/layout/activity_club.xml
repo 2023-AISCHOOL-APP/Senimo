@@ -45,7 +45,7 @@
         app:srcCompat="@drawable/ic_back" />
 
     <com.google.android.material.tabs.TabLayout
-        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabTextAppearance="@style/tab_text"
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

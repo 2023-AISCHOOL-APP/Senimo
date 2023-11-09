@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/member_option1"
+        android:title="운영진으로 전환하기"
+        app:actionLayout="@style/MenuStyle"/>
+    <item
+        android:id="@+id/member_option2"
+        android:title="일반회원 전환하기"
+        app:actionLayout="@style/MenuStyle"/>
+    <item
+        android:id="@+id/member_option3"
+        android:title="모임장 위임하기"
+        app:actionLayout="@style/MenuStyle"/>
+    <item
+        android:id="@+id/member_option4"
+        android:title="강퇴하기"
+        app:actionLayout="@style/MenuStyle"/>
+</menu>

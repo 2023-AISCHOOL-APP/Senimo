@@ -37,6 +37,7 @@ class ScheduleMemberAdapter(val context: Context, val layout : Int, val data : A
         holder.tvUserName.text = data[position].userName
         holder.tvUserLevel.text = data[position].userLevel
         holder.imgUserProfile.setImageResource(data[position].imgId)
+        holder.imgUserLevel.setImageResource(data[position].sticker)
     }
 
     override fun getItemCount(): Int {

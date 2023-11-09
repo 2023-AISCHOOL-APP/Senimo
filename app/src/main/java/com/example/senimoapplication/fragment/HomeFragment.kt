@@ -6,8 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout.HORIZONTAL
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.senimoapplication.KeywordAdapter
 import com.example.senimoapplication.MainActivity
 import com.example.senimoapplication.MemberAdapter
 import com.example.senimoapplication.R
@@ -31,13 +35,32 @@ class HomeFragment : Fragment() {
         val rvMember = view.findViewById<RecyclerView>(R.id.rvMember)
         val memberList : ArrayList<MemberVO> = ArrayList()
         val m_adapter = MemberAdapter(requireContext(),R.layout.club_member_list, memberList)
+        val keywordList : ArrayList<String> = ArrayList()
+        val k_adapter = KeywordAdapter(requireContext(),R.layout.keyword_list, keywordList)
+        val rvKeyword = view.findViewById<RecyclerView>(R.id.rvKeyword)
+        val btnJoinClub = view.findViewById<Button>(R.id.btnJoinClub)
+
+
+
+        // 모임 키워드 리사이클러뷰 어댑터 연결
+        rvKeyword.adapter = k_adapter
+        rvKeyword.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+
+        // 모임 키워드 가데이터
+        keywordList.add("운동")
+        keywordList.add("취미")
+        keywordList.add("전시/공연")
+        keywordList.add("여행")
+
 
         // 일정 리사이클러뷰 어댑터 연결
         rvSchedule.adapter = s_adapter
         rvSchedule.layoutManager=LinearLayoutManager(view.context)
 
-        scheduleList.add(ScheduleVO("양희준과 아이들","신나는 크리스마스 파티","2023.12.20(수) 17:00","3만원", "광주 동구 제봉로 대성학원 3층", "32",26,20,"모집중" ))
-        scheduleList.add(ScheduleVO("양희준과 아이들","신나는 크리스마스 파티","2023.12.20(수) 17:00","3만원", "광주 동구 제봉로 대성학원 3층", "32",26,20,"모집중" ))
+        // 모임 일정 가데이터
+        scheduleList.add(ScheduleVO("신나는 크리스마스 파티","2023-12-20 17:00","30000", "광주 동구 제봉로 대성학원 3층", 26,20,"모집중" ))
+        scheduleList.add(ScheduleVO("짬뽕이 제일 좋아","2023-11-8 17:00","10000", "광주 동구 도야짬뽕", 10,10,"모집마감" ))
+        //scheduleList.add(ScheduleVO("점심을 공유합시다","2023-11-6 17:00","30000", "광주 동구 동부식당", 26,20,"모집마감" ))
 
         // 모임 상세 페이지로 이동
         rvSchedule.addOnItemTouchListener(
@@ -56,6 +79,7 @@ class HomeFragment : Fragment() {
         // 전체 회원 리사이클러뷰 어탭터 연결
         rvMember.adapter = m_adapter
         rvMember.layoutManager=LinearLayoutManager(view.context)
+
         // 전체 회원 목록 가데이터
         memberList.add(MemberVO("양희준", "모임장", R.drawable.img_sample))
         memberList.add(MemberVO("최효정", "운영진", R.drawable.img_sample))
@@ -80,6 +104,19 @@ class HomeFragment : Fragment() {
 //            })
 //        )
 
+        // 모임 가입 상태 체크 및 버튼 전환 (join
+        var joinstate : Int = 0
+        btnJoinClub.setOnClickListener {
+            if(joinstate == 0){
+                btnJoinClub.setBackgroundColor(ContextCompat.getColor(view.context, R.color.point))
+                btnJoinClub.text = "모임 탈퇴하기"
+                joinstate = 1
+            }else{
+                btnJoinClub.setBackgroundColor(ContextCompat.getColor(view.context, R.color.main))
+                btnJoinClub.text = "모임 가입하기"
+                joinstate = 0
+            }
+        }
 
         return view
     }

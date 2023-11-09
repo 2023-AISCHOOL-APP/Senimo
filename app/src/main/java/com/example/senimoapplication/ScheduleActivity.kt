@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,8 +34,21 @@ class ScheduleActivity : AppCompatActivity() {
         rvAttendance.layoutManager = GridLayoutManager(this,3)
 
         val btnJoinSchedule = findViewById<Button>(R.id.btnJoinSchedule)
+        val tvScheduleIntro = findViewById<TextView>(R.id.tv_C_Schedule_Intro)
+        val tvScheduleName = findViewById<TextView>(R.id.tv_C_ScheduleName3)
+        val tvDate = findViewById<TextView>(R.id.tv_C_S_Time)
 
-        
+        //가데이터
+
+        tvDate.text = formatDate("2023-11-18 19:00")
+        tvScheduleName.text = "수사모(수영을 사랑하는 사람들의 모임) 정모일정안내"
+        tvScheduleIntro.text = """수영 정모에 처음 참석하시는 분들께.. 
+            |수사모는 수영을 좋아하고 정보를 교류하는 모임이에요!! 
+            |
+            |참여자 누구나 환영하고 모임 20분 전까지 오셔서 회원들과 인사 나누시고 수영장으로 들어갈게요~ :) 
+            |
+            |일정에 관한 문의는 채팅방을 이용해주시기 바래요!""".trimMargin()
+
 
 
         // 회원 목록 가데이터
