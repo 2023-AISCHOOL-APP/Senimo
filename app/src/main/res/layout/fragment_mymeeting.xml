@@ -38,16 +38,18 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_M_Meeting_Schedule"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
-                app:layout_constraintEnd_toEndOf="@+id/textView5"
-                app:layout_constraintStart_toStartOf="@+id/textView5"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/Img_M_Meeting_Shcedule_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_more"
                 app:layout_constraintEnd_toEndOf="@+id/rv_M_Meeting_Schedule"
                 app:layout_constraintStart_toStartOf="@+id/rv_M_Meeting_Schedule"
@@ -66,22 +68,21 @@
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+                app:layout_constraintTop_toBottomOf="@+id/Img_M_Meeting_Shcedule_more" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_M_Meeting_join"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="@+id/textView7"
                 app:layout_constraintStart_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/Img_M_Meeting_join_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:src="@drawable/ic_more"
                 app:layout_constraintEnd_toEndOf="@+id/rv_M_Meeting_join"
                 app:layout_constraintStart_toStartOf="@+id/rv_M_Meeting_join"
@@ -100,22 +101,21 @@
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+                app:layout_constraintTop_toBottomOf="@+id/Img_M_Meeting_join_more" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_M_Meeting_interest"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="@+id/textView8"
                 app:layout_constraintStart_toStartOf="@+id/textView8"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/Img_M_Meeting_interest_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:src="@drawable/ic_more"
                 app:layout_constraintBottom_toBottomOf="parent"
