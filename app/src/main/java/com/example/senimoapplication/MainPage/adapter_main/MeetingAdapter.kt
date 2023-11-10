@@ -62,7 +62,7 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // ViewHolder클래스가 찾아온 뷰들을 컨트롤 할 수 있는 곳
         // 데이터 + 디자인
-        holder.tv_M_Gu.text = data[position].gu
+//        holder.tv_M_Gu.text = data[position].gu
         holder.tv_M_Title.text = data[position].title
         holder.tv_M_Content.text = data[position].content
         holder.tv_M_Keyword.text = data[position].keyword
