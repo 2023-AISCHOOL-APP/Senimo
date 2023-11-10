@@ -22,7 +22,6 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-15dp"
         android:fontFamily="@font/pretendard_regular"
         android:text="시니어들의 모임"
         android:textSize="16dp"

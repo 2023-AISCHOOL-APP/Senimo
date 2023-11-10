@@ -88,6 +88,7 @@ class EnterMyInfoActivity : AppCompatActivity() {
             DongAdapter.updateData(gwangjuDistricts)
           }
         }
+        rvDong.smoothScrollToPosition(0)
       }
     }
     btnEnterInfo.setOnClickListener {
