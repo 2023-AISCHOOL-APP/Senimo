@@ -2,14 +2,29 @@ package com.example.senimoapplication.MainPage.VO_main
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 
 data class MeetingVO(
-    val gu : String = "",
-    val title: String = "",
-    val content: String = "",
-    val keyword: String = "",
-    val attendance : Int = 0,
-    val allMember : Int = 0,
+
+    val gu : String = "광산구",
+    @SerializedName("Club_name")
+    var title: String ,
+    @SerializedName("Club_introduce")
+    var content: String ,
+    @SerializedName("keyword_name")
+    var keyword: String,
+    @SerializedName("Member_cnt")
+    var attendance : Int ,
+    @SerializedName("Max_CNT")
+    var allMember : Int,
+
+
+
+//    val title: String = "",
+//    val content: String = "",
+//    val keyword: String = "",
+//    val attendance : Int = 0,
+//    val allMember : Int = 0,
     // val person: String = "",
     val imageUri: String = "", // 이미지의 URI 또는 경로를 저장할 필드
     // val backicon : String = ""
@@ -23,11 +38,11 @@ data class MeetingVO(
         allMember = parcel.readInt(),
         // person = parcel.readString() ?: "",
         imageUri = parcel.readString() ?: "",
-        // backicon = parcel.readString() ?: ""
+       // backicon = parcel.readString() ?: ""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(gu)
+//        parcel.writeString(gu)
         parcel.writeString(title)
         parcel.writeString(content)
         parcel.writeString(keyword)
