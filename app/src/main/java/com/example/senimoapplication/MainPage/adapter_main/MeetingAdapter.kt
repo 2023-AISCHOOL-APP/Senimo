@@ -16,11 +16,20 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
 
     private var showAllItems = false // 플래그 추가
 
-    val inflater = LayoutInflater.from(context)
-
     fun setShowAllItems(showAll : Boolean) {
         showAllItems = showAll
         notifyDataSetChanged() // 변경 사항을 반영하기 위해 어댑터를 갱신
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    private var itemClickListener : OnItemClickListener? = null
+
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -53,10 +62,16 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(layout,parent,false)
-        return ViewHolder(view)
+        val holder = ViewHolder(view)
+
+        // 아이템 클릭 이벤트 처리
+        holder.itemView.setOnClickListener {
+            itemClickListener?.onItemClick(holder.adapterPosition)
+        }
+
+        return holder
+
     }
-
-
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

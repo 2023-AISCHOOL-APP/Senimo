@@ -10,15 +10,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.R
+import com.example.senimoapplication.databinding.MeetingListBinding
 
-// val moimlist : List<ScheduleVO>
-class MymeetingFragment(private val myschedulList : List<ScheduleVO>, val joinList : List<MeetingVO>, val interestList : List<MeetingVO> ) : Fragment() {
+class MymeetingFragment(private val myscheduleList : List<ScheduleVO>, val joinList : List<MeetingVO>, val interestList : List<MeetingVO> ) : Fragment() {
 
     private var showAllItems = false // 플래그 추가
     @SuppressLint("MissingInflatedId")
@@ -45,7 +46,7 @@ class MymeetingFragment(private val myschedulList : List<ScheduleVO>, val joinLi
 
 
         // 모임 일정, 가입한 모임, 관심 모임 어댑터
-        val myschedule_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, myschedulList)
+        val myschedule_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, myscheduleList)
         val join_adapter = MeetingAdapter(requireContext(),R.layout.meeting_list, joinList)
         val interest_adapter = MeetingAdapter(requireContext(),R.layout.meeting_list, interestList)
 
@@ -58,6 +59,57 @@ class MymeetingFragment(private val myschedulList : List<ScheduleVO>, val joinLi
         rv_M_Meeting_Schedule.layoutManager = LinearLayoutManager(view.context)
         rv_M_Meeting_join.layoutManager = LinearLayoutManager(view.context)
         rv_M_Meeting_interest.layoutManager = LinearLayoutManager(view.context)
+
+        // 각 목록 항목에 클릭 리스너 추가
+        myschedule_adapter.setOnItemClickListener(object : ScheduleAdapter.OnItemClickListener{
+            override fun onItemClick(position: Int) {
+                // 해당 항목의 데이터 가져오기
+                val clickedSchedule = myscheduleList[position]
+
+                // ClubActivity로 데이터 전달을 위한 Intent 생성
+                val intent = Intent(requireContext(), ClubActivity::class.java)
+
+                // Intent에 데이터 추가
+                // intent.putExtra("scheduleId", clickedSchedule.id)
+
+                // ClubActivity 시작
+                startActivity(intent)
+            }
+        })
+
+        // 각 목록 항목에 클릭 리스너 추가
+        join_adapter.setOnItemClickListener(object : MeetingAdapter.OnItemClickListener{
+            override fun onItemClick(position: Int) {
+                // 해당 항목의 데이터 가져오기
+                val clickedJoin = joinList[position]
+
+                // ClubActivity로 데이터 전달을 위한 Intent 생성
+                val intent = Intent(requireContext(), ClubActivity::class.java)
+
+                // Intent에 데이터 추가
+                intent.putExtra("meetingId", clickedJoin)
+
+                // ClubActivity 시작
+                startActivity(intent)
+            }
+        })
+
+        // 각 목록 항목에 클릭 리스너 추가
+        interest_adapter.setOnItemClickListener(object : MeetingAdapter.OnItemClickListener{
+            override fun onItemClick(position: Int) {
+                // 해당 항목의 데이터 가져오기
+                val clickedInterest = interestList[position]
+
+                // ClubActivity로 데이터 전달을 위한 Intent 생성
+                val intent = Intent(requireContext(), ClubActivity::class.java)
+
+                // Intent에 데이터 추가
+                intent.putExtra("meetingId", clickedInterest)
+
+                // ClubActivity 시작
+                startActivity(intent)
+            }
+        })
 
 
         Img_M_Creatmeet_Circle.setOnClickListener {
