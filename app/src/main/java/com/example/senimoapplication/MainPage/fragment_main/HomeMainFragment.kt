@@ -72,6 +72,8 @@ class HomeMainFragment : Fragment() {
         rv_M_PopularMeeting.adapter = adapter
         rv_M_PopularMeeting.layoutManager = LinearLayoutManager(requireContext())
 
+        // 모든 모임 목록을 보이게 하기
+        adapter.setShowAllItems(true)
 
         // 모임 가데이터
         MeetingList.add(MeetingVO("동구","동명동 골프 모임", "같이 골프 합시다~", "운동", 7,20,R.drawable.golf_img.toString()))

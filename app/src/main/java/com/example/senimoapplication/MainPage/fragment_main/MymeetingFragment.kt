@@ -55,6 +55,11 @@ class MymeetingFragment(private val myscheduleList : List<ScheduleVO>, val joinL
         rv_M_Meeting_join.adapter = join_adapter
         rv_M_Meeting_interest.adapter = interest_adapter
 
+        // 최대 2개의 모임 목록만 보이게 하기
+        myschedule_adapter.setShowAllItems(false)
+        join_adapter.setShowAllItems(false)
+        interest_adapter.setShowAllItems(false)
+
         // RecyclerView의 레이아웃 매니저 설정
         rv_M_Meeting_Schedule.layoutManager = LinearLayoutManager(view.context)
         rv_M_Meeting_join.layoutManager = LinearLayoutManager(view.context)
