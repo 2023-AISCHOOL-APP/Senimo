@@ -7,6 +7,6 @@
         app:actionLayout="@style/MenuStyle"/>
     <item
         android:id="@+id/menu_option2"
-        android:title="게시물 작성하기"
+        android:title="게시물 삭제하기"
         app:actionLayout="@style/MenuStyle"/>
 </menu>

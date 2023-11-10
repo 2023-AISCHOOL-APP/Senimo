@@ -6,7 +6,7 @@
     android:layout_marginHorizontal="20dp"
     android:layout_gravity="center"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="20dp">
+    app:cardCornerRadius="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,23 +15,16 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tvMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/pretendard_bold"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/pretendard_medium"
             android:gravity="center"
             android:text="모임 일정을 삭제하시겠어요?"
             android:textColor="@color/txt_gray90"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="15dp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,30 +33,40 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnCancel"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_width="114dp"
+                android:layout_height="38dp"
                 android:layout_marginRight="5dp"
-                android:backgroundTint="@color/bg_darkgray40"
+                android:background="@drawable/button_shape"
+                android:fontFamily="@font/pretendard_medium"
+                android:hapticFeedbackEnabled="false"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:text="취소"
-                android:textSize="18sp"
-                app:cornerRadius="8dp" />
+                android:textColor="@color/main"
+                android:textSize="14sp"
+                app:cornerRadius="10dp" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnOkay"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_width="114dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
-                android:backgroundTint="@color/point"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
+                android:background="@drawable/button_shape_main"
+                android:fontFamily="@font/pretendard_medium"
+                android:hapticFeedbackEnabled="true"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="8dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="8dp"
                 android:text="삭제하기"
-                android:textSize="18sp"
-                app:cornerRadius="8dp" />
-
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

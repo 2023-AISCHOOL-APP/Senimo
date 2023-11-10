@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/member_option1"
-        android:title="운영진으로 전환하기"
+        android:title="운영진으로 임명하기"
         app:actionLayout="@style/MenuStyle"/>
     <item
         android:id="@+id/member_option2"
@@ -15,6 +15,6 @@
         app:actionLayout="@style/MenuStyle"/>
     <item
         android:id="@+id/member_option4"
-        android:title="강퇴하기"
+        android:title="모임에서 내보내기"
         app:actionLayout="@style/MenuStyle"/>
 </menu>

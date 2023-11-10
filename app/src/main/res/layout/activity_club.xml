@@ -6,55 +6,72 @@
     android:layout_height="match_parent"
     tools:context=".Club.Activity_club.ClubActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/main"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView4"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:cardElevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.appcompat.widget.Toolbar>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvClubName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/pretendard_bold"
-        android:text="모임명"
-        android:textColor="@color/bg_darkgray10"
-        android:textSize="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tvClubName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
+                android:text="모임명"
+                android:textColor="@color/black"
+                android:textSize="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_conversion_absoluteHeight="34dp"
+                tools:layout_conversion_absoluteWidth="62dp" />
 
-    <ImageView
-        android:id="@+id/icBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="6dp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.41"
-        app:srcCompat="@drawable/ic_back" />
+            <ImageView
+                android:id="@+id/imgLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_emptylike" />
+
+            <ImageView
+                android:id="@+id/icBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.516"
+                app:srcCompat="@drawable/ic_back"
+                tools:layout_conversion_absoluteHeight="25dp"
+                tools:layout_conversion_absoluteWidth="25dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.tabs.TabLayout
-        app:tabTextAppearance="@style/tab_text"
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/cardView4"
         app:tabIndicatorColor="@color/main"
-        app:tabSelectedTextAppearance="@style/TabLayoutTextStyle"
-        app:tabSelectedTextColor="@color/main">
+        app:tabSelectedTextColor="@color/main"
+        app:tabTextAppearance="@style/TabBasicStyle"
+        app:tabSelectedTextAppearance="@style/TabLayoutStyle"
+        >
 
 
         <com.google.android.material.tabs.TabItem
@@ -89,15 +106,5 @@
         app:layout_constraintTop_toBottomOf="@+id/tabLayout">
 
     </androidx.viewpager.widget.ViewPager>
-
-    <ImageView
-        android:id="@+id/imgLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="22dp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_emptylike" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
