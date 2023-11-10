@@ -1,12 +1,14 @@
 package com.example.senimoapplication.Club.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.dDate
@@ -18,6 +20,7 @@ class ScheduleAdapter(val context: Context, val layout: Int, val data: List<Sche
 RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
 
     private var showAllItems = false // 플래그 추가
+    private var itemClickListener : OnItemClickListener? = null
 
     val inflater = LayoutInflater.from(context)
 
@@ -25,6 +28,15 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
         showAllItems = showAll
         notifyDataSetChanged() // 변경 사항을 반영하기 위해 어댑터를 갱신
     }
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
         val tvClubScheduleName : TextView // 일정명
@@ -110,6 +122,24 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
         if(state == "모집마감"){
             holder.tvScheduleState.setBackgroundResource(R.drawable.tag_close)
             holder.tvScheduleState.setTextColor(ContextCompat.getColor(context, R.color.white))
+        }
+
+        // 클릭 리스너 설정
+        holder.itemView.setOnClickListener {
+            // 해당 항목의 데이터 가져오기
+            val clickedScehdule = data[position]
+
+            // ClubActivity로 데이터 전달을 위한 Intent 생성
+            val intent = Intent(context, ClubActivity::class.java)
+
+            // ClubActivity 시작
+            context.startActivity(intent)
+
+        }
+
+        // 아이템 클릭 이벤트 처리
+        holder.itemView.setOnClickListener {
+            itemClickListener?.onItemClick(position)
         }
 
 
