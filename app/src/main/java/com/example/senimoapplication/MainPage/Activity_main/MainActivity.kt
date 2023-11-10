@@ -3,6 +3,8 @@ package com.example.senimoapplication.MainPage.Activity_main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.senimoapplication.Club.VO.ScheduleVO
+import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.databinding.ActivityMainBinding
 import com.example.senimoapplication.MainPage.fragment_main.ChatMainFragment
 import com.example.senimoapplication.MainPage.fragment_main.HomeMainFragment
@@ -57,6 +59,27 @@ class MainActivity : AppCompatActivity() {
         }
       }
 
+      // 모임 일정 리스트 가데이터
+      val myscheduleList : List<ScheduleVO> = listOf(
+        ScheduleVO("가나다라마바사아자차카타파하","2023-12-20 17:00","30000", "광주 동구 제봉로 대성학원 3층", 26,20,"모집중" ),
+        ScheduleVO("시험 공부 준비합시다~!!","2023-11-15 13:30","20000", "광주 동구 제봉로 대성학원 3층", 10,30,"모집중" ),
+        ScheduleVO("빼빼로 만들자~","2023-11-10 18:00","15000", "광주 동구 제봉로 대성학원 3층", 10,10,"모집마감" ),
+      )
+
+      // 가입한 모임 리스트 가데이터
+      val joinList : List<MeetingVO> = listOf(
+        MeetingVO("동구","가나다라마바사아자차카타파하", "같이 골프 합시다~", "운동", 7,20,R.drawable.golf_img.toString()),
+        MeetingVO("북구","동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5,10,R.drawable.tea_img.toString()),
+        MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString()),
+
+      )
+
+      // 관심 모임 리스트 가데이터
+      val interestList : List<MeetingVO> = listOf(
+        MeetingVO("남구","운암동 수영 모임", "헤엄 헤엄~", "운동", 8,30,R.drawable.tea_img.toString()),
+        MeetingVO("북구","동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5,10,R.drawable.tea_img.toString()),
+        MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString()),
+      )
 
       when(item.itemId){
         R.id.M_tab1 ->{
@@ -74,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         R.id.M_tab2 ->{
           supportFragmentManager.beginTransaction().replace(
             R.id.fl,
-            MymeetingFragment()
+            MymeetingFragment(myscheduleList, joinList, interestList)
           ).commit()
 
           // 여기서 TextView의 텍스트 변경과 ImageView 숨기기

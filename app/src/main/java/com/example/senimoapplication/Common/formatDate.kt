@@ -26,6 +26,27 @@ fun formatDate(inputDate: String): String {
     }
 }
 
+fun myScheduleDate(inputDate: String): String {
+    // 입력 스트링의 형식을 지정합니다.
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+
+    // 출력 형식을 지정하고 요일을 한국어로 표시합니다.
+    val outputFormat = SimpleDateFormat("MM'.' dd (E) HH:mm", Locale.KOREA)
+
+    try {
+        // 입력 스트링을 파싱합니다.
+        val date = inputFormat.parse(inputDate)
+
+        // 출력 형식으로 포맷팅합니다.
+        val formattedDate = outputFormat.format(date)
+
+        return formattedDate
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return "" // 파싱 또는 포맷팅 오류 발생 시 빈 문자열 반환
+    }
+}
+
 
 fun dDate(inputDate: String): String {
     try {

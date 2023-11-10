@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class MeetingVO(
+    val gu : String = "",
     val title: String = "",
     val content: String = "",
     val keyword: String = "",
@@ -14,6 +15,7 @@ data class MeetingVO(
     // val backicon : String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        gu = parcel.readString() ?: "",
         title = parcel.readString() ?: "",
         content = parcel.readString() ?: "",
         keyword = parcel.readString() ?: "",
@@ -25,6 +27,7 @@ data class MeetingVO(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(gu)
         parcel.writeString(title)
         parcel.writeString(content)
         parcel.writeString(keyword)
