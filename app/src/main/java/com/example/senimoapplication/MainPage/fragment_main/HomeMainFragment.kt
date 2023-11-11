@@ -177,8 +177,13 @@ class HomeMainFragment : Fragment() {
             }
         }
 
-        fetchMeetings()
+
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fetchMeetings() // 여기에서 데이터 로딩을 호출합니다.
     }
 
     private fun fetchMeetings() {
