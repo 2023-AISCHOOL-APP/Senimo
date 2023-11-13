@@ -15,11 +15,19 @@
         android:theme="@style/Theme.SenimoApplication"
         android:usesCleartextTraffic="true"
         tools:targetApi="34">
+
+        <activity
+            android:name=".Club.Activity_club.MakeScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Club.Activity_club.PostActivity"
+            android:exported="false" />
         <activity
             android:name=".Login.Activity_login.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,24 +36,23 @@
             android:exported="false" />
         <activity
             android:name=".Login.Activity_login.EnterMyInfoActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".MainPage.Activity_main.MainActivity"
             android:exported="false" />
         <activity
             android:name=".MainPage.Activity_main.SearchActivity"
             android:exported="false" />
-        <activity android:name=".MainPage.Activity_main.CreateMeetingActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".MainPage.Activity_main.CreateMeetingActivity"
+            android:exported="false" />
         <activity
             android:name=".Club.Activity_club.ScheduleActivity"
             android:exported="false" />
         <activity
             android:name=".Club.Activity_club.ClubActivity"
-            android:exported="false"/>
-
-
+            android:exported="false" />
     </application>
 
 </manifest>

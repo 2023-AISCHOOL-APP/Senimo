@@ -1,5 +1,6 @@
 package com.example.senimoapplication.Club.Activity_club
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,8 @@ import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Club.adapter.ScheduleMemberAdapter
 import com.example.senimoapplication.Common.formatDate
+import com.example.senimoapplication.Common.showBoardDialogBox
+
 
 class ScheduleActivity : AppCompatActivity() {
     
@@ -51,10 +54,10 @@ class ScheduleActivity : AppCompatActivity() {
 
 
         // 회원 목록 가데이터
-        memberList.add(ScheduleMemberVO("양희준", "모임장", R.drawable.img_sample))
-        memberList.add(ScheduleMemberVO("최효정", "운영진", R.drawable.img_sample))
-        memberList.add(ScheduleMemberVO("국지호", "", R.drawable.img_sample))
-        memberList.add(ScheduleMemberVO("김도운", "", R.drawable.img_sample))
+        memberList.add(ScheduleMemberVO("양희준", "1", R.drawable.img_sample))
+        memberList.add(ScheduleMemberVO("최효정", "2", R.drawable.img_sample))
+        memberList.add(ScheduleMemberVO("국지호", "3", R.drawable.img_sample))
+        memberList.add(ScheduleMemberVO("김도운", "3", R.drawable.img_sample))
 
 
         // 뒤로가기 버튼
@@ -66,19 +69,21 @@ class ScheduleActivity : AppCompatActivity() {
         icMore.setOnClickListener { view ->
             val popupMenu = PopupMenu(this, view)
             val menuInflater = popupMenu.menuInflater
+
             menuInflater.inflate(R.menu.option_menu, popupMenu.menu)
 
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.menu_option1 -> {
-                        // Option 1을 선택한 경우의 동작
-                        // 여기에 원하는 동작을 추가하세요.
+                        // 게시물 수정
+                        val intent = Intent(this, PostActivity::class.java)
+                        startActivity(intent)
                         true
                     }
 
                     R.id.menu_option2 -> {
-                        // Option 2을 선택한 경우의 동작
-                        // 여기에 원하는 동작을 추가하세요.
+                        // 게시물 삭제
+                        showBoardDialogBox(this,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.")
                         true
                     }
 

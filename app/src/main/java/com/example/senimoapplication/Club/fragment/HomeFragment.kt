@@ -10,6 +10,7 @@ import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.senimoapplication.Club.Activity_club.MakeScheduleActivity
 import com.example.senimoapplication.Common.KeywordAdapter
 import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.R
@@ -37,7 +38,7 @@ class HomeFragment : Fragment() {
         val k_adapter = KeywordAdapter(requireContext(),R.layout.keyword_list, keywordList)
         val rvKeyword = view.findViewById<RecyclerView>(R.id.rvKeyword)
         val btnJoinClub = view.findViewById<Button>(R.id.btnJoinClub)
-
+        val btnNewSchedule = view.findViewById<Button>(R.id.btnNewSchedule)
 
 
         // 모임 키워드 리사이클러뷰 어댑터 연결
@@ -56,8 +57,8 @@ class HomeFragment : Fragment() {
         rvSchedule.layoutManager=LinearLayoutManager(view.context)
 
         // 모임 일정 가데이터
-        scheduleList.add(ScheduleVO("신나는 크리스마스 파티","2023-12-20 17:00","30000", "광주 동구 제봉로 대성학원 3층", 26,20,"모집중" ))
-        scheduleList.add(ScheduleVO("짬뽕이 제일 좋아","2023-11-8 17:00","10000", "광주 동구 도야짬뽕", 10,10,"모집마감" ))
+        scheduleList.add(ScheduleVO("신나는 크리스마스 파티","노는게 제일 좋은 친구들 모여서 함꼐 놀아요","2023-12-20 17:00","30000", "광주 동구 제봉로 대성학원 3층", 26,20,"모집중" ))
+        scheduleList.add(ScheduleVO("짬뽕이 제일 좋아","짜장보다는 짬뽕드실 분 모집","2023-11-8 17:00","10000", "광주 동구 도야짬뽕", 10,10,"모집마감" ))
         //scheduleList.add(ScheduleVO("점심을 공유합시다","2023-11-6 17:00","30000", "광주 동구 동부식당", 26,20,"모집마감" ))
 
         // 모임 상세 페이지로 이동
@@ -72,19 +73,23 @@ class HomeFragment : Fragment() {
             })
         )
 
-
+        // 모임 일정 등록 액티비티로 이동
+        btnNewSchedule.setOnClickListener {
+            val intent = Intent(view.context, MakeScheduleActivity::class.java)
+            view.context.startActivity(intent)
+        }
 
         // 전체 회원 리사이클러뷰 어탭터 연결
         rvMember.adapter = m_adapter
         rvMember.layoutManager=LinearLayoutManager(view.context)
 
         // 전체 회원 목록 가데이터
-        memberList.add(MemberVO("양희준", "모임장", R.drawable.img_sample))
-        memberList.add(MemberVO("최효정", "운영진", R.drawable.img_sample))
-        memberList.add(MemberVO("국지호", "", R.drawable.img_sample))
-        memberList.add(MemberVO("김도운", "", R.drawable.img_sample))
-        memberList.add(MemberVO("이지혜", "", R.drawable.img_sample))
-        memberList.add(MemberVO("나예호", "", R.drawable.img_sample))
+        memberList.add(MemberVO("양희준", 1, R.drawable.img_sample))
+        memberList.add(MemberVO("최효정", 2, R.drawable.img_sample))
+        memberList.add(MemberVO("국지호", 2, R.drawable.img_sample))
+        memberList.add(MemberVO("김도운", 3, R.drawable.img_sample))
+        memberList.add(MemberVO("이지혜", 3, R.drawable.img_sample))
+        memberList.add(MemberVO("나예호", 3, R.drawable.img_sample))
 
         // 회원 정보 페이지로 이동
         // 클릭 이벤트 처리
@@ -106,11 +111,13 @@ class HomeFragment : Fragment() {
         var joinstate : Int = 0
         btnJoinClub.setOnClickListener {
             if(joinstate == 0){
-                btnJoinClub.setBackgroundColor(ContextCompat.getColor(view.context, R.color.point))
+                btnJoinClub.setTextColor(ContextCompat.getColor(view.context, R.color.main))
+                btnJoinClub.setBackgroundResource(R.drawable.button_shape)
                 btnJoinClub.text = "모임 탈퇴하기"
                 joinstate = 1
             }else{
-                btnJoinClub.setBackgroundColor(ContextCompat.getColor(view.context, R.color.main))
+                btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
+                btnJoinClub.setTextColor(ContextCompat.getColor(view.context, R.color.white))
                 btnJoinClub.text = "모임 가입하기"
                 joinstate = 0
             }
@@ -119,5 +126,6 @@ class HomeFragment : Fragment() {
 
         return view
     }
+
 
 }

@@ -6,17 +6,20 @@
         <item name="android:popupMenuStyle">@style/MenuStyle</item>
     </style>
 
-    <style name="Theme.SenimoApplication" parent="Base.Theme.SenimoApplication" />
+    <style name="Theme.SenimoApplication" parent="Base.Theme.SenimoApplication"/>
     <!-- 모임페이지 메뉴스타일   -->
-    <style name="tab_text" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
-        <item name="android:textSize">18dp</item>
-        <item name="android:fontFamily">@font/pretendard_regular</item>
+    <style name="TabLayoutStyle" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textSize">17sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="tabIndicatorColor">@color/main</item>
+        <item name="tabTextAppearance">@color/main</item>
     </style>
-    <style name="TabLayoutTextStyle">
-        <item name="android:textSize">18sp</item>
-        <item name="android:fontFamily">@font/pretendard_bold</item>
-        <item name="android:color">@color/txt_gray30</item>
+    <style name="TabBasicStyle" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textSize">17sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="tabTextAppearance">@color/txt_gray30</item>
     </style>
+
     <!-- 모임페이지 일정 사진 스타일 -->
     <style name="RoundedImageView">
         <item name="cornerFamily">rounded</item>
