@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/pretendard_semibold"
-        android:text="구"
+        android:text="활동지역"
         android:textColor="@color/black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="@+id/textView"
@@ -92,6 +92,7 @@
         android:id="@+id/textView21"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/pretendard_semibold"
         android:text="인원 수"
         android:textColor="@color/black"
@@ -99,7 +100,7 @@
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/imageView8"
-        tools:layout_editor_absoluteY="410dp" />
+        app:layout_constraintTop_toBottomOf="@+id/sp_M_gulist" />
 
     <TextView
         android:id="@+id/textView13"
@@ -264,6 +265,30 @@
         app:layout_constraintEnd_toEndOf="@+id/textView19"
         app:layout_constraintStart_toStartOf="@+id/textView19"
         app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_downbtn"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="464dp" />
+
+    <ImageView
+        android:id="@+id/imageView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_upbtn"
+        tools:layout_editor_absoluteX="128dp"
+        tools:layout_editor_absoluteY="464dp" />
+
+    <Spinner
+        android:id="@+id/sp_M_gulist"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@+id/textView20"
+        app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

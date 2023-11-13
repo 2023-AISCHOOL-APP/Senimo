@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.MainPage.Activity_main.SearchActivity
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
+import com.example.senimoapplication.Common.KeywordAdapter
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.MainPage.Retrofit.ApiService
@@ -36,8 +37,7 @@ class HomeMainFragment : Fragment() {
     val MeetingList : ArrayList<MeetingVO> = ArrayList()
 
     private var isScrolling = false
-     private var isAtTop = true
-
+    private var isAtTop = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,7 +75,6 @@ class HomeMainFragment : Fragment() {
         rv_M_MySchedule.adapter = myScheduleAdapter
         rv_M_MySchedule.layoutManager = LinearLayoutManager(requireContext())
 
-
         // 모임 RecyclerView 어댑터 생성 및 설정
         adapter = MeetingAdapter(requireContext(), R.layout.meeting_list,MeetingList)
         rv_M_PopularMeeting.adapter = adapter
@@ -104,30 +103,25 @@ class HomeMainFragment : Fragment() {
             })
         )
 
-        // 카테고리 클릭 시 모임 홈 페이지로 이동
+        // 카테고리 클릭 시 SearchActivity로 이동
         img_M_Excercise.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
-            startActivity(intent)
+            startSearchActivity("운동")
         }
         img_M_Hobby.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
-            startActivity(intent)
+            // val intent = Intent(requireContext(), ClubActivity::class.java)
+            startSearchActivity("취미")
         }
         img_M_Concert.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
-            startActivity(intent)
+            startSearchActivity("전시","공연")
         }
         img_M_Trip.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
-            startActivity(intent)
+            startSearchActivity("여행")
         }
         img_M_Selfimprovement.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
-            startActivity(intent)
+            startSearchActivity("자기계발")
         }
         img_M_Financial.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
-            startActivity(intent)
+            startSearchActivity("재테크")
         }
 
 
@@ -179,6 +173,13 @@ class HomeMainFragment : Fragment() {
 
         fetchMeetings()
         return view
+    }
+
+    // vararg 키워드 사용하여 여러 개의 키워드 전달하기
+    private fun startSearchActivity( vararg keywords : String) {
+        val intent = Intent(requireContext(), SearchActivity::class.java)
+        intent.putExtra("keyword",keywords)
+        startActivity(intent)
     }
 
     private fun fetchMeetings() {
