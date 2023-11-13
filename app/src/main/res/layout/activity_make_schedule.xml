@@ -90,12 +90,12 @@
                 android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="장소"
                 android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="@+id/etScheduleDate"
-                app:layout_constraintTop_toBottomOf="@+id/etScheduleDate" />
+                app:layout_constraintStart_toStartOf="@+id/btnScheduleDate"
+                app:layout_constraintTop_toBottomOf="@+id/time_picker" />
 
             <TextView
                 android:id="@+id/textView15"
@@ -145,30 +145,59 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
-            <EditText
-                android:id="@+id/etScheduleDate"
-                android:layout_width="0dp"
+            <Button
+                android:id="@+id/btnScheduleDate"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:backgroundTint="@color/txt_gray30"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/bg_darkgray20"
                 android:ems="10"
-                android:hint="일시를 등록해주세요."
+                android:fontFamily="@font/pretendard_semibold"
+                android:hint="날짜 선택"
                 android:inputType="number"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:cornerRadius="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+            <Button
+                android:id="@+id/btnScheduleTime"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="@color/bg_darkgray20"
+                android:ems="10"
+                android:fontFamily="@font/pretendard_semibold"
+                android:hint="시간 선택"
+                android:inputType="number"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnScheduleDate"
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+            <TimePicker
+                android:id="@+id/time_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:timePickerMode="spinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/calendarView" />
 
             <EditText
                 android:id="@+id/etScheduleLoca"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
                 android:backgroundTint="@color/txt_gray30"
                 android:ems="10"
                 android:hint="모임 장소를 입력해주세요."
                 android:inputType="text"
-                app:layout_constraintEnd_toEndOf="@+id/etScheduleDate"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView13"
                 app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
@@ -176,11 +205,12 @@
                 android:id="@+id/etScheduleFee"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
                 android:backgroundTint="@color/txt_gray30"
                 android:ems="10"
                 android:hint="모임 회비를 입력해주세요"
                 android:inputType="text"
-                app:layout_constraintEnd_toEndOf="@+id/etScheduleLoca"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView18"
                 app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
@@ -189,7 +219,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="19dp"
                 android:fontFamily="@font/pretendard_regular"
-                android:text="13"
+                android:text="0"
                 android:textColor="@color/txt_gray70"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toStartOf="@+id/textView14"
@@ -200,7 +230,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendard_regular"
-                android:text="13"
+                android:text="0"
                 android:textColor="@color/txt_gray70"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toStartOf="@+id/textView16"
@@ -268,17 +298,6 @@
                 app:layout_constraintTop_toTopOf="@+id/imgButton"
                 app:layout_constraintVertical_bias="0.5" />
 
-            <ImageView
-                android:id="@+id/imageView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_calendar"
-                app:layout_constraintBottom_toBottomOf="@+id/etScheduleDate"
-                app:layout_constraintEnd_toEndOf="@+id/etScheduleDate"
-                app:layout_constraintTop_toTopOf="@+id/etScheduleDate"
-                app:layout_constraintVertical_bias="0.375" />
-
             <TextView
                 android:id="@+id/textView19"
                 android:layout_width="wrap_content"
@@ -303,7 +322,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="14dp"
                 android:text="0"
-                android:textColor="@color/txt_gray30"
+                android:textColor="@color/txt_gray70"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/imgMinus"
                 app:layout_constraintTop_toBottomOf="@+id/textView17" />
@@ -369,6 +388,15 @@
                     tools:layout_conversion_absoluteWidth="0dp" />
 
             </androidx.cardview.widget.CardView>
+
+            <CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnScheduleDate" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

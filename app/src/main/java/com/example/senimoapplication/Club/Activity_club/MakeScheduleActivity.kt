@@ -7,6 +7,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -16,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
+
 
 
 class MakeScheduleActivity : ComponentActivity() {
@@ -103,13 +108,31 @@ class MakeScheduleActivity : ComponentActivity() {
             }
         })
 
+        binding.timePicker.visibility = GONE
+        binding.calendarView.visibility = GONE
+
+
+
         // 날짜 설정
-        binding.etScheduleDate.setOnClickListener{
-            showDatePickerDialog()
+        binding.btnScheduleDate.setOnClickListener{
+            binding.calendarView.visibility = VISIBLE
+            binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+                val selectedDate = "$year-${month + 1}-$dayOfMonth"
+                binding.btnScheduleDate.text ="$selectedDate"
+            }
+
         }
 
 
-
+        // 시간 설정
+        binding.btnScheduleTime.setOnClickListener {
+            binding.calendarView.visibility = GONE
+            binding.timePicker.visibility = VISIBLE
+            binding.timePicker.setOnTimeChangedListener { view, hourOfDay, minute ->
+                val selectedTime = "$hourOfDay:$minute"
+                binding.btnScheduleTime.text ="$selectedTime"
+            }
+        }
 
 
 
@@ -146,7 +169,7 @@ class MakeScheduleActivity : ComponentActivity() {
             setScheduleList.add(ScheduleVO(
                 binding.etScheduleName.text.toString(),
                 binding.etScheduleIntro.text.toString(),
-                binding.etScheduleDate.text.toString(),
+                "${binding.btnScheduleDate.text.toString()} ${binding.btnScheduleTime.text.toString()}",
                 binding.etScheduleFee.text.toString(),
                 binding.etScheduleLoca.text.toString(),
                 binding.tvAllMember.text.toString().toInt(),
@@ -174,25 +197,5 @@ class MakeScheduleActivity : ComponentActivity() {
 //            }
 //        pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
     }
-    private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(
-            this,
-            DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
-                // 여기서 선택된 날짜를 사용할 수 있습니다.
-                val selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
-                binding.etScheduleDate.setText(selectedDate)
-            },
-            year, month, day
-        )
-
-        // 현재 날짜를 최소 날짜로 설정하여 과거 날짜를 선택하지 못하도록 합니다.
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
-
-        datePickerDialog.show()
-    }
 }
