@@ -1,20 +1,17 @@
 package com.example.senimoapplication.Club.Activity_club
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.senimoapplication.Club.VO.ScheduleVO
-import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
 
 
@@ -144,10 +141,11 @@ class MakeScheduleActivity : ComponentActivity() {
         // 일정 등록 버튼 클릭 시 정보 취합하기
         binding.btnSetSchedule.setOnClickListener {
             setScheduleList.add(ScheduleVO(
+                "모임명", // 나중에 수정필요
                 binding.etScheduleName.text.toString(),
                 binding.etScheduleIntro.text.toString(),
                 binding.etScheduleDate.text.toString(),
-                binding.etScheduleFee.text.toString(),
+                binding.etScheduleFee.text.toString().toInt(), // 도운이가 수정함 fee를 int로 바꿔서 에러뜸
                 binding.etScheduleLoca.text.toString(),
                 binding.tvAllMember.text.toString().toInt(),
                 0,"모집중")

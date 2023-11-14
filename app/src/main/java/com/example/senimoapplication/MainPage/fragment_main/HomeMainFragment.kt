@@ -16,8 +16,8 @@ import com.example.senimoapplication.MainPage.Activity_main.SearchActivity
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.RecyclerItemClickListener
-import com.example.senimoapplication.MainPage.Retrofit.ApiService
-import com.example.senimoapplication.MainPage.Server
+import com.example.senimoapplication.server.Retrofit.ApiService
+import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
@@ -33,10 +33,10 @@ class HomeMainFragment : Fragment() {
     // 멤버변수로 선언, adapter를 HomeMainFragment 클래스의 멤버 변수로 변수로 선언해야함
     private lateinit var adapter: MeetingAdapter
     private lateinit var myScheduleAdapter: MyScheduleAdapter
-    val MeetingList : ArrayList<MeetingVO> = ArrayList()
+    val MeetingList: ArrayList<MeetingVO> = ArrayList()
 
     private var isScrolling = false
-     private var isAtTop = true
+    private var isAtTop = true
 
 
     override fun onCreateView(
@@ -64,20 +64,21 @@ class HomeMainFragment : Fragment() {
         val img_M_Financial = view.findViewById<ImageView>(R.id.img_M_Financial)
 
         // MyScheduleVO 객체 생성
-        val mySchedule = MyScheduleVO("충장로 먹부림 모임","일이삼사오육칠팔구십십일십이십삼십사","2023-11-15 09:00")
+        val mySchedule = MyScheduleVO("충장로 먹부림 모임", "일이삼사오육칠팔구십십일십이십삼십사", "2023-11-15 09:00")
 
         // MyScheduleVO 객체를 리스트에 추가
         val myScheduleList = ArrayList<MyScheduleVO>()
         myScheduleList.add(mySchedule)
 
         // 내 일정 RecyclerView 어댑터 생성 및 설정
-        myScheduleAdapter = MyScheduleAdapter(requireContext(), R.layout.myschedule_list,myScheduleList)
+        myScheduleAdapter =
+            MyScheduleAdapter(requireContext(), R.layout.myschedule_list, myScheduleList)
         rv_M_MySchedule.adapter = myScheduleAdapter
         rv_M_MySchedule.layoutManager = LinearLayoutManager(requireContext())
 
 
         // 모임 RecyclerView 어댑터 생성 및 설정
-        adapter = MeetingAdapter(requireContext(), R.layout.meeting_list,MeetingList)
+        adapter = MeetingAdapter(requireContext(), R.layout.meeting_list, MeetingList)
         rv_M_PopularMeeting.adapter = adapter
         rv_M_PopularMeeting.layoutManager = LinearLayoutManager(requireContext())
 
@@ -89,19 +90,21 @@ class HomeMainFragment : Fragment() {
 //        MeetingList.add(MeetingVO("북구","동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5,10,R.drawable.tea_img.toString()))
 //        MeetingList.add(MeetingVO("남구","운암동 수영 모임", "헤엄 헤엄~", "운동", 8,30,R.drawable.tea_img.toString()))
 //        MeetingList.add(MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString()))
-        adapter.notifyDataSetChanged() // 어댑터 새로고침
 
         // 모임 홈 페이지로 이동
         rv_M_PopularMeeting.addOnItemTouchListener(
-            RecyclerItemClickListener(requireContext(), rv_M_PopularMeeting, object : RecyclerItemClickListener.OnItemClickListener {
-                override fun onItemClick(view: View, position: Int) {
-                    val clickedMeetinghome = MeetingList[position] // 클릭된 아이템의 MeetingVO 가져오기
-                    // 새로운 액티비티로 이동
-                    val intent = Intent(requireContext(), ClubActivity::class.java)
-                    intent.putExtra("clickedMeetinghome",clickedMeetinghome)
-                    startActivity(intent)
-                }
-            })
+            RecyclerItemClickListener(
+                requireContext(),
+                rv_M_PopularMeeting,
+                object : RecyclerItemClickListener.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        val clickedMeetinghome = MeetingList[position] // 클릭된 아이템의 MeetingVO 가져오기
+                        // 새로운 액티비티로 이동
+                        val intent = Intent(requireContext(), ClubActivity::class.java)
+                        intent.putExtra("clickedMeetinghome", clickedMeetinghome)
+                        startActivity(intent)
+                    }
+                })
         )
 
         // 카테고리 클릭 시 모임 홈 페이지로 이동
@@ -148,8 +151,6 @@ class HomeMainFragment : Fragment() {
         }
 
 
-
-
         // 스크롤 중에 터치 이벤트가 감지될 때
         sv_M_frag1.setOnTouchListener { _, _ ->
             isScrolling = true
@@ -183,6 +184,7 @@ class HomeMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         fetchMeetings() // 여기에서 데이터 로딩을 호출합니다.
     }
 
@@ -199,30 +201,32 @@ class HomeMainFragment : Fragment() {
         service.getMeetings().enqueue(object : Callback<List<MeetingVO>> {
             // 서버에서 답이 오면 이 부분이 실행돼요.
             override fun onResponse(call: Call<List<MeetingVO>>, response: Response<List<MeetingVO>>) {
-                Log.d("ody", response.toString())
+                Log.d("ody1", response.toString())
                 // 서버 응답이 null인지 확인합니다.
                 if (response.isSuccessful) {
-                    if (response.body() != null) {
-                        Log.d("ody", response.body().toString())
-                        response.body()?.let { meetings ->
-                            // null이 아니면 기존 목록을 지우고 새 데이터로 채웁니다.
-                            MeetingList.clear()
-                            MeetingList.addAll(meetings)
-                            if(::adapter.isInitialized) {
-                                adapter.notifyDataSetChanged()// 어댑터에 데이터 변경을 알립니다.
-                            }
-                            }
-                    } else {
+                    Log.d("ody1", response.body().toString())
+                    response.body()?.let { meetings ->
+                        // null이 아니면 기존 목록을 지우고 새 데이터로 채웁니다.
+                        MeetingList.clear()
+                        MeetingList.addAll(meetings)
+                        if (::adapter.isInitialized) {
+                            adapter.notifyDataSetChanged()// 어댑터에 데이터 변경을 알립니다.
+                        } else {
+                            // 어댑터를 초기화하지 않았으면 여기서 초기화합니다.
+                            adapter =
+                                MeetingAdapter(requireContext(), R.layout.meeting_list, MeetingList)
+//                                rv_M_PopularMeeting.adapter = adapter
+                        }
+                    } ?: run {
                         // 응답이 null이면 사용자에게 알려줄 수 있는 방법을 사용하세요.
                         // 예를 들어, Toast 메시지를 표시합니다.
 //                        Toast.makeText(context, "모임 정보가 없습니다.", Toast.LENGTH_SHORT).show()
                         Log.d("HomeMainFragment", "모임 정보가 없습니다.")
                     }
-
                 } else {
                     // HTTP 상태 코드가 성공 범위가 아닌 경우 오류 메시지를 표시합니다.
 //                    Toast.makeText(context, "요청에 실패했습니다: ${response.code()}", Toast.LENGTH_SHORT).show()
-                    Log.e("HomeMainFragment", "요청에 실패했습니다: ${response.code()}")
+                    Log.e("HomeMainFragment", "통신은 성공했으나 요청에 실패했습니다: ${response.code()}")
                 }
             }
 
