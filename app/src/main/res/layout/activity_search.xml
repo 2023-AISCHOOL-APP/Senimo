@@ -180,10 +180,9 @@
                 android:text="검색결과"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="@+id/tv_M_Keyword"
-                app:layout_constraintTop_toBottomOf="@+id/tv_M_Keyword" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_Keyword2" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_M_CategoryMeeting"
@@ -197,38 +196,12 @@
 
             </androidx.recyclerview.widget.RecyclerView>
 
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:text="다른 회원들이"
-                android:textColor="@color/main"
-                android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="@+id/tv_M_Keyword"
-                app:layout_constraintTop_toBottomOf="@+id/tv_M_Keyword" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard_bold"
-                android:text="많이 찾고 있어요!"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="@+id/tv_M_CategoryTitle"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
             <androidx.gridlayout.widget.GridLayout
                 android:layout_width="0dp"
                 android:layout_height="150dp"
-                android:layout_marginTop="20dp"
                 app:columnCount="2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintStart_toStartOf="@+id/textView12"
-                app:layout_constraintTop_toBottomOf="@+id/textView12"
                 app:orientation="vertical"
                 app:rowCount="5">
 

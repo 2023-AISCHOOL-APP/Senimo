@@ -49,6 +49,8 @@ class SearchActivity : AppCompatActivity() {
                 recyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
 
                 adapter.notifyDataSetChanged() // 어댑터 새로고침
+                binding.tvMCategoryTitle.visibility = View.INVISIBLE
+
             } else {
                 // 검색 결과가 없을 때, 필요한 뷰를 숨김
                 binding.tvMCategoryTitle.visibility = View.GONE
