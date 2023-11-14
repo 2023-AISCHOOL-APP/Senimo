@@ -15,7 +15,9 @@
         android:theme="@style/Theme.SenimoApplication"
         android:usesCleartextTraffic="true"
         tools:targetApi="34">
-
+        <activity
+            android:name=".Club.Activity_club.PhotoActivity"
+            android:exported="false" />
         <activity
             android:name=".Club.Activity_club.MakeScheduleActivity"
             android:exported="false" />

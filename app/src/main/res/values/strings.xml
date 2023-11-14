@@ -1,6 +1,8 @@
 <resources>
+
+    <string name="app_name">Senimo Application</string>
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello, Blank Fragment!</string>
-    <string name="app_name" />
     <string-array name="districts">
         <item>광산구</item>
         <item>남구</item>
@@ -13,4 +15,5 @@
     <string name="minutes_ago">%d분 전</string>
     <string name="hours_ago">%d시간 전</string>
     <string name="days_ago">%d일 전</string>
+
 </resources>

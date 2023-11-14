@@ -55,10 +55,10 @@ class ClubActivity : AppCompatActivity() {
         img.setOnClickListener {
             cnt++
             if (cnt%2 == 1) {
-                img.setImageResource(R.drawable.ic_like)
+                img.setImageResource(R.drawable.ic_fullheart)
                 // 서버로 데이터 보내기
             }else{
-                img.setImageResource(R.drawable.ic_emptylike)
+                img.setImageResource(R.drawable.ic_lineheart)
                 // 서버로 데이터 보내기
             }
         }
