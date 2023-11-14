@@ -5,19 +5,19 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class MeetingVO(
-
+    @SerializedName("club_location")
     val gu : String = "광산구",
-    @SerializedName("Club_name")
+    @SerializedName("club_name") // 서버 응답의 club_name을 title에 맵핑합니다.
     var title: String ,
-    @SerializedName("Club_introduce")
+    @SerializedName("club_introduce") // 서버 응답의 club_introduce를 content에 맵핑합니다.
     var content: String ,
     @SerializedName("keyword_name")
     var keyword: String,
-    @SerializedName("Member_cnt")
+    @SerializedName("attend_user_cnt")
     var attendance : Int ,
-    @SerializedName("Max_CNT")
+    @SerializedName("max_cnt")
     var allMember : Int,
-
+    @SerializedName("club_img")
 
 
 //    val title: String = "",
@@ -26,7 +26,7 @@ data class MeetingVO(
 //    val attendance : Int = 0,
 //    val allMember : Int = 0,
     // val person: String = "",
-    val imageUri: String = "", // 이미지의 URI 또는 경로를 저장할 필드
+    val imageUri: String = "" // 이미지의 URI 또는 경로를 저장할 필드
     // val backicon : String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -38,11 +38,11 @@ data class MeetingVO(
         allMember = parcel.readInt(),
         // person = parcel.readString() ?: "",
         imageUri = parcel.readString() ?: "",
-       // backicon = parcel.readString() ?: ""
+        // backicon = parcel.readString() ?: ""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-//        parcel.writeString(gu)
+        parcel.writeString(gu)
         parcel.writeString(title)
         parcel.writeString(content)
         parcel.writeString(keyword)
@@ -52,6 +52,8 @@ data class MeetingVO(
         parcel.writeString(imageUri) // 이미지 경로 또는 URI를 저장
         // parcel.writeString(backicon)
     }
+
+
 
     override fun describeContents(): Int {
         return 0
@@ -65,5 +67,10 @@ data class MeetingVO(
         override fun newArray(size: Int): Array<MeetingVO?> {
             return arrayOfNulls(size)
         }
+
+
     }
+
+
 }
+

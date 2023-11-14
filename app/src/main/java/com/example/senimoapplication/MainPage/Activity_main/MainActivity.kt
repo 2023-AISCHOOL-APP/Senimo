@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     setContentView(view)
 
     // 아이콘 초기 설정 : M_tab1을 ic_home_color로 설정
+    binding.bnvMain.itemIconTintList = null // 원래 이미지 색으로 보이게 하기
     binding.bnvMain.menu.findItem(R.id.M_tab1).icon = getDrawable(R.drawable.ic_home_color)
 
 

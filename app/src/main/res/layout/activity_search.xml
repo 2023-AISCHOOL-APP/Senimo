@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    tools:context="com.example.senimoapplication.MainPage.Activity_main.SearchActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:srcCompat="@drawable/ic_search_white" />
+                app:srcCompat="@drawable/ic_search_white"/>
 
             <EditText
                 android:id="@+id/tv_M_SearchBar"
@@ -180,6 +180,7 @@
                 android:text="검색결과"
                 android:textColor="@color/black"
                 android:textSize="22sp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="@+id/tv_M_Keyword"
                 app:layout_constraintTop_toBottomOf="@+id/tv_M_Keyword2" />
@@ -195,17 +196,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_M_CategoryTitle">
 
             </androidx.recyclerview.widget.RecyclerView>
-
-            <androidx.gridlayout.widget.GridLayout
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                app:columnCount="2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:orientation="vertical"
-                app:rowCount="5">
-
-            </androidx.gridlayout.widget.GridLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

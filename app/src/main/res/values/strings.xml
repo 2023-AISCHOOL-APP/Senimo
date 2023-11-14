@@ -8,4 +8,9 @@
         <item>북구</item>
         <item>서구</item>
     </string-array>
+
+    <string name="just_now">방금</string>
+    <string name="minutes_ago">%d분 전</string>
+    <string name="hours_ago">%d시간 전</string>
+    <string name="days_ago">%d일 전</string>
 </resources>

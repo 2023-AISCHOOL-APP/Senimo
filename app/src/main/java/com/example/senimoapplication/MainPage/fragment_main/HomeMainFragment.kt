@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.MainPage.Activity_main.SearchActivity
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
-import com.example.senimoapplication.Common.KeywordAdapter
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.MainPage.Retrofit.ApiService
@@ -88,7 +87,7 @@ class HomeMainFragment : Fragment() {
 //        MeetingList.add(MeetingVO("북구","동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5,10,R.drawable.tea_img.toString()))
 //        MeetingList.add(MeetingVO("남구","운암동 수영 모임", "헤엄 헤엄~", "운동", 8,30,R.drawable.tea_img.toString()))
 //        MeetingList.add(MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString()))
-        adapter.notifyDataSetChanged() // 어댑터 새로고침
+        // adapter.notifyDataSetChanged() // 어댑터 새로고침
 
         // 모임 홈 페이지로 이동
         rv_M_PopularMeeting.addOnItemTouchListener(
@@ -104,34 +103,59 @@ class HomeMainFragment : Fragment() {
         )
 
         // 카테고리 클릭 시 SearchActivity로 이동
+//        img_M_Excercise.setOnClickListener {
+//            startSearchActivity("운동")
+//        }
+//        img_M_Hobby.setOnClickListener {
+//            // val intent = Intent(requireContext(), ClubActivity::class.java)
+//            startSearchActivity("취미")
+//        }
+//        img_M_Concert.setOnClickListener {
+//            startSearchActivity("전시","공연")
+//        }
+//        img_M_Trip.setOnClickListener {
+//            startSearchActivity("여행")
+//        }
+//        img_M_Selfimprovement.setOnClickListener {
+//            startSearchActivity("자기계발")
+//        }
+//        img_M_Financial.setOnClickListener {
+//            startSearchActivity("재테크")
+//        }
+
+        // 카테고리 클릭 시 모임 홈 페이지로 이동
         img_M_Excercise.setOnClickListener {
-            startSearchActivity("운동")
+            val intent = Intent(requireContext(), ClubActivity::class.java)
+            startActivity(intent)
         }
         img_M_Hobby.setOnClickListener {
-            // val intent = Intent(requireContext(), ClubActivity::class.java)
-            startSearchActivity("취미")
+            val intent = Intent(requireContext(), ClubActivity::class.java)
+            startActivity(intent)
         }
         img_M_Concert.setOnClickListener {
-            startSearchActivity("전시","공연")
+            val intent = Intent(requireContext(), ClubActivity::class.java)
+            startActivity(intent)
         }
         img_M_Trip.setOnClickListener {
-            startSearchActivity("여행")
+            val intent = Intent(requireContext(), ClubActivity::class.java)
+            startActivity(intent)
         }
         img_M_Selfimprovement.setOnClickListener {
-            startSearchActivity("자기계발")
+            val intent = Intent(requireContext(), ClubActivity::class.java)
+            startActivity(intent)
         }
         img_M_Financial.setOnClickListener {
-            startSearchActivity("재테크")
+            val intent = Intent(requireContext(), ClubActivity::class.java)
+            startActivity(intent)
         }
+
 
 
 
 
         Img_M_SearchBar.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
-
-            intent.putExtra("MeetingList", MeetingList)
-
+            //intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))  // HomeMainFragment에서 MeetingList를 Parcel로 만들어 SearchActivity로 전달
             startActivity(intent)
             activity?.finish()
 
@@ -172,15 +196,16 @@ class HomeMainFragment : Fragment() {
         }
 
         fetchMeetings()
+        Log.d("testout", MeetingList.toString())
         return view
     }
 
     // vararg 키워드 사용하여 여러 개의 키워드 전달하기
-    private fun startSearchActivity( vararg keywords : String) {
-        val intent = Intent(requireContext(), SearchActivity::class.java)
-        intent.putExtra("keyword",keywords)
-        startActivity(intent)
-    }
+//    private fun startSearchActivity( vararg keywords : String) {
+//        val intent = Intent(requireContext(), SearchActivity::class.java)
+//        intent.putExtra("keyword",keywords)
+//        startActivity(intent)
+//    }
 
     private fun fetchMeetings() {
 //        val retrofit = Retrofit.Builder()
@@ -188,6 +213,7 @@ class HomeMainFragment : Fragment() {
 //            .addConverterFactory(GsonConverterFactory.create())
 //            .build()
         val retrofit = Server().retrofit
+
 
         // 서버에 요청을 보낼 '전화기'를 만들어요.
         val service = retrofit.create(ApiService::class.java)
@@ -207,7 +233,19 @@ class HomeMainFragment : Fragment() {
                             if(::adapter.isInitialized) {
                                 adapter.notifyDataSetChanged()// 어댑터에 데이터 변경을 알립니다.
                             }
+
+                            Log.d("test2", MeetingList.toString())
+
+                            for (meeting in MeetingList) {
+                                Log.d("MeetingList_test", "Title: ${meeting.title}, Content: ${meeting.content}, Keyword: ${meeting.keyword}")
                             }
+
+//                            // HomeMainFragment에서 MeetingList를 Parcel로 만들어 SearchActivity로 전달
+//                            val intent = Intent(requireContext(), SearchActivity::class.java)
+//                            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+//                            startActivity(intent)
+
+                        }
                     } else {
                         // 응답이 null이면 사용자에게 알려줄 수 있는 방법을 사용하세요.
                         // 예를 들어, Toast 메시지를 표시합니다.
@@ -228,6 +266,7 @@ class HomeMainFragment : Fragment() {
             }
         })
     }
+
 
 
 }

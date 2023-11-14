@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/img_M_ChatImg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedChatProfileImage"
+        app:srcCompat="@drawable/tea_img" />
+
+    <TextView
+        android:id="@+id/tv_M_ChatTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:text="구구까까"
+        android:textColor="@color/txt_black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/img_M_ChatImg"
+        app:layout_constraintTop_toTopOf="@+id/img_M_ChatImg" />
+
+    <TextView
+        android:id="@+id/tv_M_ChatContent"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="오늘 너무 배고파요... 이따가 동명동 가서 맛난거 같이 먹을래요? 저 맛집리스트..."
+        android:textColor="@color/txt_gray80"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_M_ChatImg"
+        app:layout_constraintStart_toStartOf="@+id/tv_M_ChatTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tv_M_ChatTitle" />
+
+    <View
+        android:id="@+id/v_M_NewShape"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/alert_shape"
+        android:foregroundGravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_M_ChatContent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_M_ChatContent" />
+
+    <TextView
+        android:id="@+id/tv_M_New"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="N"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/v_M_NewShape"
+        app:layout_constraintEnd_toEndOf="@+id/v_M_NewShape"
+        app:layout_constraintStart_toStartOf="@+id/v_M_NewShape"
+        app:layout_constraintTop_toTopOf="@+id/v_M_NewShape" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/txt_gray30"
+        app:layout_constraintEnd_toEndOf="@+id/v_M_NewShape"
+        app:layout_constraintStart_toStartOf="@+id/img_M_ChatImg"
+        app:layout_constraintTop_toBottomOf="@+id/img_M_ChatImg" />
+
+    <TextView
+        android:id="@+id/tv_M_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="1분전"
+        android:textColor="@color/txt_gray50"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@+id/v_M_NewShape"
+        app:layout_constraintTop_toTopOf="@+id/tv_M_ChatTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,249 +46,398 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:fontFamily="@font/pretendard_semibold"
-        android:text="모임의 종류를 골라주세요."
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/cardView2"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2">
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/pretendard_semibold"
-        android:text="모임 이름"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="@+id/imageView8"
-        app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/pretendard_semibold"
-        android:text="활동지역"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView8"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="모임의 종류를 골라주세요."
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView21"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/pretendard_semibold"
-        android:text="인원 수"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView8"
-        app:layout_constraintTop_toBottomOf="@+id/sp_M_gulist" />
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="모임 이름"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="@+id/img_M_Check_Trip"
+                app:layout_constraintTop_toBottomOf="@+id/img_M_Check_Trip" />
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginBottom="3dp"
-        android:drawablePadding="5dp"
-        android:fontFamily="@font/pretendard_medium"
-        android:text="운동"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="@+id/imageView5" />
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="활동지역"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="@+id/etMeetingName"
+                app:layout_constraintTop_toBottomOf="@+id/etMeetingName" />
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginBottom="3dp"
-        android:drawablePadding="5dp"
-        android:fontFamily="@font/pretendard_medium"
-        android:text="여행"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
-        app:layout_constraintStart_toEndOf="@+id/imageView8"
-        app:layout_constraintTop_toTopOf="@+id/imageView8" />
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="인원 수"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="@+id/sp_M_gulist"
+                app:layout_constraintTop_toBottomOf="@+id/sp_M_gulist" />
 
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginBottom="3dp"
-        android:drawablePadding="5dp"
-        android:fontFamily="@font/pretendard_medium"
-        android:text="취미"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="@+id/imageView6" />
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="운동"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_M_Check_Exercise"
+                app:layout_constraintStart_toEndOf="@+id/img_M_Check_Exercise"
+                app:layout_constraintTop_toTopOf="@+id/img_M_Check_Exercise" />
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginBottom="3dp"
-        android:drawablePadding="5dp"
-        android:fontFamily="@font/pretendard_medium"
-        android:text="자기계발"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
-        app:layout_constraintStart_toEndOf="@+id/imageView9"
-        app:layout_constraintTop_toTopOf="@+id/imageView9" />
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="여행"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_M_Check_Trip"
+                app:layout_constraintStart_toEndOf="@+id/img_M_Check_Trip"
+                app:layout_constraintTop_toTopOf="@+id/img_M_Check_Trip" />
 
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginBottom="3dp"
-        android:drawablePadding="5dp"
-        android:fontFamily="@font/pretendard_medium"
-        android:text="전시/공연"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView7"
-        app:layout_constraintStart_toEndOf="@+id/imageView7"
-        app:layout_constraintTop_toTopOf="@+id/imageView7" />
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="취미"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_M_Check_Hobby"
+                app:layout_constraintStart_toEndOf="@+id/img_M_Check_Hobby"
+                app:layout_constraintTop_toTopOf="@+id/img_M_Check_Hobby" />
 
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginBottom="3dp"
-        android:drawablePadding="5dp"
-        android:fontFamily="@font/pretendard_medium"
-        android:text="재테크"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
-        app:layout_constraintStart_toEndOf="@+id/imageView10"
-        app:layout_constraintTop_toTopOf="@+id/imageView10" />
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="자기계발"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_M_Check_Selfimprovement"
+                app:layout_constraintStart_toEndOf="@+id/img_M_Check_Selfimprovement"
+                app:layout_constraintTop_toTopOf="@+id/img_M_Check_Selfimprovement" />
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_checkbox"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="전시/공연"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_M_Check_Concert"
+                app:layout_constraintStart_toEndOf="@+id/img_M_Check_Concert"
+                app:layout_constraintTop_toTopOf="@+id/img_M_Check_Concert" />
 
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_checkbox"
-        app:layout_constraintStart_toStartOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/pretendard_medium"
+                android:text="재테크"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_M_Check_Financial"
+                app:layout_constraintStart_toEndOf="@+id/img_M_Check_Financial"
+                app:layout_constraintTop_toTopOf="@+id/img_M_Check_Financial" />
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:src="@drawable/ic_checkbox"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        app:layout_constraintStart_toEndOf="@+id/textView13"
-        app:layout_constraintTop_toTopOf="@+id/imageView5" />
+            <ImageView
+                android:id="@+id/img_M_Check_Exercise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_checkbox"
+                android:clickable="true"
+                android:onClick="onExerciseImageClick"
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <ImageView
-        android:id="@+id/imageView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:src="@drawable/ic_checkbox"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
-        app:layout_constraintStart_toEndOf="@+id/textView16"
-        app:layout_constraintTop_toTopOf="@+id/imageView8" />
+            <ImageView
+                android:id="@+id/img_M_Check_Trip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_checkbox"
+                android:clickable="true"
+                android:onClick="onExerciseImageClick"
+                app:layout_constraintStart_toStartOf="@+id/img_M_Check_Exercise"
+                app:layout_constraintTop_toBottomOf="@+id/img_M_Check_Exercise" />
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="61dp"
-        android:src="@drawable/ic_checkbox"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        app:layout_constraintStart_toEndOf="@+id/textView14"
-        app:layout_constraintTop_toTopOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.0" />
+            <ImageView
+                android:id="@+id/img_M_Check_Hobby"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_checkbox"
+                android:clickable="true"
+                android:onClick="onExerciseImageClick"
+                app:layout_constraintStart_toEndOf="@+id/textView13"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:src="@drawable/ic_checkbox"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
-        app:layout_constraintStart_toEndOf="@+id/textView17"
-        app:layout_constraintTop_toTopOf="@+id/imageView8" />
+            <ImageView
+                android:id="@+id/img_M_Check_Selfimprovement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_checkbox"
+                android:clickable="true"
+                android:onClick="onExerciseImageClick"
+                app:layout_constraintStart_toStartOf="@+id/img_M_Check_Hobby"
+                app:layout_constraintTop_toBottomOf="@+id/img_M_Check_Hobby" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="-2dp"
-        android:backgroundTint="@color/txt_gray70"
-        android:ems="10"
-        android:hint="모임 이름을 작성해 주세요."
-        android:inputType="text"
-        android:lineSpacingExtra="10sp"
-        android:lineSpacingMultiplier="1.2"
-        app:layout_constraintEnd_toEndOf="@+id/textView19"
-        app:layout_constraintStart_toStartOf="@+id/textView19"
-        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+            <ImageView
+                android:id="@+id/img_M_Check_Concert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_checkbox"
+                android:clickable="true"
+                android:onClick="onExerciseImageClick"
+                app:layout_constraintStart_toEndOf="@+id/textView30"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <ImageView
-        android:id="@+id/imageView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_downbtn"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="464dp" />
+            <ImageView
+                android:id="@+id/img_M_Check_Financial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_checkbox"
+                android:clickable="true"
+                android:onClick="onExerciseImageClick"
+                app:layout_constraintStart_toStartOf="@+id/img_M_Check_Concert"
+                app:layout_constraintTop_toBottomOf="@+id/img_M_Check_Concert" />
 
-    <ImageView
-        android:id="@+id/imageView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_upbtn"
-        tools:layout_editor_absoluteX="128dp"
-        tools:layout_editor_absoluteY="464dp" />
+            <EditText
+                android:id="@+id/etMeetingName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="@color/txt_gray70"
+                android:ems="10"
+                android:hint="모임 이름을 작성해 주세요."
+                android:inputType="text"
+                android:lineSpacingExtra="10sp"
+                android:lineSpacingMultiplier="1.2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
-    <Spinner
-        android:id="@+id/sp_M_gulist"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@+id/textView20"
-        app:layout_constraintTop_toBottomOf="@+id/textView20" />
+            <TextView
+                android:id="@+id/tv_M_LetterCnt"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="0"
+                android:textColor="@color/txt_gray70"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView14"
+                app:layout_constraintEnd_toStartOf="@+id/textView14"
+                app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+            <Spinner
+                android:id="@+id/sp_M_gulist"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@+id/textView20"
+                app:layout_constraintTop_toBottomOf="@+id/textView20" />
+
+            <TextView
+                android:id="@+id/tv_M_AllMember"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/cnt_button_shape"
+                android:fontFamily="@font/pretendard_medium"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                android:paddingBottom="14dp"
+                android:text="0"
+                android:textColor="@color/txt_gray70"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/img_M_Minus"
+                app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+            <ImageView
+                android:id="@+id/img_M_Minus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_minus_1"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_M_AllMember"
+                app:layout_constraintStart_toStartOf="@+id/textView21"
+                app:layout_constraintTop_toTopOf="@+id/tv_M_AllMember" />
+
+            <ImageView
+                android:id="@+id/img_M_Plus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_plus"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_M_AllMember"
+                app:layout_constraintStart_toEndOf="@+id/tv_M_AllMember"
+                app:layout_constraintTop_toTopOf="@+id/tv_M_AllMember" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-5dp"
+                android:layout_marginEnd="3dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="/20"
+                android:textColor="@color/txt_gray70"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/etMeetingName"
+                app:layout_constraintTop_toBottomOf="@+id/etMeetingName" />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="모임 소개"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="@+id/img_M_Minus"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_AllMember" />
+
+            <EditText
+                android:id="@+id/etMeetingIntro"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/textfield_shape"
+                android:ems="13"
+                android:gravity="start|top"
+                android:hint="모임 소개를 작성해 주세요."
+                android:inputType="textMultiLine"
+                android:padding="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
+            <TextView
+                android:id="@+id/textView25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="/300"
+                android:textColor="@color/txt_gray70"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/etMeetingIntro"
+                app:layout_constraintTop_toBottomOf="@+id/etMeetingIntro" />
+
+            <TextView
+                android:id="@+id/tv_M_LetterCnt2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="0"
+                android:textColor="@color/txt_gray70"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView25"
+                app:layout_constraintEnd_toStartOf="@+id/textView25"
+                app:layout_constraintTop_toTopOf="@+id/textView25" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="1dp"
+                app:cardElevation="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etMeetingIntro">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="84dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/card_bttom"
+                    android:elevation="2dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSetMeeing"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/button_shape_main"
+                    android:elevation="5dp"
+                    android:fontFamily="@font/pretendard_semibold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingTop="13dp"
+                    android:paddingBottom="13dp"
+                    android:text="모임 만들기"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:visibility="visible"
+                    app:cornerRadius="20dp"
+                    tools:layout_conversion_absoluteHeight="60dp"
+                    tools:layout_conversion_absoluteWidth="0dp" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
