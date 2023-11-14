@@ -1,26 +1,22 @@
 package com.example.senimoapplication.Club.Activity_club
 
-import android.app.DatePickerDialog
+
 import android.content.Intent
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.senimoapplication.Club.VO.ScheduleVO
-import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
-
+import java.util.Locale
 
 
 class MakeScheduleActivity : ComponentActivity() {
@@ -108,14 +104,15 @@ class MakeScheduleActivity : ComponentActivity() {
             }
         })
 
+
         binding.timePicker.visibility = GONE
         binding.calendarView.visibility = GONE
-
 
 
         // 날짜 설정
         binding.btnScheduleDate.setOnClickListener{
             binding.calendarView.visibility = VISIBLE
+            binding.timePicker.visibility = View.GONE
             binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
                 val selectedDate = "$year-${month + 1}-$dayOfMonth"
                 binding.btnScheduleDate.text ="$selectedDate"
@@ -126,15 +123,28 @@ class MakeScheduleActivity : ComponentActivity() {
 
         // 시간 설정
         binding.btnScheduleTime.setOnClickListener {
-            binding.calendarView.visibility = GONE
-            binding.timePicker.visibility = VISIBLE
+            binding.calendarView.visibility = View.GONE
+            binding.timePicker.visibility = View.VISIBLE
             binding.timePicker.setOnTimeChangedListener { view, hourOfDay, minute ->
-                val selectedTime = "$hourOfDay:$minute"
-                binding.btnScheduleTime.text ="$selectedTime"
+                val selectedHour = if (hourOfDay > 12) {
+                    hourOfDay - 12 // 오후 시간을 12시간 형식으로 변환
+                } else if (hourOfDay == 0) {
+                    12 // 자정 시간을 12시간 형식으로 변환
+                } else {
+                    hourOfDay // 오전 시간은 그대로 유지
+                }
+
+                val amPm = if (hourOfDay >= 12) "오후" else "오전" // 오전/오후 정보
+
+                val selectedTime = "$amPm $selectedHour:$minute"
+                binding.btnScheduleTime.text = selectedTime
             }
         }
 
-
+        binding.etScheduleLoca.setOnClickListener {
+            binding.timePicker.visibility = GONE
+            binding.calendarView.visibility = GONE
+        }
 
 
 
@@ -166,15 +176,22 @@ class MakeScheduleActivity : ComponentActivity() {
 
         // 일정 등록 버튼 클릭 시 정보 취합하기
         binding.btnSetSchedule.setOnClickListener {
-            setScheduleList.add(ScheduleVO(
-                binding.etScheduleName.text.toString(),
-                binding.etScheduleIntro.text.toString(),
-                "${binding.btnScheduleDate.text.toString()} ${binding.btnScheduleTime.text.toString()}",
-                binding.etScheduleFee.text.toString(),
-                binding.etScheduleLoca.text.toString(),
-                binding.tvAllMember.text.toString().toInt(),
-                0,"모집중")
-            )
+
+            // 나중에 서버 통신 결과로 일정 등록 성공/실패 토스트 메시지 띄우기
+            Toast.makeText(this, "일정이 등록되었습니다", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this, ClubActivity::class.java)
+            startActivity(intent)
+            finish()
+//            setScheduleList.add(ScheduleVO(
+//                binding.etScheduleName.text.toString(),
+//                binding.etScheduleIntro.text.toString(),
+//                "${binding.btnScheduleDate.text.toString()} ${binding.btnScheduleTime.text.toString()}",
+//                binding.etScheduleFee.text.toString(),
+//                binding.etScheduleLoca.text.toString(),
+//                binding.tvAllMember.text.toString().toInt(),
+//                0,"모집중")
+//            )
         }
 
 

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="20dp"
     android:layout_gravity="center"
+    android:layout_marginHorizontal="20dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="10dp">
 
@@ -34,25 +34,8 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnCancel"
-                android:layout_width="114dp"
-                android:layout_height="38dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/button_shape"
-                android:fontFamily="@font/pretendard_medium"
-                android:hapticFeedbackEnabled="false"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:text="취소"
-                android:textColor="@color/main"
-                android:textSize="16sp"
-                app:cornerRadius="10dp" />
-
-            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnOkay"
-                android:layout_width="114dp"
+                android:layout_width="238dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:background="@drawable/button_shape_main"
@@ -64,7 +47,7 @@
                 android:paddingTop="8dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="8dp"
-                android:text="삭제하기"
+                android:text="확인"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp" />
         </LinearLayout>
