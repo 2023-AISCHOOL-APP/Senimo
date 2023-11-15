@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.senimoapplication.Club.VO.ScheduleVO
+import com.example.senimoapplication.Club.fragment.ChatFragment
+import com.example.senimoapplication.MainPage.VO_main.ChatListVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.databinding.ActivityMainBinding
 import com.example.senimoapplication.MainPage.fragment_main.ChatMainFragment
@@ -124,7 +126,11 @@ class MainActivity : AppCompatActivity() {
           binding.ImgMSettingbtn.visibility = View.INVISIBLE
           binding.ImgMBackbtnToFrag1.visibility = View.INVISIBLE
 
+
+
         }
+
+
         R.id.M_tab4 ->{
           supportFragmentManager.beginTransaction().replace(
             R.id.fl,
@@ -153,8 +159,20 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
-    }
+  }
 
-
+  // ChatMainFragment 에서 ChatFragment로 이동시키게 하는 함수 만들기
+  // 내 모임리스트 -> 내 모임 방
+  // tab3 에서 fl화면 전환
+  fun navigateToChatFragment(chatListVO: ChatListVO) {
+    supportFragmentManager.beginTransaction().replace(
+      R.id.fl,
+      ChatFragment.newInstance(chatListVO)
+    ).commit()
+  }
 
   }
+
+interface OnChatItemClickListener {
+  fun navigateToChatFragment(chatListVO: ChatListVO)
+}

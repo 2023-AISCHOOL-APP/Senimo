@@ -1,5 +1,6 @@
 package com.example.senimoapplication.MainPage.adapter_main
 
+import com.example.senimoapplication.MainPage.VO_main.ChatListVO
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.compose.ui.unit.min
 import androidx.recyclerview.widget.RecyclerView
-import com.example.senimoapplication.MainPage.VO_main.ChatListVO
 import com.example.senimoapplication.R
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -16,6 +16,18 @@ import java.util.Locale
 
 class ChatListAdapter(val context: Context, val layout: Int, val data: List<ChatListVO>)
     : RecyclerView.Adapter<ChatListAdapter.ViewHolder>(){
+
+    private var onItemClickListener: OnItemClickListener? = null
+
+    // OnItemClickListener 인터페이스 정의
+    interface OnItemClickListener {
+        fun onItemClick(chatListVO: ChatListVO)
+    }
+
+    // 외부에서 OnItemClickListener를 설정할 수 있도록 하는 메서드
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.onItemClickListener = listener
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val img_M_ChatImg : View
@@ -83,6 +95,11 @@ class ChatListAdapter(val context: Context, val layout: Int, val data: List<Chat
 
         // 로그 확인
         Log.d("ChatListAdapter", "Position $position = New Count : $newCount")
+
+
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.onItemClick(data[position])
+        }
 
 
 

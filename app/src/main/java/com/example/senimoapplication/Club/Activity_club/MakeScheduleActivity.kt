@@ -20,7 +20,6 @@ import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
 
 
-
 class MakeScheduleActivity : ComponentActivity() {
 
     lateinit var binding : ActivityMakeScheduleBinding
@@ -31,7 +30,7 @@ class MakeScheduleActivity : ComponentActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.icBackbtn.setOnClickListener {
+        binding.icBack.setOnClickListener {
             val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
             startActivity(intent)
             finish()
