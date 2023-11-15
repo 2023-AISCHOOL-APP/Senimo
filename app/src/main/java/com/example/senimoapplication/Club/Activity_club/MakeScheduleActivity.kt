@@ -16,7 +16,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
-import java.util.Locale
 
 
 class MakeScheduleActivity : ComponentActivity() {

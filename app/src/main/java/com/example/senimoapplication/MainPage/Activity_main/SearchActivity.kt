@@ -21,11 +21,6 @@ class SearchActivity : AppCompatActivity() {
     lateinit var meetingList: ArrayList<MeetingVO>
     private var filteredMeetingList: List<MeetingVO> = ArrayList()
 
-    // 로그 메세지 태그
-    companion object {
-        private const val TAG = "SearchActivity"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
