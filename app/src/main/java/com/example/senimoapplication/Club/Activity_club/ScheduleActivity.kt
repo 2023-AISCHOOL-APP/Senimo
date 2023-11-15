@@ -7,6 +7,7 @@ import android.os.Bundle
 
 import android.util.Log
 import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO

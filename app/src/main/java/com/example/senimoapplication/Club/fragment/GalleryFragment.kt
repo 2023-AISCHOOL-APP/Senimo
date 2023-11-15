@@ -1,21 +1,16 @@
 package com.example.senimoapplication.Club.fragment
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.senimoapplication.Club.Activity_club.PhotoActivity
+import com.example.senimoapplication.Club.VO.GalleryVO
 import com.example.senimoapplication.Club.adapter.GalleryAdapter
 import com.example.senimoapplication.R
-import com.example.senimoapplication.databinding.FragmentBoardBinding
 import com.example.senimoapplication.databinding.FragmentGalleryBinding
 
 
@@ -29,13 +24,21 @@ class GalleryFragment : Fragment() {
 
         binding = FragmentGalleryBinding.inflate(inflater, container, false)
         val view = binding.root
-        val photoList : ArrayList<Uri> = ArrayList()
-        val adapter = GalleryAdapter(requireContext(), R.layout.post_list, photoList)
+        val photosList : ArrayList<GalleryVO> = ArrayList()
+        val adapter = GalleryAdapter(requireContext(), R.layout.photo_list, photosList)
+
+
+        photosList.add(GalleryVO("dfsdfsdfs"))
+        photosList.add(GalleryVO("dfsdfsdfs"))
+        photosList.add(GalleryVO("dfsdfsdfs"))
+        photosList.add(GalleryVO("dfsdfsdfs"))
+
         binding.rvGallery.adapter = adapter
         binding.rvGallery.layoutManager = GridLayoutManager(requireContext(),3)
 
+
         // PostVO 리스트가 비어있는 경우 Announce 텍스트를 보여줌
-        if (photoList.isEmpty()) {
+        if (photosList.isEmpty()) {
             binding.rvGallery.visibility = View.GONE
             binding.tvAnnounceMainPhoto.visibility = View.VISIBLE
             binding.tvAnnounceSubPhoto.visibility = View.VISIBLE
@@ -44,9 +47,6 @@ class GalleryFragment : Fragment() {
             binding.tvAnnounceMainPhoto.visibility = View.GONE
             binding.tvAnnounceSubPhoto.visibility = View.GONE
         }
-
-
-
 
 
         binding.btnFloatingNewPhoto.setOnClickListener {
