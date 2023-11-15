@@ -2,59 +2,85 @@ package com.example.senimoapplication.Club.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.Club.Activity_club.MakeScheduleActivity
-import com.example.senimoapplication.Common.KeywordAdapter
-import com.example.senimoapplication.Club.adapter.MemberAdapter
-import com.example.senimoapplication.R
-import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.Club.Activity_club.ScheduleActivity
-import com.example.senimoapplication.Club.adapter.ScheduleAdapter
+import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
+import com.example.senimoapplication.Club.adapter.MemberAdapter
+import com.example.senimoapplication.Club.adapter.ScheduleAdapter
+import com.example.senimoapplication.Common.RecyclerItemClickListener
+import com.example.senimoapplication.R
+import com.example.senimoapplication.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
+    lateinit var binding : FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        val view = binding.root
 
         val scheduleList : ArrayList<ScheduleVO> = ArrayList()
-        val s_adapter = ScheduleAdapter(requireContext(),R.layout.schedule_list, scheduleList)
-        val rvSchedule = view.findViewById<RecyclerView>(R.id.rvSchedule)
-        val rvMember = view.findViewById<RecyclerView>(R.id.rvMember)
         val memberList : ArrayList<MemberVO> = ArrayList()
+
+        val s_adapter = ScheduleAdapter(requireContext(),R.layout.schedule_list, scheduleList)
         val m_adapter = MemberAdapter(requireContext(),R.layout.club_member_list, memberList)
-        val keywordList : ArrayList<String> = ArrayList()
-        val k_adapter = KeywordAdapter(requireContext(),R.layout.keyword_list, keywordList)
-        val rvKeyword = view.findViewById<RecyclerView>(R.id.rvKeyword)
-        val btnJoinClub = view.findViewById<Button>(R.id.btnJoinClub)
-        val btnNewSchedule = view.findViewById<Button>(R.id.btnNewSchedule)
 
 
-        // 모임 키워드 리사이클러뷰 어댑터 연결
-        rvKeyword.adapter = k_adapter
-        rvKeyword.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+        // 관리자 여부 확인해서 버튼 보이기
+//        if(회원레벨이 3인 경우){
+//            binding.tvMoveEdit.visibility = INVISIBLE
+//            binding.btnNewSchedule.visibility = GONE
+//        }else{
+//            // 관리자, 운영자인 경우
+//            binding.tvMoveEdit.visibility = VISIBLE
+//            binding.btnNewSchedule.visibility = VISIBLE
+//        }
+//
+        // view요소들 데이터 변경
 
-        // 모임 키워드 가데이터
-        keywordList.add("운동")
-        keywordList.add("취미")
-        keywordList.add("전시/공연")
-        keywordList.add("여행")
+
+        val clubInfo = ClubInfoVO(
+            "img_sample",
+            5,
+            10,
+            "양희준과 아이들 T1F4",
+            "동구",
+            "자기계발",
+            "시니어의 활동적인 삶을 위해서 모임 플랫폼을 만들기로 했습니다. 우리의 첫 번째 모임입니다.",
+        )
+
+
+
+        //binding.clubImage.setImageURI(clubInfo.clubImg)
+        binding.tvMemberAllNum.text="/${clubInfo.maxCnt}명"
+        binding.tvMemberNum.text="${clubInfo.joinedUserCnt}"
+        binding.tvClubNameTitle.text = clubInfo.clubName
+        binding.tvClubLoca.text = clubInfo.clubLocation
+        binding.tvKeyword.text = clubInfo.keywordName
+        binding.tvClubIntro.text = clubInfo.clubIntroduce
+
+
+
+        binding.tvMoveEdit.setOnClickListener {
+            val intent = Intent(view.context, MakeScheduleActivity::class.java)
+            startActivity(intent)
+        }
 
 
         // 일정 리사이클러뷰 어댑터 연결
-        rvSchedule.adapter = s_adapter
-        rvSchedule.layoutManager=LinearLayoutManager(view.context)
+        binding.rvSchedule.adapter = s_adapter
+        binding.rvSchedule.layoutManager=LinearLayoutManager(view.context)
 
         // 모임 일정 가데이터
         scheduleList.add(ScheduleVO("모임명","신나는 크리스마스 파티","노는게 제일 좋은 친구들 모여서 함꼐 놀아요","2023-12-20 17:00",30000, "광주 동구 제봉로 대성학원 3층", 26,20,"모집중" ))
@@ -62,8 +88,8 @@ class HomeFragment : Fragment() {
         //scheduleList.add(ScheduleVO("점심을 공유합시다","2023-11-6 17:00","30000", "광주 동구 동부식당", 26,20,"모집마감" ))
 
         // 모임 상세 페이지로 이동
-        rvSchedule.addOnItemTouchListener(
-            RecyclerItemClickListener(requireContext(), rvSchedule, object : RecyclerItemClickListener.OnItemClickListener {
+        binding.rvSchedule.addOnItemTouchListener(
+            RecyclerItemClickListener(requireContext(), binding.rvSchedule, object : RecyclerItemClickListener.OnItemClickListener {
                 override fun onItemClick(view: View, position: Int) {
                     val clickedSchedule = scheduleList[position] // 클릭된 아이템의 ScheduleVO 가져오기
                     // 새로운 액티비티로 이동
@@ -74,14 +100,14 @@ class HomeFragment : Fragment() {
         )
 
         // 모임 일정 등록 액티비티로 이동
-        btnNewSchedule.setOnClickListener {
+        binding.btnNewSchedule.setOnClickListener {
             val intent = Intent(view.context, MakeScheduleActivity::class.java)
             view.context.startActivity(intent)
         }
 
         // 전체 회원 리사이클러뷰 어탭터 연결
-        rvMember.adapter = m_adapter
-        rvMember.layoutManager=LinearLayoutManager(view.context)
+        binding.rvMember.adapter = m_adapter
+        binding.rvMember.layoutManager=LinearLayoutManager(view.context)
 
         // 전체 회원 목록 가데이터
         memberList.add(MemberVO("양희준", 1, R.drawable.img_sample))
@@ -109,16 +135,16 @@ class HomeFragment : Fragment() {
 
         // 모임 가입 상태 체크 및 버튼 전환 (join
         var joinstate : Int = 0
-        btnJoinClub.setOnClickListener {
+        binding.btnJoinClub.setOnClickListener {
             if(joinstate == 0){
-                btnJoinClub.setTextColor(ContextCompat.getColor(view.context, R.color.main))
-                btnJoinClub.setBackgroundResource(R.drawable.button_shape)
-                btnJoinClub.text = "모임 탈퇴하기"
+                binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context, R.color.main))
+                binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
+                binding.btnJoinClub.text = "모임 탈퇴하기"
                 joinstate = 1
             }else{
-                btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
-                btnJoinClub.setTextColor(ContextCompat.getColor(view.context, R.color.white))
-                btnJoinClub.text = "모임 가입하기"
+                binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
+                binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context, R.color.white))
+                binding.btnJoinClub.text = "모임 가입하기"
                 joinstate = 0
             }
         }

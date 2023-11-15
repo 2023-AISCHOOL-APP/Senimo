@@ -1,4 +1,4 @@
-package com.example.senimoapplication.Common
+package com.example.senimoapplication.Club.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -23,6 +23,18 @@ class KeywordAdapter (val context : Context, val layout : Int, val data : ArrayL
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tvKeyword.text = data[position]
+        for (keyword in data) {
+            when (keyword) {
+                "운동" -> holder.tvKeyword.setBackgroundResource(R.drawable.keyword)
+                "취미" -> holder.tvKeyword.setBackgroundResource(R.drawable.keyword_color2)
+                "전시/공연" -> holder.tvKeyword.setBackgroundResource(R.drawable.keyword_color3)
+                "여행" -> holder.tvKeyword.setBackgroundResource(R.drawable.keyword_color4)
+                "자기계발" -> holder.tvKeyword.setBackgroundResource(R.drawable.keyword_color5)
+                "재테크" -> holder.tvKeyword.setBackgroundResource(R.drawable.keyword_color6)
+                // 기타 키워드에 대한 처리
+                else -> holder.tvKeyword.setBackgroundResource(R.drawable.keyword_color6)
+            }
+        }
     }
 
     override fun getItemCount(): Int {

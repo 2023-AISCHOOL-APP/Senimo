@@ -38,7 +38,6 @@ class HomeMainFragment : Fragment() {
     private var isScrolling = false
     private var isAtTop = true
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,7 +75,6 @@ class HomeMainFragment : Fragment() {
         rv_M_MySchedule.adapter = myScheduleAdapter
         rv_M_MySchedule.layoutManager = LinearLayoutManager(requireContext())
 
-
         // 모임 RecyclerView 어댑터 생성 및 설정
         adapter = MeetingAdapter(requireContext(), R.layout.meeting_list, MeetingList)
         rv_M_PopularMeeting.adapter = adapter
@@ -90,6 +88,8 @@ class HomeMainFragment : Fragment() {
 //        MeetingList.add(MeetingVO("북구","동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5,10,R.drawable.tea_img.toString()))
 //        MeetingList.add(MeetingVO("남구","운암동 수영 모임", "헤엄 헤엄~", "운동", 8,30,R.drawable.tea_img.toString()))
 //        MeetingList.add(MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString()))
+        // adapter.notifyDataSetChanged() // 어댑터 새로고침
+
 
         // 모임 홈 페이지로 이동
         rv_M_PopularMeeting.addOnItemTouchListener(
@@ -106,6 +106,27 @@ class HomeMainFragment : Fragment() {
                     }
                 })
         )
+
+        // 카테고리 클릭 시 SearchActivity로 이동
+//        img_M_Excercise.setOnClickListener {
+//            startSearchActivity("운동")
+//        }
+//        img_M_Hobby.setOnClickListener {
+//            // val intent = Intent(requireContext(), ClubActivity::class.java)
+//            startSearchActivity("취미")
+//        }
+//        img_M_Concert.setOnClickListener {
+//            startSearchActivity("전시","공연")
+//        }
+//        img_M_Trip.setOnClickListener {
+//            startSearchActivity("여행")
+//        }
+//        img_M_Selfimprovement.setOnClickListener {
+//            startSearchActivity("자기계발")
+//        }
+//        img_M_Financial.setOnClickListener {
+//            startSearchActivity("재테크")
+//        }
 
         // 카테고리 클릭 시 모임 홈 페이지로 이동
         img_M_Excercise.setOnClickListener {
@@ -136,11 +157,10 @@ class HomeMainFragment : Fragment() {
 
 
 
+
         Img_M_SearchBar.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
-
-            intent.putExtra("MeetingList", MeetingList)
-
+            //intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))  // HomeMainFragment에서 MeetingList를 Parcel로 만들어 SearchActivity로 전달
             startActivity(intent)
             activity?.finish()
 
@@ -178,7 +198,6 @@ class HomeMainFragment : Fragment() {
             }
         }
 
-
         return view
     }
 
@@ -195,6 +214,7 @@ class HomeMainFragment : Fragment() {
 //            .build()
         val retrofit = Server().retrofit
 
+
         // 서버에 요청을 보낼 '전화기'를 만들어요.
         val service = retrofit.create(ApiService::class.java)
         // '전화'를 걸어요. 서버에 데이터를 달라고 요청해요.
@@ -204,6 +224,7 @@ class HomeMainFragment : Fragment() {
                 Log.d("ody1", response.toString())
                 // 서버 응답이 null인지 확인합니다.
                 if (response.isSuccessful) {
+
                     Log.d("ody1", response.body().toString())
                     response.body()?.let { meetings ->
                         // null이 아니면 기존 목록을 지우고 새 데이터로 채웁니다.
@@ -211,6 +232,13 @@ class HomeMainFragment : Fragment() {
                         MeetingList.addAll(meetings)
                         if (::adapter.isInitialized) {
                             adapter.notifyDataSetChanged()// 어댑터에 데이터 변경을 알립니다.
+
+                            Log.d("test2", MeetingList.toString())
+
+                            for (meeting in MeetingList) {
+                                Log.d("MeetingList_test", "Title: ${meeting.title}, Content: ${meeting.content}, Keyword: ${meeting.keyword}")
+                            }
+
                         } else {
                             // 어댑터를 초기화하지 않았으면 여기서 초기화합니다.
                             adapter =
@@ -236,6 +264,7 @@ class HomeMainFragment : Fragment() {
             }
         })
     }
+
 
 
 }

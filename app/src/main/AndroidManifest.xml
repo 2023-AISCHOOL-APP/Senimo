@@ -21,15 +21,20 @@
         android:requestLegacyExternalStorage="true"
         tools:targetApi="34">
         <activity
+
             android:name=".server.GalleryActivity"
             android:exported="false" >
 
         </activity>
-        +<activity
+        <activity
             android:name=".server.picture_test"
             android:exported="false" >
 
         </activity>
+        <activity
+            android:name=".Club.Activity_club.PhotoActivity"
+            android:exported="false" />
+
         <activity
             android:name=".Club.Activity_club.MakeScheduleActivity"
             android:exported="false" />

@@ -4,6 +4,7 @@ const conn = require('../config/database');
 
 router.get('/getMeetings', (req, res) => {
   console.log('result', req.body);
+
   // SQL 쿼리를 실행합니다.
 
   const query = `

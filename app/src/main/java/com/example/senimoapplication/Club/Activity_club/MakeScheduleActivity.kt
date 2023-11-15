@@ -1,11 +1,15 @@
 package com.example.senimoapplication.Club.Activity_club
 
-import android.app.DatePickerDialog
-import android.icu.util.Calendar
+
+
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -13,6 +17,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
+
 
 
 class MakeScheduleActivity : ComponentActivity() {
@@ -100,15 +105,47 @@ class MakeScheduleActivity : ComponentActivity() {
             }
         })
 
+
+        binding.timePicker.visibility = GONE
+        binding.calendarView.visibility = GONE
+
+
         // 날짜 설정
-        binding.etScheduleDate.setOnClickListener{
-            showDatePickerDialog()
+        binding.btnScheduleDate.setOnClickListener{
+            binding.calendarView.visibility = VISIBLE
+            binding.timePicker.visibility = View.GONE
+            binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+                val selectedDate = "$year-${month + 1}-$dayOfMonth"
+                binding.btnScheduleDate.text ="$selectedDate"
+            }
+
         }
 
 
+        // 시간 설정
+        binding.btnScheduleTime.setOnClickListener {
+            binding.calendarView.visibility = View.GONE
+            binding.timePicker.visibility = View.VISIBLE
+            binding.timePicker.setOnTimeChangedListener { view, hourOfDay, minute ->
+                val selectedHour = if (hourOfDay > 12) {
+                    hourOfDay - 12 // 오후 시간을 12시간 형식으로 변환
+                } else if (hourOfDay == 0) {
+                    12 // 자정 시간을 12시간 형식으로 변환
+                } else {
+                    hourOfDay // 오전 시간은 그대로 유지
+                }
 
+                val amPm = if (hourOfDay >= 12) "오후" else "오전" // 오전/오후 정보
 
+                val selectedTime = "$amPm $selectedHour:$minute"
+                binding.btnScheduleTime.text = selectedTime
+            }
+        }
 
+        binding.etScheduleLoca.setOnClickListener {
+            binding.timePicker.visibility = GONE
+            binding.calendarView.visibility = GONE
+        }
 
 
 
@@ -140,16 +177,24 @@ class MakeScheduleActivity : ComponentActivity() {
 
         // 일정 등록 버튼 클릭 시 정보 취합하기
         binding.btnSetSchedule.setOnClickListener {
-            setScheduleList.add(ScheduleVO(
-                "모임명", // 나중에 수정필요
-                binding.etScheduleName.text.toString(),
-                binding.etScheduleIntro.text.toString(),
-                binding.etScheduleDate.text.toString(),
-                binding.etScheduleFee.text.toString().toInt(), // 도운이가 수정함 fee를 int로 바꿔서 에러뜸
-                binding.etScheduleLoca.text.toString(),
-                binding.tvAllMember.text.toString().toInt(),
-                0,"모집중")
-            )
+
+            // 나중에 서버 통신 결과로 일정 등록 성공/실패 토스트 메시지 띄우기
+            Toast.makeText(this, "일정이 등록되었습니다", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this, ClubActivity::class.java)
+            startActivity(intent)
+            finish()
+//            setScheduleList.add(ScheduleVO(
+//                "모임명", // 나중에 수정필요
+//                binding.etScheduleName.text.toString(),
+//                binding.etScheduleIntro.text.toString(),
+//                "${binding.btnScheduleDate.text.toString()} ${binding.btnScheduleTime.text.toString()}",
+//                binding.etScheduleFee.text.toString().toInt(), // 도운이가 수정함 fee를 int로 바꿔서 수정함
+//                binding.etScheduleLoca.text.toString(),
+//                binding.tvAllMember.text.toString().toInt(),
+//                0,"모집중")
+//            )
+
         }
 
 
@@ -172,25 +217,5 @@ class MakeScheduleActivity : ComponentActivity() {
 //            }
 //        pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
     }
-    private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(
-            this,
-            DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
-                // 여기서 선택된 날짜를 사용할 수 있습니다.
-                val selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDay"
-                binding.etScheduleDate.setText(selectedDate)
-            },
-            year, month, day
-        )
-
-        // 현재 날짜를 최소 날짜로 설정하여 과거 날짜를 선택하지 못하도록 합니다.
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
-
-        datePickerDialog.show()
-    }
 }

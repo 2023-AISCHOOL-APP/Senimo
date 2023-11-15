@@ -33,6 +33,21 @@
         <item name="cornerSize">25dp</item>
         <item name="color">@color/white</item>
     </style>
+
+    <!-- 채팅 리스트 회원 프로필 사진 스타일   -->
+    <style name="RoundedChatProfileImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">30dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
+    <!-- 댓글 회원 프로필 사진 스타일   -->
+    <style name="RoundedProfileComment">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
     <!-- 옵션 메뉴 스타일 -->
     <style name="MenuStyle" parent="@style/Widget.AppCompat.PopupMenu">
         <item name="android:minWidth">130dp</item>

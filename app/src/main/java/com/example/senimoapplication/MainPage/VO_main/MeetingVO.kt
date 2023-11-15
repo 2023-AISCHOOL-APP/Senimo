@@ -38,11 +38,11 @@ data class MeetingVO(
         allMember = parcel.readInt(),
         // person = parcel.readString() ?: "",
         imageUri = parcel.readString() ?: "",
-       // backicon = parcel.readString() ?: ""
+        // backicon = parcel.readString() ?: ""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-//        parcel.writeString(gu)
+        parcel.writeString(gu)
         parcel.writeString(title)
         parcel.writeString(content)
         parcel.writeString(keyword)
@@ -52,6 +52,8 @@ data class MeetingVO(
         parcel.writeString(imageUri) // 이미지 경로 또는 URI를 저장
         // parcel.writeString(backicon)
     }
+
+
 
     override fun describeContents(): Int {
         return 0
@@ -65,5 +67,10 @@ data class MeetingVO(
         override fun newArray(size: Int): Array<MeetingVO?> {
             return arrayOfNulls(size)
         }
+
+
     }
+
+
 }
+

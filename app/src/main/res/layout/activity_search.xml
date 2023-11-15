@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    tools:context="com.example.senimoapplication.MainPage.Activity_main.SearchActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
-                app:srcCompat="@drawable/ic_search_white" />
+                app:srcCompat="@drawable/ic_search_white"/>
 
             <EditText
                 android:id="@+id/tv_M_SearchBar"
@@ -183,7 +183,7 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="@+id/tv_M_Keyword"
-                app:layout_constraintTop_toBottomOf="@+id/tv_M_Keyword" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_Keyword2" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_M_CategoryMeeting"
@@ -196,43 +196,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_M_CategoryTitle">
 
             </androidx.recyclerview.widget.RecyclerView>
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:fontFamily="@font/pretendard_bold"
-                android:text="다른 회원들이"
-                android:textColor="@color/main"
-                android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="@+id/tv_M_Keyword"
-                app:layout_constraintTop_toBottomOf="@+id/tv_M_Keyword" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/pretendard_bold"
-                android:text="많이 찾고 있어요!"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="@+id/tv_M_CategoryTitle"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-            <androidx.gridlayout.widget.GridLayout
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="20dp"
-                app:columnCount="2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintStart_toStartOf="@+id/textView12"
-                app:layout_constraintTop_toBottomOf="@+id/textView12"
-                app:orientation="vertical"
-                app:rowCount="5">
-
-            </androidx.gridlayout.widget.GridLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

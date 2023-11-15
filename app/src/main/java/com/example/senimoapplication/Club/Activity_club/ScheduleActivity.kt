@@ -5,13 +5,10 @@ import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
@@ -23,42 +20,34 @@ import com.example.senimoapplication.server.Server
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
+import com.example.senimoapplication.databinding.ActivityScheduleBinding
 
 class ScheduleActivity : AppCompatActivity() {
     private lateinit var scheduleMemberAdapter: ScheduleMemberAdapter
     val ScheduleGroupList : ArrayList<ScheduleVO> = ArrayList()
+    lateinit var binding : ActivityScheduleBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_schedule)
 
-        val icBack = findViewById<ImageView>(R.id.icBack2)
-        val icMore = findViewById<ImageView>(R.id.icMore)
+        binding = ActivityScheduleBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         val color = ContextCompat.getColor(this, R.color.white)
-        icMore.setImageTintList(ColorStateList.valueOf(color))
+        binding.icMore.setImageTintList(ColorStateList.valueOf(color))
 
         val memberList : ArrayList<ScheduleMemberVO> = ArrayList()
-        val rvAttendance : RecyclerView = findViewById(R.id.rvAttendance)
-        val adapter = ScheduleMemberAdapter(applicationContext, R.layout.schedule_member_list, memberList)
-        rvAttendance.adapter = adapter
-        rvAttendance.layoutManager = GridLayoutManager(this,3)
 
-        val btnJoinSchedule = findViewById<Button>(R.id.btnJoinSchedule)
-        val tvScheduleIntro = findViewById<TextView>(R.id.tv_C_Schedule_Intro)
-        val tvScheduleName = findViewById<TextView>(R.id.tv_C_ScheduleName3)
-        val tvDate = findViewById<TextView>(R.id.tv_C_S_Time)
+        val adapter = ScheduleMemberAdapter(applicationContext, R.layout.schedule_member_list, memberList)
+        binding.rvAttendance.adapter = adapter
+        binding.rvAttendance.layoutManager = GridLayoutManager(this,3)
+
 
         //가데이터
 
-//        tvDate.text = formatDate("2023-11-18 19:00")
-//        tvScheduleName.text = "수사모(수영을 사랑하는 사람들의 모임) 정모일정안내"
-//        tvScheduleIntro.text = """수영 정모에 처음 참석하시는 분들께..
-//            |수사모는 수영을 좋아하고 정보를 교류하는 모임이에요!!
-//            |
-//            |참여자 누구나 환영하고 모임 20분 전까지 오셔서 회원들과 인사 나누시고 수영장으로 들어갈게요~ :)
-//            |
-//            |일정에 관한 문의는 채팅방을 이용해주시기 바래요!""".trimMargin()
-
+        binding.tvCSTime.text = formatDate("2023-11-18 19:00")
+        binding.tvCScheduleName3.text = "수사모(수영을 사랑하는 사람들의 모임) 정모일정안내"
 
 
         // 회원 목록 가데이터
@@ -69,12 +58,12 @@ class ScheduleActivity : AppCompatActivity() {
 
 
         // 뒤로가기 버튼
-        icBack.setOnClickListener {
+        binding.icBack2.setOnClickListener {
             onBackPressed()
         }
 
         // 앱바 - 게시물 관리 기능 추가
-        icMore.setOnClickListener { view ->
+        binding.icMore.setOnClickListener { view ->
             val popupMenu = PopupMenu(this, view)
             val menuInflater = popupMenu.menuInflater
 
@@ -84,7 +73,7 @@ class ScheduleActivity : AppCompatActivity() {
                 when (item.itemId) {
                     R.id.menu_option1 -> {
                         // 게시물 수정
-                        val intent = Intent(this, PostActivity::class.java)
+                        val intent = Intent(this, MakeScheduleActivity::class.java)
                         startActivity(intent)
                         true
                     }
