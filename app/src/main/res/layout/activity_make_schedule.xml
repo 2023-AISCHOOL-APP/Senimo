@@ -33,17 +33,15 @@
                 tools:layout_conversion_absoluteWidth="62dp" />
 
             <ImageView
-                android:id="@+id/icBack"
+                android:id="@+id/icBackbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:src="@drawable/ic_back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.516"
-                app:srcCompat="@drawable/ic_back"
-                tools:layout_conversion_absoluteHeight="25dp"
-                tools:layout_conversion_absoluteWidth="25dp" />
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
