@@ -43,13 +43,14 @@ class BoardFragment : Fragment() {
         postList.add(post1)
         postList.add(post2)
 
+        binding.rvBoard.setOnClickListener {
+            binding.btnFloatingNewPost.visibility = INVISIBLE
+        }
+
 
         val adapter = PostAdapter(requireContext(), R.layout.post_list, postList)
         binding.rvBoard.adapter = adapter
         binding.rvBoard.layoutManager = LinearLayoutManager(requireContext())
-
-
-
 
 
         binding.btnFloatingNewPost.setOnClickListener {
@@ -71,5 +72,6 @@ class BoardFragment : Fragment() {
 
 
         return view
+
     }
 }
