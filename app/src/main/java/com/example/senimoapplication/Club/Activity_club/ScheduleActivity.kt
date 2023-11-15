@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-
 import android.util.Log
 import android.widget.PopupMenu
 import android.widget.TextView

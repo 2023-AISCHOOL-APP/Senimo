@@ -20,7 +20,6 @@ import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
 
 
-
 class MakeScheduleActivity : ComponentActivity() {
 
     lateinit var binding : ActivityMakeScheduleBinding

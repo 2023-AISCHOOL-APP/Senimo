@@ -1,20 +1,22 @@
 package com.example.senimoapplication.MainPage.fragment_main
 
+
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.senimoapplication.MainPage.VO_main.ChatListVO
+import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.adapter_main.ChatListAdapter
 import com.example.senimoapplication.R
+import com.example.senimoapplication.MainPage.VO_main.ChatListVO
 
 class ChatMainFragment : Fragment() {
 
     private val chatList = mutableListOf<ChatListVO>() // ChatListVO 객체를 담을 리스트
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +35,19 @@ class ChatMainFragment : Fragment() {
         val chatListAdapter = ChatListAdapter(requireContext(), R.layout.chat_list, chatList)
         rv_M_ChatList.adapter = chatListAdapter
 
+        // RecyclerView 아이템 클릭 시 처리
+        chatListAdapter.setOnItemClickListener(object : ChatListAdapter.OnItemClickListener {
+            override fun onItemClick(chatListVO: ChatListVO) {
+                // 클릭된 아이템의 정보를 사용하여 ChatFragment로 이동 또는 다른 처리를 수행
+                // ChatFragment로 이동
+                (requireActivity() as MainActivity).navigateToChatFragment(chatListVO)
+
+                // ChatFragment로 이동되었는지 확인
+                Log.d("ChatMainFragment", "ChatFragment added to fl_ChatRoom")
+
+            }
+
+        })
 
         return view
     }

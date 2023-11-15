@@ -1,6 +1,7 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -10,7 +11,8 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
@@ -19,6 +21,7 @@ import com.example.senimoapplication.databinding.ActivityCreateMeetingBinding
 class CreateMeetingActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityCreateMeetingBinding
+    private var imageUri: Uri? = null // selectedImageUri를 클래스 수준에 선언
 
     // 이미지뷰 클릭 상태를 추적하기 위한 변수들
     private var exerciseChecked = false
@@ -35,6 +38,28 @@ class CreateMeetingActivity : AppCompatActivity() {
         binding = ActivityCreateMeetingBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        // 사진 1장 선택
+        val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Callback is invoked after the user selects a media item or closes the
+            // photo picker.
+            if (uri != null) {
+                Log.d("PhotoPicker_main","Selected URI: $uri")
+                binding.imgMButton.setImageURI(uri)
+                binding.imgMButton.visibility = ImageView.VISIBLE
+
+                // 이미지를 선택한 후에 URI를 변수에 저장
+                val imageUri = uri
+
+
+            } else {
+                Log.d("PhotoPicker_main", "No media selected")
+            }
+        }
+
+        binding.imgMButton.setOnClickListener {
+            pickMediaMain.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
 
         // 스피너 초기화
         val spinner = findViewById<Spinner>(R.id.sp_M_gulist)
@@ -177,6 +202,8 @@ class CreateMeetingActivity : AppCompatActivity() {
         }
 
 
+
+
         // 모임 만들기 버튼 클릭 시 정보 취합하기
         binding.btnSetMeeing.setOnClickListener {
             val selectedGu = binding.spMGulist.selectedItem.toString()
@@ -238,5 +265,6 @@ class CreateMeetingActivity : AppCompatActivity() {
         val drawableResId = if (isChecked) R.drawable.ic_checkbox_color else R.drawable.ic_checkbox
         imageView.setImageResource(drawableResId)
     }
+
 
 }
