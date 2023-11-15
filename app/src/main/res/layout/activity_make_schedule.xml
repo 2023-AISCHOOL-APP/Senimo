@@ -12,7 +12,10 @@
         android:id="@+id/cardView4"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        app:cardElevation="10dp">
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -44,6 +47,7 @@
                 app:srcCompat="@drawable/ic_back"
                 tools:layout_conversion_absoluteHeight="25dp"
                 tools:layout_conversion_absoluteWidth="25dp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

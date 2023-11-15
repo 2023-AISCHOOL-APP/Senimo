@@ -1,6 +1,7 @@
 package com.example.senimoapplication.Club.Activity_club
 
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -15,6 +16,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.senimoapplication.Club.VO.ScheduleVO
+import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
 
 
@@ -27,6 +29,14 @@ class MakeScheduleActivity : ComponentActivity() {
         binding = ActivityMakeScheduleBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        binding.icBack.setOnClickListener {
+            val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+
 
         // 사진 1장 선택
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -183,14 +193,16 @@ class MakeScheduleActivity : ComponentActivity() {
             startActivity(intent)
             finish()
 //            setScheduleList.add(ScheduleVO(
+//                "모임명", // 나중에 수정필요
 //                binding.etScheduleName.text.toString(),
 //                binding.etScheduleIntro.text.toString(),
 //                "${binding.btnScheduleDate.text.toString()} ${binding.btnScheduleTime.text.toString()}",
-//                binding.etScheduleFee.text.toString(),
+//                binding.etScheduleFee.text.toString().toInt(), // 도운이가 수정함 fee를 int로 바꿔서 수정함
 //                binding.etScheduleLoca.text.toString(),
 //                binding.tvAllMember.text.toString().toInt(),
 //                0,"모집중")
 //            )
+
         }
 
 
@@ -200,18 +212,7 @@ class MakeScheduleActivity : ComponentActivity() {
 
 
 
-//        // 사진 여러장 선택하기
-//        val pickMultipleMedia =
-//            registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
-//                // Callback is invoked after the user selects media items or closes the
-//                // photo picker.
-//                if (uris.isNotEmpty()) {
-//                    Log.d("PhotoPicker", "Number of items selected: ${uris.size}")
-//                } else {
-//                    Log.d("PhotoPicker", "No media selected")
-//                }
-//            }
-//        pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+
     }
 
 }
