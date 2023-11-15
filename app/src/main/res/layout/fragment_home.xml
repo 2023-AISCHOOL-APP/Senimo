@@ -290,16 +290,6 @@
 
             </androidx.recyclerview.widget.RecyclerView>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="128dp"
-                android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_add"
-                app:layout_constraintBottom_toBottomOf="@+id/btnNewSchedule"
-                app:layout_constraintEnd_toEndOf="@+id/btnNewSchedule" />
-
             <TextView
                 android:id="@+id/tvClubLoca"
                 android:layout_width="wrap_content"

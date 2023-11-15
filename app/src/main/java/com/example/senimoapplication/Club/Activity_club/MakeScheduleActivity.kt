@@ -30,7 +30,7 @@ class MakeScheduleActivity : ComponentActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.icBackbtn.setOnClickListener {
+        binding.icBack.setOnClickListener {
             val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
             startActivity(intent)
             finish()

@@ -4,19 +4,14 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.PopupMenu
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Club.adapter.ScheduleMemberAdapter
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showBoardDialogBox
-import com.example.senimoapplication.databinding.ActivityPostBinding
 import com.example.senimoapplication.databinding.ActivityScheduleBinding
 
 
