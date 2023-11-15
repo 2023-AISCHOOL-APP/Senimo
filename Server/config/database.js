@@ -8,6 +8,8 @@ let conn = mysql.createConnection({
   'database': 'Insa4_App_final_3'
 })
 
+
+
 conn.connect(error => {
   if (error) {
     console.error("데이터베이스 연결 실패: " + error.stack);
