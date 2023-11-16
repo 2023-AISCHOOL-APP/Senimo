@@ -132,32 +132,22 @@
 
             <TextView
                 android:id="@+id/tv_C_allMember"
-                android:layout_width="70dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:alpha="0.8"
                 android:background="@drawable/member_tag_shape"
+                android:drawableLeft="@drawable/ic_member"
+                android:drawablePadding="4dp"
                 android:fontFamily="@font/pretendard_semibold"
-                android:paddingStart="24dp"
+                android:paddingStart="10dp"
                 android:paddingTop="5dp"
-                android:paddingRight="5dp"
                 android:paddingBottom="5dp"
-                android:text="17/20"
+                android:text="40/30"
                 android:textColor="@color/bg_darkgray70"
                 app:layout_constraintEnd_toEndOf="@+id/Img_M_Meeting"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/Img_M_Meeting" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:layout_marginStart="5dp"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_C_allMember"
-                app:layout_constraintStart_toStartOf="@+id/tv_C_allMember"
-                app:layout_constraintTop_toTopOf="@+id/tv_C_allMember"
-                app:layout_constraintVertical_bias="0.5"
-                app:srcCompat="@drawable/ic_member" />
 
             <ImageView
                 android:id="@+id/imageView"

@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.Toast
@@ -17,6 +18,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
+import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
 
 
@@ -46,6 +48,7 @@ class MakeScheduleActivity : ComponentActivity() {
                 Log.d("PhotoPicker", "Selected URI: $uri")
                 binding.imgButton.setImageURI(uri)
                 binding.imgButton.visibility = ImageView.VISIBLE
+                binding.imagebtnLogo.visibility = INVISIBLE // 이미지 선택 시 아이콘 사라지기
             } else {
                 Log.d("PhotoPicker", "No media selected")
             }
