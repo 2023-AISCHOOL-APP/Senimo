@@ -52,13 +52,13 @@ class PhotoActivity : AppCompatActivity() {
             val scaleFactor = 0.85f // 페이지 크기 조절 (원하는 크기로 조절)
 
             val absPosition = Math.abs(position)
-                if (absPosition >= 1) {
-                    // 현재 페이지 외의 페이지 크기 설정
-                    page.alpha = scaleFactor
-                } else {
-                    page.translationX = -offset * position
-                    page.alpha = 1 - (absPosition * (1 - scaleFactor))
-                }
+            if (absPosition >= 1) {
+                // 현재 페이지 외의 페이지 크기 설정
+                page.alpha = scaleFactor
+            } else {
+                page.translationX = -offset * position
+                page.alpha = 1 - (absPosition * (1 - scaleFactor))
+            }
         }
 
         // 페이지별로 끊어서 이동

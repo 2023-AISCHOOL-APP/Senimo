@@ -3,8 +3,6 @@ package com.example.senimoapplication.MainPage.Activity_main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import com.example.senimoapplication.Common.showBoardDialogBox
 import com.example.senimoapplication.Common.showSettingDialogBox
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivitySettingBinding
