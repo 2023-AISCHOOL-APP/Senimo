@@ -110,7 +110,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         // 서버에 요청을 보낼 '전화기'를 만들어요.
         val service = retrofit.create(ApiService::class.java)
-        val sche_code = "sche_code 1" // 예시 ID
+        val sche_code = "sche_code1" // 예시 ID
         // '전화'를 걸어요. 서버에 데이터를 달라고 요청해요.
         service.getScheIntro(sche_code).enqueue(object : Callback<ScheduleVO> {
             // 서버에서 답이 오면 이 부분이 실행돼요.
@@ -123,7 +123,7 @@ class ScheduleActivity : AppCompatActivity() {
                         response.body()?.let { schedules ->
                             // null이 아니면 기존 목록을 지우고 새 데이터로 채웁니다.
                             findViewById<TextView>(R.id.tv_C_S_Time).text = formatDate(schedules.scheduleDate)
-                            findViewById<TextView>(R.id.tvClubName2).text = schedules.club_code
+                            findViewById<TextView>(R.id.tvClubName2).text = schedules.clubName
                             findViewById<TextView>(R.id.tv_C_ScheduleName3).text = schedules.scheduleName
                             findViewById<TextView>(R.id.tv_C_Schedule_Intro).text = schedules.scheduleIntro
                             findViewById<TextView>(R.id.tv_C_S_Loca).text = schedules.scheduleLoca
