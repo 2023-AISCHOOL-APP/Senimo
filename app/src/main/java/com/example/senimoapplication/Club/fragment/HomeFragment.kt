@@ -18,9 +18,9 @@ import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.MainPage.Retrofit.ApiService
-import com.example.senimoapplication.MainPage.Server
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentHomeBinding
+import com.example.senimoapplication.server.Server
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
