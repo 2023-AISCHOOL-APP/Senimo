@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainPage.Activity_main.EditMyPageActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView6"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:cardElevation="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <ImageView
+                        android:id="@+id/imgMBackbtnToFrag4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_M_Setting"
+                        app:layout_constraintStart_toStartOf="@+id/tv_M_Setting"
+                        app:layout_constraintTop_toTopOf="@+id/tv_M_Setting"
+                        app:srcCompat="@drawable/ic_back_black" />
+
+                    <TextView
+                        android:id="@+id/tv_M_Setting"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:text="내 정보 수정 "
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_M_EditMypageImg"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView6"
+                app:shapeAppearanceOverlay="@style/RoundedEditMyPageProfileComment"
+                app:srcCompat="@drawable/tea_img" />
+
+            <ImageView
+                android:id="@+id/img_M_EditPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/img_M_EditMypageImg"
+                app:layout_constraintEnd_toEndOf="@+id/img_M_EditMypageImg"
+                app:srcCompat="@drawable/ic_editphoto" />
+
+            <EditText
+                android:id="@+id/et_M_UserName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="@color/txt_gray30"
+                android:ems="10"
+                android:fontFamily="@font/pretendard_medium"
+                android:hint="이름을 입력해주세요"
+                android:inputType="text"
+                android:lineSpacingExtra="10sp"
+                android:lineSpacingMultiplier="1.2"
+                android:textColor="@color/bg_darkgray90"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView37"
+                app:layout_constraintTop_toBottomOf="@+id/textView37" />
+
+            <EditText
+                android:id="@+id/et_M_Gu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/txt_gray30"
+                android:ems="10"
+                android:fontFamily="@font/pretendard_medium"
+                android:hint="광산구 / 남구 / 동구 / 북구 / 서구"
+                android:inputType="text"
+                android:lineSpacingExtra="10sp"
+                android:lineSpacingMultiplier="1.2"
+                android:textColor="@color/bg_darkgray90"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_M_Gender"
+                app:layout_constraintStart_toStartOf="@+id/textView42"
+                app:layout_constraintTop_toBottomOf="@+id/textView42" />
+
+            <EditText
+                android:id="@+id/et_M_UserBirth"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/txt_gray30"
+                android:ems="10"
+                android:fontFamily="@font/pretendard_medium"
+                android:hint="ex) 1990"
+                android:inputType="text"
+                android:lineSpacingExtra="10sp"
+                android:lineSpacingMultiplier="1.2"
+                android:textColor="@color/bg_darkgray90"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/textView40"
+                app:layout_constraintTop_toBottomOf="@+id/textView40" />
+
+            <EditText
+                android:id="@+id/et_M_Gender"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/txt_gray30"
+                android:ems="10"
+                android:fontFamily="@font/pretendard_medium"
+                android:hint="남성 / 여성"
+                android:inputType="text"
+                android:lineSpacingExtra="10sp"
+                android:lineSpacingMultiplier="1.2"
+                android:textColor="@color/bg_darkgray90"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_M_UserName"
+                app:layout_constraintTop_toBottomOf="@+id/textView41" />
+
+            <TextView
+                android:id="@+id/textView37"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="이름"
+                android:textColor="@color/txt_gray50"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_M_EditMypageImg" />
+
+            <TextView
+                android:id="@+id/textView42"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="거주지"
+                android:textColor="@color/txt_gray50"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/et_M_UserBirth"
+                app:layout_constraintTop_toBottomOf="@+id/et_M_UserBirth" />
+
+            <TextView
+                android:id="@+id/textView40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="출생년도"
+                android:textColor="@color/txt_gray50"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/et_M_UserName"
+                app:layout_constraintTop_toBottomOf="@+id/et_M_UserName" />
+
+            <TextView
+                android:id="@+id/textView41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="성별"
+                android:textColor="@color/txt_gray50"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/et_M_Gender"
+                app:layout_constraintTop_toTopOf="@+id/textView40" />
+
+            <EditText
+                android:id="@+id/et_M_MyPageIntro"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/textfield_shape"
+                android:ems="13"
+                android:gravity="start|top"
+                android:hint="소개를 작성해 주세요."
+                android:inputType="textMultiLine"
+                android:padding="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_M_Gu" />
+
+            <TextView
+                android:id="@+id/tv_M_AnnounceMyPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="/100"
+                android:textColor="@color/txt_gray70"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/et_M_MyPageIntro"
+                app:layout_constraintTop_toBottomOf="@+id/et_M_MyPageIntro" />
+
+            <TextView
+                android:id="@+id/tv_M_LetterCnt_MyPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="0"
+                android:textColor="@color/txt_gray70"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_M_AnnounceMyPage"
+                app:layout_constraintEnd_toStartOf="@+id/tv_M_AnnounceMyPage"
+                app:layout_constraintTop_toTopOf="@+id/tv_M_AnnounceMyPage" />
+
+            <View
+                android:id="@+id/view6"
+                android:layout_width="0dp"
+                android:layout_height="84dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/card_bttom"
+                android:elevation="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_AnnounceMyPage" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_M_Save"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_shape_main"
+                android:elevation="5dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingTop="13dp"
+                android:paddingBottom="13dp"
+                android:text="저장하기"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:visibility="visible"
+                app:cornerRadius="20dp"
+                app:layout_constraintBottom_toBottomOf="@id/view6"
+                app:layout_constraintEnd_toEndOf="@id/view6"
+                app:layout_constraintStart_toStartOf="@id/view6"
+                app:layout_constraintTop_toTopOf="@+id/view6"
+                tools:layout_conversion_absoluteHeight="60dp"
+                tools:layout_conversion_absoluteWidth="0dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

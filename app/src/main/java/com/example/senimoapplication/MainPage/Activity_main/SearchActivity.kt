@@ -65,7 +65,7 @@ class SearchActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         }
 
-        binding.ImgMBackbtnToFrag1.setOnClickListener {
+        binding.imgMBackbtnToFrag1.setOnClickListener {
             val intent = Intent(this@SearchActivity, MainActivity::class.java)
             startActivity(intent)
             finish()

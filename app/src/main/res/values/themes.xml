@@ -48,6 +48,20 @@
         <item name="color">@color/white</item>
     </style>
 
+    <!--내정보 회원 프로필 사진 스타일 -->
+    <style name="RoundedMyPageProfileComment">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">35dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
+    <!--내정보수정 회원 프로필 사진 스타일 -->
+    <style name="RoundedEditMyPageProfileComment">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
     <!-- 옵션 메뉴 스타일 -->
     <style name="MenuStyle" parent="@style/Widget.AppCompat.PopupMenu">
         <item name="android:minWidth">130dp</item>
