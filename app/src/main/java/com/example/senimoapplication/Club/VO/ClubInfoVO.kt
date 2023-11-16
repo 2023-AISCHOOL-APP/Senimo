@@ -9,27 +9,28 @@ data class ClubInfoVO(
 
 //    @SerializedName("club_img")
 //    val clubImg : String,
-//    @SerializedName("joined_user_cnt")
-//    val joinedUserCnt : Int,
-//    @SerializedName("max_cnt")
-//    val maxCnt : Int,
-//    @SerializedName("club_name")
-//    val clubName : String,
-//    @SerializedName("club_location")
-//    val clubLocation : String,
-//    @SerializedName("keyword_name")
-//    val keywordName : String,
-//    @SerializedName("club_introduce")
-//    val clubIntroduce : String,
-
-
     val clubImg : String="",
-    val joinedUserCnt : Int =0,
-    val maxCnt : Int=0,
-    val clubName : String="",
-    val clubLocation : String="",
-    val keywordName : String="",
-    val clubIntroduce : String=""
+    @SerializedName("joined_user_cnt")
+    val joinedUserCnt : Int,
+    @SerializedName("max_cnt")
+    val maxCnt : Int,
+    @SerializedName("club_name")
+    val clubName : String,
+    @SerializedName("club_location")
+    val clubLocation : String,
+    @SerializedName("keyword_name")
+    val keywordName : String,
+    @SerializedName("club_introduce")
+    val clubIntroduce : String,
+
+
+//    val clubImg : String="",
+//    val joinedUserCnt : Int =0,
+//    val maxCnt : Int=0,
+//    val clubName : String="",
+//    val clubLocation : String="",
+//    val keywordName : String="",
+//    val clubIntroduce : String=""
 
     ) : Parcelable {
     constructor(parcel: Parcel) : this(
