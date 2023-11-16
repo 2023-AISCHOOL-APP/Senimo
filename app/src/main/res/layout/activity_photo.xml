@@ -6,130 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".Club.Activity_club.PhotoActivity">
 
-    <View
-        android:id="@+id/view7"
+    <!-- ViewPager2 -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPhoto"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/view6"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view6"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:background="#F2F4F7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/imgView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/img_sample"
-        app:layout_constraintBottom_toTopOf="@+id/view6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view7" />
-
-    <TextView
-        android:id="@+id/tvUserNamePhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/pretendard_semibold"
-        android:text="국지호"
-        android:textColor="#000000"
-        android:textSize="22sp"
-        app:layout_constraintStart_toStartOf="@+id/tvUserLevelPhoto"
-        app:layout_constraintTop_toBottomOf="@+id/tvUserLevelPhoto" />
-
-    <TextView
-        android:id="@+id/tvUserLevelPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:layout_marginStart="14dp"
-        android:background="@drawable/user_level_leader"
-        android:fontFamily="@font/pretendard_semibold"
-        android:gravity="center"
-        android:paddingLeft="8dp"
-        android:paddingTop="0dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="0dp"
-        android:text="모임장"
-        android:textColor="@color/bg_darkgray10"
-        android:textSize="10dp"
-        app:layout_constraintStart_toEndOf="@+id/userProfile3"
-        app:layout_constraintTop_toTopOf="@+id/userProfile3" />
-
-    <TextView
-        android:id="@+id/tvUploadTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/pretendard_medium"
-        android:text="11월 13일 오후 3:12"
-        android:textColor="@color/txt_gray70"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/tvUserNamePhoto"
-        app:layout_constraintTop_toBottomOf="@+id/tvUserNamePhoto" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/userProfile3"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="20dp"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/view6"
-        app:layout_constraintTop_toTopOf="@id/view6"
-        app:shapeAppearanceOverlay="@style/RoundedChatProfileImage"
-        app:srcCompat="@drawable/img_sample" />
-
-    <ImageView
-        android:id="@+id/imgbtnLike"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:scaleX="1.6"
-        android:scaleY="1.6"
-        app:layout_constraintBottom_toBottomOf="@+id/tvUploadTime"
-        app:layout_constraintEnd_toStartOf="@+id/tvLikeCnt"
-        app:layout_constraintTop_toTopOf="@+id/tvUserLevelPhoto"
-        app:layout_constraintVertical_bias="0.5"
-        app:srcCompat="@drawable/ic_heart" />
-
-    <TextView
-        android:id="@+id/tvLikeCnt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:drawableTint="@color/white"
-        android:fontFamily="@font/pretendard_semibold"
-        android:text="00"
-        android:textColor="@color/txt_gray70"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgbtnLike"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imgbtnLike" />
-
-    <ImageView
-        android:id="@+id/imgbtnCancle"
-        android:layout_width="wrap_content"
-        android:layout_height="18dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
-        android:clickable="true"
-        android:scaleX="2.4"
-        android:scaleY="2.4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_btn_delete"
-        app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.senimoapplication.Club.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,11 +32,14 @@ class GalleryAdapter(val context: Context, val layout: Int, val data: ArrayList<
 
     override fun onBindViewHolder(holder: GalleryAdapter.ViewHolder, position: Int) {
         //holder.img.setImageURI(data[position].imageUrl.toUri())
-        holder.img.setImageResource(R.drawable.img_sample)
+        holder.img.setImageResource(data[position].imgUri)
 
         holder.img.setOnClickListener {
             val intent = Intent(context, PhotoActivity::class.java)
             intent.putExtra("clickedPhoto", data[position])
+            Log.d("clickedphoto check", "${data[position]}")
+            intent.putExtra("photos", data)
+            Log.d("clickeddata check", "${data}")
             context.startActivity(intent)
         }
 
