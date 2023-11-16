@@ -1,22 +1,20 @@
 package com.example.senimoapplication.Club.fragment
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.Activity_club.PhotoActivity
+import com.example.senimoapplication.Club.VO.GalleryVO
 import com.example.senimoapplication.Club.adapter.GalleryAdapter
 import com.example.senimoapplication.R
-import com.example.senimoapplication.databinding.FragmentBoardBinding
 import com.example.senimoapplication.databinding.FragmentGalleryBinding
+import com.example.senimoapplication.databinding.FragmentPhotoViewBinding
 
 
 class GalleryFragment : Fragment() {
@@ -29,8 +27,15 @@ class GalleryFragment : Fragment() {
 
         binding = FragmentGalleryBinding.inflate(inflater, container, false)
         val view = binding.root
-        val photoList : ArrayList<Uri> = ArrayList()
-        val adapter = GalleryAdapter(requireContext(), R.layout.post_list, photoList)
+
+        val photoList : ArrayList<GalleryVO> = ArrayList()
+        val adapter = GalleryAdapter(requireContext(), R.layout.photo_list, photoList)
+
+        photoList.add(GalleryVO("dfsdfsdfs",1,"양희준","2023-11-22'T'12:00:08.SSS'Z'",12,R.drawable.img_sample))
+        photoList.add(GalleryVO("dfsdfsdfs",2,"김도운","yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",4,R.drawable.img_sample))
+        photoList.add(GalleryVO("dfsdfsdfs",2,"국지호","yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",7,R.drawable.img_sample))
+        photoList.add(GalleryVO("dfsdfsdfs",2,"최효정","yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",9,R.drawable.img_sample))
+
         binding.rvGallery.adapter = adapter
         binding.rvGallery.layoutManager = GridLayoutManager(requireContext(),3)
 
@@ -48,28 +53,10 @@ class GalleryFragment : Fragment() {
 
 
 
-
-        binding.btnFloatingNewPhoto.setOnClickListener {
-            val intent = Intent(requireContext(), PhotoActivity::class.java)
-            startActivity(intent)
-            // 이미지 여러 장 선택하기
-//            val pickMultipleMedia =
-//                registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { uris ->
-//                    if (uris.isNotEmpty()) {
-//                        Log.d("PhotoPicker", "Number of items selected: ${uris.size}")
-//                        for (uri in uris) {
-//                            // 각 이미지 URI를 처리하는 코드를 여기에 추가
-//                            Log.d("PhotoPicker", "Selected media URI: $uri")
-//
-//                            // 선택한 이미지 URI를 사용하여 원하는 작업을 수행할 수 있습니다.
-//                        }
-//                    } else {
-//                        Log.d("PhotoPicker", "No media selected")
-//                    }
-//                }
-//
-//            pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        binding.imgFloatingNewPhoto.setOnClickListener {
+           //
         }
+
 
         return view
     }

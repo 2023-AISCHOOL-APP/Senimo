@@ -2,10 +2,7 @@ package com.example.senimoapplication.server.Retrofit
 
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
-import com.example.senimoapplication.server.Photo
-import com.example.senimoapplication.server.ResponseDC
 import okhttp3.MultipartBody
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -19,12 +16,12 @@ interface ApiService {
     @GET("/getMeetings")
     fun getMeetings(): Call<List<MeetingVO>>
 
-    @Multipart
-    @POST("/db/postImg")
-    fun postImg(@Part photo: MultipartBody.Part): Call<ResponseDC> // 사진을 업로드 하는 함수
-
-    @GET("/photos")
-    fun getPhotos(): Call<List<Photo>> // 서버에서 사진 목록을 가져오는 함수입니다.
+//    @Multipart
+//    @POST("/db/postImg")
+//    fun postImg(@Part photo: MultipartBody.Part): Call<ResponseDC> // 사진을 업로드 하는 함수
+//
+//    @GET("/photos")
+//    fun getPhotos(): Call<List<Photo>> // 서버에서 사진 목록을 가져오는 함수입니다.
 
     @GET("/sche_intro/{sche_code}")
     fun getScheIntro(@Path("sche_code") sche_code: String): Call<ScheduleVO> // 특정 일정 ID를 사용하여 상세 정보 가져오기

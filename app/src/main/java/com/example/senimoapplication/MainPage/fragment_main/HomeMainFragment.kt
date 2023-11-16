@@ -103,6 +103,7 @@ class HomeMainFragment : Fragment() {
                         val intent = Intent(requireContext(), ClubActivity::class.java)
                         intent.putExtra("clickedMeetinghome", clickedMeetinghome)
                         startActivity(intent)
+
                     }
                 })
         )
@@ -214,18 +215,19 @@ class HomeMainFragment : Fragment() {
 //            .build()
         val retrofit = Server().retrofit
 
-
         // 서버에 요청을 보낼 '전화기'를 만들어요.
         val service = retrofit.create(ApiService::class.java)
         // '전화'를 걸어요. 서버에 데이터를 달라고 요청해요.
         service.getMeetings().enqueue(object : Callback<List<MeetingVO>> {
             // 서버에서 답이 오면 이 부분이 실행돼요.
-            override fun onResponse(call: Call<List<MeetingVO>>, response: Response<List<MeetingVO>>) {
+            override fun onResponse(
+                call: Call<List<MeetingVO>>,
+                response: Response<List<MeetingVO>>
+            ) {
                 Log.d("ody1", response.toString())
                 // 서버 응답이 null인지 확인합니다.
                 if (response.isSuccessful) {
-
-                    Log.d("ody1", response.body().toString())
+                    Log.d("ody2", response.body().toString())
                     response.body()?.let { meetings ->
                         // null이 아니면 기존 목록을 지우고 새 데이터로 채웁니다.
                         MeetingList.clear()
@@ -233,17 +235,7 @@ class HomeMainFragment : Fragment() {
                         if (::adapter.isInitialized) {
                             adapter.notifyDataSetChanged()// 어댑터에 데이터 변경을 알립니다.
 
-                            Log.d("test2", MeetingList.toString())
-
-                            for (meeting in MeetingList) {
-                                Log.d("MeetingList_test", "Title: ${meeting.title}, Content: ${meeting.content}, Keyword: ${meeting.keyword}")
-                            }
-
-                        } else {
-                            // 어댑터를 초기화하지 않았으면 여기서 초기화합니다.
-                            adapter =
-                                MeetingAdapter(requireContext(), R.layout.meeting_list, MeetingList)
-//                                rv_M_PopularMeeting.adapter = adapter
+                            Log.d("ody3", MeetingList.toString())
                         }
                     } ?: run {
                         // 응답이 null이면 사용자에게 알려줄 수 있는 방법을 사용하세요.
@@ -264,7 +256,6 @@ class HomeMainFragment : Fragment() {
             }
         })
     }
-
 
 
 }

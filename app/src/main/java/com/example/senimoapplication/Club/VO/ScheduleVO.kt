@@ -4,7 +4,8 @@ package com.example.senimoapplication.Club.VO
 import com.google.gson.annotations.SerializedName
 
 data class ScheduleVO(
-    val club_code: String="",
+    @SerializedName("club_name")
+    val clubName: String="",
     @SerializedName("sche_title")
     val scheduleName: String ="",
     @SerializedName("sche_content")
