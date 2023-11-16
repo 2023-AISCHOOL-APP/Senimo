@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainPage.Activity_main.SettingActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView7"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:cardElevation="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <ImageView
+                        android:id="@+id/img_M_BackbtnToMyPage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_M_Setting"
+                        app:layout_constraintStart_toStartOf="@+id/tv_M_Setting"
+                        app:layout_constraintTop_toTopOf="@+id/tv_M_Setting"
+                        app:srcCompat="@drawable/ic_back_black" />
+
+                    <TextView
+                        android:id="@+id/tv_M_Setting"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:text="설정"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/textView25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="안내"
+                android:textColor="@color/txt_gray50"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView7" />
+
+            <TextView
+                android:id="@+id/textView47"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:text="계정관리"
+                android:textColor="@color/txt_gray50"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view7" />
+
+            <TextView
+                android:id="@+id/tv_M_Notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawableLeft="@drawable/ic_notice"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="공지사항"
+                android:textColor="@color/txt_gray90"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/textView25"
+                app:layout_constraintTop_toBottomOf="@+id/textView25" />
+
+            <TextView
+                android:id="@+id/tv_M_CustomerService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawableLeft="@drawable/ic_customer_service"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="고객센터"
+                android:textColor="@color/txt_gray90"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_M_Notice"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_Notice" />
+
+            <TextView
+                android:id="@+id/tv_M_Question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawableLeft="@drawable/ic_question"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="자주묻는질문"
+                android:textColor="@color/txt_gray90"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_M_CustomerService"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_CustomerService" />
+
+            <TextView
+                android:id="@+id/tv_M_AlertSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawableLeft="@drawable/ic_alert_setting"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="알림설정"
+                android:textColor="@color/txt_gray90"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/textView47"
+                app:layout_constraintTop_toBottomOf="@+id/textView47" />
+
+            <TextView
+                android:id="@+id/tv_M_Logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawableLeft="@drawable/ic_logout"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="로그아웃"
+                android:textColor="@color/txt_gray90"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_M_AlertSetting"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_AlertSetting" />
+
+            <TextView
+                android:id="@+id/tv_M_MemberDropout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:drawableLeft="@drawable/ic_member_dropout"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="회원탈퇴"
+                android:textColor="@color/txt_gray90"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/tv_M_Logout"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_Logout" />
+
+            <View
+                android:id="@+id/view7"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/txt_gray10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_Question" />
+
+            <ImageView
+                android:id="@+id/img_M_Toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="170dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_M_AlertSetting"
+                app:layout_constraintStart_toEndOf="@+id/tv_M_AlertSetting"
+                app:layout_constraintTop_toTopOf="@+id/tv_M_AlertSetting"
+                app:srcCompat="@drawable/ic_toggle_gray" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
