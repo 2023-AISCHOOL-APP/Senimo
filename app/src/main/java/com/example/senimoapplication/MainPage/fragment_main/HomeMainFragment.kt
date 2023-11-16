@@ -103,6 +103,7 @@ class HomeMainFragment : Fragment() {
                         val intent = Intent(requireContext(), ClubActivity::class.java)
                         intent.putExtra("clickedMeetinghome", clickedMeetinghome)
                         startActivity(intent)
+
                     }
                 })
         )
