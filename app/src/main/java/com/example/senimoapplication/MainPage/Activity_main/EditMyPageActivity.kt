@@ -40,6 +40,7 @@ class EditMyPageActivity : AppCompatActivity() {
             // 탭 4를 선택한 것으로 설정
             intent.putExtra("selected_tab","M_tab4")
             startActivity(intent)
+            finish()
         }
 
 

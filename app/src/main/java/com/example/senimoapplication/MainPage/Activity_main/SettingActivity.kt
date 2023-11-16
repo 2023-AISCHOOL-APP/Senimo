@@ -1,5 +1,6 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
@@ -40,6 +41,12 @@ class SettingActivity : AppCompatActivity() {
             } else {
                 binding.imgMToggle.setImageResource(R.drawable.ic_toggle_gray)
             }
+        }
+
+        binding.tvMMemberDropout.setOnClickListener {
+            val intent = Intent(this@SettingActivity, MemberDropOutActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }
