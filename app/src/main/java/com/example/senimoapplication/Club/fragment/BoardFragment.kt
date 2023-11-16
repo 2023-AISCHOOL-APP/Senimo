@@ -44,7 +44,7 @@ class BoardFragment : Fragment() {
         postList.add(post2)
 
         binding.rvBoard.setOnClickListener {
-            binding.btnFloatingNewPost.visibility = INVISIBLE
+            binding.imgFloatingNewpost.visibility = INVISIBLE
         }
 
 
@@ -53,7 +53,7 @@ class BoardFragment : Fragment() {
         binding.rvBoard.layoutManager = LinearLayoutManager(requireContext())
 
 
-        binding.btnFloatingNewPost.setOnClickListener {
+        binding.imgFloatingNewpost.setOnClickListener {
             val intent = Intent(requireContext(), PostActivity::class.java)
             startActivity(intent)
         }

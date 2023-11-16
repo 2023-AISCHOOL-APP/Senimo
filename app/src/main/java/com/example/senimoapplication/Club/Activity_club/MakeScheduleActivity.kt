@@ -1,6 +1,7 @@
 package com.example.senimoapplication.Club.Activity_club
 
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -17,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
-import java.util.Locale
 
 
 class MakeScheduleActivity : ComponentActivity() {
@@ -30,7 +30,7 @@ class MakeScheduleActivity : ComponentActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.icBackbtn.setOnClickListener {
+        binding.icBack.setOnClickListener {
             val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
             startActivity(intent)
             finish()
@@ -193,14 +193,16 @@ class MakeScheduleActivity : ComponentActivity() {
             startActivity(intent)
             finish()
 //            setScheduleList.add(ScheduleVO(
+//                "모임명", // 나중에 수정필요
 //                binding.etScheduleName.text.toString(),
 //                binding.etScheduleIntro.text.toString(),
 //                "${binding.btnScheduleDate.text.toString()} ${binding.btnScheduleTime.text.toString()}",
-//                binding.etScheduleFee.text.toString(),
+//                binding.etScheduleFee.text.toString().toInt(), // 도운이가 수정함 fee를 int로 바꿔서 수정함
 //                binding.etScheduleLoca.text.toString(),
 //                binding.tvAllMember.text.toString().toInt(),
 //                0,"모집중")
 //            )
+
         }
 
 

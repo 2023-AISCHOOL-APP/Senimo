@@ -12,7 +12,10 @@
         android:id="@+id/cardView4"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        app:cardElevation="10dp">
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -33,14 +36,17 @@
                 tools:layout_conversion_absoluteWidth="62dp" />
 
             <ImageView
-                android:id="@+id/icBackbtn"
+                android:id="@+id/icBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/ic_back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.516"
+                app:srcCompat="@drawable/ic_back"
+                tools:layout_conversion_absoluteHeight="25dp"
+                tools:layout_conversion_absoluteWidth="25dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -51,7 +57,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView4"
         app:layout_constraintVertical_bias="1.0">
@@ -344,48 +350,36 @@
                 app:layout_constraintStart_toStartOf="@+id/textView17"
                 app:layout_constraintTop_toTopOf="@+id/tvAllMember" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView5"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="24dp"
-                app:cardElevation="2dp"
+            <View
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="84dp"
+                android:background="@drawable/card_bttom"
+                android:elevation="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etScheduleFee">
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="0dp"
-                    android:layout_height="84dp"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/card_bttom"
-                    android:elevation="2dp" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnSetSchedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="32dp"
-                    android:background="@drawable/button_shape_main"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/pretendard_semibold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="13dp"
-                    android:text="일정 등록"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:visibility="visible"
-                    app:cornerRadius="20dp"
-                    tools:layout_conversion_absoluteHeight="60dp"
-                    tools:layout_conversion_absoluteWidth="0dp" />
-
-            </androidx.cardview.widget.CardView>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSetSchedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_main"
+                android:elevation="5dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingTop="13dp"
+                android:paddingBottom="13dp"
+                android:text="일정 등록"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:visibility="visible"
+                app:cornerRadius="20dp"
+                tools:layout_conversion_absoluteHeight="60dp"
+                tools:layout_conversion_absoluteWidth="0dp"
+                tools:layout_editor_absoluteX="32dp"
+                tools:layout_editor_absoluteY="1631dp" />
 
             <CalendarView
                 android:id="@+id/calendarView"
