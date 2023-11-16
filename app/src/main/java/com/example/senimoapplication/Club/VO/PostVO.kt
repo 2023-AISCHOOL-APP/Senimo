@@ -20,5 +20,4 @@ class PostVO (
     val review_content : ArrayList<CommentVO>,
     val reviewed_cnt : Int = 0
 
-
 )

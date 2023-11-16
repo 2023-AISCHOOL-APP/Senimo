@@ -63,6 +63,7 @@ class SearchActivity : AppCompatActivity() {
             searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
 
             adapter.notifyDataSetChanged()
+            adapter.setShowAllItems(true)
         }
 
         binding.imgMBackbtnToFrag1.setOnClickListener {

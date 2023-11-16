@@ -13,11 +13,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
+import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.Login.Activity_login.LoginActivity
 import com.example.senimoapplication.R
 
 // 게시물 관리 다이얼로그
-fun showBoardDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?) {
+fun showActivityDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?) {
     val dialog = Dialog(activity)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)
@@ -46,7 +47,7 @@ fun showBoardDialogBox(activity: Activity, message: String?, okay: String?, succ
 }
 
 // 회원 관리 다이얼로그
-fun showMemberDialogBox(context: Context, message: String?, okay: String?, successMessage : String?) {
+fun showFragmentDialogBox(context: Context, message: String?, okay: String?, successMessage : String?) {
     val dialog = Dialog(context)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)
@@ -91,7 +92,7 @@ fun showSettingDialogBox(activity: Activity, message: String?, okay: String?, su
         Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
         // DB 데이터 삭제
-        val intent = Intent(activity, LoginActivity::class.java)
+        val intent = Intent(activity, IntroActivity::class.java)
         activity.startActivity(intent)
     }
     btnCancel.setOnClickListener {

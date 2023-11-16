@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.Login.Activity_login.LoginActivity
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityMemberDropOutBinding
@@ -20,7 +21,7 @@ class MemberDropOutActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.btnSetDropout.setOnClickListener {
-            val intent = Intent(this@MemberDropOutActivity,LoginActivity::class.java)
+            val intent = Intent(this@MemberDropOutActivity,IntroActivity::class.java)
             startActivity(intent)
             finish()
             Toast.makeText(this@MemberDropOutActivity,"탈퇴되었습니다.",Toast.LENGTH_SHORT).show()

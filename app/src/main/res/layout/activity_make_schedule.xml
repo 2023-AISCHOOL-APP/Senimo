@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/textfield_shape"
+    android:background="@color/bg_darkgray10"
     android:elevation="2dp"
     tools:context=".Club.Activity_club.MakeScheduleActivity">
 
@@ -292,7 +292,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/etScheduleIntro" />
 
             <ImageView
-                android:id="@+id/imageView8"
+                android:id="@+id/imagebtnLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_gallery"
@@ -364,6 +364,9 @@
                 android:id="@+id/btnSetSchedule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/button_shape_main"
                 android:elevation="5dp"
                 android:fontFamily="@font/pretendard_semibold"
@@ -376,10 +379,13 @@
                 android:textSize="18sp"
                 android:visibility="visible"
                 app:cornerRadius="20dp"
+                app:layout_constraintBottom_toBottomOf="@id/view"
+                app:layout_constraintEnd_toEndOf="@id/view"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@id/view"
+                app:layout_constraintTop_toTopOf="@+id/view"
                 tools:layout_conversion_absoluteHeight="60dp"
-                tools:layout_conversion_absoluteWidth="0dp"
-                tools:layout_editor_absoluteX="32dp"
-                tools:layout_editor_absoluteY="1631dp" />
+                tools:layout_conversion_absoluteWidth="0dp" />
 
             <CalendarView
                 android:id="@+id/calendarView"

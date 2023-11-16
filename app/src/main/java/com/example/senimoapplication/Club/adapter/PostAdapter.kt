@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.Club.Activity_club.MakeScheduleActivity
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Common.formatDate
-import com.example.senimoapplication.Common.showBoardDialogBox
+import com.example.senimoapplication.Common.showActivityDialogBox
 import com.example.senimoapplication.R
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -115,7 +115,7 @@ class PostAdapter(val context: Context, val layout : Int, val data: ArrayList<Po
 
                     R.id.menu_option2 -> {
                         // 게시물 삭제
-                        showBoardDialogBox(view.context as Activity,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.")
+                        showActivityDialogBox(view.context as Activity,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.")
                         true
                     }
 

@@ -14,7 +14,7 @@ import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Club.adapter.ScheduleMemberAdapter
 import com.example.senimoapplication.Common.formatDate
-import com.example.senimoapplication.Common.showBoardDialogBox
+import com.example.senimoapplication.Common.showActivityDialogBox
 import com.example.senimoapplication.server.Retrofit.ApiService
 import com.example.senimoapplication.server.Server
 import retrofit2.Call
@@ -58,7 +58,7 @@ class ScheduleActivity : AppCompatActivity() {
 
 
         // 뒤로가기 버튼
-        binding.icBack2.setOnClickListener {
+        binding.icBack.setOnClickListener {
             onBackPressed()
         }
 
@@ -80,7 +80,7 @@ class ScheduleActivity : AppCompatActivity() {
 
                     R.id.menu_option2 -> {
                         // 게시물 삭제
-                        showBoardDialogBox(this,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.")
+                        showActivityDialogBox(this,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.")
                         true
                     }
 
