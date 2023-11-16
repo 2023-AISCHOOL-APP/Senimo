@@ -6,8 +6,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class Server {
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.70.207:3333") // 도운IP
-        //.baseUrl("http://192.168.70.29:3333") // 희준IP
+
+        //.baseUrl("https://192.168.70.234:3333") // 도운IP
+        .baseUrl("http://192.168.70.154:3333") // 희준IP
+
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 }

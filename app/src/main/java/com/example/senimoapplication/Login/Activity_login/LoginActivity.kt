@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.R
 
 class LoginActivity : AppCompatActivity() {
@@ -11,10 +12,10 @@ class LoginActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_login)
 
-    val btnLogin = findViewById<Button>(R.id.btnLogin)
+    val btnLoginL = findViewById<Button>(R.id.btnLoginL)
 
-    btnLogin.setOnClickListener {
-      val intent = Intent(this@LoginActivity, EnterMyInfoActivity::class.java)
+    btnLoginL.setOnClickListener {
+      val intent = Intent(this@LoginActivity, MainActivity::class.java)
 
       startActivity(intent)
 

@@ -1,5 +1,6 @@
 package com.example.senimoapplication.server.Retrofit
 
+import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import okhttp3.MultipartBody
@@ -26,8 +27,7 @@ interface ApiService {
     @GET("/sche_intro/{sche_code}")
     fun getScheIntro(@Path("sche_code") sche_code: String): Call<ScheduleVO> // 특정 일정 ID를 사용하여 상세 정보 가져오기
 
-
-
-
+    @GET("/getClubInfo/{club_code}")
+    fun getClubInfo(@Path("club_code") club_code: String): Call<ClubInfoVO>
 }
 

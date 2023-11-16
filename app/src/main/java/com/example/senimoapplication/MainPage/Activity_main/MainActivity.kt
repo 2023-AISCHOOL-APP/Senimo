@@ -1,5 +1,6 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -89,6 +90,14 @@ class MainActivity : AppCompatActivity() {
         MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString()),
       )
 
+
+      // 환경설정 아이콘
+      binding.imgMSettingbtn.setOnClickListener {
+        val intent = Intent(this@MainActivity,SettingActivity::class.java)
+        startActivity(intent)
+        finish()
+      }
+
       when(item.itemId){
         R.id.M_tab1 ->{
           supportFragmentManager.beginTransaction().replace(
@@ -98,9 +107,9 @@ class MainActivity : AppCompatActivity() {
 
 
           binding.tvMToptitle.text = "시니모"
-          binding.ImgMAlertbtn.visibility = View.VISIBLE
-          binding.ImgMSettingbtn.visibility = View.INVISIBLE
-          binding.ImgMBackbtnToFrag1.visibility = View.INVISIBLE
+          binding.imgMAlertbtn.visibility = View.VISIBLE
+          binding.imgMSettingbtn.visibility = View.INVISIBLE
+          binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
         }
         R.id.M_tab2 ->{
           supportFragmentManager.beginTransaction().replace(
@@ -110,9 +119,9 @@ class MainActivity : AppCompatActivity() {
 
           // 여기서 TextView의 텍스트 변경과 ImageView 숨기기
           binding.tvMToptitle.text = "내 모임"
-          binding.ImgMAlertbtn.visibility = View.INVISIBLE
-          binding.ImgMSettingbtn.visibility = View.INVISIBLE
-          binding.ImgMBackbtnToFrag1.visibility = View.INVISIBLE
+          binding.imgMAlertbtn.visibility = View.INVISIBLE
+          binding.imgMSettingbtn.visibility = View.INVISIBLE
+          binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
 
         }
         R.id.M_tab3 ->{
@@ -122,9 +131,9 @@ class MainActivity : AppCompatActivity() {
           ).commit()
 
           binding.tvMToptitle.text = "채팅"
-          binding.ImgMAlertbtn.visibility = View.INVISIBLE
-          binding.ImgMSettingbtn.visibility = View.INVISIBLE
-          binding.ImgMBackbtnToFrag1.visibility = View.INVISIBLE
+          binding.imgMAlertbtn.visibility = View.INVISIBLE
+          binding.imgMSettingbtn.visibility = View.INVISIBLE
+          binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
 
 
 
@@ -138,9 +147,9 @@ class MainActivity : AppCompatActivity() {
           ).commit()
 
           binding.tvMToptitle.text = "내 정보"
-          binding.ImgMAlertbtn.visibility = View.INVISIBLE
-          binding.ImgMSettingbtn.visibility = View.VISIBLE
-          binding.ImgMBackbtnToFrag1.visibility = View.INVISIBLE
+          binding.imgMAlertbtn.visibility = View.INVISIBLE
+          binding.imgMSettingbtn.visibility = View.VISIBLE
+          binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
 
         }
       }
