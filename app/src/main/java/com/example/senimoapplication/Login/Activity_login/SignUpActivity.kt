@@ -4,22 +4,19 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.R
 
-class LoginActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_login)
+    setContentView(R.layout.activity_sign_up)
 
-    val btnLoginL = findViewById<Button>(R.id.btnLoginL)
+    val btnToEnterMyInfo = findViewById<Button>(R.id.btnToEnterMyInfo)
 
-    btnLoginL.setOnClickListener {
-      val intent = Intent(this@LoginActivity, MainActivity::class.java)
-
+    btnToEnterMyInfo.setOnClickListener {
+      val intent = Intent(this@SignUpActivity, EnterMyInfoActivity::class.java)
       startActivity(intent)
-
-      finish()
+      overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right)
     }
   }
 }

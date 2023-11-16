@@ -2,6 +2,7 @@ package com.example.senimoapplication.Club.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,11 +17,18 @@ import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.Common.RecyclerItemClickListener
+import com.example.senimoapplication.MainPage.Retrofit.ApiService
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentHomeBinding
+import com.example.senimoapplication.server.Server
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 class HomeFragment : Fragment() {
     lateinit var binding : FragmentHomeBinding
+    val ClubInfoList : ArrayList<ClubInfoVO> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,27 +58,15 @@ class HomeFragment : Fragment() {
         // view요소들 데이터 변경
 
 
-        val clubInfo = ClubInfoVO(
-            "img_sample",
-            5,
-            10,
-            "양희준과 아이들 T1F4",
-            "동구",
-            "자기계발",
-            "시니어의 활동적인 삶을 위해서 모임 플랫폼을 만들기로 했습니다. 우리의 첫 번째 모임입니다.",
-        )
-
-
-
-        //binding.clubImage.setImageURI(clubInfo.clubImg)
-        binding.tvMemberAllNum.text="/${clubInfo.maxCnt}명"
-        binding.tvMemberNum.text="${clubInfo.joinedUserCnt}"
-        binding.tvClubNameTitle.text = clubInfo.clubName
-        binding.tvClubLoca.text = clubInfo.clubLocation
-        binding.tvKeyword.text = clubInfo.keywordName
-        binding.tvClubIntro.text = clubInfo.clubIntroduce
-
-
+//        val clubInfo = ClubInfoVO(
+//            "img_sample",
+//            5,
+//            10,
+//            "양희준과 아이들 T1F4",
+//            "동구",
+//            "자기계발",
+//            "시니어의 활동적인 삶을 위해서 모임 플랫폼을 만들기로 했습니다. 우리의 첫 번째 모임입니다.",
+//        )
 
         binding.tvMoveEdit.setOnClickListener {
             val intent = Intent(view.context, MakeScheduleActivity::class.java)
@@ -149,9 +145,41 @@ class HomeFragment : Fragment() {
             }
         }
 
+        fetchClubInfo()
 
         return view
     }
 
+    private fun fetchClubInfo() {
+        val retrofit = Server().retrofit
+        val service = retrofit.create(ApiService::class.java)
+        val clubCode = "club_code1"
+        val call = service.getClubInfo(clubCode)
+
+        call.enqueue(object : Callback<ClubInfoVO>{
+            override fun onResponse(call: Call<ClubInfoVO>, response: Response<ClubInfoVO>) {
+                Log.d("ClubInfo", response.toString())
+                if (response.isSuccessful) {
+                    if (response.body() != null) {
+                        Log.d("ClubInfo 응답 성공",response.body().toString())
+                        response.body()?.let { clubInfos ->
+                            //binding.clubImage.setImageURI(clubInfo.clubImg)
+                            binding.tvMemberAllNum.text="/${clubInfos.maxCnt}명"
+                            binding.tvMemberNum.text="${clubInfos.joinedUserCnt}"
+                            binding.tvClubNameTitle.text = clubInfos.clubName
+                            binding.tvClubLoca.text = clubInfos.clubLocation
+                            binding.tvClubIntro.text = clubInfos.clubIntroduce
+                        }
+                    }else {
+                        Log.e("HomFragment", "서버 에러: ${response.code()}")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ClubInfoVO>, t: Throwable) {
+                Log.e("HomeFragment", "네트워크 요청 실패", t)
+            }
+        })
+    }
 
 }

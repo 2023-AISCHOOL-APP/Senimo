@@ -94,7 +94,7 @@ class EnterMyInfoActivity : AppCompatActivity() {
     btnEnterInfo.setOnClickListener {
       val intent = Intent(this@EnterMyInfoActivity, MainActivity::class.java)
       startActivity(intent)
-
+      finish()
     }
 
   }
