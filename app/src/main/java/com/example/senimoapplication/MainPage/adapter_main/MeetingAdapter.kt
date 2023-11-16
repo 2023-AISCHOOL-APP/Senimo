@@ -75,6 +75,7 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         val TITLE_MAX_TEXT_LENGTH = 10 // 최대 글자 수
         val CONTENT_MAX_TEXT_LENGTH = 18 // 최대 내용 수
 
@@ -107,6 +108,15 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         holder.tv_M_Content.text = content_truncatedName // 글자 제한 content
 
         holder.tv_M_Keyword.text = data[position].keyword
+        when(data[position].keyword){
+            "운동" -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword)
+            "취미" -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword_color2)
+            "전시/공연" -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword_color3)
+            "여행" -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword_color4)
+            "자기계발" -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword_color5)
+            "재테크" -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword_color6)
+            else -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword_color6)
+        }
         holder.tv_M_attendance.text = data[position].attendance.toString()
         holder.tv_M_allMember.text = "/${data[position].allMember.toString()}명"
         // holder.tv_M_Person.text = data[position].person

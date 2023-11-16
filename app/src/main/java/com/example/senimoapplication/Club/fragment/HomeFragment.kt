@@ -17,7 +17,7 @@ import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.Common.RecyclerItemClickListener
-import com.example.senimoapplication.MainPage.Retrofit.ApiService
+import com.example.senimoapplication.server.Retrofit.ApiService
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentHomeBinding
 import com.example.senimoapplication.server.Server

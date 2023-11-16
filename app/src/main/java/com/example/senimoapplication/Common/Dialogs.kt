@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
+import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.Login.Activity_login.LoginActivity
 import com.example.senimoapplication.R
 
@@ -91,7 +92,7 @@ fun showSettingDialogBox(activity: Activity, message: String?, okay: String?, su
         Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
         // DB 데이터 삭제
-        val intent = Intent(activity, LoginActivity::class.java)
+        val intent = Intent(activity, IntroActivity::class.java)
         activity.startActivity(intent)
     }
     btnCancel.setOnClickListener {
