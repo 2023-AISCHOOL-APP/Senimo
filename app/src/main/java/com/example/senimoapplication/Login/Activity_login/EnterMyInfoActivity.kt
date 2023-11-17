@@ -108,7 +108,7 @@ class EnterMyInfoActivity : AppCompatActivity() {
     this.onBackPressedDispatcher.addCallback(this, callback)
 
     binding.btnEnterInfo.setOnClickListener {
-      val intent = Intent(this@EnterMyInfoActivity, MainActivity::class.java)
+      val intent = Intent(this@EnterMyInfoActivity, LoginActivity::class.java)
       startActivity(intent)
       finishAffinity()
     }
