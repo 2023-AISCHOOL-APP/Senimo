@@ -153,8 +153,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchClubInfo() {
-        val retrofit = Server().retrofit
-        val service = retrofit.create(ApiService::class.java)
+        val service = Server().service
         val clubCode = "club_code1"
         val call = service.getClubInfo(clubCode)
 
