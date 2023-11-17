@@ -160,13 +160,14 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/tvNameS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="이름"
                 android:textColor="@color/txt_gray50"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/textView7"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -179,11 +180,11 @@
                 android:ems="10"
                 android:hint="이름을 입력해 주세요."
                 android:inputType="text"
-                android:textColor="@color/txt_gray30"
+                android:textColor="@color/txt_black"
                 android:textColorHighlight="@color/main_opacity60"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintStart_toStartOf="@+id/tvNameS"
+                app:layout_constraintTop_toBottomOf="@+id/tvNameS" />
 
             <TextView
                 android:id="@+id/textView10"
@@ -210,28 +211,6 @@
                 app:layout_constraintStart_toEndOf="@+id/textView10"
                 app:layout_constraintTop_toBottomOf="@+id/etNameS" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="124dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:text="Button"
-                app:layout_constraintStart_toStartOf="@+id/textView10"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="124dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:text="Button"
-                app:layout_constraintStart_toStartOf="@+id/textView48"
-                app:layout_constraintTop_toBottomOf="@+id/textView48" />
-
             <TextView
                 android:id="@+id/textView49"
                 android:layout_width="wrap_content"
@@ -241,8 +220,8 @@
                 android:text="거주지"
                 android:textColor="@color/txt_gray50"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/button"
-                app:layout_constraintTop_toBottomOf="@+id/button" />
+                app:layout_constraintStart_toStartOf="@+id/etYearS"
+                app:layout_constraintTop_toBottomOf="@+id/etYearS" />
 
             <TextView
                 android:id="@+id/textView50"
@@ -271,6 +250,36 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView50"
                 app:layout_constraintTop_toBottomOf="@+id/textView50" />
+
+            <EditText
+                android:id="@+id/etYearS"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/et_underline"
+                android:ems="10"
+                android:hint="ex) 1964"
+                android:inputType="text"
+                android:textColor="@color/txt_black"
+                android:textColorHighlight="@color/main_opacity60"
+                app:layout_constraintEnd_toStartOf="@+id/etGenderS"
+                app:layout_constraintStart_toStartOf="@+id/textView10"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+            <EditText
+                android:id="@+id/etGenderS"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="76dp"
+                android:background="@drawable/et_underline"
+                android:ems="10"
+                android:hint="ex) 남"
+                android:inputType="text"
+                android:textColor="@color/txt_black"
+                android:textColorHighlight="@color/main_opacity60"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/textView48"
+                app:layout_constraintTop_toBottomOf="@+id/textView48" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
