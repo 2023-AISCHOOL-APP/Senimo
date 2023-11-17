@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 data class MeetingVO(
     @SerializedName("club_location")
-    val gu: String = "광산구",
+    val gu: String? = null,
     @SerializedName("club_name") // 서버 응답의 club_name을 title에 맵핑합니다.
     var title: String,
     @SerializedName("club_introduce") // 서버 응답의 club_introduce를 content에 맵핑합니다.
@@ -58,8 +58,6 @@ data class MeetingVO(
         parcel.writeString(imageUri?.toString()) // 이미지 경로 또는 URI를 저장
         // parcel.writeString(backicon)
     }
-
-
 
     override fun describeContents(): Int {
         return 0

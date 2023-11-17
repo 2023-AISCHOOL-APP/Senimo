@@ -4,6 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,8 +30,6 @@ class PostActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-
-        binding.etPostContent.text
 
         // 사진 1장 선택
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

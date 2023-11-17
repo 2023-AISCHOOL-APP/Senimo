@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.Club.Activity_club.MakeScheduleActivity
+import com.example.senimoapplication.Club.Activity_club.PostActivity
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showActivityDialogBox
@@ -126,9 +127,6 @@ class PostAdapter(val context: Context, val layout : Int, val data: ArrayList<Po
             popupMenu.show()
 
         }
-
-
-
 
 
         holder.tvCommentCnt.text = data[position].reviewed_cnt.toString()
