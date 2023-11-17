@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.senimoapplication.R
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import kotlin.math.min
@@ -112,6 +113,14 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         // holder.tv_M_Person.text = data[position].person
         holder.Img_M_Meeting.setImageResource(R.drawable.golf_img)
         // holder.img_M_Backicon.setImageResource(R.drawable.ic_back_black)
+
+        // Glide를 사용하여 이미지 로드 및 표시
+        val imageUrl = data[position].imageUri
+        Glide.with(context)
+            .load(imageUrl)
+            .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
+            .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
+            .into(holder.Img_M_Meeting)
     }
 
     override fun getItemCount(): Int {

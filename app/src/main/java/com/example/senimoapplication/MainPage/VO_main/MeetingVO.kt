@@ -18,8 +18,9 @@ data class MeetingVO(
     var attendance: Int,
     @SerializedName("max_cnt")
     var allMember: Int,
-    @SerializedName("club_img")
-    var imageUri: String? = null // 이미지 경로를 String 타입으로 저장
+    @SerializedName("club_img_url")
+    var imageUri: String // 이미지 경로를 String 타입으로 저장
+
 
 //    val title: String = "",
 //    val content: String = "",
@@ -31,13 +32,7 @@ data class MeetingVO(
     // val backicon : String = ""
 ) : Parcelable {
     // 이미지 경로를 사용하여 Uri를 얻는 메서드 추가
-    fun getImageUriAsString(): String? {
-        return imageUri
-    }
 
-    fun getImageUri(): Uri? {
-        return imageUri?.let { Uri.parse(it) }
-    }
     constructor(parcel: Parcel) : this(
         gu = parcel.readString() ?: "",
         title = parcel.readString() ?: "",
@@ -46,7 +41,7 @@ data class MeetingVO(
         attendance = parcel.readInt(),
         allMember = parcel.readInt(),
         // person = parcel.readString() ?: "",
-        imageUri = parcel.readString()
+        imageUri = parcel.readString() ?:""
         // backicon = parcel.readString() ?: ""
     )
 

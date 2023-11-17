@@ -18,9 +18,13 @@ data class ScheduleVO(
     val scheduleLoca: String="",
     @SerializedName("max_num")
     val allMembers: Int =0,
-    @SerializedName("joined_user_count")
+    @SerializedName("attend_user_cnt")
     val attendance: Int= 0,
-    val state: String = "모집중")
+    val state: String = "모집중",
+    @SerializedName("sche_img_url")
+    var imageUri: String // 이미지 경로를 String 타입으로 저장
+)
+
 
 
 

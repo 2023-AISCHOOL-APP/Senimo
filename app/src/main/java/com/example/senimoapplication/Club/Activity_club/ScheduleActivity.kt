@@ -9,6 +9,7 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
@@ -122,6 +123,7 @@ class ScheduleActivity : AppCompatActivity() {
                         Log.d("Schedule", response.body().toString())
                         response.body()?.let { schedules ->
                             // null이 아니면 기존 목록을 지우고 새 데이터로 채웁니다.
+
                             findViewById<TextView>(R.id.tv_C_S_Time).text = formatDate(schedules.scheduleDate)
                             findViewById<TextView>(R.id.tvClubName2).text = schedules.clubName
                             findViewById<TextView>(R.id.tv_C_ScheduleName3).text = schedules.scheduleName
@@ -130,7 +132,12 @@ class ScheduleActivity : AppCompatActivity() {
                             findViewById<TextView>(R.id.tv_C_S_Fee).text = "${schedules.scheduleFee} 원"
                             findViewById<TextView>(R.id.tv_C_S_attendance).text = "${schedules.attendance} /"
                             findViewById<TextView>(R.id.tv_C_S_all).text = "${schedules.allMembers}명"
-
+                            binding.tvCScheduleIntro.text = schedules.scheduleName
+                           //binding.imgCSchedule.setImageResource(schedules.imageUri)
+                            Glide.with(this@ScheduleActivity)
+                                .load(schedules.imageUri) // MeetingVO 객체의 imageUri
+                                .placeholder(R.drawable.golf_img) // 기본 이미지
+                                .into(binding.imgCSchedule) // 이미지를 표시할 ImageView
                         }
                     } else {
                         Log.e("ScheduleActivity", "서버 에러: ${response.code()}")
