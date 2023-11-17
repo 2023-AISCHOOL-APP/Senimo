@@ -30,7 +30,7 @@ class SearchActivity : AppCompatActivity() {
         setContentView(view)
 
         // Intent에서 MeetingList와 CategoryKeyword를 받아옴
-        meetingList = intent.getParcelableArrayListExtra("MeetingList") ?: ArrayList()
+        meetingList = intent.getParcelableArrayListExtra<MeetingVO>("MeetingList") ?: ArrayList()
         Log.d("SearchActivity", "받아온 모임 리스트: $meetingList")
 
         val categoryKeyword = intent.getStringExtra("CategoryKeyword") ?: ""
@@ -90,6 +90,7 @@ class SearchActivity : AppCompatActivity() {
             val adapter =
                 MeetingAdapter(applicationContext, R.layout.meeting_list, filteredMeetingList)
             searchRecyclerView.adapter = adapter
+
             searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
 
             adapter.notifyDataSetChanged()
@@ -111,8 +112,9 @@ class SearchActivity : AppCompatActivity() {
                     override fun onItemClick(view: View, position: Int) {
                         if (position != RecyclerView.NO_POSITION && position < filteredMeetingList.size) {
                             val clickedSearchPage = filteredMeetingList[position]
+                            Log.d("SearchMeeting",clickedSearchPage.toString())
                             val intent = Intent(this@SearchActivity, ClubActivity::class.java)
-                            intent.putExtra("clickedSearchPage", clickedSearchPage)
+                            intent.putExtra("clickedMeeting", clickedSearchPage)
                             startActivity(intent)
                         }
                     }

@@ -24,10 +24,13 @@ interface ApiService {
 //    @GET("/photos")
 //    fun getPhotos(): Call<List<Photo>> // 서버에서 사진 목록을 가져오는 함수입니다.
 
-    @GET("/sche_intro/{sche_code}")
+    @GET("/getSche_intro/{sche_code}")
     fun getScheIntro(@Path("sche_code") sche_code: String): Call<ScheduleVO> // 특정 일정 ID를 사용하여 상세 정보 가져오기
 
     @GET("/getClubInfo/{club_code}")
     fun getClubInfo(@Path("club_code") club_code: String): Call<ClubInfoVO>
+
+    @POST("/postcreateMeeting")
+    fun createMeeting(): Call<List<MeetingVO>>
 }
 

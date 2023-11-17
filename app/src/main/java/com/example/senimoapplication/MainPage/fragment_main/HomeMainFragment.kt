@@ -91,17 +91,18 @@ class HomeMainFragment : Fragment() {
         // adapter.notifyDataSetChanged() // 어댑터 새로고침
 
 
-        // 모임 홈 페이지로 이동
+        // 메인페이지 모임클릭시 모임 홈 페이지로 이동
         rv_M_PopularMeeting.addOnItemTouchListener(
             RecyclerItemClickListener(
                 requireContext(),
                 rv_M_PopularMeeting,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(view: View, position: Int) {
-                        val clickedMeetinghome = MeetingList[position] // 클릭된 아이템의 MeetingVO 가져오기
+                        val clickedMeeting  = MeetingList[position] // 클릭된 아이템의 MeetingVO 가져오기
                         // 새로운 액티비티로 이동
+                        Log.d("clickedMeetinghome", clickedMeeting.toString())
                         val intent = Intent(requireContext(), ClubActivity::class.java)
-                        intent.putExtra("clickedMeetinghome", clickedMeetinghome)
+                        intent.putExtra("clickedMeeting", clickedMeeting) // Parcelable로 넘김
                         startActivity(intent)
 
                     }
@@ -185,10 +186,11 @@ class HomeMainFragment : Fragment() {
             startActivity(intent)
         }
 
-
+        // 검색바 이부분은 전체모임정보가 들어가게 수정해야함(따로요청을 보내야하나?)
         Img_M_SearchBar.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
             intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))  // HomeMainFragment에서 MeetingList를 Parcel로 만들어 SearchActivity로 전달
+            Log.d("검색바",MeetingList.toString())
             intent.putExtra("isFromSearchBar", true) // 검색 바에서 온 것임을 나타내는 플래그
             startActivity(intent)
             activity?.finish()
@@ -244,7 +246,7 @@ class HomeMainFragment : Fragment() {
         val retrofit = Server().retrofit
 
         // 서버에 요청을 보낼 '전화기'를 만들어요.
-        val service = retrofit.create(ApiService::class.java)
+        val service = Server().service
         // '전화'를 걸어요. 서버에 데이터를 달라고 요청해요.
         service.getMeetings().enqueue(object : Callback<List<MeetingVO>> {
             // 서버에서 답이 오면 이 부분이 실행돼요.
