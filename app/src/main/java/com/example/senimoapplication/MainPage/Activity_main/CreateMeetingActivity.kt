@@ -201,6 +201,13 @@ class CreateMeetingActivity : AppCompatActivity() {
             }
         }
 
+        binding.ImgMBackbtnToFrag2.setOnClickListener {
+            val intent = Intent(this@CreateMeetingActivity,MainActivity::class.java)
+            intent.putExtra("selected_tab","M_tab2")
+            startActivity(intent)
+            finish()
+        }
+
 
 
 
@@ -241,6 +248,8 @@ class CreateMeetingActivity : AppCompatActivity() {
                         meetingKeywords,
                         0,
                         binding.tvMAllMember.text.toString().toInt(),
+                        binding.imgMButton.toString()
+//                        binding.imgMButton.setImageResource(R.drawable.golf_img)
                     )
 
                 // 결과를 설정하고 현재 액티비티를 종료

@@ -79,8 +79,10 @@ class HomeFragment : Fragment() {
         binding.rvSchedule.layoutManager=LinearLayoutManager(view.context)
 
         // 모임 일정 가데이터
-        scheduleList.add(ScheduleVO("모임명","신나는 크리스마스 파티","노는게 제일 좋은 친구들 모여서 함꼐 놀아요","2023-12-20 17:00",30000, "광주 동구 제봉로 대성학원 3층", 26,20,"모집중" ))
-        scheduleList.add(ScheduleVO("모임명","짬뽕이 제일 좋아","짜장보다는 짬뽕드실 분 모집","2023-11-8 17:00",10000, "광주 동구 도야짬뽕", 10,10,"모집마감" )) // 도운이 수정함 fee int로 바꿔서"삭제
+
+        scheduleList.add(ScheduleVO("축구보자축구","대한민국싱가포르축구볼사람구함","3층에 모여서 축구봐요. 생각보다 잘할거에여.","2023-11-22T12:00:08.123Z",3000,"광주 동구 대성학원 3층 6강의실", 10,4,R.drawable.img_sample2,"모집중"))
+        scheduleList.add(ScheduleVO("축구보자축구","대한민국싱가포르축구볼사람구함","3층에 모여서 축구봐요. 생각보다 잘할거에여.","2023-11-22T12:00:08.123Z",3000,"광주 동구 대성학원 3층 6강의실", 10,4,R.drawable.img_sample2,"모집중")) // 도운이 수정함 fee int로 바꿔서"삭제
+
         //scheduleList.add(ScheduleVO("점심을 공유합시다","2023-11-6 17:00","30000", "광주 동구 동부식당", 26,20,"모집마감" ))
 
         // 모임 상세 페이지로 이동

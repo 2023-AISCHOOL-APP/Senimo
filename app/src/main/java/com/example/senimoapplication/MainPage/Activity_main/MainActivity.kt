@@ -1,9 +1,11 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.fragment.ChatFragment
 import com.example.senimoapplication.MainPage.VO_main.ChatListVO
@@ -66,9 +68,9 @@ class MainActivity : AppCompatActivity() {
       // 모임 일정 리스트 가데이터
       val myscheduleList : List<ScheduleVO> = listOf(
 
-        ScheduleVO("모임명","가나다라마바사아자차카타파하","2023-12-20 17:00","30000", 26,"광주 동구 제봉로 대성학원 3층", 20,40 ),
-        ScheduleVO("모임명","시험 공부 준비합시다~!!","2023-11-15 13:30","20000", 10,"광주 동구 제봉로 대성학원 3층", 30,40 ),
-        ScheduleVO("모임명","빼빼로 만들자~","2023-11-10 18:00","15000", 10,"광주 동구 제봉로 대성학원 3층", 10,40 ),
+        ScheduleVO("모임명","가나다라마바사아자차카타파하","2023-12-20 17:00","30000", 26,"광주 동구 제봉로 대성학원 3층", 20,40 ,"",""),
+        ScheduleVO("모임명","시험 공부 준비합시다~!!","2023-11-15 13:30","20000", 10,"광주 동구 제봉로 대성학원 3층", 30,40 ,"",""),
+        ScheduleVO("모임명","빼빼로 만들자~","2023-11-10 18:00","15000", 10,"광주 동구 제봉로 대성학원 3층", 10,40 ,"",""),
         // 변수가 서로 다름 지금 지혜누나는 fee를 loca 위치에 써놓고, attendance에 모집중 모집마감이라 써져있음 ,"모임명",추가함 schedulvo에 club_code 추가해서
 
       )
@@ -168,6 +170,17 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
+  }
+
+  // 뒤로가기 버튼을 눌렀을 때 M_tab1로 이동하도록 설정
+  @SuppressLint("MissingSuperCall")
+  override fun onBackPressed() {
+    val currentTabId = binding.bnvMain.selectedItemId
+    if (currentTabId != R.id.M_tab1) {
+      binding.bnvMain.selectedItemId = R.id.M_tab1
+    } else {
+      super.onBackPressed()
+    }
   }
 
   // ChatMainFragment 에서 ChatFragment로 이동시키게 하는 함수 만들기

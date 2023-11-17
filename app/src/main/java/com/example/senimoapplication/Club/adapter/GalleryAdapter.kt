@@ -42,8 +42,6 @@ class GalleryAdapter(val context: Context, val layout: Int, val data: ArrayList<
             Log.d("clickeddata check", "${data}")
             context.startActivity(intent)
         }
-
-
     }
 
     override fun getItemCount(): Int {

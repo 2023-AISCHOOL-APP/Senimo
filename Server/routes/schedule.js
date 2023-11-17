@@ -9,23 +9,14 @@ router.get('/sche_intro/:sche_code', (req, res) => {
     const sche_code = req.params.sche_code;
     console.log("요청",req)
     console.log("요청받은코드",sche_code)
-    const query = `SELECT 
-    s.sche_code,
-    s.club_code,
-    c.club_name,
-    s.sche_title,
-    s.sche_content,
-    s.sche_date,
-    s.sche_location,
-    s.max_num,
-    s.fee,
-    s.sche_img,
-    (SELECT COUNT(*) FROM tb_sche_joined_user WHERE sche_code = s.sche_code) AS joined_user_count
-FROM 
-    tb_schedule AS s
-    join tb_club as c 
-WHERE 
-    s.sche_code ='sche_code1';ule
+    const query = `SELECT c.club_name, CONCAT('http://192.168.70.207:3333/uploads/', a.sche_img) AS sche_img_url , a.sche_title, a.sche_date, a.sche_location, a.fee, 
+    COUNT(b.user_id) AS attend_user_cnt, a.max_num, a.sche_content
+  FROM tb_schedule a
+  LEFT JOIN tb_sche_joined_user b ON a.sche_code = b.sche_code
+  left join tb_club c on a.club_code = c.club_code
+  WHERE a.sche_code = ?
+  GROUP BY a.sche_img, a.sche_title, a.sche_date, a.sche_location, a.fee, a.max_num;
+  ;
 `;
 
      conn.query(query, [sche_code], (error, results) => {

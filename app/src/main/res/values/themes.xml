@@ -27,6 +27,7 @@
         <item name="cornerSizeBottomRight">15dp</item>
         <item name="color">@color/white</item>
     </style>
+
     <!-- 회원 목록 회원 프로필 사진 스타일   -->
     <style name="RoundedProfileImage">
         <item name="cornerFamily">rounded</item>
