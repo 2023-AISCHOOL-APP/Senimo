@@ -6,24 +6,24 @@ import android.os.Parcelable
 class ChatListVO(
     val meetingImg: String = "",
     val meetingTitle: String = "",
-    val meetingContent: String = "",
-    val time: Long = 0,
-    val new: Int = 0
+    val recentlyMessage: String = "",
+    val time: String = "",
+    val newMessagesCount: Int = 0
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
-        parcel.readLong(),
+        parcel.readString() ?: "",
         parcel.readInt()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(meetingImg)
         parcel.writeString(meetingTitle)
-        parcel.writeString(meetingContent)
-        parcel.writeLong(time)
-        parcel.writeInt(new)
+        parcel.writeString(recentlyMessage)
+        parcel.writeString(time)
+        parcel.writeInt(newMessagesCount)
     }
 
     override fun describeContents(): Int {

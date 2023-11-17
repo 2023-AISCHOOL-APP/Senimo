@@ -1,5 +1,8 @@
 package com.example.senimoapplication.Common
 
+import android.content.Context
+import com.example.senimoapplication.R
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -88,6 +91,38 @@ fun photoUploadTime(inputDate: String): String {
     } catch (e: Exception) {
         // 날짜 형식이 잘못된 경우 또는 파싱 오류 발생 시 처리
         return "Invalid Date"
+    }
+}
+
+fun myChatListDate(inputDateString: String, context: Context): String {
+    // 입력 스트링의 형식을 지정합니다.
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+    try {
+        // 입력 스트링을 파싱합니다.
+        val date = inputFormat.parse(inputDateString)
+        date?.let {
+            val currentTime = System.currentTimeMillis()
+            val diff = currentTime - date.time
+            val seconds = diff / 1000
+            val minutes = seconds / 60
+            val hours = minutes / 60
+            val days = hours / 24
+
+            return when {
+                seconds < 60 -> context.getString(R.string.just_now)
+                minutes < 60 -> context.getString(R.string.minutes_ago, minutes.toInt())
+                hours < 24 -> context.getString(R.string.hours_ago, hours.toInt())
+                days < 2 -> context.getString(R.string.days_ago, days.toInt())
+                else -> SimpleDateFormat("MM'.' dd (E) HH:mm", Locale.KOREA).format(date)
+            }
+        } ?: run {
+            return "" // 날짜 파싱 실패 시 빈 문자열 반환
+        }
+    } catch (e: ParseException) {
+        e.printStackTrace()
+        return "" // 예외 발생 시 빈 문자열 반환
     }
 }
 

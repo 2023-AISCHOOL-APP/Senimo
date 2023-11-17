@@ -88,13 +88,13 @@
                 android:id="@+id/view8"
                 android:layout_width="0dp"
                 android:layout_height="84dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/card_bttom"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etmlUserIntroS" />
+                app:layout_constraintTop_toBottomOf="@id/textView56" />
 
             <TextView
                 android:id="@+id/textView52"
@@ -179,7 +179,7 @@
                 android:ems="10"
                 android:hint="이름을 입력해 주세요."
                 android:inputType="text"
-                android:textColor="@color/txt_gray30"
+                android:textColor="@color/txt_gray90"
                 android:textColorHighlight="@color/main_opacity60"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView6"
@@ -271,6 +271,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView50"
                 app:layout_constraintTop_toBottomOf="@+id/textView50" />
+
+            <TextView
+                android:id="@+id/tv_M_UserIntroWarning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_regular"
+                android:text="300자를 초과할 수 없습니다."
+                android:textColor="@color/main"
+                android:textSize="12sp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/etmlUserIntroS"
+                app:layout_constraintTop_toBottomOf="@+id/etmlUserIntroS" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
