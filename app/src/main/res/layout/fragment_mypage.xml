@@ -165,7 +165,7 @@
                 android:background="@drawable/badge_shape"
                 android:elevation="6dp"
                 android:padding="8dp"
-                android:src="@drawable/ic_badge1_off"
+                android:src="@drawable/ic_badge1_on"
                 app:layout_constraintStart_toStartOf="@+id/textView24"
                 app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
@@ -393,7 +393,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:fontFamily="@font/pretendard_medium"
-                android:text="4"
+                android:text="1"
                 android:textColor="@color/point2"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView24"

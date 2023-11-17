@@ -68,17 +68,19 @@
                 android:layout_height="100dp"
                 android:layout_marginTop="20dp"
                 android:adjustViewBounds="true"
+                android:elevation="4dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView6"
                 app:shapeAppearanceOverlay="@style/RoundedEditMyPageProfileComment"
-                app:srcCompat="@drawable/tea_img" />
+                app:srcCompat="@drawable/ic_profile_circle" />
 
             <ImageView
                 android:id="@+id/img_M_EditPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:elevation="6dp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_M_EditMypageImg"
                 app:layout_constraintEnd_toEndOf="@+id/img_M_EditMypageImg"
                 app:srcCompat="@drawable/ic_editphoto" />
@@ -120,7 +122,7 @@
 
             <EditText
                 android:id="@+id/et_M_UserBirth"
-                android:layout_width="180dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/txt_gray30"
                 android:ems="10"
@@ -136,7 +138,7 @@
 
             <EditText
                 android:id="@+id/et_M_Gender"
-                android:layout_width="180dp"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/txt_gray30"
                 android:ems="10"

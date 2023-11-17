@@ -201,6 +201,13 @@ class CreateMeetingActivity : AppCompatActivity() {
             }
         }
 
+        binding.ImgMBackbtnToFrag2.setOnClickListener {
+            val intent = Intent(this@CreateMeetingActivity,MainActivity::class.java)
+            intent.putExtra("selected_tab","M_tab2")
+            startActivity(intent)
+            finish()
+        }
+
 
 
 

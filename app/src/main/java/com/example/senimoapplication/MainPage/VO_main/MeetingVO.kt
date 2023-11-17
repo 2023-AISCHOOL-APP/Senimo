@@ -21,7 +21,7 @@ data class MeetingVO(
     var allMember: Int,
     @SerializedName("club_img")
     var imageUri: String? = null, // 이미지 경로를 String 타입으로 저장
-
+// = "drawable/ic_meeting_profile",
 
 //    val title: String = "",
 //    val content: String = "",

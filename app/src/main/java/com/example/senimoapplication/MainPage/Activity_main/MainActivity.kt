@@ -1,9 +1,11 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.fragment.ChatFragment
 import com.example.senimoapplication.MainPage.VO_main.ChatListVO
@@ -168,6 +170,17 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
+  }
+
+  // 뒤로가기 버튼을 눌렀을 때 M_tab1로 이동하도록 설정
+  @SuppressLint("MissingSuperCall")
+  override fun onBackPressed() {
+    val currentTabId = binding.bnvMain.selectedItemId
+    if (currentTabId != R.id.M_tab1) {
+      binding.bnvMain.selectedItemId = R.id.M_tab1
+    } else {
+      super.onBackPressed()
+    }
   }
 
   // ChatMainFragment 에서 ChatFragment로 이동시키게 하는 함수 만들기

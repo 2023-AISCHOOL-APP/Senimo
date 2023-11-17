@@ -5,6 +5,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import com.bumptech.glide.Glide
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.R
@@ -42,6 +46,36 @@ class EditMyPageActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+
+        // 사진 1장 선택
+        val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Callback is invoked after the user selects a media item or closes the
+            // photo picker.
+            if (uri != null) {
+                Log.d("PhotoPicker_main","Selected URI: $uri")
+//                binding.imgMEditPhoto.setImageURI(uri)
+//                binding.imgMEditPhoto.visibility = ImageView.VISIBLE
+
+                // Gride를 사용하여 이미지 로딩
+                Glide.with(this@EditMyPageActivity)
+                    .load(uri) // 이미지 URI
+                    .centerCrop() // 이미지가 ImageView를 가득 채우도록 조정
+                    .into(binding.imgMEditMypageImg) // 이미지를 설정할 ImageView
+
+                // 이미지를 선택한 후에 URI를 변수에 저장
+                val imageUri = uri
+
+
+            } else {
+                Log.d("PhotoPicker_main", "No media selected")
+            }
+        }
+
+        binding.imgMEditPhoto.setOnClickListener {
+            pickMediaMain.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
 
 
     }
