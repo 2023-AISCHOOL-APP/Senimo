@@ -30,14 +30,14 @@ class BoardFragment : Fragment() {
         val postList : ArrayList<PostVO> = ArrayList()
 
         //가데이터
-        val post1 = PostVO("국지호", "rtyrt", 1, "2023-11-19 09:00", "게시물 내용입니다", "wer", arrayListOf(
-            CommentVO("양희준", "2023-11-19 09:00", "이것이 최선입니까?", "이미지"),
-            CommentVO("다른 사용자", "2023-11-19 09:30", "댓글 내용2", "이미지2")
+        val post1 = PostVO("국지호", "rtyrt", 1, "2023-11-22T12:00:08.123Z", "게시물 내용입니다", "wer", arrayListOf(
+            CommentVO("양희준", "2023-11-22T12:00:08.123Z", "이것이 최선입니까?", "이미지"),
+            CommentVO("다른 사용자", "2023-11-22T12:00:08.123Z", "댓글 내용2", "이미지2")
         ), 2)
 
-        val post2 = PostVO("최효정", "rtyrt", 2, "2023-11-19 09:00", "게시물 내용입니다", "wer", arrayListOf(
-            CommentVO("양희준", "2023-11-19 09:00", "이것이 최선입니까?", "이미지"),
-            CommentVO("다른 사용자", "2023-11-19 09:30", "댓글 내용2", "이미지2")
+        val post2 = PostVO("최효정", "rtyrt", 2, "2023-11-22T12:00:08.123Z", "게시물 내용입니다", "wer", arrayListOf(
+            CommentVO("양희준", "2023-11-22T12:00:08.123Z", "이것이 최선입니까?", "이미지"),
+            CommentVO("다른 사용자", "2023-11-22T12:00:08.123Z", "댓글 내용2", "이미지2")
         ), 2)
 
         postList.add(post1)
