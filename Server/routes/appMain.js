@@ -2,18 +2,41 @@ const express = require('express')
 const router = express.Router()
 const conn = require('../config/database');
 
+
+
+  // 'public' 폴더를 정적 파일로 제공
+ 
+
 router.get('/getMeetings', (req, res) => {
   console.log('result', req.body);
 
   // SQL 쿼리를 실행합니다.
 
   const query = `
-  select c1.club_location, c1.club_name, c1.club_introduce, count(j.user_id) as attend_user_cnt, c1.max_cnt, c1.club_img, k.keyword_name
-from tb_club c1 
-left join tb_keyword k on c1.keyword_code = k.keyword_code
-left join tb_join j on c1.club_code = j.club_code
-group by c1.club_location, c1.club_name, c1.club_introduce, c1.max_cnt, c1.club_img, k.keyword_name
-order by attend_user_cnt desc;`
+  SELECT 
+    c.club_location, 
+    c.club_name, 
+    c.club_introduce, 
+    COUNT(j.user_id) AS attend_user_cnt, 
+    c.max_cnt, 
+    CONCAT('http://192.168.70.207:3333/uploads/', c.club_img) AS club_img_url ,
+    k.keyword_name
+FROM 
+    tb_club c
+LEFT JOIN 
+    tb_keyword k ON c.keyword_code = k.keyword_code
+LEFT JOIN 
+    tb_join j ON c.club_code = j.club_code
+GROUP BY 
+    c.club_location, 
+    c.club_name, 
+    c.club_introduce, 
+    c.max_cnt, 
+    c.club_img, 
+    k.keyword_name
+ORDER BY 
+    attend_user_cnt DESC
+LIMIT 20;`
   
 
   conn.query(query, (err, rows) => {

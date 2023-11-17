@@ -127,7 +127,18 @@ fun myChatListDate(inputDateString: String, context: Context): String {
 }
 
 
+fun ChattingTime(inputDate: String): String {
+    try {
+        val inputDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        val outputDateFormat = SimpleDateFormat("a hh:mm", Locale.getDefault())
 
+        val date = inputDateFormat.parse(inputDate)
+        return outputDateFormat.format(date)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return ""
+    }
+}
 
 
 
@@ -137,4 +148,3 @@ fun main() {
     val formattedDate = formatDate(inputDate)
     println(formattedDate)
 }
-

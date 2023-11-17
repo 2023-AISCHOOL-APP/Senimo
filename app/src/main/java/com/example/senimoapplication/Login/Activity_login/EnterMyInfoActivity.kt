@@ -69,6 +69,8 @@ class EnterMyInfoActivity : AppCompatActivity() {
 
     GuAdapter.itemClickListener = object : GuAdapter.OnItemClickListener {
       override fun onItemClick(position: Int) {
+        DongAdapter.selectedPosition = -1
+        DongAdapter.notifyDataSetChanged()
         val item = guList[position]
 
         // rvGu의 아이템을 클릭할 때마다 DongAdapter를 새로 업데이트
@@ -110,7 +112,7 @@ class EnterMyInfoActivity : AppCompatActivity() {
     this.onBackPressedDispatcher.addCallback(this, callback)
 
     binding.btnEnterInfo.setOnClickListener {
-      val intent = Intent(this@EnterMyInfoActivity, MainActivity::class.java)
+      val intent = Intent(this@EnterMyInfoActivity, LoginActivity::class.java)
       startActivity(intent)
       finishAffinity()
     }

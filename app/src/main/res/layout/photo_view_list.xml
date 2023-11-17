@@ -9,7 +9,7 @@
         android:id="@+id/view8"
         android:layout_width="0dp"
         android:layout_height="100dp"
-        android:background="#F2F4F7"
+        android:background="@color/txt_gray10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

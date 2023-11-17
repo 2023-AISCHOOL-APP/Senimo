@@ -6,16 +6,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.R
+import okhttp3.internal.addHeaderLenient
 
 
 class DongAdapter(val layout: Int, var list: ArrayList<String>, val context: Context) : RecyclerView.Adapter<DongAdapter.ViewHolder>() {
 
   val inflater = LayoutInflater.from(context)
 
-  class ViewHolder(view: View): RecyclerView.ViewHolder(view){
+  interface OnItemClickListener {
+    fun onItemClick(position: Int) {}
+  }
+
+  var itemClickListener: OnItemClickListener? = null
+  var selectedPosition = -1
+
+  inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
     val tvDong = view.findViewById<TextView>(R.id.tvDong)
+
+    init {
+      itemView.setOnClickListener {
+        itemClickListener?.onItemClick(adapterPosition)
+        val previousPosition = selectedPosition
+        selectedPosition = adapterPosition
+        notifyItemChanged(previousPosition)
+        notifyItemChanged(selectedPosition)
+      }
+    }
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,6 +45,19 @@ class DongAdapter(val layout: Int, var list: ArrayList<String>, val context: Con
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.tvDong.text = list[position]
+
+    val selectedColor = ContextCompat.getColor(context, R.color.main)
+    val selectedTextColor = ContextCompat.getColor(context, R.color.white)
+    val nonSelectedColor = ContextCompat.getColor(context, R.color.white)
+    val nonSelectedTextColor = ContextCompat.getColor(context, R.color.txt_gray80)
+
+    if(position == selectedPosition && selectedPosition != -1){
+      holder.itemView.setBackgroundColor(selectedColor)
+      holder.tvDong.setTextColor(selectedTextColor)
+    }else{
+      holder.itemView.setBackgroundColor(nonSelectedColor)
+      holder.tvDong.setTextColor(nonSelectedTextColor)
+    }
   }
 
   override fun getItemCount(): Int {

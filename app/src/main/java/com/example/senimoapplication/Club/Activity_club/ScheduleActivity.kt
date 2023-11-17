@@ -10,7 +10,11 @@ import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+
+import com.bumptech.glide.Glide
+
 import androidx.recyclerview.widget.LinearLayoutManager
+
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
@@ -48,7 +52,7 @@ class ScheduleActivity : AppCompatActivity() {
 
 
         //가데이터
-        val schedule = ScheduleVO("축구보자축구","대한민국싱가포르축구볼사람구함","3층에 모여서 축구봐요. 생각보다 잘할거에여.","2023-11-22T12:00:08.123Z",3000,"광주 동구 대성학원 3층 6강의실", 10,4,R.drawable.img_sample2,"모집중")
+        val schedule = ScheduleVO("축구보자축구","대한민국싱가포르축구볼사람구함","3층에 모여서 축구봐요. 생각보다 잘할거에여.","2023-11-22T12:00:08.123Z",3000,"광주 동구 대성학원 3층 6강의실", 10,4,"모집중","R.drawable.img_sample2")
 
 
         //binding.tvCScheduleName3.text = schedule.scheduleName
@@ -132,10 +136,6 @@ class ScheduleActivity : AppCompatActivity() {
 
 
     private fun fetchSchedule() {
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("http://192.168.70.234:3000") // 실제 서버 주소
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
         val retrofit = Server().retrofit
 
         // 서버에 요청을 보낼 '전화기'를 만들어요.
@@ -145,13 +145,14 @@ class ScheduleActivity : AppCompatActivity() {
         service.getScheIntro(sche_code).enqueue(object : Callback<ScheduleVO> {
             // 서버에서 답이 오면 이 부분이 실행돼요.
             override fun onResponse(call: Call<ScheduleVO>, response: Response<ScheduleVO>) {
-                Log.d("Schedule", response.toString())
+                Log.d("ScheduleActivity", response.toString())
                 // 서버 응답이 null인지 확인합니다.
                 if (response.isSuccessful) {
                     if (response.body() != null) {
-                        Log.d("Schedule", response.body().toString())
+                        Log.d("ScheduleActivity", response.body().toString())
                         response.body()?.let { schedules ->
                             // null이 아니면 기존 목록을 지우고 새 데이터로 채웁니다.
+
                             findViewById<TextView>(R.id.tv_C_S_Time).text = formatDate(schedules.scheduleDate)
                             findViewById<TextView>(R.id.tvClubName2).text = schedules.clubName
                             findViewById<TextView>(R.id.tv_C_ScheduleName3).text = schedules.scheduleName
@@ -159,6 +160,12 @@ class ScheduleActivity : AppCompatActivity() {
                             findViewById<TextView>(R.id.tv_C_S_Loca).text = schedules.scheduleLoca
                             findViewById<TextView>(R.id.tv_C_S_Fee).text = "${schedules.scheduleFee} 원"
                             findViewById<TextView>(R.id.tv_C_S_attendance).text = "${schedules.attendance}/${schedules.allMembers}명"
+                            // binding.tvCScheduleIntro.text = schedules.scheduleName
+                           //binding.imgCSchedule.setImageResource(schedules.imageUri)
+                            Glide.with(this@ScheduleActivity)
+                                .load(schedules.imageUri) // MeetingVO 객체의 imageUri
+                                .placeholder(R.drawable.golf_img) // 기본 이미지
+                                .into(binding.imgCSchedule) // 이미지를 표시할 ImageView
                         }
                     } else {
                         Log.e("ScheduleActivity", "서버 에러: ${response.code()}")

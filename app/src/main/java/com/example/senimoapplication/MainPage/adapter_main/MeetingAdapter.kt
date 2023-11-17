@@ -121,14 +121,16 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         holder.tv_M_attendance.text = data[position].attendance.toString()
         holder.tv_M_allMember.text = "/${data[position].allMember.toString()}명"
         // holder.tv_M_Person.text = data[position].person
-
-        Glide.with(context)
-            .load(data[position].getImageUriAsString()) // MeetingVO 객체의 imageUri
-            .placeholder(R.drawable.ic_meeting_profile) // 기본 이미지
-            .into(holder.Img_M_Meeting) // 이미지를 표시할 ImageView
-
         // holder.Img_M_Meeting.setImageResource(R.drawable.golf_img)
         // holder.img_M_Backicon.setImageResource(R.drawable.ic_back_black)
+
+        // Glide를 사용하여 이미지 로드 및 표시
+        val imageUrl = data[position].imageUri
+        Glide.with(context)
+            .load(imageUrl)
+            .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
+            .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
+            .into(holder.Img_M_Meeting)
     }
 
     override fun getItemCount(): Int {

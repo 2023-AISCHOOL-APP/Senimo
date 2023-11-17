@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 data class MeetingVO(
     @SerializedName("club_location")
-    val gu: String = "광산구",
+    val gu: String? = null,
     @SerializedName("club_name") // 서버 응답의 club_name을 title에 맵핑합니다.
     var title: String,
     @SerializedName("club_introduce") // 서버 응답의 club_introduce를 content에 맵핑합니다.
@@ -19,9 +19,10 @@ data class MeetingVO(
     var attendance: Int,
     @SerializedName("max_cnt")
     var allMember: Int,
-    @SerializedName("club_img")
-    var imageUri: String? = null, // 이미지 경로를 String 타입으로 저장
-// = "drawable/ic_meeting_profile",
+    @SerializedName("club_img_url")
+    var imageUri: String // 이미지 경로를 String 타입으로 저장
+
+
 
 //    val title: String = "",
 //    val content: String = "",
@@ -33,13 +34,7 @@ data class MeetingVO(
     // val backicon : String = ""
 ) : Parcelable {
     // 이미지 경로를 사용하여 Uri를 얻는 메서드 추가
-    fun getImageUriAsString(): String? {
-        return imageUri
-    }
 
-    fun getImageUri(): Uri? {
-        return imageUri?.let { Uri.parse(it) }
-    }
     constructor(parcel: Parcel) : this(
         gu = parcel.readString() ?: "",
         title = parcel.readString() ?: "",
@@ -48,7 +43,7 @@ data class MeetingVO(
         attendance = parcel.readInt(),
         allMember = parcel.readInt(),
         // person = parcel.readString() ?: "",
-        imageUri = parcel.readString()
+        imageUri = parcel.readString() ?:""
         // backicon = parcel.readString() ?: ""
     )
 
@@ -63,8 +58,6 @@ data class MeetingVO(
         parcel.writeString(imageUri?.toString()) // 이미지 경로 또는 URI를 저장
         // parcel.writeString(backicon)
     }
-
-
 
     override fun describeContents(): Int {
         return 0

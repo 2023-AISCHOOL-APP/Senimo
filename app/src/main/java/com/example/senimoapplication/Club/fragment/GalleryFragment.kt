@@ -1,5 +1,7 @@
 package com.example.senimoapplication.Club.fragment
 
+
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,7 +16,6 @@ import com.example.senimoapplication.Club.VO.GalleryVO
 import com.example.senimoapplication.Club.adapter.GalleryAdapter
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentGalleryBinding
-
 
 class GalleryFragment : Fragment() {
     private lateinit var binding: FragmentGalleryBinding
@@ -36,6 +37,17 @@ class GalleryFragment : Fragment() {
             }
     }
 
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris: List<Uri>? ->
+        // 여기에서 URI 리스트를 처리
+        if (uris != null) {
+            uploadPhotosToServer(uris)
+        }
+    }
+
+    private fun uploadPhotosToServer(uris: List<Uri>) {
+        // 사진을 서버로 업로드하는 로직 구현
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,6 +67,7 @@ class GalleryFragment : Fragment() {
         // 리사이클러뷰에 어댑터 설정
         binding.rvGallery.adapter = adapter
         binding.rvGallery.layoutManager = GridLayoutManager(requireContext(), 3)
+
 
         // 포스트가 없을 경우 안내 메시지 표시
         if (photoList.isEmpty()) {

@@ -5,15 +5,68 @@
     android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_darkgray20"
     tools:context=".Club.fragment.ChatFragment">
 
-    <TextView
-        android:id="@+id/textView23"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="안녕~~~"
+    <ScrollView
+        android:id="@+id/chatScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/view10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChatting"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+    </ScrollView>
+
+    <View
+        android:id="@+id/view10"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:background="@drawable/card_bttom"
+        android:elevation="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/etMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/messageinput_shape"
+        android:elevation="15dp"
+        android:ems="10"
+        android:gravity="top|start"
+        android:hint="메시지를 입력하세요."
+        android:inputType="textMultiLine"
+        android:maxLines="3"
+        android:paddingLeft="20dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/chatScroll"
+        app:layout_constraintVertical_bias="0.326" />
+
+    <ImageView
+        android:id="@+id/imgSendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:elevation="16dp"
+        android:src="@drawable/ic_sendingchat"
+        app:layout_constraintBottom_toBottomOf="@+id/etMessage"
+        app:layout_constraintEnd_toEndOf="@+id/etMessage"
+        app:layout_constraintTop_toTopOf="@+id/etMessage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

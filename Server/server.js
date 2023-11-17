@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', appMainRouter)
 app.use('/', clubMainRouter)
 app.use('/', scheduleRouter)
+app.use('/uploads', express.static("C:/Users/gjaischool/Desktop/final_project/Senimo/Server/uploads"));
 
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');
