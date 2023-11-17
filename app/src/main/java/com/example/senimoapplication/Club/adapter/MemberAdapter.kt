@@ -31,7 +31,7 @@ class MemberAdapter(val context: Context, val layout : Int, val data : ArrayList
             tvUserName = view.findViewById(R.id.tv_C_userName)
             tvUserLevel = view.findViewById(R.id.tv_C_userLevel)
             imgUserProfile = view.findViewById(R.id.userProfile)
-            btnMore = view.findViewById(R.id.btnMore)
+            btnMore = view.findViewById(R.id.imgbtnMore)
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
