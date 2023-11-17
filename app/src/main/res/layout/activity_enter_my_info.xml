@@ -126,6 +126,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rvgu_edge"
+                android:hapticFeedbackEnabled="true"
                 app:layout_constraintStart_toStartOf="@+id/textView49"
                 app:layout_constraintTop_toBottomOf="@+id/textView49" />
 
@@ -133,6 +134,7 @@
                 android:id="@+id/rvDong"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginStart="-1dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rvdong_edge"
                 app:layout_constraintBottom_toBottomOf="@+id/rvGu"
@@ -202,13 +204,12 @@
                 android:id="@+id/textView48"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="95dp"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="성별"
                 android:textColor="@color/txt_gray50"
                 android:textSize="20sp"
-                app:layout_constraintStart_toEndOf="@+id/textView10"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/etNameS" />
 
             <TextView
@@ -270,16 +271,23 @@
                 android:id="@+id/etGenderS"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="76dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/et_underline"
                 android:ems="10"
-                android:hint="ex) 남"
+                android:hint="ex) 남/여"
                 android:inputType="text"
                 android:textColor="@color/txt_black"
                 android:textColorHighlight="@color/main_opacity60"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView48"
                 app:layout_constraintTop_toBottomOf="@+id/textView48" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="202dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
