@@ -13,6 +13,7 @@ data class MeetingVO(
     @SerializedName("club_introduce") // 서버 응답의 club_introduce를 content에 맵핑합니다.
     var content: String,
     @SerializedName("keyword_name")
+    // var keyword: String,
     var keyword: String,
     @SerializedName("attend_user_cnt")
     var attendance: Int,
@@ -20,6 +21,7 @@ data class MeetingVO(
     var allMember: Int,
     @SerializedName("club_img_url")
     var imageUri: String // 이미지 경로를 String 타입으로 저장
+
 
 
 //    val title: String = "",

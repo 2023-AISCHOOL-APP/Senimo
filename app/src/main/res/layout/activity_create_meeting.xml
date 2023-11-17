@@ -371,7 +371,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView22" />
 
             <TextView
-                android:id="@+id/tvAnnounceMainPhoto"
+                android:id="@+id/textView59"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -390,8 +390,8 @@
                 android:text="0"
                 android:textColor="@color/txt_gray70"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tvAnnounceMainPhoto"
-                app:layout_constraintEnd_toStartOf="@+id/tvAnnounceMainPhoto"
+                app:layout_constraintBottom_toBottomOf="@id/textView59"
+                app:layout_constraintEnd_toStartOf="@id/textView59"
                 app:layout_constraintTop_toTopOf="@+id/tvAnnounceMainPhoto" />
 
             <ImageView
@@ -414,48 +414,44 @@
                 app:layout_constraintStart_toStartOf="@+id/img_M_Button"
                 app:layout_constraintTop_toTopOf="@+id/img_M_Button" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView6"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
+            <View
+                android:id="@+id/view6"
+                android:layout_width="0dp"
+                android:layout_height="84dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="1dp"
-                app:cardElevation="2dp"
+                android:background="@drawable/card_bttom"
+                android:elevation="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_M_Button">
+                app:layout_constraintTop_toBottomOf="@+id/img_M_Button" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="84dp"
-                    android:layout_marginTop="24dp"
-                    android:background="@drawable/card_bttom"
-                    android:elevation="2dp" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnSetMeeing"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="32dp"
-                    android:background="@drawable/button_shape_main"
-                    android:elevation="5dp"
-                    android:fontFamily="@font/pretendard_semibold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingTop="13dp"
-                    android:paddingBottom="13dp"
-                    android:text="모임 만들기"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:visibility="visible"
-                    app:cornerRadius="20dp"
-                    tools:layout_conversion_absoluteHeight="60dp"
-                    tools:layout_conversion_absoluteWidth="0dp" />
-
-            </androidx.cardview.widget.CardView>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSetMeeting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_shape_main"
+                android:elevation="5dp"
+                android:fontFamily="@font/pretendard_semibold"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingTop="13dp"
+                android:paddingBottom="13dp"
+                android:text="모임 만들기"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:visibility="visible"
+                app:cornerRadius="20dp"
+                app:layout_constraintBottom_toBottomOf="@id/view6"
+                app:layout_constraintEnd_toEndOf="@id/view6"
+                app:layout_constraintStart_toStartOf="@id/view6"
+                app:layout_constraintTop_toTopOf="@+id/view6"
+                tools:layout_conversion_absoluteHeight="60dp"
+                tools:layout_conversion_absoluteWidth="0dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

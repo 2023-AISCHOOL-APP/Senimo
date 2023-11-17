@@ -63,7 +63,7 @@ class HomeMainFragment : Fragment() {
         val img_M_Financial = view.findViewById<ImageView>(R.id.img_M_Financial)
 
         // MyScheduleVO 객체 생성
-        val mySchedule = MyScheduleVO("충장로 먹부림 모임", "일이삼사오육칠팔구십십일십이십삼십사", "2023-11-15 09:00")
+        val mySchedule = MyScheduleVO("충장로 먹부림 모임", "일이삼사오육칠팔구십십일십이십삼십사", "2023-11-18T12:00:08.123Z")
 
         // MyScheduleVO 객체를 리스트에 추가
         val myScheduleList = ArrayList<MyScheduleVO>()
@@ -103,6 +103,7 @@ class HomeMainFragment : Fragment() {
                         val intent = Intent(requireContext(), ClubActivity::class.java)
                         intent.putExtra("clickedMeetinghome", clickedMeetinghome)
                         startActivity(intent)
+
                     }
                 })
         )
@@ -130,34 +131,65 @@ class HomeMainFragment : Fragment() {
 
         // 카테고리 클릭 시 모임 홈 페이지로 이동
         img_M_Excercise.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
+            val categoryKeyword = "운동"
+            // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
+            Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
         }
         img_M_Hobby.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
+            val categoryKeyword = "취미"
+            // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
+            Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
         }
         img_M_Concert.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
+            val categoryKeyword = "전시/공연"
+            // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
+            Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
         }
         img_M_Trip.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
+            val categoryKeyword = "여행"
+            // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
+            Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
         }
         img_M_Selfimprovement.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
+            val categoryKeyword = "자기계발"
+            // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
+            Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
         }
         img_M_Financial.setOnClickListener {
-            val intent = Intent(requireContext(), ClubActivity::class.java)
+            val categoryKeyword = "재테크"
+            // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
+            Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
         }
 
 
         Img_M_SearchBar.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            //intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))  // HomeMainFragment에서 MeetingList를 Parcel로 만들어 SearchActivity로 전달
+            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))  // HomeMainFragment에서 MeetingList를 Parcel로 만들어 SearchActivity로 전달
+            intent.putExtra("isFromSearchBar", true) // 검색 바에서 온 것임을 나타내는 플래그
             startActivity(intent)
             activity?.finish()
 

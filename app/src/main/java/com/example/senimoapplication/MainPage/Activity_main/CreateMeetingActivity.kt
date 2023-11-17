@@ -201,11 +201,18 @@ class CreateMeetingActivity : AppCompatActivity() {
             }
         }
 
+        binding.ImgMBackbtnToFrag2.setOnClickListener {
+            val intent = Intent(this@CreateMeetingActivity,MainActivity::class.java)
+            intent.putExtra("selected_tab","M_tab2")
+            startActivity(intent)
+            finish()
+        }
+
 
 
 
         // 모임 만들기 버튼 클릭 시 정보 취합하기
-        binding.btnSetMeeing.setOnClickListener {
+        binding.btnSetMeeting.setOnClickListener {
             val selectedGu = binding.spMGulist.selectedItem.toString()
 
             // 선택된 키워드를 담을 리스트

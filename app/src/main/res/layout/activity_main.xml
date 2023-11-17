@@ -21,7 +21,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/Img_M_BackbtnToFrag1"
+                android:id="@+id/img_M_BackbtnToFrag1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -32,7 +32,7 @@
                 app:srcCompat="@drawable/ic_back_black" />
 
             <ImageView
-                android:id="@+id/Img_M_Alertbtn"
+                android:id="@+id/img_M_Alertbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -57,7 +57,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/Img_M_Settingbtn"
+                android:id="@+id/img_M_Settingbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"

@@ -9,7 +9,7 @@ data class ScheduleVO(
     @SerializedName("sche_title")
     val scheduleName: String ="",
     @SerializedName("sche_content")
-    val scheduleIntro:String="",
+    val scheduleIntro: String="",
     @SerializedName("sche_date")
     val scheduleDate: String = "",
     @SerializedName("fee")
@@ -24,6 +24,11 @@ data class ScheduleVO(
     @SerializedName("sche_img_url")
     var imageUri: String // 이미지 경로를 String 타입으로 저장
 )
+
+
+//    @SerializedName("sche_img")
+//    val scheImg: Int = 0,
+//    val state: String = "모집중")
 
 
 

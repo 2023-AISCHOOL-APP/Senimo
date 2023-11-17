@@ -1,8 +1,11 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.fragment.ChatFragment
 import com.example.senimoapplication.MainPage.VO_main.ChatListVO
@@ -89,6 +92,14 @@ class MainActivity : AppCompatActivity() {
         MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString()),
       )
 
+
+      // 환경설정 아이콘
+      binding.imgMSettingbtn.setOnClickListener {
+        val intent = Intent(this@MainActivity,SettingActivity::class.java)
+        startActivity(intent)
+        finish()
+      }
+
       when(item.itemId){
         R.id.M_tab1 ->{
           supportFragmentManager.beginTransaction().replace(
@@ -98,9 +109,9 @@ class MainActivity : AppCompatActivity() {
 
 
           binding.tvMToptitle.text = "시니모"
-          binding.ImgMAlertbtn.visibility = View.VISIBLE
-          binding.ImgMSettingbtn.visibility = View.INVISIBLE
-          binding.ImgMBackbtnToFrag1.visibility = View.INVISIBLE
+          binding.imgMAlertbtn.visibility = View.VISIBLE
+          binding.imgMSettingbtn.visibility = View.INVISIBLE
+          binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
         }
         R.id.M_tab2 ->{
           supportFragmentManager.beginTransaction().replace(
@@ -110,9 +121,9 @@ class MainActivity : AppCompatActivity() {
 
           // 여기서 TextView의 텍스트 변경과 ImageView 숨기기
           binding.tvMToptitle.text = "내 모임"
-          binding.ImgMAlertbtn.visibility = View.INVISIBLE
-          binding.ImgMSettingbtn.visibility = View.INVISIBLE
-          binding.ImgMBackbtnToFrag1.visibility = View.INVISIBLE
+          binding.imgMAlertbtn.visibility = View.INVISIBLE
+          binding.imgMSettingbtn.visibility = View.INVISIBLE
+          binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
 
         }
         R.id.M_tab3 ->{
@@ -122,9 +133,9 @@ class MainActivity : AppCompatActivity() {
           ).commit()
 
           binding.tvMToptitle.text = "채팅"
-          binding.ImgMAlertbtn.visibility = View.INVISIBLE
-          binding.ImgMSettingbtn.visibility = View.INVISIBLE
-          binding.ImgMBackbtnToFrag1.visibility = View.INVISIBLE
+          binding.imgMAlertbtn.visibility = View.INVISIBLE
+          binding.imgMSettingbtn.visibility = View.INVISIBLE
+          binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
 
 
 
@@ -138,9 +149,9 @@ class MainActivity : AppCompatActivity() {
           ).commit()
 
           binding.tvMToptitle.text = "내 정보"
-          binding.ImgMAlertbtn.visibility = View.INVISIBLE
-          binding.ImgMSettingbtn.visibility = View.VISIBLE
-          binding.ImgMBackbtnToFrag1.visibility = View.INVISIBLE
+          binding.imgMAlertbtn.visibility = View.INVISIBLE
+          binding.imgMSettingbtn.visibility = View.VISIBLE
+          binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
 
         }
       }
@@ -159,6 +170,17 @@ class MainActivity : AppCompatActivity() {
       }
     }
 
+  }
+
+  // 뒤로가기 버튼을 눌렀을 때 M_tab1로 이동하도록 설정
+  @SuppressLint("MissingSuperCall")
+  override fun onBackPressed() {
+    val currentTabId = binding.bnvMain.selectedItemId
+    if (currentTabId != R.id.M_tab1) {
+      binding.bnvMain.selectedItemId = R.id.M_tab1
+    } else {
+      super.onBackPressed()
+    }
   }
 
   // ChatMainFragment 에서 ChatFragment로 이동시키게 하는 함수 만들기

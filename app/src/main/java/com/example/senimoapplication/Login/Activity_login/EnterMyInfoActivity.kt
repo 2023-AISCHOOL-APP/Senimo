@@ -3,7 +3,11 @@ package com.example.senimoapplication.Login.Activity_login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,18 +15,20 @@ import com.example.senimoapplication.Login.adapter.DongAdapter
 import com.example.senimoapplication.Login.adapter.GuAdapter
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.R
+import com.example.senimoapplication.databinding.ActivityEnterMyInfoBinding
 
 class EnterMyInfoActivity : AppCompatActivity() {
 
   lateinit var DongAdapter: DongAdapter
+  lateinit var binding: ActivityEnterMyInfoBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_enter_my_info)
 
-    val rvGu = findViewById<RecyclerView>(R.id.rvGu)
-    val rvDong = findViewById<RecyclerView>(R.id.rvDong)
-    val btnEnterInfo = findViewById<Button>(R.id.btnEnterInfo)
+    binding = ActivityEnterMyInfoBinding.inflate(layoutInflater)
+    val view = binding.root
+    setContentView(view)
 
     val guList = arrayListOf<String>("광주 전체","광산구","남구","동구","북구","서구")
 
@@ -51,13 +57,13 @@ class EnterMyInfoActivity : AppCompatActivity() {
     val GuAdapter = GuAdapter(R.layout.gu_list, guList, applicationContext)
     DongAdapter = DongAdapter(R.layout.dong_list, gwangjuDistricts, applicationContext)
 
-    rvGu.adapter = GuAdapter
-    rvGu.layoutManager = LinearLayoutManager(this@EnterMyInfoActivity)
+    binding.rvGu.adapter = GuAdapter
+    binding.rvGu.layoutManager = LinearLayoutManager(this@EnterMyInfoActivity)
 
-    rvDong.adapter = DongAdapter
+    binding.rvDong.adapter = DongAdapter
 
     val girdLayoutManager = GridLayoutManager(applicationContext, 2)
-    rvDong.layoutManager = girdLayoutManager
+    binding.rvDong.layoutManager = girdLayoutManager
 
     GuAdapter.itemClickListener = object : GuAdapter.OnItemClickListener {
       override fun onItemClick(position: Int) {
@@ -88,14 +94,55 @@ class EnterMyInfoActivity : AppCompatActivity() {
             DongAdapter.updateData(gwangjuDistricts)
           }
         }
-        rvDong.smoothScrollToPosition(0)
+        binding.rvDong.smoothScrollToPosition(0)
       }
     }
-    btnEnterInfo.setOnClickListener {
+
+    val callback = object : OnBackPressedCallback(true){
+      override fun handleOnBackPressed() {
+        val intent = Intent(this@EnterMyInfoActivity, SignUpActivity::class.java)
+        startActivity(intent)
+        finish()
+      }
+    }
+    this.onBackPressedDispatcher.addCallback(this, callback)
+
+    binding.btnEnterInfo.setOnClickListener {
       val intent = Intent(this@EnterMyInfoActivity, MainActivity::class.java)
       startActivity(intent)
-
+      finishAffinity()
     }
+
+    binding.imgBackToSignUp.setOnClickListener {
+      val intent = Intent(this@EnterMyInfoActivity, SignUpActivity::class.java)
+      startActivity(intent)
+      finish()
+    }
+
+    // 회원 소개글 글자 수 제한
+    var isUserIntroLimitExceeded = false
+
+    binding.etmlUserIntroS.addTextChangedListener(object  : TextWatcher{
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        val currentLength = s?.length ?: 0
+        if (currentLength >= 300) {
+          Toast.makeText(this@EnterMyInfoActivity, "300자 이내로 입력해주세요.", Toast.LENGTH_SHORT).show()
+          binding.etmlUserIntroS.text.delete(start, start+count)
+          isUserIntroLimitExceeded = true
+        }else{
+          isUserIntroLimitExceeded = false
+        }
+      }
+
+      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+      }
+
+      override fun afterTextChanged(s: Editable?) {
+        val currentLength = s?.length ?:0
+        binding.tvMLetterCnt3.text = currentLength.toString()
+      }
+    })
 
   }
 }

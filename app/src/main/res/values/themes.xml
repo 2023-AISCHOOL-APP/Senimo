@@ -27,6 +27,7 @@
         <item name="cornerSizeBottomRight">15dp</item>
         <item name="color">@color/white</item>
     </style>
+
     <!-- 회원 목록 회원 프로필 사진 스타일   -->
     <style name="RoundedProfileImage">
         <item name="cornerFamily">rounded</item>
@@ -45,6 +46,20 @@
     <style name="RoundedProfileComment">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">20dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
+    <!--내정보 회원 프로필 사진 스타일 -->
+    <style name="RoundedMyPageProfileComment">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">35dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
+    <!--내정보수정 회원 프로필 사진 스타일 -->
+    <style name="RoundedEditMyPageProfileComment">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50dp</item>
         <item name="color">@color/white</item>
     </style>
 
