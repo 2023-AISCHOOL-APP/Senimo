@@ -141,7 +141,7 @@
                 android:fontFamily="@font/pretendard_bold"
                 android:text="동구"
                 android:textColor="@color/point"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_M_Title"
                 app:layout_constraintStart_toEndOf="@+id/Img_M_Meeting"
                 app:layout_constraintTop_toTopOf="@+id/Img_M_Meeting" />

@@ -21,6 +21,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/icBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:elevation="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView56"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView56"
+                app:layout_constraintVertical_bias="0.516"
+                app:srcCompat="@drawable/ic_back"
+                tools:layout_conversion_absoluteHeight="25dp"
+                tools:layout_conversion_absoluteWidth="25dp" />
+
             <TextView
                 android:id="@+id/textView56"
                 android:layout_width="wrap_content"
@@ -35,20 +49,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_conversion_absoluteHeight="34dp"
                 tools:layout_conversion_absoluteWidth="62dp" />
-
-            <ImageView
-                android:id="@+id/icBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:elevation="2dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView56"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView56"
-                app:layout_constraintVertical_bias="0.516"
-                app:srcCompat="@drawable/ic_back"
-                tools:layout_conversion_absoluteHeight="25dp"
-                tools:layout_conversion_absoluteWidth="25dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
