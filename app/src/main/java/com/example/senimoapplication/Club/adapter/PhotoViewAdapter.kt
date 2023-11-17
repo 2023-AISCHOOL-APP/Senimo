@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.Club.VO.GalleryVO
 import com.example.senimoapplication.Common.photoUploadTime
+import com.example.senimoapplication.Common.showFragmentDialogBox
 import com.example.senimoapplication.R
 import org.w3c.dom.Text
 
@@ -25,6 +26,7 @@ class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, v
         val imgbtnCancel : ImageView
         val imgUserProfile : ImageView
         val imgView : ImageView
+        val imgbtnDelete : ImageView
 
         init {
             tvUserRole = view.findViewById(R.id.tvUserLevelPhoto)
@@ -35,6 +37,7 @@ class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, v
             imgbtnCancel = view.findViewById(R.id.imgbtnCancle)
             imgUserProfile = view.findViewById(R.id.userProfile3)
             imgView = view.findViewById(R.id.imgView)
+            imgbtnDelete = view.findViewById(R.id.imgbtnDelete)
         }
 
     }
@@ -69,6 +72,15 @@ class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, v
 
         holder.imgView.setImageResource(item.imgUri)
 
+        // if userid == 작성자 {
+        //  holder.imgbtnDelete.visibility = view.VISIBLE
+        // } else {
+        //  holder.imgbtnDelete.visibility = view.INVISIBLE
+
+        holder.imgbtnDelete.setOnClickListener{
+            showFragmentDialogBox(context,"사진을 삭제하시겠습니까?","삭제하기","사진이 삭제되었습니다.")
+            // 사진 삭제
+        }
 
 //        좋아요 관련 기능
 //        holder.tvLikeCnt.text = item.photoLikes.toString()

@@ -18,7 +18,7 @@ import com.example.senimoapplication.Login.Activity_login.LoginActivity
 import com.example.senimoapplication.R
 
 // 게시물 관리 다이얼로그
-fun showBoardDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?) {
+fun showActivityDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?) {
     val dialog = Dialog(activity)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)
@@ -47,7 +47,7 @@ fun showBoardDialogBox(activity: Activity, message: String?, okay: String?, succ
 }
 
 // 회원 관리 다이얼로그
-fun showMemberDialogBox(context: Context, message: String?, okay: String?, successMessage : String?) {
+fun showFragmentDialogBox(context: Context, message: String?, okay: String?, successMessage : String?) {
     val dialog = Dialog(context)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)

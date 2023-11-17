@@ -19,16 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imgBackToIntroBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/tvSignUp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_back" />
-
             <TextView
                 android:id="@+id/tvSignUp"
                 android:layout_width="0dp"
@@ -43,6 +33,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imgBackToIntro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvSignUp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_back" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -86,7 +86,7 @@
         android:layout_marginTop="50dp"
         android:fontFamily="@font/pretendard_semibold"
         android:text="아이디와 비밀번호를"
-        android:textSize="20sp"
+        android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView3" />
 
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_semibold"
         android:text="입력해 주세요."
-        android:textSize="20sp"
+        android:textSize="25sp"
         app:layout_constraintStart_toStartOf="@+id/textView24"
         app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
@@ -108,11 +108,12 @@
         android:fontFamily="@font/pretendard_semibold"
         android:text="아이디"
         android:textColor="@color/txt_gray50"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textView24"
         app:layout_constraintTop_toBottomOf="@+id/textView27" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/etSignUpId"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -120,7 +121,7 @@
         android:ems="10"
         android:hint="아이디를 입력해 주세요."
         android:inputType="text"
-        android:textColorHighlight="@color/main"
+        android:textColorHighlight="@color/main_opacity60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView28"
         app:layout_constraintTop_toBottomOf="@+id/textView28" />
@@ -133,11 +134,12 @@
         android:fontFamily="@font/pretendard_semibold"
         android:text="비밀번호"
         android:textColor="@color/txt_gray50"
-        app:layout_constraintStart_toStartOf="@+id/editTextText2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/etSignUpId"
+        app:layout_constraintTop_toBottomOf="@+id/etSignUpId" />
 
     <EditText
-        android:id="@+id/editTextTextPassword3"
+        android:id="@+id/etSignUpPw"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -145,7 +147,7 @@
         android:ems="10"
         android:hint="비밀번호를 입력해 주세요."
         android:inputType="textPassword"
-        android:textColorHighlight="@color/main"
+        android:textColorHighlight="@color/main_opacity60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView29"
         app:layout_constraintTop_toBottomOf="@+id/textView29" />
@@ -158,11 +160,12 @@
         android:fontFamily="@font/pretendard_semibold"
         android:text="비밀번호 확인"
         android:textColor="@color/txt_gray50"
-        app:layout_constraintStart_toStartOf="@+id/editTextTextPassword3"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword3" />
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/etSignUpPw"
+        app:layout_constraintTop_toBottomOf="@+id/etSignUpPw" />
 
     <EditText
-        android:id="@+id/editTextTextPassword4"
+        android:id="@+id/etSignUpPwCheck"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -170,7 +173,7 @@
         android:ems="10"
         android:hint="비밀번호를 다시 입력해 주세요."
         android:inputType="textPassword"
-        android:textColorHighlight="@color/main"
+        android:textColorHighlight="@color/main_opacity60"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView31"
         app:layout_constraintTop_toBottomOf="@+id/textView31" />

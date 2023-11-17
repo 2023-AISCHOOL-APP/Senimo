@@ -10,7 +10,7 @@ class GalleryVO (
     @SerializedName("user_name")
     val userName: String = "",
     @SerializedName("uploaded_dt")
-    val uploadedDt: String = " ",
+    val uploadedDt: String = "",
     @SerializedName("img_name")
     val imgUri: Int = 0
 ) : Serializable {

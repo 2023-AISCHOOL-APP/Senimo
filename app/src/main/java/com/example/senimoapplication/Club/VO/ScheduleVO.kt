@@ -9,7 +9,7 @@ data class ScheduleVO(
     @SerializedName("sche_title")
     val scheduleName: String ="",
     @SerializedName("sche_content")
-    val scheduleIntro:String="",
+    val scheduleIntro: String="",
     @SerializedName("sche_date")
     val scheduleDate: String = "",
     @SerializedName("fee")
@@ -18,8 +18,10 @@ data class ScheduleVO(
     val scheduleLoca: String="",
     @SerializedName("max_num")
     val allMembers: Int =0,
-    @SerializedName("joined_user_count")
+    @SerializedName("attend_user_cnt")
     val attendance: Int= 0,
+    @SerializedName("sche_img")
+    val scheImg: Int = 0,
     val state: String = "모집중")
 
 
