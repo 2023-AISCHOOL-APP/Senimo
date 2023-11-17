@@ -87,6 +87,7 @@ class HomeFragment : Fragment() {
 
         // 모임 일정 가데이터
 
+
         scheduleList.add(
             ScheduleVO(
                 "축구보자축구",
@@ -195,11 +196,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchClubInfo() {
-        val retrofit = Server().retrofit
-        val service = retrofit.create(ApiService::class.java)
+
+        val service = Server().service
         clickedMeeting?.let { meeting ->
             val clubCode = meeting.club_code
-
             val call = service.getClubInfo(clubCode)
 
             call.enqueue(object : Callback<ClubInfoVO> {

@@ -160,7 +160,7 @@ class ScheduleActivity : AppCompatActivity() {
                             findViewById<TextView>(R.id.tv_C_S_Loca).text = schedules.scheduleLoca
                             findViewById<TextView>(R.id.tv_C_S_Fee).text = "${schedules.scheduleFee} 원"
                             findViewById<TextView>(R.id.tv_C_S_attendance).text = "${schedules.attendance}/${schedules.allMembers}명"
-                            //binding.tvCScheduleIntro.text = schedules.scheduleIntro
+                            // binding.tvCScheduleIntro.text = schedules.scheduleName
                            //binding.imgCSchedule.setImageResource(schedules.imageUri)
                             Glide.with(this@ScheduleActivity)
                                 .load(schedules.imageUri) // MeetingVO 객체의 imageUri
