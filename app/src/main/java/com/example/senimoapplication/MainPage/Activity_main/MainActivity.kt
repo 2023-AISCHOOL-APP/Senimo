@@ -30,10 +30,20 @@ class MainActivity : AppCompatActivity() {
     // 액티비티 화면 출력
     setContentView(view)
 
+    setupBottomNavigation()
+    handleSelectedTabFromIntent()
+
+    // ChatFragment에서 ChatMainFragment로 이동하는 함수 설정
+    binding.imgMBackbtnToFrag1.setOnClickListener {
+      navigateBackToChatMainFragment()
+    }
+  }
+
+  /** 하단 바 네비게이션 함수 */
+  private fun setupBottomNavigation() {
     // 아이콘 초기 설정 : M_tab1을 ic_home_color로 설정
     binding.bnvMain.itemIconTintList = null // 원래 이미지 색으로 보이게 하기
     binding.bnvMain.menu.findItem(R.id.M_tab1).icon = getDrawable(R.drawable.ic_home_color)
-
 
     binding.bnvMain.setOnItemSelectedListener { item ->
 
@@ -82,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         MeetingVO("북구","동명동 티 타임dddddddddddddddddddd", "우리 같이 차 마셔요~ddddddddddddddddddddd", "취미", 5,10,R.drawable.tea_img.toString(),""),
         MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString(),""),
 
-      )
+        )
 
 
 
@@ -160,6 +170,10 @@ class MainActivity : AppCompatActivity() {
       true
     }
 
+  }
+
+  /** 선택된 탭 이동 함수 */
+  private fun handleSelectedTabFromIntent() {
     // CreateMeetingActivity로부터 선택한 탭 정보 받기
     val selectedTab = intent.getStringExtra("selected_tab")
     if(selectedTab != null){
@@ -170,7 +184,6 @@ class MainActivity : AppCompatActivity() {
         "M_tab4" -> binding.bnvMain.selectedItemId = R.id.M_tab4
       }
     }
-
   }
 
   // 뒤로가기 버튼을 눌렀을 때 M_tab1로 이동하도록 설정
@@ -192,9 +205,22 @@ class MainActivity : AppCompatActivity() {
       R.id.fl,
       ChatFragment.newInstance(chatListVO)
     ).commit()
+
+    // ChatFragment에 있을 때 뒤로가기 버튼 보이게 설정
+    binding.imgMBackbtnToFrag1.visibility = View.VISIBLE
+  }
+
+  // ChatFragment에서 ChatMainFragment로 이동하는 함수
+  fun navigateBackToChatMainFragment() {
+    supportFragmentManager.beginTransaction().replace(
+      R.id.fl,
+      ChatMainFragment()
+    ).commit()
+    binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE // 버튼 숨기기
   }
 
   }
+
 
 interface OnChatItemClickListener {
   fun navigateToChatFragment(chatListVO: ChatListVO)

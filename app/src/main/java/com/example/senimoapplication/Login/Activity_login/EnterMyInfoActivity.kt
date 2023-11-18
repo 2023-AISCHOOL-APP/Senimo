@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -122,27 +124,49 @@ class EnterMyInfoActivity : AppCompatActivity() {
     }
 
     // 회원 소개글 글자 수 제한
-    var isUserIntroLimitExceeded = false
+//    var isUserIntroLimitExceeded = false
+//
+//    binding.etmlUserIntroS.addTextChangedListener(object  : TextWatcher{
+//      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//        val currentLength = s?.length ?: 0
+//        if (currentLength >= 300) {
+//          Toast.makeText(this@EnterMyInfoActivity, "300자 이내로 입력해주세요.", Toast.LENGTH_SHORT).show()
+//          binding.etmlUserIntroS.text.delete(start, start+count)
+//          isUserIntroLimitExceeded = true
+//        }else{
+//          isUserIntroLimitExceeded = false
+//        }
+//      }
+//
+//      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//
+//      }
+//
+//      override fun afterTextChanged(s: Editable?) {
+//        val currentLength = s?.length ?:0
+//        binding.tvMLetterCnt3.text = currentLength.toString()
+//      }
+//    })
 
-    binding.etmlUserIntroS.addTextChangedListener(object  : TextWatcher{
+
+    // 회원 소개글 글자 수 제한
+    binding.etmlUserIntroS.addTextChangedListener(object : TextWatcher {
       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        val currentLength = s?.length ?: 0
-        if (currentLength >= 300) {
-          Toast.makeText(this@EnterMyInfoActivity, "300자 이내로 입력해주세요.", Toast.LENGTH_SHORT).show()
-          binding.etmlUserIntroS.text.delete(start, start+count)
-          isUserIntroLimitExceeded = true
-        }else{
-          isUserIntroLimitExceeded = false
-        }
+        // 입력 전 필요한 로직 (필요한 경우)
       }
-
       override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
+        // 입력 중 필요한 로직 (필요한 경우)
       }
-
       override fun afterTextChanged(s: Editable?) {
-        val currentLength = s?.length ?:0
-        binding.tvMLetterCnt3.text = currentLength.toString()
+        val currentLength = s?.length ?: 0
+        binding.tvMLetterCnt3.text = "$currentLength"
+        if (currentLength > 300) {
+          binding.tvMLetterCnt3.setTextColor(ContextCompat.getColor(this@EnterMyInfoActivity, R.color.main))
+          binding.tvMUserIntroWarning.visibility = View.VISIBLE // 경고 메시지 표시
+        } else {
+          binding.tvMLetterCnt3.setTextColor(ContextCompat.getColor(this@EnterMyInfoActivity, R.color.txt_gray70))
+          binding.tvMUserIntroWarning.visibility = View.GONE // 경고 메시지 숨김
+        }
       }
     })
 

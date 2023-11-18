@@ -9,10 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.senimoapplication.Common.myChatListDate
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.adapter_main.ChatListAdapter
 import com.example.senimoapplication.R
 import com.example.senimoapplication.MainPage.VO_main.ChatListVO
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class ChatMainFragment : Fragment() {
 
@@ -25,9 +30,14 @@ class ChatMainFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_chat_main, container, false)
 
+        // 현재 시간에 가까운 ISO 8601 형식의 문자열 생성
+        val currentIsoTimeSting = generateCurrentIsoTimeString()
+
         // chatList에 ChatListVO 데이터를 추가
-        chatList.add(ChatListVO("user1_profile.jpg", "모임 제목 1", "오늘 다같이 모여서 대화도 하고 맛있는 것도 먹으러 가나요?", System.currentTimeMillis() - 1000 * 60 * 5, 3))
-        chatList.add(ChatListVO("user2_profile.jpg", "모임 제목 2", "저기요!", System.currentTimeMillis() - 1000 * 60 * 30, 1))
+        chatList.add(ChatListVO("user1_profile.jpg", "모임 제목 1", "첫 번째 메시지 내용", "2023-11-16T12:00:08.123Z", 2))
+        chatList.add(ChatListVO("user2_profile.jpg", "모임 제목 2", "두 번째 메시지 내용", currentIsoTimeSting, 1))
+        chatList.add(ChatListVO("user3_profile.jpg", "모임 제목 3", "세 번째 메시지 내용", currentIsoTimeSting, 0))
+
 
         // RecyclerView 설정
         val rv_M_ChatList = view.findViewById<RecyclerView>(R.id.rv_M_ChatList)
@@ -53,4 +63,10 @@ class ChatMainFragment : Fragment() {
     }
 
 
+}
+
+fun generateCurrentIsoTimeString(): String {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+    return dateFormat.format(Date())
 }

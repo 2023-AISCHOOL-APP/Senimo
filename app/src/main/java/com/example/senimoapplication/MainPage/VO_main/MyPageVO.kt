@@ -33,6 +33,11 @@ class MyPageVO(val img: String = "",            // 사진
         return 0
     }
 
+    // toString() 메서드
+    override fun toString(): String {
+        return "MyPageVO(img='$img', name='$name', gu='$gu', birth=$birth, gender='$gender', intro='$intro')"
+    }
+
     companion object CREATOR : Parcelable.Creator<MyPageVO> {
         override fun createFromParcel(parcel: Parcel): MyPageVO {
             return MyPageVO(parcel)
