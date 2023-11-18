@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,6 +21,7 @@ import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.Common.RecyclerItemClickListener
+import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.server.Retrofit.ApiService
 import com.example.senimoapplication.R
@@ -51,29 +55,29 @@ class HomeFragment : Fragment() {
         val s_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, scheduleList)
         val m_adapter = MemberAdapter(requireContext(), R.layout.club_member_list, memberList)
 
+        // view요소들 데이터 변경
+        val clubInfo = ClubInfoVO(
+            "R.drawable.img_sample",
+            5,
+            10,
+            "양희준과 아이들 T1F4",
+            "동구",
+            "자기계발",
+            "시니어의 활동적인 삶을 위해서 모임 플랫폼을 만들기로 했습니다. 우리의 첫 번째 모임입니다.",
+            MemberVO("양희준",1)
+        )
 
         // 관리자 여부 확인해서 버튼 보이기
-//        if(회원레벨이 3인 경우){
-//            binding.tvMoveEdit.visibility = INVISIBLE
-//            binding.btnNewSchedule.visibility = GONE
-//        }else{
-//            // 관리자, 운영자인 경우
-//            binding.tvMoveEdit.visibility = VISIBLE
-//            binding.btnNewSchedule.visibility = VISIBLE
-//        }
-//
-        // view요소들 데이터 변경
+        if(clubInfo.clubStaff.clubRole == 3){
+            binding.tvMoveEdit.visibility = INVISIBLE
+            binding.btnNewSchedule.visibility = GONE
+        }else{
+            // 관리자, 운영자인 경우
+            binding.tvMoveEdit.visibility = VISIBLE
+            binding.btnNewSchedule.visibility = VISIBLE
+        }
 
 
-//        val clubInfo = ClubInfoVO(
-//            "img_sample",
-//            5,
-//            10,
-//            "양희준과 아이들 T1F4",
-//            "동구",
-//            "자기계발",
-//            "시니어의 활동적인 삶을 위해서 모임 플랫폼을 만들기로 했습니다. 우리의 첫 번째 모임입니다.",
-//        )
 
         binding.tvMoveEdit.setOnClickListener {
             val intent = Intent(view.context, MakeScheduleActivity::class.java)
@@ -146,28 +150,13 @@ class HomeFragment : Fragment() {
         binding.rvMember.layoutManager = LinearLayoutManager(view.context)
 
         // 전체 회원 목록 가데이터
-        memberList.add(MemberVO("양희준", 1, R.drawable.img_sample))
-        memberList.add(MemberVO("최효정", 2, R.drawable.img_sample))
-        memberList.add(MemberVO("국지호", 2, R.drawable.img_sample))
-        memberList.add(MemberVO("김도운", 3, R.drawable.img_sample))
-        memberList.add(MemberVO("이지혜", 3, R.drawable.img_sample))
-        memberList.add(MemberVO("나예호", 3, R.drawable.img_sample))
+        memberList.add(MemberVO("양희준", 1, "R.drawable.img_sample"))
+        memberList.add(MemberVO("최효정", 2, "R.drawable.img_sample"))
+        memberList.add(MemberVO("국지호", 2, "R.drawable.img_sample"))
+        memberList.add(MemberVO("김도운", 3, "R.drawable.img_sample"))
+        memberList.add(MemberVO("이지혜", 3, "R.drawable.img_sample"))
+        memberList.add(MemberVO("나예호", 3, "R.drawable.img_sample"))
 
-        // 회원 정보 페이지로 이동
-        // 클릭 이벤트 처리
-//        rvMember.addOnItemTouchListener(
-//            RecyclerItemClickListener(this, rvMember, object : RecyclerItemClickListener.OnItemClickListener {
-//                override fun onItemClick(view: View, position: Int) {
-//                    // 클릭한 아이템의 정보를 가져오거나 원하는 프래그먼트를 결정할 수 있음
-//                    val selectedFragment = YourFragment() // 여기에는 원하는 프래그먼트 클래스를 넣어주세요
-//
-//                    // 프래그먼트 전환
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.fragment_container, selectedFragment) // R.id.fragment_container는 프래그먼트를 호스팅하는 레이아웃의 ID입니다.
-//                        .commit()
-//                }
-//            })
-//        )
 
         // 모임 가입 상태 체크 및 버튼 전환 (join
         var joinstate: Int = 0

@@ -65,4 +65,12 @@ class GuAdapter(val layout: Int, val list: ArrayList<String>, val context: Conte
   override fun getItemCount(): Int {
     return list.size
   }
+
+  // 선택된 항목의 문자열을 반환하는 메소드
+  fun getSelectedItem(): String {
+    return list[selectedPosition]
+  }
+
+
+
 }

@@ -13,4 +13,3 @@ class Server {
         .build()
     val service = retrofit.create(ApiService::class.java)
 }
-

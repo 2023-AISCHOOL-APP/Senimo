@@ -47,11 +47,10 @@
         android:id="@+id/v_M_NewShape"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginEnd="20dp"
         android:background="@drawable/alert_shape"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/tv_M_ChatContent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_M_Time"
         app:layout_constraintTop_toTopOf="@+id/tv_M_ChatContent" />
 
     <TextView
@@ -81,11 +80,12 @@
         android:id="@+id/tv_M_Time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
         android:fontFamily="@font/pretendard_medium"
         android:text="1분전"
         android:textColor="@color/txt_gray50"
         android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="@+id/v_M_NewShape"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_M_ChatTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

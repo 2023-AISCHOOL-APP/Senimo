@@ -9,10 +9,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.compose.ui.unit.min
 import androidx.recyclerview.widget.RecyclerView
+import com.example.senimoapplication.Common.myChatListDate
 import com.example.senimoapplication.R
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
+import java.util.zip.DataFormatException
 
 class ChatListAdapter(val context: Context, val layout: Int, val data: List<ChatListVO>)
     : RecyclerView.Adapter<ChatListAdapter.ViewHolder>(){
@@ -59,7 +62,7 @@ class ChatListAdapter(val context: Context, val layout: Int, val data: List<Chat
 
         // 채팅 제목, 내용 가져오기
         val meetingTitle = data[position].meetingTitle
-        val meetingContent = data[position].meetingContent
+        val meetingContent = data[position].recentlyMessage
 
         // 글자 수가 최대 길이보다 길 경우 생략 부호(...) 추가하여 자르기
 
@@ -78,11 +81,11 @@ class ChatListAdapter(val context: Context, val layout: Int, val data: List<Chat
 
         holder.tv_M_ChatTitle.text = meetingTitle_truncatedName
         holder.tv_M_ChatContent.text = meetingContent_truncatedName
-        val messageTime = data[position].time // Unix 타임스탬프로 변환
-        holder.tv_M_Time.text = formatRelativeTime(context, messageTime) // 상대적인 시간 표시
+        val isoDateString = data[position].time // 이미 ISO 8601 형식의 문자열인 경우
+        holder.tv_M_Time.text = myChatListDate(isoDateString, context) // 상대적인 시간 표시
 
         // new 필드 값을 가져와서 TextView에 표시
-        val newCount = data[position].new
+        val newCount = data[position].newMessagesCount
         if (newCount > 0) {
             holder.tv_M_New.visibility = View.VISIBLE
             holder.tv_M_New.text = "N"
@@ -111,20 +114,20 @@ class ChatListAdapter(val context: Context, val layout: Int, val data: List<Chat
     }
 
     // 시간을 상대적인 시간으로 변환하는 함수
-    private fun formatRelativeTime(context: Context, messageTime: Long): String {
-        val currentTime = System.currentTimeMillis()
-        val diff = currentTime - messageTime
-        val seconds = diff / 1000
-        val minutes = seconds / 60
-        val hours = minutes / 60
-        val days = hours / 24
-
-        return when {
-            seconds < 60 -> context.getString(R.string.just_now)
-            minutes < 60 -> context.getString(R.string.minutes_ago, minutes.toInt())
-            hours < 24 -> context.getString(R.string.hours_ago, hours.toInt())
-            days < 2 -> context.getString(R.string.days_ago, days.toInt())
-            else -> SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(messageTime)
-        }
-    }
+//    private fun formatRelativeTime(context: Context, messageTime: Long): String {
+//        val currentTime = System.currentTimeMillis()
+//        val diff = currentTime - messageTime
+//        val seconds = diff / 1000
+//        val minutes = seconds / 60
+//        val hours = minutes / 60
+//        val days = hours / 24
+//
+//        return when {
+//            seconds < 60 -> context.getString(R.string.just_now)
+//            minutes < 60 -> context.getString(R.string.minutes_ago, minutes.toInt())
+//            hours < 24 -> context.getString(R.string.hours_ago, hours.toInt())
+//            days < 2 -> context.getString(R.string.days_ago, days.toInt())
+//            else -> SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(messageTime)
+//        }
+//    }
 }

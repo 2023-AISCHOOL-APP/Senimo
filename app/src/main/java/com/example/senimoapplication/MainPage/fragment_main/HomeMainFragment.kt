@@ -91,7 +91,8 @@ class HomeMainFragment : Fragment() {
         // adapter.notifyDataSetChanged() // 어댑터 새로고침
 
 
-        // 메인페이지 모임클릭시 모임 홈 페이지로 이동
+
+        // 메인페이지 인기 모임클릭 시 모임 홈 페이지로 이동
         rv_M_PopularMeeting.addOnItemTouchListener(
             RecyclerItemClickListener(
                 requireContext(),
