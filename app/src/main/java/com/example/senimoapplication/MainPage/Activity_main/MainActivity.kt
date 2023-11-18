@@ -78,9 +78,9 @@ class MainActivity : AppCompatActivity() {
 
       // 가입한 모임 리스트 가데이터
       val joinList : List<MeetingVO> = listOf(
-        MeetingVO("동구","가나다라마바사아자차카타파하", "같이 골프 합시다~", "운동", 7,20,R.drawable.golf_img.toString()),
-        MeetingVO("북구","동명동 티 타임dddddddddddddddddddd", "우리 같이 차 마셔요~ddddddddddddddddddddd", "취미", 5,10,R.drawable.tea_img.toString()),
-        MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString()),
+        MeetingVO("동구","가나다라마바사아자차카타파하", "같이 골프 합시다~", "운동", 7,20,R.drawable.golf_img.toString(),""),
+        MeetingVO("북구","동명동 티 타임dddddddddddddddddddd", "우리 같이 차 마셔요~ddddddddddddddddddddd", "취미", 5,10,R.drawable.tea_img.toString(),""),
+        MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString(),""),
 
       )
 
@@ -88,9 +88,9 @@ class MainActivity : AppCompatActivity() {
 
       // 관심 모임 리스트 가데이터
       val interestList : List<MeetingVO> = listOf(
-        MeetingVO("남구","운암동 수영 모임", "헤엄 헤엄~", "운동", 8,30,R.drawable.tea_img.toString()),
-        MeetingVO("북구","동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5,10,R.drawable.tea_img.toString()),
-        MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString()),
+        MeetingVO("남구","운암동 수영 모임", "헤엄 헤엄~", "운동", 8,30,R.drawable.tea_img.toString(),""),
+        MeetingVO("북구","동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5,10,R.drawable.tea_img.toString(),""),
+        MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString(),""),
       )
 
 

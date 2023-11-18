@@ -17,12 +17,16 @@ import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityCreateMeetingBinding
+import com.example.senimoapplication.server.Server
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CreateMeetingActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityCreateMeetingBinding
     private var imageUri: Uri? = null // selectedImageUri를 클래스 수준에 선언
-
+    val Meetinginfo: ArrayList<MeetingVO> = ArrayList()
     // 이미지뷰 클릭 상태를 추적하기 위한 변수들
     private var exerciseChecked = false
     private var hobbyChecked = false
@@ -248,8 +252,9 @@ class CreateMeetingActivity : AppCompatActivity() {
                         meetingKeywords,
                         0,
                         binding.tvMAllMember.text.toString().toInt(),
-                        binding.imgMButton.toString()
+                        binding.imgMButton.toString(),
 //                        binding.imgMButton.setImageResource(R.drawable.golf_img)
+                        club_code ="" // db에서 uuid로 생성된 값으로 저장되서 MeetingVO형식 맞추기위해 사용한값
                     )
 
                 // 결과를 설정하고 현재 액티비티를 종료
@@ -274,6 +279,20 @@ class CreateMeetingActivity : AppCompatActivity() {
         val drawableResId = if (isChecked) R.drawable.ic_checkbox_color else R.drawable.ic_checkbox
         imageView.setImageResource(drawableResId)
     }
+
+    // 모임생성 요청 함수
+//    private fun createMeeting() {
+//        val service = Server().service
+//        service.createMeeting().enqueue(object : Callback<List<MeetingVO>> {
+//            override fun onResponse(
+//                call: Call<List<MeetingVO>>,
+//                response: Response<List<MeetingVO>>
+//            ) {
+//                Log.d("CreateMeeting",response.toString())
+//            }
+//        })
+//
+//    }
 
 
 }

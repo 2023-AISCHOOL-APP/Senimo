@@ -20,7 +20,8 @@ data class MeetingVO(
     @SerializedName("max_cnt")
     var allMember: Int,
     @SerializedName("club_img_url")
-    var imageUri: String // 이미지 경로를 String 타입으로 저장
+    var imageUri: String? = null, // 이미지 경로를 String 타입으로 저장
+    var club_code: String
 
 
 
@@ -43,8 +44,9 @@ data class MeetingVO(
         attendance = parcel.readInt(),
         allMember = parcel.readInt(),
         // person = parcel.readString() ?: "",
-        imageUri = parcel.readString() ?:""
+        imageUri = parcel.readString() ?:"",
         // backicon = parcel.readString() ?: ""
+        club_code = parcel.readString() ?:""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -56,7 +58,8 @@ data class MeetingVO(
         parcel.writeInt(allMember)
         // parcel.writeString(person)
         parcel.writeString(imageUri?.toString()) // 이미지 경로 또는 URI를 저장
-        // parcel.writeString(backicon)
+        parcel.writeString(club_code?.toString())
+       // parcel.writeString(backicon)
     }
 
     override fun describeContents(): Int {

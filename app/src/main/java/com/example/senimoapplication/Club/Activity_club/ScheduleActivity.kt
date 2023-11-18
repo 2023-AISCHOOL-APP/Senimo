@@ -164,7 +164,8 @@ class ScheduleActivity : AppCompatActivity() {
                            //binding.imgCSchedule.setImageResource(schedules.imageUri)
                             Glide.with(this@ScheduleActivity)
                                 .load(schedules.imageUri) // MeetingVO 객체의 imageUri
-                                .placeholder(R.drawable.golf_img) // 기본 이미지
+                                .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
+                                .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
                                 .into(binding.imgCSchedule) // 이미지를 표시할 ImageView
                         }
                     } else {
