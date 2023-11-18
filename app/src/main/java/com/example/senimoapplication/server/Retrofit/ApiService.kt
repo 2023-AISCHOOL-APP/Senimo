@@ -32,7 +32,7 @@ interface ApiService {
     fun getClubInfo(@Path("club_code") club_code: String): Call<ClubInfoVO>
 
     @POST("/postcreateMeeting")
-    fun createMeeting(): Call<List<MeetingVO>>
+    fun createMeeting(): Call<Void>
 
     @FormUrlEncoded
     @POST("/login")

@@ -7,8 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class Server {
     val retrofit = Retrofit.Builder()
-
-        .baseUrl("http://192.168.70.207:3333") // 도운IP
+        .baseUrl("https://improved-sadly-snake.ngrok-free.app") // 도운IP
         //.baseUrl("http://192.168.70.154:3333") // 희준IP
         .addConverterFactory(GsonConverterFactory.create())
         .build()
