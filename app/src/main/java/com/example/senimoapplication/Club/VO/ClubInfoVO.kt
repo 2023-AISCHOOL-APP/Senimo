@@ -7,9 +7,8 @@ import com.google.gson.annotations.SerializedName
 data class ClubInfoVO(
     // 모임명, 이미지, 전체회원수, 정원, 카테고리, 모임소개, 활동지역
 
-//    @SerializedName("club_img")
-//    val clubImg : String,
-    val clubImg : String="",
+    @SerializedName("club_img_url")
+    var clubImageUri: String? = null, // 이미지 경로를 String 타입으로 저장
     @SerializedName("joined_user_cnt")
     val joinedUserCnt : Int,
     @SerializedName("max_cnt")
@@ -34,7 +33,7 @@ data class ClubInfoVO(
 
     ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        clubImg = parcel.readString() ?: "",
+        clubImageUri = parcel.readString() ?: "",
         joinedUserCnt = parcel.readInt(),
         maxCnt = parcel.readInt(),
         clubName = parcel.readString() ?: "",
@@ -46,7 +45,7 @@ data class ClubInfoVO(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
 //        parcel.writeString(gu)
 
-        parcel.writeString(clubImg)
+        parcel.writeString(clubImageUri)
         parcel.writeInt(maxCnt)
         parcel.writeInt(joinedUserCnt)
         parcel.writeString(clubName)

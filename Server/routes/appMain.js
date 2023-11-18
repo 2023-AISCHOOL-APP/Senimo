@@ -14,6 +14,7 @@ router.get('/getMeetings', (req, res) => {
 
   const query = `
   SELECT 
+    c.club_code,
     c.club_location, 
     c.club_name, 
     c.club_introduce, 
@@ -28,6 +29,7 @@ LEFT JOIN
 LEFT JOIN 
     tb_join j ON c.club_code = j.club_code
 GROUP BY 
+    c.club_code,
     c.club_location, 
     c.club_name, 
     c.club_introduce, 

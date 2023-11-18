@@ -3,7 +3,7 @@ const router = express.Router()
 const conn = require('../config/database');
 
 
-router.get('/sche_intro/:sche_code', (req, res) => {
+router.get('/get/Sche_intro/:sche_code', (req, res) => {
     console.log('result', req.body);
     // 클라이언트로부터 받은 schedule_id를 사용하여 쿼리문을 생성
     const sche_code = req.params.sche_code;
