@@ -2,6 +2,7 @@ package com.example.senimoapplication.MainPage.Activity_main
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -27,7 +28,9 @@ import com.example.senimoapplication.databinding.ActivityEditMyPageBinding
 class EditMyPageActivity : AppCompatActivity() {
 
     private lateinit var myProfile: MyPageVO // MyPageVO 객체를 담을 변수
+    private var imageUri: Uri? = null // 클래스 수준 변수로 선언
 
+    lateinit var GuAdapter : GuAdapter
     lateinit var DongAdapter: DongAdapter
     lateinit var binding: ActivityEditMyPageBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,33 +42,7 @@ class EditMyPageActivity : AppCompatActivity() {
         setContentView(view)
 
 
-        val myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData")
-
-        binding.btnMSave.setOnClickListener {
-            // 사용자가 입력한 데이터로 myProfile 객체를 업데이트
-            val updateProfile = MyPageVO(
-                img = myProfile?.img ?: "",
-                name = binding.etMUserName.text.toString(),
-                birth = binding.etMUserBirth.text.toString().toIntOrNull() ?: myProfile?.birth ?: 0,
-                gender = binding.etMGender.text.toString(),
-                intro = binding.etMMyPageIntro.text.toString()
-            )
-
-            val returnIntent = Intent()
-            returnIntent.putExtra("updatedProfileData", updateProfile)
-            setResult(RESULT_OK, returnIntent)
-            finish()
-        }
-
-        // 뒤로가기 버튼
-        binding.imgMBackbtnToFrag4.setOnClickListener {
-            val intent = Intent(this@EditMyPageActivity,MainActivity::class.java)
-            // 탭 4를 선택한 것으로 설정
-            intent.putExtra("selected_tab","M_tab4")
-            startActivity(intent)
-            finish()
-        }
-
+        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
 
         // 사진 1장 선택
         val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -76,15 +53,16 @@ class EditMyPageActivity : AppCompatActivity() {
 //                binding.imgMEditPhoto.setImageURI(uri)
 //                binding.imgMEditPhoto.visibility = ImageView.VISIBLE
 
+                imageUri = uri // 클래스 수준 변수에 URI 저장
+                Glide.with(this).load(uri).into(binding.imgMEditMypageImg)
+
                 // Gride를 사용하여 이미지 로딩
-                Glide.with(this@EditMyPageActivity)
-                    .load(uri) // 이미지 URI
-                    .centerCrop() // 이미지가 ImageView를 가득 채우도록 조정
-                    .into(binding.imgMEditMypageImg) // 이미지를 설정할 ImageView
-
-                // 이미지를 선택한 후에 URI를 변수에 저장
-                val imageUri = uri
-
+//                Glide.with(this@EditMyPageActivity)
+//                    .load(uri) // 이미지 URI
+//                    .centerCrop() // 이미지가 ImageView를 가득 채우도록 조정
+//                    .into(binding.imgMEditMypageImg) // 이미지를 설정할 ImageView
+//                    // 이미지를 선택한 후에 URI를 변수에 저장
+//                    val imageUriString = uri.toString() // Uri 객체를 String으로 변환하여 저장
 
             } else {
                 Log.d("PhotoPicker_main", "No media selected")
@@ -197,6 +175,47 @@ class EditMyPageActivity : AppCompatActivity() {
                 binding.tvMLetterCntMyPage.text = currentLength.toString()
             }
         })
+
+
+
+        binding.btnMSave.setOnClickListener {
+            // GuAdapter에서 선택된 항목 가져오기
+            val selectedGu = GuAdapter.getSelectedItem()
+            val imageUriString = imageUri?.toString() // URI를 String으로 변환
+
+            // 사용자가 입력한 데이터로 myProfile 객체를 업데이트
+            val updateProfile = MyPageVO(
+                img = imageUriString ?: myProfile?.img ?: "", // null 체크하여 기존 값 또는 빈 문자열 사용
+                name = binding.etMUserName.text.toString(),
+                gu = selectedGu,
+                birth = binding.etMUserBirth.text.toString().toIntOrNull() ?: myProfile?.birth ?: 0,
+                gender = binding.etMGender.text.toString(),
+                intro = binding.etMMyPageIntro.text.toString()
+            )
+
+            // 로그 출력
+            Log.d("EditProfile","수정된 프로필 정보 : $updateProfile ")
+
+            val returnIntent = Intent()
+            returnIntent.putExtra("updatedProfileData", updateProfile)
+            setResult(RESULT_OK, returnIntent)
+            finish()
+        }
+
+        // 뒤로가기 버튼
+        binding.imgMBackbtnToFrag4.setOnClickListener {
+            val intent = Intent(this@EditMyPageActivity,MainActivity::class.java)
+            // 탭 4를 선택한 것으로 설정
+            intent.putExtra("selected_tab","M_tab4")
+            startActivity(intent)
+            finish()
+        }
+
+
+
+
+
+
     }
 }
 

@@ -19,7 +19,7 @@ router.get('/getMeetings', (req, res) => {
     c.club_introduce, 
     COUNT(j.user_id) AS attend_user_cnt, 
     c.max_cnt, 
-    CONCAT('http://192.168.70.207:3333/uploads/', c.club_img) AS club_img_url ,
+    CONCAT('http://192.168.70.20:3333/uploads/', c.club_img) AS club_img_url ,
     k.keyword_name
 FROM 
     tb_club c

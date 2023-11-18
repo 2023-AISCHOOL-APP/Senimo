@@ -30,7 +30,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/RoundedMyPageProfileComment"
-                app:srcCompat="@drawable/tea_img" />
+                app:srcCompat="@drawable/ic_profile_circle" />
 
             <TextView
                 android:id="@+id/tv_M_UserName"
@@ -80,7 +80,7 @@
 
             <TextView
                 android:id="@+id/tv_M_BirthYear"
-                android:layout_width="wrap_content"
+                android:layout_width="76dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:drawableLeft="@drawable/ic_member2"
@@ -95,15 +95,17 @@
 
             <TextView
                 android:id="@+id/tv_M_gender"
-                android:layout_width="wrap_content"
+                android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
+                android:layout_marginEnd="90dp"
                 android:drawablePadding="4dp"
                 android:fontFamily="@font/pretendard_medium"
                 android:text="남성"
                 android:textColor="@color/txt_gray90"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_M_BirthYear"
+                app:layout_constraintEnd_toEndOf="@+id/tv_M_MoveEdit"
                 app:layout_constraintStart_toEndOf="@+id/tv_M_BirthYear"
                 app:layout_constraintTop_toTopOf="@+id/tv_M_BirthYear" />
 
@@ -119,7 +121,7 @@
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_M_MoveEdit"
                 app:layout_constraintStart_toStartOf="@+id/img_M_MypageImg"
-                app:layout_constraintTop_toBottomOf="@+id/img_M_MypageImg" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_M_gender" />
 
             <TextView
                 android:id="@+id/tv_M_UserIntroMore"

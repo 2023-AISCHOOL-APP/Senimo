@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import com.bumptech.glide.Glide
 import com.example.senimoapplication.MainPage.Activity_main.EditMyPageActivity
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.R
@@ -115,12 +116,32 @@ class MypageFragment : Fragment() {
 
     private fun updateUIWithProfile(profile: MyPageVO) {
         // 여기에서 프로필 정보를 UI 요소에 설정
-        // 예: binding.tvMUserName.text = profile.name 등
-        binding.imgMMypageImg.setImageResource(R.drawable.tea_img)             // 이미지 설정
+        if (profile.img.startsWith("content://")) {
+            Glide.with(this)
+                .load(profile.img)
+                .centerCrop()
+                .into(binding.imgMMypageImg)
+        } else {
+            // 기본 이미지 설정
+            binding.imgMMypageImg.setImageResource(R.drawable.ic_profile_circle)
+        }            // 이미지 설정
         binding.tvMUserName.text = profile.name                               // 이름
         binding.tvMUserGu.text = profile.gu                                   // 구
-        binding.tvMBirthYear.text = "${profile.birth}년생"                    // 출생년도
-        binding.tvMGender.text = profile.gender                              // 성별
+
+        val birthYearText = "${profile.birth}"
+        binding.tvMBirthYear.text = if (birthYearText.length > 4) {           // 출생년도
+            birthYearText.substring(0, 4) + "년생"
+        } else {
+            birthYearText + "년생"
+        }
+
+        val genderText = if (profile.gender.length >2) {
+            profile.gender.substring(0, 2)
+        } else {
+            profile.gender
+        }
+        binding.tvMGender.text = genderText                            // 성별
+
         val introText = if (profile.intro.length > INTRO_MAX_TEXT_LENGTH) {
             binding.tvMUserIntroMore.visibility = View.VISIBLE
             profile.intro.substring(0, INTRO_MAX_TEXT_LENGTH) + "..."

@@ -46,7 +46,7 @@ class DongAdapter(val layout: Int, var list: ArrayList<String>, val context: Con
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.tvDong.text = list[position]
 
-    val selectedColor = ContextCompat.getColor(context, R.color.main)
+    val selectedColor = ContextCompat.getColor(context, R.color.Dong)
     val selectedTextColor = ContextCompat.getColor(context, R.color.white)
     val nonSelectedColor = ContextCompat.getColor(context, R.color.white)
     val nonSelectedTextColor = ContextCompat.getColor(context, R.color.txt_gray80)

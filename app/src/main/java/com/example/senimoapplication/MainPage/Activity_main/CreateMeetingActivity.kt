@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
@@ -24,6 +25,7 @@ class CreateMeetingActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityCreateMeetingBinding
     private var imageUri: Uri? = null // selectedImageUri를 클래스 수준에 선언
+    private var selectedKeyword : String? = null // 선택된 키워드를 저장하는 변수
 
     // 이미지뷰 클릭 상태를 추적하기 위한 변수들
     private var exerciseChecked = false
@@ -46,12 +48,14 @@ class CreateMeetingActivity : AppCompatActivity() {
             // Callback is invoked after the user selects a media item or closes the
             // photo picker.
             if (uri != null) {
+                // 이미지를 선택한 후에 URI를 변수에 저장
+                imageUri = uri
+                Glide.with(this).load(uri).into(binding.imgMButton)
                 Log.d("PhotoPicker_main","Selected URI: $uri")
+
+                // 이미지뷰에 이미지 표시
                 binding.imgMButton.setImageURI(uri)
                 binding.imgMButton.visibility = ImageView.VISIBLE
-
-                // 이미지를 선택한 후에 URI를 변수에 저장
-                val imageUri = uri
 
 
             } else {
@@ -132,33 +136,27 @@ class CreateMeetingActivity : AppCompatActivity() {
 
         // 이미지뷰 클릭 이벤트 처리
         binding.imgMCheckExercise.setOnClickListener {
-            exerciseChecked = !exerciseChecked
-            updateImageState(binding.imgMCheckExercise, exerciseChecked)
+            setSelectedKeyword("운동")
         }
 
         binding.imgMCheckHobby.setOnClickListener {
-            hobbyChecked = !hobbyChecked
-            updateImageState(binding.imgMCheckHobby, hobbyChecked)
+            setSelectedKeyword("취미")
         }
 
         binding.imgMCheckConcert.setOnClickListener {
-            concertChecked = !concertChecked
-            updateImageState(binding.imgMCheckConcert, concertChecked)
+            setSelectedKeyword("전시/공연")
         }
 
         binding.imgMCheckTrip.setOnClickListener {
-            tripChecked = !tripChecked
-            updateImageState(binding.imgMCheckTrip, tripChecked)
+            setSelectedKeyword("여행")
         }
 
         binding.imgMCheckSelfimprovement.setOnClickListener {
-            selfImprovementChecked = !selfImprovementChecked
-            updateImageState(binding.imgMCheckSelfimprovement, selfImprovementChecked)
+            setSelectedKeyword("자기계발")
         }
 
         binding.imgMCheckFinancial.setOnClickListener {
-            financialChecked = !financialChecked
-            updateImageState(binding.imgMCheckFinancial, financialChecked)
+            setSelectedKeyword("재테크")
         }
 
 
@@ -198,43 +196,17 @@ class CreateMeetingActivity : AppCompatActivity() {
         binding.btnSetMeeting.setOnClickListener {
             val selectedGu = binding.spMGulist.selectedItem.toString()
 
-            // 선택된 키워드를 담을 리스트
-            val selectedKeywordList = ArrayList<String>()
-
-            if (exerciseChecked) {
-                selectedKeywordList.add("운동")
-            }
-            if (hobbyChecked) {
-                selectedKeywordList.add("취미")
-            }
-            if (concertChecked) {
-                selectedKeywordList.add("전시/공연")
-            }
-            if (tripChecked) {
-                selectedKeywordList.add("여행")
-            }
-            if (selfImprovementChecked) {
-                selectedKeywordList.add("자기계발")
-            }
-            if (financialChecked) {
-                selectedKeywordList.add("재테크")
-            }
-
-            // 선택된 키워드가 하나 이상인 경우에만 MeetingVO에 추가
-            if (selectedKeywordList.isNotEmpty()) {
-                val meetingKeywords = selectedKeywordList.joinToString("/")
+            if (selectedKeyword != null) {
                 val meetingVO =
                     MeetingVO(
-                        selectedGu,
-                        binding.etMeetingName.text.toString(),
-                        binding.etMeetingIntro.text.toString(),
-                        meetingKeywords,
-                        0,
-                        binding.tvMAllMember.text.toString().toInt(),
-                        binding.imgMButton.toString()
-//                        binding.imgMButton.setImageResource(R.drawable.golf_img)
+                        gu = selectedGu,
+                        title = binding.etMeetingName.text.toString(),
+                        content = binding.etMeetingIntro.text.toString(),
+                        keyword = selectedKeyword!!,
+                        attendance = 0,
+                        allMember = binding.tvMAllMember.text.toString().toInt(),
+                        imageUri = imageUri.toString() // 이미지 URI 사용
                     )
-
                 // 결과를 설정하고 현재 액티비티를 종료
                 val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
                 intent.putExtra("meetingVO", meetingVO)
@@ -248,11 +220,77 @@ class CreateMeetingActivity : AppCompatActivity() {
                 Toast.makeText(this@CreateMeetingActivity, "모임 생성에 실패하셨습니다", Toast.LENGTH_SHORT).show()
             }
 
+//            // 선택된 키워드를 담을 리스트
+//            val selectedKeywordList = ArrayList<String>()
+//
+//            if (exerciseChecked) {
+//                selectedKeywordList.add("운동")
+//            }
+//            if (hobbyChecked) {
+//                selectedKeywordList.add("취미")
+//            }
+//            if (concertChecked) {
+//                selectedKeywordList.add("전시/공연")
+//            }
+//            if (tripChecked) {
+//                selectedKeywordList.add("여행")
+//            }
+//            if (selfImprovementChecked) {
+//                selectedKeywordList.add("자기계발")
+//            }
+//            if (financialChecked) {
+//                selectedKeywordList.add("재테크")
+//            }
+
+//            // 선택된 키워드가 하나 이상인 경우에만 MeetingVO에 추가
+//            if (selectedKeywordList.isNotEmpty()) {
+//                val meetingKeywords = selectedKeywordList.joinToString("/")
+//                val meetingVO =
+//                    MeetingVO(
+//                        selectedGu,
+//                        binding.etMeetingName.text.toString(),
+//                        binding.etMeetingIntro.text.toString(),
+//                        meetingKeywords,
+//                        0,
+//                        binding.tvMAllMember.text.toString().toInt(),
+//                        binding.imgMButton.toString()
+////                        binding.imgMButton.setImageResource(R.drawable.golf_img)
+//                    )
+//
+//                // 결과를 설정하고 현재 액티비티를 종료
+//                val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
+//                intent.putExtra("meetingVO", meetingVO)
+//                // setResult(RESULT_OK, intent)
+//                startActivity(intent)
+//
+//                // 로그로 모임 정보 출력
+//                Log.d("CreateMeetingActivity", "새로운 모임 생성: $meetingVO")
+//                Toast.makeText(this@CreateMeetingActivity,"모임이 생성되었습니다",Toast.LENGTH_SHORT).show()
+//            } else {
+//                Toast.makeText(this@CreateMeetingActivity, "모임 생성에 실패하셨습니다", Toast.LENGTH_SHORT).show()
+//            }
+
 
 
 
         }
 
+    }
+
+    // 선택된 키워드를 설정하고 UI를 업데이트하는 함수
+    private fun setSelectedKeyword(keyword: String) {
+        selectedKeyword = keyword
+        updateKeywordCheckState()
+    }
+
+    // 모든 키워드의 상태를 업데이트하는 함수
+    private fun updateKeywordCheckState() {
+        updateImageState(binding.imgMCheckExercise, "운동" == selectedKeyword)
+        updateImageState(binding.imgMCheckHobby, "취미" == selectedKeyword)
+        updateImageState(binding.imgMCheckConcert, "전시/공연" == selectedKeyword)
+        updateImageState(binding.imgMCheckTrip, "여행" == selectedKeyword)
+        updateImageState(binding.imgMCheckSelfimprovement, "자기계발" == selectedKeyword)
+        updateImageState(binding.imgMCheckFinancial, "재테크" == selectedKeyword)
     }
 
     // 이미지 상태 업데이트 함수
