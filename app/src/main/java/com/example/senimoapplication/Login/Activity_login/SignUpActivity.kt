@@ -3,7 +3,6 @@ package com.example.senimoapplication.Login.Activity_login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivitySignUpBinding
@@ -27,6 +26,21 @@ class SignUpActivity : AppCompatActivity() {
       }
     }
     this.onBackPressedDispatcher.addCallback(this, callback)
+
+
+    // id 중복 확인
+
+    binding.btnIdCheck.setOnClickListener {
+      val userId = binding.etSignUpId.text?.toString() ?: ""
+
+
+
+    }
+
+
+
+
+
 
     binding.btnToEnterMyInfo.setOnClickListener {
       val intent = Intent(this@SignUpActivity, EnterMyInfoActivity::class.java)
