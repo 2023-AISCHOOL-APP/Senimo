@@ -8,9 +8,9 @@ import com.google.gson.annotations.SerializedName
 data class MeetingVO(
     @SerializedName("club_location")
     val gu: String? = null,
-    @SerializedName("club_name") // 서버 응답의 club_name을 title에 맵핑합니다.
+    @SerializedName("club_name")
     var title: String,
-    @SerializedName("club_introduce") // 서버 응답의 club_introduce를 content에 맵핑합니다.
+    @SerializedName("club_introduce")
     var content: String,
     @SerializedName("keyword_name")
     var keyword: String,
@@ -25,18 +25,7 @@ data class MeetingVO(
     var userId: String? = null
 
 
-
-//    val title: String = "",
-//    val content: String = "",
-//    val keyword: String = "",
-//    val attendance : Int = 0,
-//    val allMember : Int = 0,
-    // val person: String = "",
-    // val imageUri: Uri? = "" // 이미지의 URI 또는 경로를 저장할 필드
-    // val backicon : String = ""
 ) : Parcelable {
-    // 이미지 경로를 사용하여 Uri를 얻는 메서드 추가
-    //생성자에서도 동일한 순서로 데이터를 읽어야 합니다.
     constructor(parcel: Parcel) : this(
         gu = parcel.readString() ?: "",
         title = parcel.readString() ?: "",
@@ -44,11 +33,10 @@ data class MeetingVO(
         keyword = parcel.readString() ?: "",
         attendance = parcel.readInt(),
         allMember = parcel.readInt(),
-        // person = parcel.readString() ?: "",
         imageUri = parcel.readString() ?:"",
-        // backicon = parcel.readString() ?: ""
         club_code = parcel.readString() ?:"",
         userId = parcel.readString() ?:""
+
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -58,11 +46,9 @@ data class MeetingVO(
         parcel.writeString(keyword)
         parcel.writeInt(attendance)
         parcel.writeInt(allMember)
-        // parcel.writeString(person)
-        parcel.writeString(imageUri?.toString()) // 이미지 경로 또는 URI를 저장
-        parcel.writeString(club_code?.toString())
-        parcel.writeString(userId?.toString())
-       // parcel.writeString(backicon)
+        parcel.writeString(imageUri)
+        parcel.writeString(club_code)
+        parcel.writeString(userId)
     }
 
     override fun describeContents(): Int {

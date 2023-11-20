@@ -148,7 +148,6 @@ class ScheduleActivity : AppCompatActivity() {
                         Log.d("ScheduleActivity", response.body().toString())
                         response.body()?.let { schedules ->
                             // null이 아니면 기존 목록을 지우고 새 데이터로 채웁니다.
-
                             findViewById<TextView>(R.id.tv_C_S_Time).text = formatDate(schedules.scheduleDate)
                             findViewById<TextView>(R.id.tvClubName2).text = schedules.clubName
                             findViewById<TextView>(R.id.tv_C_ScheduleName3).text = schedules.scheduleName
