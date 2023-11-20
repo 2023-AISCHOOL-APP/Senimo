@@ -46,5 +46,12 @@ class SettingActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        binding.imgMBackbtnToMyPage.setOnClickListener {
+            val intent = Intent(this@SettingActivity, MainActivity::class.java)
+            intent.putExtra("selected_tab", "M_tab4")
+            startActivity(intent)
+            finish()
+        }
     }
 }
