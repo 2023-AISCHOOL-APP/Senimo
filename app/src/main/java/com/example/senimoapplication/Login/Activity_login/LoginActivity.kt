@@ -6,15 +6,17 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import com.example.senimoapplication.Login.VO.LoginResVO
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityLoginBinding
-import com.example.senimoapplication.server.Retrofit.ApiService
+import com.example.senimoapplication.server.Token.PreferenceManager
+import com.example.senimoapplication.server.Token.TokenResponse
 import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.UserData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -38,10 +40,11 @@ class LoginActivity : AppCompatActivity() {
 
     binding.btnLoginL.setOnClickListener {
 
-      val intent = Intent(this@LoginActivity, MainActivity::class.java)
-      startActivity(intent)
-      finishAffinity()
-
+      // 임시로 서버가 안될때 그다음페이지로 넘어가게 넣어놓음
+//      val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//      startActivity(intent)
+//      finishAffinity()
+      //
       val userId = binding.etLoginId.text.toString()
       val userPw = binding.etLoginPw.text.toString()
       loginUser(userId, userPw)
@@ -56,32 +59,67 @@ class LoginActivity : AppCompatActivity() {
 
   fun loginUser(userId: String, userPw: String){
 
-    val userId = binding.etLoginId.text.toString()
-    val userPw = binding.etLoginPw.text.toString()
-
-    val service = Server().service
+    val service = Server(this).service
     val call = service.loginUser(userId, userPw)
-    call.enqueue(object : Callback<LoginResVO> {
-      override fun onResponse(call: Call<LoginResVO>, response: Response<LoginResVO>) {
-        Log.d("LoginInfo", response.toString())
+    call.enqueue(object : Callback<TokenResponse> {
+      override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+        Log.d("LoginInfo", "Response: $response")
         if (response.isSuccessful) {
-          val LoginResVO = response.body()
-          if (LoginResVO != null && LoginResVO.rows == "success") {
-            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            startActivity(intent)
-            finishAffinity()
-          } else {
-            Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
+          response.body()?.let { tokens ->
+            if (tokens.accessToken != null && tokens.refreshToken != null && tokens.rows == "success") {
+              Log.d("LoginInfoTokens", tokens.toString())
+              Log.d("LoginInfo", "Access Token: ${tokens.accessToken}")
+              Log.d("LoginInfo", "Refresh Token: ${tokens.refreshToken}")
+              // 토큰 저장
+              PreferenceManager.setAccessToken(this@LoginActivity, tokens.accessToken)
+              PreferenceManager.setRefreshToken(this@LoginActivity, tokens.refreshToken)
+
+              UserData.userId = tokens.userId
+              Log.d("LoginInfo", "UserData.userId: ${UserData.userId}")
+              // 환영 메시지 표시
+              val welcomeMessage = "${UserData.userId}님 환영합니다"
+              Toast.makeText(this@LoginActivity, welcomeMessage, Toast.LENGTH_LONG).show()
+              // 메인 액티비티로 이동
+              val intent = Intent(this@LoginActivity, MainActivity::class.java)
+              startActivity(intent)
+              finishAffinity()
+            } else {
+              Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
+            }
           }
         } else {
-          Toast.makeText(this@LoginActivity, "서버 응답 실패", Toast.LENGTH_SHORT).show()
+          Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
         }
       }
 
-      override fun onFailure(call: Call<LoginResVO>, t: Throwable) {
+      override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
         Log.e("loginActivity", "네트워크 요청 실패", t)
       }
     })
   }
+
+
+//  fun refreshTokenIfNeeded() {
+//    val refreshToken = PreferenceManager.getRefreshToken(context)
+//    refreshToken?.let {
+//      val service = Server().service
+//      val call = service.refreshToken(it)
+//      call.enqueue(object : Callback<TokenResponse> {
+//        override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+//          if (response.isSuccessful) {
+//            response.body()?.let { tokenResponse ->
+//              PreferenceManager.setAccessToken(context, tokenResponse.accessToken)
+//            }
+//          } else {
+//            // 토큰 재발급 실패 처리
+//          }
+//        }
+//
+//        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+//          // 네트워크 실패 처리
+//        }
+//      })
+//    }
+//  }
+
 }

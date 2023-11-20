@@ -13,15 +13,16 @@ data class MeetingVO(
     @SerializedName("club_introduce") // 서버 응답의 club_introduce를 content에 맵핑합니다.
     var content: String,
     @SerializedName("keyword_name")
-    // var keyword: String,
     var keyword: String,
     @SerializedName("attend_user_cnt")
     var attendance: Int,
     @SerializedName("max_cnt")
     var allMember: Int,
-    @SerializedName("club_img_url")
+    @SerializedName("club_img")
     var imageUri: String? = null, // 이미지 경로를 String 타입으로 저장
-    var club_code: String
+    var club_code: String,
+    @SerializedName("user_id")
+    var userId: String? = null
 
 
 
@@ -35,7 +36,7 @@ data class MeetingVO(
     // val backicon : String = ""
 ) : Parcelable {
     // 이미지 경로를 사용하여 Uri를 얻는 메서드 추가
-
+    //생성자에서도 동일한 순서로 데이터를 읽어야 합니다.
     constructor(parcel: Parcel) : this(
         gu = parcel.readString() ?: "",
         title = parcel.readString() ?: "",
@@ -46,7 +47,8 @@ data class MeetingVO(
         // person = parcel.readString() ?: "",
         imageUri = parcel.readString() ?:"",
         // backicon = parcel.readString() ?: ""
-        club_code = parcel.readString() ?:""
+        club_code = parcel.readString() ?:"",
+        userId = parcel.readString() ?:""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -59,6 +61,7 @@ data class MeetingVO(
         // parcel.writeString(person)
         parcel.writeString(imageUri?.toString()) // 이미지 경로 또는 URI를 저장
         parcel.writeString(club_code?.toString())
+        parcel.writeString(userId?.toString())
        // parcel.writeString(backicon)
     }
 
