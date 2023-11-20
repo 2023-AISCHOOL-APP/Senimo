@@ -1,14 +1,18 @@
 package com.example.senimoapplication.server.Retrofit
 
 import com.example.senimoapplication.Club.VO.ClubInfoVO
+import com.example.senimoapplication.Club.VO.InterestedResVO
+import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Login.VO.LoginResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
+import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
+import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -58,6 +62,17 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/checkUserId")
     fun checkId(@Field("user_id") userId: String): Call<SignUpResVO>
+
+    @POST("/postModifyMeeting")
+    fun modifyMeeting(@Body meetingVO: MeetingVO) : Call<modifyResult>
+
+    @FormUrlEncoded
+    @POST("/updateInterestedClub")
+    fun updateInterestStatus(@FieldMap params: Map<String, String>): Call<InterestedResVO>
+
+    @POST("/postClubMember")
+    fun clubMember(@Body memberVO: MemberVO) : Call<MemberVO>
+
 }
 
 

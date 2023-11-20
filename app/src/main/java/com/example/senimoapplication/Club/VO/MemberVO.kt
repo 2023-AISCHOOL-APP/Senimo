@@ -43,3 +43,5 @@ class MemberVO (
         }
     constructor(userName: String, clubRole : Int) : this(userName, clubRole, null)
     }
+
+

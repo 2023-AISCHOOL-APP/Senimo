@@ -5,7 +5,7 @@ const config = require('../config/config')
 
 router.post('/postcreateMeeting', (req, res) => {
     console.log('result', req.body);
-    const { user_id, club_name, club_introduce, max_cnt, club_location, keyword_name, club_img} = req.body;
+    const { user_id, club_name, club_introduce, max_cnt, club_location, keyword_name, club_img,} = req.body;
     // 먼저 keyword_code를 조회합니다.
     const findKeywordCodeQuery = `SELECT keyword_code FROM tb_keyword WHERE keyword_name = ?;`;
     conn.query(findKeywordCodeQuery, [keyword_name], (err, results) => {

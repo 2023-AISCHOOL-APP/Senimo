@@ -66,7 +66,8 @@ data class MeetingVO(
 
 
     }
-
-
 }
 
+data class modifyResult(
+    val result : Boolean
+)

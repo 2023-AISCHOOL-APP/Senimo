@@ -1,5 +1,6 @@
 package com.example.senimoapplication.Club.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,22 +41,43 @@ class HomeFragment : Fragment() {
     val ClubInfoList: ArrayList<ClubInfoVO> = ArrayList()
     var clickedMeeting: MeetingVO? = null // MeetingVO? 타입으로 선언
     var createMeeting: MeetingVO? = null
+    val memberList: ArrayList<MemberVO> = ArrayList()
+
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val updatedMeeting: MeetingVO? = result.data?.getParcelableExtra("CreateMeeting")
+                updatedMeeting?.let {
+                    // 여기에서 UI 업데이트 수행
+                    displayMeetingInfo(it)
+                }
+            }
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         // 이제 clickedMeeting 객체를 사용하여 모임 정보를 화면에 표시하거나 다른 작업을 수행할 수 있습니다.
-        clickedMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting") // Parcelable로 받음
-        createMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("CreateMeeting") // Parcelable로 받음
+        clickedMeeting =
+            activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting") // Parcelable로 받음
+        createMeeting =
+            activity?.intent?.getParcelableExtra<MeetingVO>("CreateMeeting") // Parcelable로 받음
         //clickedMeetinghome = activity?.intent?.getParcelableArrayListExtra("clickedMeetinghome") ?: ArrayList()
         Log.d("getclickedMeetinghome", clickedMeeting.toString())
+
+
+
+        Log.d("datacheck", memberList.toString())
+
+
         // 현재 club_code랑 userId는 안받고 있음
 
         val view = binding.root
 
         val scheduleList: ArrayList<ScheduleVO> = ArrayList()
-        val memberList: ArrayList<MemberVO> = ArrayList()
+
 
         val s_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, scheduleList)
         val m_adapter = MemberAdapter(requireContext(), R.layout.club_member_list, memberList)
@@ -68,27 +91,25 @@ class HomeFragment : Fragment() {
             "동구",
             "자기계발",
             "시니어의 활동적인 삶을 위해서 모임 플랫폼을 만들기로 했습니다. 우리의 첫 번째 모임입니다.",
-            MemberVO("양희준",1)
+            MemberVO("양희준", 1)
         )
 
         // 관리자 여부 확인해서 버튼 보이기
-        if(clubInfo.clubStaff.clubRole == 3){
+        if (clubInfo.clubStaff.clubRole == 3) {
             binding.tvMoveEdit.visibility = INVISIBLE
             binding.btnNewSchedule.visibility = GONE
-        }else{
+        } else {
             // 관리자, 운영자인 경우
             binding.tvMoveEdit.visibility = VISIBLE
             binding.btnNewSchedule.visibility = VISIBLE
         }
-
-
 
         binding.tvMoveEdit.setOnClickListener {
             val intent = Intent(view.context, CreateMeetingActivity::class.java)
             intent.putExtra("MeetingVO", clickedMeeting)
             intent.putExtra("title", "모임 정보 수정")
             intent.putExtra("btnTitle", "모임 정보 수정하기")
-            startActivity(intent)
+            startForResult.launch(intent)
             Log.d("click", "모임 수정페이지로 값을 전송합니다. ${clickedMeeting}")
         }
 
@@ -193,7 +214,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchClubInfo() {
-
         val service = Server(requireContext()).service
         if (createMeeting != null) {
             Log.d("fetchClubInfo_createMeeting", createMeeting.toString())
@@ -258,6 +278,37 @@ class HomeFragment : Fragment() {
             .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
             .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
             .into(binding.clubImage) // 이미지를 표시할 ImageView
+    }
+
+    private fun clubMember() {
+        val service = Server(requireContext()).service
+        clickedMeeting?.let { meeting ->
+            val memberVO = MemberVO() // You may need to set appropriate values in memberVO before sending the request
+
+            service.clubMember(memberVO).enqueue(object : Callback<MemberVO> {
+                override fun onResponse(call: Call<MemberVO>, response: Response<MemberVO>) {
+                    if (response.isSuccessful) {
+                        val member = response.body()
+                        if (member != null) {
+                            memberList.add(member) // Add the received member to the list
+                            // Now you can use memberList for further processing
+                            Log.d("ClubMember 응답", "서버 응답 성공")
+                        } else {
+                            Log.e(
+                                "ClubMember 응답",
+                                "서버 응답 성공, 하지만 멤버 정보가 null입니다. 에러 코드: ${response.code()}"
+                            )
+                        }
+                    } else {
+                        Log.e("ClubMember 응답", "서버 응답 실패. 에러 코드: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<MemberVO>, t: Throwable) {
+                    Log.e("HomeFragment", "네트워크 요청 실패", t)
+                }
+            })
+        }
     }
 
 }
