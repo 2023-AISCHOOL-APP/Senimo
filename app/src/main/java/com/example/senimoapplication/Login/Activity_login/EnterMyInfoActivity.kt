@@ -177,7 +177,7 @@ class EnterMyInfoActivity : AppCompatActivity() {
   // 서버와 통신하여 회원가입하는 함수
   fun signUpComplete(userId: String, userPw: String, userName: String, gender: String, birthYear: Int, userGu: String, userDong: String, userIntroduce: String?) {
 
-    val service = Server().service
+    val service = Server(this).service
     val call = service.signUp(userId, userPw, userName, gender, birthYear, userGu, userDong, userIntroduce)
 
     call.enqueue(object : Callback<SignUpResVO> {

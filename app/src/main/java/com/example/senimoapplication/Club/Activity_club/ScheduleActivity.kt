@@ -9,12 +9,8 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
-
 import com.bumptech.glide.Glide
-
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
@@ -136,10 +132,10 @@ class ScheduleActivity : AppCompatActivity() {
 
 
     private fun fetchSchedule() {
-        val retrofit = Server().retrofit
+        
 
         // 서버에 요청을 보낼 '전화기'를 만들어요.
-        val service = retrofit.create(ApiService::class.java)
+        val service = Server(this).service
         val sche_code = "sche_code1" // 예시 ID
         // '전화'를 걸어요. 서버에 데이터를 달라고 요청해요.
         service.getScheIntro(sche_code).enqueue(object : Callback<ScheduleVO> {
