@@ -9,7 +9,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-
 //class Server {
 //    val retrofit = Retrofit.Builder()
 //        .baseUrl("https://improved-sadly-snake.ngrok-free.app") // 도운IP
@@ -38,4 +37,4 @@ class Server(private val context: Context) {
     }
 }
 // activity는 val server = Server(this)
-// fragment val server = Server(requireContext()) requireContext()는 현재 Fragment가 Activity에 붙어 있을 때만 호출해야 합니다.
+// fragment val server = Server(requireContext()) : requireContext()는 현재 Fragment가 Activity에 붙어 있을 때만 호출해야 합니다.

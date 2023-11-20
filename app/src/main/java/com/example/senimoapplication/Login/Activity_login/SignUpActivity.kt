@@ -70,7 +70,7 @@ class SignUpActivity : AppCompatActivity() {
   }
 
   fun checkUserId(userId: String){
-    val service = Server().service
+    val service = Server(this).service
     val call = service.checkId(userId)
 
     call.enqueue(object : Callback<SignUpResVO> {
