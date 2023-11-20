@@ -136,7 +136,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                         binding.tvMLetterCnt1.setTextColor(
                             ContextCompat.getColor(
                                 this@CreateMeetingActivity,
-                                R.color.main
+                                R.color.point
                             )
                         )
                         binding.tvMNameWarning.visibility = View.VISIBLE // 경고 메시지 표시
@@ -174,7 +174,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                         binding.tvMLetterCnt2.setTextColor(
                             ContextCompat.getColor(
                                 this@CreateMeetingActivity,
-                                R.color.main
+                                R.color.point
                             )
                         )
                         binding.tvMIntroWarning.visibility = View.VISIBLE // 경고 메시지 표시
