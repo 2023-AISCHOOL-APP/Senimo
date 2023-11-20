@@ -197,7 +197,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                         binding.tvMLetterCnt1.setTextColor(
                             ContextCompat.getColor(
                                 this@CreateMeetingActivity,
-                                R.color.main
+                                R.color.point
                             )
                         )
                         binding.tvMNameWarning.visibility = View.VISIBLE // 경고 메시지 표시
@@ -235,7 +235,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                         binding.tvMLetterCnt2.setTextColor(
                             ContextCompat.getColor(
                                 this@CreateMeetingActivity,
-                                R.color.main
+                                R.color.point
                             )
                         )
                         binding.tvMIntroWarning.visibility = View.VISIBLE // 경고 메시지 표시
@@ -302,6 +302,55 @@ class CreateMeetingActivity : AppCompatActivity() {
             meetingMembers = updatedMembers
             onMemberChanged(updatedMembers)
         }
+
+        binding.ImgMBackbtnToFrag2.setOnClickListener {
+            val intent = Intent(this@CreateMeetingActivity, MainActivity::class.java)
+            intent.putExtra("selected_tab", "M_tab2")
+            startActivity(intent)
+            finish()
+        }
+
+
+
+        // 모임 만들기 버튼 클릭 시 정보 취합하기
+        binding.btnSetMeeting.setOnClickListener {
+            val selectedGu = binding.spMGulist.selectedItem.toString()
+
+            if (selectedKeyword != null) {
+                val meetingVO =
+                    MeetingVO(
+
+                        gu = selectedGu,
+                        title = binding.etMeetingName.text.toString(),
+                        content = binding.etMeetingIntro.text.toString(),
+                        keyword = selectedKeyword!!,
+                        attendance = 0, // 참석자수 0명 고정
+                        allMember = binding.tvMAllMember.text.toString().toInt(),
+                        imageUri = imageName.toString(), // 이미지 URI 사용
+                        club_code = "", // db에서 uuid로 생성된 값으로 저장되서 MeetingVO형식 맞추기위해 사용한값
+                        userId = UserData.userId // 로그인한 사용자 id 정보 받아와야함
+
+
+                    )
+                Log.d("CreateMeeting1",meetingVO.toString())
+                sendMeetingInfo(meetingVO)
+                // 결과를 설정하고 현재 액티비티를 종료
+//                val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
+//                intent.putExtra("meetingVO", meetingVO)
+//                // setResult(RESULT_OK, intent)
+//                startActivity(intent)
+            }
+            // 로그로 모임 정보 출력
+//                Log.d("CreateMeetingActivity", "새로운 모임 생성: $meetingVO")
+//                Toast.makeText(this@CreateMeetingActivity,"모임이 생성되었습니다",Toast.LENGTH_SHORT).show()
+//            } else {
+//                Toast.makeText(this@CreateMeetingActivity, "모임 생성에 실패하셨습니다", Toast.LENGTH_SHORT).show()
+//            }
+
+
+        }
+
+
     }
 
     // 키워드 클릭 리스너
