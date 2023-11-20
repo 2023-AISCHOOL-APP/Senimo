@@ -48,17 +48,9 @@ class MypageFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
         val view = binding.root
-        // val view = inflater.inflate(R.layout.fragment_mypage, container, false)
 
-        // 뷰에 데이터 설정
-//        val imgMypageImg = view.findViewById<ShapeableImageView>(R.id.img_M_MypageImg)
-//        val tvMoveEdit = view.findViewById<TextView>(R.id.tv_M_MoveEdit)
-//        val tvuserIntroMore = view.findViewById<TextView>(R.id.tv_M_UserIntroMore)
-//        val tvUserName =  view.findViewById<TextView>(R.id.tv_M_UserName)
-//        val tvUserGu = view.findViewById<TextView>(R.id.tv_M_UserGu)
-//        val tvBirthYear = view.findViewById<TextView>(R.id.tv_M_BirthYear)
-//        val tvGender = view.findViewById<TextView>(R.id.tv_M_gender)
-//        val tvUserIntro = view.findViewById<TextView>(R.id.tv_M_UserIntro)
+        // 뱃지 상태를 나타내는 가데이터
+        val badges = listOf(true, false, true, true, false, false, false, false, false)
 
         myProfile = MyPageVO(
             "user1_profile.jpg",
@@ -66,10 +58,35 @@ class MypageFragment : Fragment() {
             "남구",
             1995,
             "여성",
-            "안녕하세요~호호호호호홍가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라"
+            "안녕하세요~호호호호호홍가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라",
+            badges // 뱃지 상태 추가
         )
 
         updateUIWithProfile(myProfile) // 초기 UI 설정
+
+        // 뱃지 상태에 따라 이미지 리소스 업데이트
+        val badgeImageViews = listOf(
+            binding.imgMBadge1,
+            binding.imgMBadge2,
+            binding.imgMBadge3,
+            binding.imgMBadge4,
+            binding.imgMBadge5,
+            binding.imgMBadge6,
+            binding.imgMBadge7,
+            binding.imgMBadge8,
+            binding.imgMBadge9
+        )
+
+        badgeImageViews.forEachIndexed { index, imageView ->
+            val badgeActive = myProfile.badges.getOrNull(index) ?: false
+            val resource = if (badgeActive) {
+                resources.getIdentifier("ic_badge${index + 1}_on", "drawable", context?.packageName)
+            } else {
+                resources.getIdentifier("ic_badge${index + 1}_off", "drawable", context?.packageName)
+            }
+            imageView.setImageResource(resource)
+
+        }
 
 
 
@@ -151,6 +168,10 @@ class MypageFragment : Fragment() {
         }
         binding.tvMUserIntro.text = introText                               // 소개글
 
+        // 뱃지 카운트 업데이트
+        val badgeCount = profile.badges.count { it } // 'true'인 항목의 개수 세기
+        binding.tvMBadgeCnt.text = badgeCount.toString()
+
         // 로그 출력
         Log.d("MypageFragment", "프로필 데이터 업데이트 되었음!")
         Log.d("MypageFragment", "이름: ${profile.name}")
@@ -158,6 +179,7 @@ class MypageFragment : Fragment() {
         Log.d("MypageFragment", "출생년도: ${profile.birth}")
         Log.d("MypageFragment", "성별: ${profile.gender}")
         Log.d("MypageFragment", "소개글: $introText")
+        Log.d("MypageFragment", "뱃지 개수: $badgeCount")
     }
 
     override fun onDestroyView() {
