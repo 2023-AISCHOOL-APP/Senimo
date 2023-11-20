@@ -3,11 +3,8 @@ package com.example.senimoapplication.Login.Activity_login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-<<<<<<< Updated upstream
-=======
 import android.widget.Button
 import android.widget.Toast
->>>>>>> Stashed changes
 import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivitySignUpBinding

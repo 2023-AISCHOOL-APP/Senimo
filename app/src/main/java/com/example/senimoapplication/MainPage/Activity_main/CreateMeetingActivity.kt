@@ -218,15 +218,6 @@ class CreateMeetingActivity : AppCompatActivity() {
                         imageUri = imageUri.toString(), // 이미지 URI 사용
                         club_code ="" // db에서 uuid로 생성된 값으로 저장되서 MeetingVO형식 맞추기위해 사용한값
 
-                        // selectedGu,
-//                        binding.etMeetingName.text.toString(),
-//                        binding.etMeetingIntro.text.toString(),
-//                        meetingKeywords,
-//                        0,
-//                        binding.tvMAllMember.text.toString().toInt(),
-//                        binding.imgMButton.toString(),
-//                        binding.imgMButton.setImageResource(R.drawable.golf_img)
-
 
                     )
                 // 결과를 설정하고 현재 액티비티를 종료
@@ -241,58 +232,6 @@ class CreateMeetingActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this@CreateMeetingActivity, "모임 생성에 실패하셨습니다", Toast.LENGTH_SHORT).show()
             }
-
-//            // 선택된 키워드를 담을 리스트
-//            val selectedKeywordList = ArrayList<String>()
-//
-//            if (exerciseChecked) {
-//                selectedKeywordList.add("운동")
-//            }
-//            if (hobbyChecked) {
-//                selectedKeywordList.add("취미")
-//            }
-//            if (concertChecked) {
-//                selectedKeywordList.add("전시/공연")
-//            }
-//            if (tripChecked) {
-//                selectedKeywordList.add("여행")
-//            }
-//            if (selfImprovementChecked) {
-//                selectedKeywordList.add("자기계발")
-//            }
-//            if (financialChecked) {
-//                selectedKeywordList.add("재테크")
-//            }
-
-//            // 선택된 키워드가 하나 이상인 경우에만 MeetingVO에 추가
-//            if (selectedKeywordList.isNotEmpty()) {
-//                val meetingKeywords = selectedKeywordList.joinToString("/")
-//                val meetingVO =
-//                    MeetingVO(
-//                        selectedGu,
-//                        binding.etMeetingName.text.toString(),
-//                        binding.etMeetingIntro.text.toString(),
-//                        meetingKeywords,
-//                        0,
-//                        binding.tvMAllMember.text.toString().toInt(),
-//                        binding.imgMButton.toString()
-////                        binding.imgMButton.setImageResource(R.drawable.golf_img)
-//                    )
-//
-//                // 결과를 설정하고 현재 액티비티를 종료
-//                val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
-//                intent.putExtra("meetingVO", meetingVO)
-//                // setResult(RESULT_OK, intent)
-//                startActivity(intent)
-//
-//                // 로그로 모임 정보 출력
-//                Log.d("CreateMeetingActivity", "새로운 모임 생성: $meetingVO")
-//                Toast.makeText(this@CreateMeetingActivity,"모임이 생성되었습니다",Toast.LENGTH_SHORT).show()
-//            } else {
-//                Toast.makeText(this@CreateMeetingActivity, "모임 생성에 실패하셨습니다", Toast.LENGTH_SHORT).show()
-//            }
-
-
 
 
         }
