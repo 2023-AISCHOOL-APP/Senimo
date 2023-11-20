@@ -18,13 +18,14 @@ data class MeetingVO(
     var attendance: Int,
     @SerializedName("max_cnt")
     var allMember: Int,
-    @SerializedName("club_img_url")
-    var imageUri: String? = null,
-    var club_code: String
+    @SerializedName("club_img")
+    var imageUri: String? = null, // 이미지 경로를 String 타입으로 저장
+    var club_code: String,
+    @SerializedName("user_id")
+    var userId: String? = null
+
 
 ) : Parcelable {
-
-
     constructor(parcel: Parcel) : this(
         gu = parcel.readString() ?: "",
         title = parcel.readString() ?: "",
@@ -33,7 +34,9 @@ data class MeetingVO(
         attendance = parcel.readInt(),
         allMember = parcel.readInt(),
         imageUri = parcel.readString() ?:"",
-        club_code = parcel.readString() ?:""
+        club_code = parcel.readString() ?:"",
+        userId = parcel.readString() ?:""
+
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -43,8 +46,9 @@ data class MeetingVO(
         parcel.writeString(keyword)
         parcel.writeInt(attendance)
         parcel.writeInt(allMember)
-        parcel.writeString(imageUri?.toString())
-        parcel.writeString(club_code?.toString())
+        parcel.writeString(imageUri)
+        parcel.writeString(club_code)
+        parcel.writeString(userId)
     }
 
     override fun describeContents(): Int {

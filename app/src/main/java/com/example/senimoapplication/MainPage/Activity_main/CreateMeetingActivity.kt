@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -21,6 +22,7 @@ import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityCreateMeetingBinding
 import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.UserData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,7 +31,7 @@ class CreateMeetingActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityCreateMeetingBinding
     private var imageUri: Uri? = null // selectedImageUri를 클래스 수준에 선언
-
+    private var imageName: String? = null // 선택된 이미지의 이름을 저장
     private var selectedKeyword : String? = null // 선택된 키워드를 저장하는 변수
 
 
@@ -51,36 +53,34 @@ class CreateMeetingActivity : AppCompatActivity() {
         setContentView(view)
 
         // intent 값 받아오기
-        val intent: Intent = intent
         val meetingVO: MeetingVO? = intent.getParcelableExtra("MeetingVO")
         val title: String? = intent.getStringExtra("title")
-        val btnTitle : String? = intent.getStringExtra("btnTitle")
-        Log.d("click", "${meetingVO}")
+        val btnTitle: String? = intent.getStringExtra("btnTitle")
+
+        Log.d("click", "$meetingVO")
 
         if (meetingVO != null) {
             binding.tvMToptitle.text = title
             binding.btnSetMeeting.text = btnTitle
             setSelectedKeyword(meetingVO.keyword)
+
             meetingVO.title?.let { title ->
-                binding.etMeetingName.text = Editable.Factory.getInstance().newEditable(title)
+                binding.etMeetingName.text = Editable.Factory.getInstance().newEditable(title.toString())
             }
+
             meetingVO.content?.let { content ->
-                binding.etMeetingIntro.text = Editable.Factory.getInstance().newEditable(content)
+                binding.etMeetingIntro.text = Editable.Factory.getInstance().newEditable(content.toString())
             }
             // 활동지역, 모집 인원, 이미지 수정 추가
-
-
-
-
-
-        } else {
+        }
+        else {
             // 사진 1장 선택
-            val pickMediaMain =
-                registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                    if (uri != null) {
-                        imageUri = uri
-                        Glide.with(this).load(uri).into(binding.imgMButton)
-                        Log.d("PhotoPicker_main", "Selected URI: $uri")
+            val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    imageUri = uri
+                    imageName = getFileName(uri) // 파일이름 추출
+                    Glide.with(this).load(uri).into(binding.imgMButton)
+                    Log.d("PhotoPicker_main","Selected URI: $uri")
 
                         binding.imgMButton.setImageURI(uri)
                         binding.imgMButton.visibility = ImageView.VISIBLE
@@ -90,6 +90,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                         Log.d("PhotoPicker_main", "No media selected")
                     }
                 }
+
 
             binding.imgMButton.setOnClickListener {
                 pickMediaMain.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -214,7 +215,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                 setSelectedKeyword("재테크")
             }
 
-
+            // 버튼 누르면 인원수 변경
             setClubMembers { updatedMembers ->
                 binding.tvMAllMember.text = updatedMembers.toString()
             }
@@ -237,28 +238,16 @@ class CreateMeetingActivity : AppCompatActivity() {
                             title = binding.etMeetingName.text.toString(),
                             content = binding.etMeetingIntro.text.toString(),
                             keyword = selectedKeyword!!,
-                            attendance = 0,
+                            attendance = 0, // 참석자수 0명 고정
                             allMember = binding.tvMAllMember.text.toString().toInt(),
-                            imageUri = imageUri.toString(), // 이미지 URI 사용
-                            club_code = "" // db에서 uuid로 생성된 값으로 저장되서 MeetingVO형식 맞추기위해 사용한값
+                            imageUri = imageName.toString(), // 이미지 URI 사용
+                            club_code = "", // db에서 uuid로 생성된 값으로 저장되서 MeetingVO형식 맞추기위해 사용한값
+                            userId = UserData.userId // 로그인한 사용자 id 정보 받아와야함
                         )
-                    // 결과를 설정하고 현재 액티비티를 종료
-                    val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
-                    intent.putExtra("meetingVO", meetingVO)
-                    // setResult(RESULT_OK, intent)
-                    startActivity(intent)
-
-                    // 로그로 모임 정보 출력
-                    Log.d("CreateMeetingActivity", "새로운 모임 생성: $meetingVO")
-                    Toast.makeText(this@CreateMeetingActivity, "모임이 생성되었습니다", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(this@CreateMeetingActivity, "모임 생성에 실패하셨습니다", Toast.LENGTH_SHORT)
-                        .show()
+                    Log.d("CreateMeeting1",meetingVO.toString())
+                    sendMeetingInfo(meetingVO)
                 }
-
             }
-
         }
     }
     // 모임 멤버 설정 함수
@@ -276,7 +265,17 @@ class CreateMeetingActivity : AppCompatActivity() {
             meetingMembers = updatedMembers
             onMemberChanged(updatedMembers)
         }
+
+        binding.ImgMBackbtnToFrag2.setOnClickListener {
+            val intent = Intent(this@CreateMeetingActivity, MainActivity::class.java)
+            intent.putExtra("selected_tab", "M_tab2")
+            startActivity(intent)
+            finish()
+        }
     }
+
+
+
 
     // 선택된 키워드를 설정하고 UI를 업데이트하는 함수
     private fun setSelectedKeyword(keyword: String) {
@@ -300,4 +299,48 @@ class CreateMeetingActivity : AppCompatActivity() {
         imageView.setImageResource(drawableResId)
     }
 
+    // 이미지 URI에서 파일 이름을 추출하는 함수
+    private fun getFileName(uri: Uri):String?{
+        var imageName: String? = null
+        val cursor = contentResolver.query(uri,null,null,null,null)
+        cursor?.use{
+            if (it.moveToFirst()) {
+                val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (it.moveToFirst()) {
+                    imageName = it.getString(nameIndex)
+                }
+            }
+        }
+        return imageName
+    }
+
+    //모임생성 요청 함수
+    private fun sendMeetingInfo(meetingVO: MeetingVO) {
+        val service = Server(this).service
+        service.createMeeting(meetingVO).enqueue(object : Callback<MeetingVO> {
+            override fun onResponse(call: Call<MeetingVO>, response: Response<MeetingVO>) {
+                if (response.isSuccessful) {
+                    // 서버로부터 성공적으로 응답을 받았을 떄의 처리
+                    Log.d("CreateMeeting",response.toString())
+                    Toast.makeText(this@CreateMeetingActivity,"모임이 생성되었습니다.", Toast.LENGTH_SHORT).show()
+                    Log.d("CreateMeetingm",meetingVO.toString())
+                    Log.d("CreateMeetingm1",response.body().toString())
+                    // 모임 생성 후 내 모임 창으로 이동
+                    val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
+                    intent.putExtra("CreateMeeting", response.body())
+                    // setResult(RESULT_OK, intent)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    //서버로부터 에러 응답을 받았을때 처리
+                    Toast.makeText(this@CreateMeetingActivity,"모임이 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<MeetingVO>, t: Throwable) {
+                // 통신 실패 시 처리
+                Log.d("CreateMeeting","서버 연결 실패",t)
+            }
+        })
+    }
 }
