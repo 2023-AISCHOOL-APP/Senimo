@@ -50,5 +50,8 @@ interface ApiService {
                @Field("user_gu") userGu: String,
                @Field("user_dong") userDong: String,
                @Field("user_introduce") userIntroduce: String?): Call<SignUpResVO>
+    @FormUrlEncoded
+    @POST("/checkUserId")
+    fun checkId(@Field("user_id") userId: String): Call<SignUpResVO>
 }
 
