@@ -59,18 +59,13 @@ class LoginActivity : AppCompatActivity() {
 
   fun loginUser(userId: String, userPw: String){
 
-//    val userId = binding.etLoginId.text.toString()
-//    val userPw = binding.etLoginPw.text.toString()
-
     val service = Server(this).service
     val call = service.loginUser(userId, userPw)
     call.enqueue(object : Callback<TokenResponse> {
       override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
         Log.d("LoginInfo", "Response: $response")
         if (response.isSuccessful) {
-
           response.body()?.let { tokens ->
-            // 여기서 조건문을 추가합니다.
             if (tokens.accessToken != null && tokens.refreshToken != null && tokens.rows == "success") {
               Log.d("LoginInfoTokens", tokens.toString())
               Log.d("LoginInfo", "Access Token: ${tokens.accessToken}")
@@ -91,17 +86,6 @@ class LoginActivity : AppCompatActivity() {
             } else {
               Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
             }
-//=======
-//          val LoginResVO = response.body()
-//          if (LoginResVO != null && LoginResVO.rows == "success") {
-//            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
-//            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//            startActivity(intent)
-//            finishAffinity()
-//          } else {
-//            Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
-//>>>>>>> d5779f6404859dcb3a0a0721f7b18548ec190d50
-
           }
         } else {
           Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
