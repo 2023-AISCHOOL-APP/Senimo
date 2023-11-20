@@ -39,7 +39,8 @@ class LoginActivity : AppCompatActivity() {
     this.onBackPressedDispatcher.addCallback(this, callback)
 
     binding.btnLoginL.setOnClickListener {
-      //
+
+      // 임시로 서버가 안될때 그다음페이지로 넘어가게 넣어놓음
 //      val intent = Intent(this@LoginActivity, MainActivity::class.java)
 //      startActivity(intent)
 //      finishAffinity()
@@ -67,6 +68,7 @@ class LoginActivity : AppCompatActivity() {
       override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
         Log.d("LoginInfo", "Response: $response")
         if (response.isSuccessful) {
+
           response.body()?.let { tokens ->
             // 여기서 조건문을 추가합니다.
             if (tokens.accessToken != null && tokens.refreshToken != null && tokens.rows == "success") {
@@ -89,6 +91,17 @@ class LoginActivity : AppCompatActivity() {
             } else {
               Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
             }
+//=======
+//          val LoginResVO = response.body()
+//          if (LoginResVO != null && LoginResVO.rows == "success") {
+//            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
+//            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//            startActivity(intent)
+//            finishAffinity()
+//          } else {
+//            Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
+//>>>>>>> d5779f6404859dcb3a0a0721f7b18548ec190d50
+
           }
         } else {
           Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()

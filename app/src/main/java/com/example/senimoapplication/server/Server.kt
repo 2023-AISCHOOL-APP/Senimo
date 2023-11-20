@@ -9,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
+
 //class Server {
 //    val retrofit = Retrofit.Builder()
 //        .baseUrl("https://improved-sadly-snake.ngrok-free.app") // 도운IP
@@ -24,7 +25,9 @@ class Server(private val context: Context) {
             .build()
 
         Retrofit.Builder()
-            .baseUrl("https://improved-sadly-snake.ngrok-free.app") // 서버 URL
+            .baseUrl("https://improved-sadly-snake.ngrok-free.app") // 원격서버 URL
+            //.baseUrl("http://192.168.70.207:3333") // 도운IP 같은 와이파로 접근할때
+            //.baseUrl("http://192.168.70.154:3333") // 희준IP
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

@@ -68,6 +68,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                 // 이미지뷰에 이미지 표시
                 binding.imgMButton.setImageURI(uri)
                 binding.imgMButton.visibility = ImageView.VISIBLE
+                binding.imgMIcon.visibility = ImageView.INVISIBLE
 
 
             } else {

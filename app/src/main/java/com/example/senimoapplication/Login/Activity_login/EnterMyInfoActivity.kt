@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -13,16 +14,23 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.Login.adapter.DongAdapter
 import com.example.senimoapplication.Login.adapter.GuAdapter
-import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityEnterMyInfoBinding
+import com.example.senimoapplication.server.Server
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class EnterMyInfoActivity : AppCompatActivity() {
 
   lateinit var DongAdapter: DongAdapter
   lateinit var binding: ActivityEnterMyInfoBinding
+
+  var selectedGu: String = ""
+  var selectedDong: String = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -94,11 +102,21 @@ class EnterMyInfoActivity : AppCompatActivity() {
             DongAdapter.updateData(westList)
           }
           else -> {
-            // 기본적으로 allList를 보여줌
+            // 기본적으로 gwangjuDistricts를 보여줌
             DongAdapter.updateData(gwangjuDistricts)
           }
         }
         binding.rvDong.smoothScrollToPosition(0)
+        selectedGu = item
+        Log.d("EnterMyInfoActivity", "Selected Gu: $selectedGu")
+      }
+    }
+
+    DongAdapter.itemClickListener = object  : DongAdapter.OnItemClickListener {
+      override fun onItemClick(position: Int) {
+        val item = DongAdapter.list[position]
+        selectedDong = item
+        Log.d("EnterMyInfoActivity", "Selected Dong: $selectedDong")
       }
     }
 
@@ -111,10 +129,19 @@ class EnterMyInfoActivity : AppCompatActivity() {
     }
     this.onBackPressedDispatcher.addCallback(this, callback)
 
+    // 버튼 클릭 시 회원가입
     binding.btnEnterInfo.setOnClickListener {
-      val intent = Intent(this@EnterMyInfoActivity, LoginActivity::class.java)
-      startActivity(intent)
-      finishAffinity()
+      val userId = intent.getStringExtra("user_Id").toString()
+      val userPw = intent.getStringExtra("user_Pw").toString()
+      val userName = binding.etNameS.text.toString()
+      val gender = binding.etGenderS.text.toString()
+      val birthYearSiring = binding.etYearS.text.toString()
+      val birthYear: Int = birthYearSiring.toIntOrNull() ?: 0
+      val userGu = selectedGu
+      val userDong = selectedDong
+      val userIntroduce = binding.etmlUserIntroS.text.toString()
+
+      signUpComplete(userId, userPw, userName, gender, birthYear, userGu, userDong, userIntroduce)
     }
 
     binding.imgBackToSignUp.setOnClickListener {
@@ -170,5 +197,38 @@ class EnterMyInfoActivity : AppCompatActivity() {
       }
     })
 
+  }
+
+  // 서버와 통신하여 회원가입하는 함수
+  fun signUpComplete(userId: String, userPw: String, userName: String, gender: String, birthYear: Int, userGu: String, userDong: String, userIntroduce: String?) {
+
+    val service = Server(this).service
+    val call = service.signUp(userId, userPw, userName, gender, birthYear, userGu, userDong, userIntroduce)
+
+    call.enqueue(object : Callback<SignUpResVO> {
+      override fun onResponse(call: Call<SignUpResVO>, response: Response<SignUpResVO>) {
+        Log.d("call", call.toString())
+        Log.d("SignUpInfo", response.toString())
+        if (response.isSuccessful) {
+          val signUpResponse = response.body()
+          if (signUpResponse != null && signUpResponse.rows == "success") {
+              Toast.makeText(this@EnterMyInfoActivity, "회원가입 성공", Toast.LENGTH_SHORT).show()
+              val intent = Intent(this@EnterMyInfoActivity, LoginActivity::class.java)
+              startActivity(intent)
+              finishAffinity()
+            } else {
+              Log.e("failed", "회원가입 실패 ${response.code()} - ${response.message()}")
+              Toast.makeText(this@EnterMyInfoActivity, "회원가입 실패", Toast.LENGTH_SHORT).show()
+          }
+        } else {
+          // 서버 응답이 실패했을 때의 처리
+          Toast.makeText(this@EnterMyInfoActivity, "서버 응답 실패", Toast.LENGTH_SHORT).show()
+        }
+      }
+
+      override fun onFailure(call: Call<SignUpResVO>, t: Throwable) {
+        Log.e("EnterMyInfoActivity", "네트워크 요청 실패", t)
+      }
+    })
   }
 }

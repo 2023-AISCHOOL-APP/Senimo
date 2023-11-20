@@ -2,6 +2,8 @@ package com.example.senimoapplication.server.Retrofit
 
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
+import com.example.senimoapplication.Login.VO.LoginResVO
+import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.server.Token.TokenResponse
 import retrofit2.Call
@@ -41,8 +43,18 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/login")
     fun loginUser(@Field("user_id") userId: String,
-                  @Field("user_pw") userPw: String):Call<TokenResponse>//Call<LoginResVO>
+                  @Field("user_pw") userPw: String):Call<TokenResponse> //Call<LoginResVO>
 
+    @FormUrlEncoded
+    @POST("/signup")
+    fun signUp(@Field("user_id") userId: String,
+               @Field("user_pw") userPw: String,
+               @Field("user_name") userName: String,
+               @Field("gender") gender: String,
+               @Field("birth_year") birthYear: Int,
+               @Field("user_gu") userGu: String,
+               @Field("user_dong") userDong: String,
+               @Field("user_introduce") userIntroduce: String?): Call<SignUpResVO>
 }
 
 

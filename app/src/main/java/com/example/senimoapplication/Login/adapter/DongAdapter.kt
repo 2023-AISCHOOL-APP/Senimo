@@ -15,13 +15,14 @@ import okhttp3.internal.addHeaderLenient
 class DongAdapter(val layout: Int, var list: ArrayList<String>, val context: Context) : RecyclerView.Adapter<DongAdapter.ViewHolder>() {
 
   val inflater = LayoutInflater.from(context)
+  var selectedPosition = -1
+//  var selectedDong: String = ""
 
   interface OnItemClickListener {
-    fun onItemClick(position: Int) {}
+    fun onItemClick(position: Int)
   }
 
   var itemClickListener: OnItemClickListener? = null
-  var selectedPosition = -1
 
   inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
     val tvDong = view.findViewById<TextView>(R.id.tvDong)
@@ -46,7 +47,7 @@ class DongAdapter(val layout: Int, var list: ArrayList<String>, val context: Con
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.tvDong.text = list[position]
 
-    val selectedColor = ContextCompat.getColor(context, R.color.Dong)
+    val selectedColor = ContextCompat.getColor(context, R.color.main)
     val selectedTextColor = ContextCompat.getColor(context, R.color.white)
     val nonSelectedColor = ContextCompat.getColor(context, R.color.white)
     val nonSelectedTextColor = ContextCompat.getColor(context, R.color.txt_gray80)
@@ -71,5 +72,10 @@ class DongAdapter(val layout: Int, var list: ArrayList<String>, val context: Con
 //    list.addAll(newList)
     list = ArrayList(newList)
     notifyDataSetChanged()
+  }
+
+  // 선택한 동이름을 빼오기위한 함수
+  fun getSelectedDongName(): String {
+    return list[selectedPosition]
   }
 }

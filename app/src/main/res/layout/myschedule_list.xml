@@ -25,35 +25,24 @@
         android:backgroundTint="#B87874"
         android:insetTop="0dp"
         android:insetBottom="0dp"
+        android:visibility="visible"
         app:cornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/button6"
         app:layout_constraintStart_toStartOf="@+id/button6"
         app:layout_constraintTop_toTopOf="@+id/button6" />
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/Img_M_Meeting"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/tea_img"
         app:layout_constraintBottom_toBottomOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="@+id/button4"
         app:layout_constraintStart_toStartOf="@+id/button4"
-        app:layout_constraintTop_toTopOf="@+id/button4">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            app:cardCornerRadius="15dp">
-
-            <ImageView
-                android:id="@+id/Img_M_Meeting"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/tea_img"
-                app:srcCompat="@drawable/tea_img" />
-
-        </androidx.cardview.widget.CardView>
-    </RelativeLayout>
+        app:layout_constraintTop_toTopOf="@+id/button4"
+        app:shapeAppearanceOverlay="@style/RoundedScheduledProfileComment" />
 
     <TextView
         android:id="@+id/tv_M_ScheduleTitle"
