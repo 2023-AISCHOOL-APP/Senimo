@@ -21,6 +21,8 @@ import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.Common.RecyclerItemClickListener
+import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
+import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.server.Retrofit.ApiService
@@ -80,8 +82,12 @@ class HomeFragment : Fragment() {
 
 
         binding.tvMoveEdit.setOnClickListener {
-            val intent = Intent(view.context, MakeScheduleActivity::class.java)
+            val intent = Intent(view.context, CreateMeetingActivity::class.java)
+            intent.putExtra("MeetingVO", clickedMeeting)
+            intent.putExtra("title", "모임 정보 수정")
+            intent.putExtra("btnTitle", "모임 정보 수정하기")
             startActivity(intent)
+            Log.d("click", "모임 수정페이지로 값을 전송합니다. ${clickedMeeting}")
         }
 
 
