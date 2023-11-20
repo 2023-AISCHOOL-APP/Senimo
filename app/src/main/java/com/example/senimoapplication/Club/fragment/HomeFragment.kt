@@ -36,16 +36,18 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     val ClubInfoList: ArrayList<ClubInfoVO> = ArrayList()
     var clickedMeeting: MeetingVO? = null // MeetingVO? 타입으로 선언
+    var createMeeting: MeetingVO? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         // 이제 clickedMeeting 객체를 사용하여 모임 정보를 화면에 표시하거나 다른 작업을 수행할 수 있습니다.
-        clickedMeeting =
-            activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting") // Parcelable로 받음
+        clickedMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting") // Parcelable로 받음
+        createMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("CreateMeeting") // Parcelable로 받음
         //clickedMeetinghome = activity?.intent?.getParcelableArrayListExtra("clickedMeetinghome") ?: ArrayList()
         Log.d("getclickedMeetinghome", clickedMeeting.toString())
+        // 현재 club_code랑 userId는 안받고 있음
 
         val view = binding.root
 
@@ -186,44 +188,70 @@ class HomeFragment : Fragment() {
 
     private fun fetchClubInfo() {
 
-        val service = Server().service
-        clickedMeeting?.let { meeting ->
-            val clubCode = meeting.club_code
-            val call = service.getClubInfo(clubCode)
+        val service = Server(requireContext()).service
+        if (createMeeting != null) {
+            Log.d("fetchClubInfo_createMeeting", createMeeting.toString())
+            //MeetingVO(gu=광산구, title=헬스클럽, content=인생은 100세 시대 운동을 하자!!, keyword=자기계발, attendance=0, allMember=20, imageUri=https://improved-sadly-snake.ngrok-free.app/uploads/IMG_20231119_094239.jpg, club_code=, userId=)
+            displayMeetingInfo(createMeeting!!)
+            //createMeeting = null // createMeeting 초기화해서 모임정보 눌렀을떄 안겹치게
+        } else {
+            clickedMeeting?.let { meeting ->
+                val clubCode = meeting.club_code
+                val call = service.getClubInfo(clubCode)
 
-            call.enqueue(object : Callback<ClubInfoVO> {
-                override fun onResponse(call: Call<ClubInfoVO>, response: Response<ClubInfoVO>) {
-                    Log.d("ClubInfo", response.toString())
-                    if (response.isSuccessful) {
-                        if (response.body() != null) {
-                            Log.d("ClubInfo 응답 성공", response.body().toString())
-                            response.body()?.let { clubInfos ->
-                                //binding.clubImage.setImageURI(clubInfo.clubImg)
-                                binding.tvMemberAllNum.text = "/${clubInfos.maxCnt}명"
-                                binding.tvMemberNum.text = "${clubInfos.joinedUserCnt}"
-                                binding.tvClubNameTitle.text = clubInfos.clubName
-                                binding.tvClubLoca.text = clubInfos.clubLocation
-                                binding.tvClubIntro.text = clubInfos.clubIntroduce
-                                Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
-                                    .load(clubInfos.clubImageUri) // MeetingVO 객체의 imageUri
-                                    .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
-                                    .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
-                                    .into(binding.clubImage) // 이미지를 표시할 ImageView
+                call.enqueue(object : Callback<ClubInfoVO> {
+                    override fun onResponse(
+                        call: Call<ClubInfoVO>,
+                        response: Response<ClubInfoVO>
+                    ) {
+                        Log.d("ClubInfo", response.toString())
+                        if (response.isSuccessful) {
+                            if (response.body() != null) {
+                                Log.d("ClubInfo 응답 성공", response.body().toString())
+                                response.body()?.let { clubInfos ->
+                                    //binding.clubImage.setImageURI(clubInfo.clubImg)
+                                    binding.tvMemberAllNum.text = "/${clubInfos.maxCnt}명"
+                                    binding.tvMemberNum.text = "${clubInfos.joinedUserCnt}"
+                                    binding.tvClubNameTitle.text = clubInfos.clubName
+                                    binding.tvClubLoca.text = clubInfos.clubLocation
+                                    binding.tvClubIntro.text = clubInfos.clubIntroduce
+                                    binding.tvKeyword.text = clubInfos.keywordName
+                                    Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
+                                        .load(clubInfos.clubImageUri) // MeetingVO 객체의 imageUri
+                                        .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
+                                        .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
+                                        .into(binding.clubImage) // 이미지를 표시할 ImageView
+                                }
+                            } else {
+                                Log.e("HomFragment", "서버 에러: ${response.code()}")
                             }
-                        } else {
-                            Log.e("HomFragment", "서버 에러: ${response.code()}")
                         }
                     }
-                }
 
-                override fun onFailure(call: Call<ClubInfoVO>, t: Throwable) {
-                    Log.e("HomeFragment", "네트워크 요청 실패", t)
-                }
-            })
-        } ?: run {
-            // clickedMeeting이 null인 경우의 처리
-            Log.e("HomeFragment", "clickedMeeting이 null입니다.")
+                    override fun onFailure(call: Call<ClubInfoVO>, t: Throwable) {
+                        Log.e("HomeFragment", "네트워크 요청 실패", t)
+                    }
+                })
+            } ?: run {
+                // clickedMeeting이 null인 경우의 처리
+                Log.e("HomeFragment", "clickedMeeting이 null입니다.")
+            }
+
         }
-
     }
+
+    private fun displayMeetingInfo(meeting: MeetingVO) {
+        binding.tvMemberAllNum.text = "/${meeting.allMember}명"
+        binding.tvMemberNum.text = "${meeting.attendance}"
+        binding.tvClubNameTitle.text = meeting.title
+        binding.tvClubLoca.text = meeting.gu
+        binding.tvClubIntro.text = meeting.content
+        binding.tvKeyword.text = meeting.keyword
+        Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
+            .load(meeting.imageUri) // MeetingVO 객체의 imageUri
+            .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
+            .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
+            .into(binding.clubImage) // 이미지를 표시할 ImageView
+    }
+
 }

@@ -20,8 +20,9 @@ router.get('/getMeetings', (req, res) => {
     c.club_introduce, 
     COUNT(j.user_id) AS attend_user_cnt, 
     c.max_cnt, 
-    CONCAT('${config.baseURL}/uploads/', c.club_img) AS club_img_url ,
-    k.keyword_name
+    CONCAT('${config.baseURL}/uploads/', c.club_img) AS club_img ,
+    k.keyword_name,
+    c.user_id
 FROM 
     tb_club c
 LEFT JOIN 

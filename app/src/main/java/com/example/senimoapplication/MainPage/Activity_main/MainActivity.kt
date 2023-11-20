@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.fragment.ChatFragment
 import com.example.senimoapplication.MainPage.VO_main.ChatListVO
@@ -16,6 +15,7 @@ import com.example.senimoapplication.MainPage.fragment_main.HomeMainFragment
 import com.example.senimoapplication.MainPage.fragment_main.MymeetingFragment
 import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.R
+import com.example.senimoapplication.server.Token.TokenManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +23,8 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
+    val tokenManager = TokenManager(this)
+    tokenManager.refreshTokenIfNeeded()
     // 바인딩 객체 획득
     binding = ActivityMainBinding.inflate(layoutInflater)
     val view = binding.root

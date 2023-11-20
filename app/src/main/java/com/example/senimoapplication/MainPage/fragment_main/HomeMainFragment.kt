@@ -22,6 +22,7 @@ import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.MainPage.adapter_main.MyScheduleAdapter
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,6 +35,7 @@ class HomeMainFragment : Fragment() {
     private lateinit var adapter: MeetingAdapter
     private lateinit var myScheduleAdapter: MyScheduleAdapter
     val MeetingList: ArrayList<MeetingVO> = ArrayList()
+    private lateinit var apiService: ApiService
 
     private var isScrolling = false
     private var isAtTop = true
@@ -91,7 +93,7 @@ class HomeMainFragment : Fragment() {
         // adapter.notifyDataSetChanged() // 어댑터 새로고침
 
 
-
+        //fetchMeetings() Q: 왜 clickedMeetinghome에서 userId값을 못불러올까
         // 메인페이지 인기 모임클릭 시 모임 홈 페이지로 이동
         rv_M_PopularMeeting.addOnItemTouchListener(
             RecyclerItemClickListener(
@@ -109,6 +111,7 @@ class HomeMainFragment : Fragment() {
                     }
                 })
         )
+
 
         // 카테고리 클릭 시 SearchActivity로 이동
 //        img_M_Excercise.setOnClickListener {
@@ -244,10 +247,11 @@ class HomeMainFragment : Fragment() {
 //            .baseUrl("http://192.168.70.234:3000") // 실제 서버 주소
 //            .addConverterFactory(GsonConverterFactory.create())
 //            .build()
-        val retrofit = Server().retrofit
+//        val retrofit = Server().retrofit
+
 
         // 서버에 요청을 보낼 '전화기'를 만들어요.
-        val service = Server().service
+        val service = Server(requireContext()).service
         // '전화'를 걸어요. 서버에 데이터를 달라고 요청해요.
         service.getMeetings().enqueue(object : Callback<List<MeetingVO>> {
             // 서버에서 답이 오면 이 부분이 실행돼요.

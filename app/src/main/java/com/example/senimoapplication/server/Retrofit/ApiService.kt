@@ -2,8 +2,8 @@ package com.example.senimoapplication.server.Retrofit
 
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
-import com.example.senimoapplication.Login.VO.LoginResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
+import com.example.senimoapplication.server.Token.TokenResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -25,6 +25,10 @@ interface ApiService {
 //    @GET("/photos")
 //    fun getPhotos(): Call<List<Photo>> // 서버에서 사진 목록을 가져오는 함수입니다.
 
+    @FormUrlEncoded
+    @POST("/refreshToken") // 새로운 액세스 토큰 요청
+    fun refreshToken(@Field("refreshToken") refreshToken: String): Call<TokenResponse>
+
     @GET("/getSche_intro/{sche_code}")
     fun getScheIntro(@Path("sche_code") sche_code: String): Call<ScheduleVO> // 특정 일정 ID를 사용하여 상세 정보 가져오기
 
@@ -32,12 +36,14 @@ interface ApiService {
     fun getClubInfo(@Path("club_code") club_code: String): Call<ClubInfoVO>
 
     @POST("/postcreateMeeting")
-    fun createMeeting(): Call<Void>
+    fun createMeeting(@Body meetingVO: MeetingVO): Call<MeetingVO>
 
     @FormUrlEncoded
     @POST("/login")
     fun loginUser(@Field("user_id") userId: String,
-                  @Field("user_pw") userPw: String): Call<LoginResVO>
+                  @Field("user_pw") userPw: String):Call<TokenResponse>//Call<LoginResVO>
 
 }
+
+
 
