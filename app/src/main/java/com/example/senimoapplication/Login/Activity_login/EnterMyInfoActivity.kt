@@ -150,31 +150,6 @@ class EnterMyInfoActivity : AppCompatActivity() {
       finish()
     }
 
-    // 회원 소개글 글자 수 제한
-//    var isUserIntroLimitExceeded = false
-//
-//    binding.etmlUserIntroS.addTextChangedListener(object  : TextWatcher{
-//      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//        val currentLength = s?.length ?: 0
-//        if (currentLength >= 300) {
-//          Toast.makeText(this@EnterMyInfoActivity, "300자 이내로 입력해주세요.", Toast.LENGTH_SHORT).show()
-//          binding.etmlUserIntroS.text.delete(start, start+count)
-//          isUserIntroLimitExceeded = true
-//        }else{
-//          isUserIntroLimitExceeded = false
-//        }
-//      }
-//
-//      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//
-//      }
-//
-//      override fun afterTextChanged(s: Editable?) {
-//        val currentLength = s?.length ?:0
-//        binding.tvMLetterCnt3.text = currentLength.toString()
-//      }
-//    })
-
 
     // 회원 소개글 글자 수 제한
     binding.etmlUserIntroS.addTextChangedListener(object : TextWatcher {
