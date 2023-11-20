@@ -37,6 +37,9 @@ class LoginActivity : AppCompatActivity() {
     this.onBackPressedDispatcher.addCallback(this, callback)
 
     binding.btnLoginL.setOnClickListener {
+      val intent = Intent(this@LoginActivity, MainActivity::class.java)
+      startActivity(intent)
+      finishAffinity()
       val userId = binding.etLoginId.text.toString()
       val userPw = binding.etLoginPw.text.toString()
       loginUser(userId, userPw)

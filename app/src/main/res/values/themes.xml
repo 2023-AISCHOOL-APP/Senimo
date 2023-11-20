@@ -63,6 +63,27 @@
         <item name="color">@color/white</item>
     </style>
 
+    <!--모임생성 사진 스타일 -->
+    <style name="RoundedCreateMeetingProfileComment">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">18dp</item>
+        <item name="color">@color/txt_gray10</item>
+    </style>
+
+    <!--일정 등록 사진 스타일 -->
+    <style name="RoundedScheduleProfileComment">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">18dp</item>
+        <item name="color">@color/txt_gray10</item>
+    </style>
+
+    <!--일정 등록된 사진 스타일 -->
+    <style name="RoundedScheduledProfileComment">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">14dp</item>
+    </style>
+
+
     <!-- 옵션 메뉴 스타일 -->
     <style name="MenuStyle" parent="@style/Widget.AppCompat.PopupMenu">
         <item name="android:minWidth">130dp</item>

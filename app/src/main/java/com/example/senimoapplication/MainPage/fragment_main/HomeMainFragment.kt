@@ -63,7 +63,7 @@ class HomeMainFragment : Fragment() {
         val img_M_Financial = view.findViewById<ImageView>(R.id.img_M_Financial)
 
         // MyScheduleVO 객체 생성
-        val mySchedule = MyScheduleVO("충장로 먹부림 모임", "일이삼사오육칠팔구십십일십이십삼십사", "2023-11-18T12:00:08.123Z")
+        val mySchedule = MyScheduleVO(R.drawable.tea_img,"충장로 먹부림 모임", "일이삼사오육칠팔구십십일십이십삼십사", "2023-11-18T12:00:08.123Z")
 
         // MyScheduleVO 객체를 리스트에 추가
         val myScheduleList = ArrayList<MyScheduleVO>()
