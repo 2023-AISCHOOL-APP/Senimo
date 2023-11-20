@@ -20,11 +20,22 @@
         <item name="tabTextAppearance">@color/txt_gray30</item>
     </style>
 
-    <!-- 모임페이지 일정 사진 스타일 -->
+    <!-- 메인 페이지 모임 사진 스타일 -->
     <style name="RoundedImageView">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopRight">15dp</item>
-        <item name="cornerSizeBottomRight">15dp</item>
+        <item name="cornerSizeTopRight">10dp</item>
+        <item name="cornerSizeBottomLeft">10dp</item>
+        <item name="cornerSizeBottomRight">10dp</item>
+        <item name="color">@color/white</item>
+    </style>
+
+    <!-- 모임페이지 일정 사진 스타일 -->
+    <style name="RoundedImageView2">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">10dp</item>
+        <item name="cornerSizeTopLeft">10dp</item>
+        <item name="cornerSizeBottomLeft">10dp</item>
+        <item name="cornerSizeBottomRight">10dp</item>
         <item name="color">@color/white</item>
     </style>
 

@@ -37,9 +37,11 @@ class LoginActivity : AppCompatActivity() {
     this.onBackPressedDispatcher.addCallback(this, callback)
 
     binding.btnLoginL.setOnClickListener {
+
       val intent = Intent(this@LoginActivity, MainActivity::class.java)
       startActivity(intent)
       finishAffinity()
+
       val userId = binding.etLoginId.text.toString()
       val userPw = binding.etLoginPw.text.toString()
       loginUser(userId, userPw)
@@ -65,6 +67,7 @@ class LoginActivity : AppCompatActivity() {
         if (response.isSuccessful) {
           val LoginResVO = response.body()
           if (LoginResVO != null && LoginResVO.rows == "success") {
+            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             startActivity(intent)
             finishAffinity()

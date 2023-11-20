@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../config/database');
-
+const config = require('../config/config')
 
 router.get('/get/Sche_intro/:sche_code', (req, res) => {
     console.log('result', req.body);
@@ -9,7 +9,7 @@ router.get('/get/Sche_intro/:sche_code', (req, res) => {
     const sche_code = req.params.sche_code;
     console.log("요청",req)
     console.log("요청받은코드",sche_code)
-    const query = `SELECT c.club_name, CONCAT('http://192.168.70.20:3333/uploads/', a.sche_img) AS sche_img_url , a.sche_title, a.sche_date, a.sche_location, a.fee, 
+    const query = `SELECT c.club_name, CONCAT('${config.baseURL}/uploads/', a.sche_img) AS sche_img_url , a.sche_title, a.sche_date, a.sche_location, a.fee, 
     COUNT(b.user_id) AS attend_user_cnt, a.max_num, a.sche_content
   FROM tb_schedule a
   LEFT JOIN tb_sche_joined_user b ON a.sche_code = b.sche_code

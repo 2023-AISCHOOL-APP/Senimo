@@ -3,6 +3,7 @@ package com.example.senimoapplication.server.Retrofit
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Login.VO.LoginResVO
+import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import retrofit2.Call
 import retrofit2.http.Body
@@ -32,12 +33,22 @@ interface ApiService {
     fun getClubInfo(@Path("club_code") club_code: String): Call<ClubInfoVO>
 
     @POST("/postcreateMeeting")
-    fun createMeeting(): Call<List<MeetingVO>>
+    fun createMeeting(): Call<Void>
 
     @FormUrlEncoded
     @POST("/login")
     fun loginUser(@Field("user_id") userId: String,
                   @Field("user_pw") userPw: String): Call<LoginResVO>
 
+    @FormUrlEncoded
+    @POST("/signup")
+    fun signUp(@Field("user_id") userId: String,
+               @Field("user_pw") userPw: String,
+               @Field("user_name") userName: String,
+               @Field("gender") gender: String,
+               @Field("birth_year") birthYear: Int,
+               @Field("user_gu") userGu: String,
+               @Field("user_dong") userDong: String,
+               @Field("user_introduce") userIntroduce: String?): Call<SignUpResVO>
 }
 

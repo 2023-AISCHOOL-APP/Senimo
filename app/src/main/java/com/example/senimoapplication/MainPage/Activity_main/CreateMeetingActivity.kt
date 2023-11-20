@@ -321,7 +321,7 @@ class CreateMeetingActivity : AppCompatActivity() {
         imageView.setImageResource(drawableResId)
     }
 
-    // 모임생성 요청 함수
+     //모임생성 요청 함수
 //    private fun createMeeting() {
 //        val service = Server().service
 //        service.createMeeting().enqueue(object : Callback<List<MeetingVO>> {
@@ -330,6 +330,13 @@ class CreateMeetingActivity : AppCompatActivity() {
 //                response: Response<List<MeetingVO>>
 //            ) {
 //                Log.d("CreateMeeting",response.toString())
+//                // 서버 응답이 null인지 확인합니다.
+//                if (response.isSuccessful) {
+//                    Log.d("CreateMeeting1",response.body().toString())
+//                    response.body()?.let { meeting ->
+//                        Meeting
+//                    }
+//                }
 //            }
 //        })
 //

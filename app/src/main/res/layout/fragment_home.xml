@@ -157,7 +157,7 @@
 
             <TextView
                 android:id="@+id/tvScheduleTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="20dp"
@@ -173,11 +173,11 @@
                 android:id="@+id/rvSchedule"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="@+id/tvScheduleTitle"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/tvScheduleTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tvScheduleTitle">
 
@@ -187,9 +187,9 @@
                 android:id="@+id/btnNewSchedule"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/button_shape"
                 android:fontFamily="@font/pretendard_semibold"
                 android:insetBottom="0dp"
@@ -199,9 +199,9 @@
                 android:textColor="@color/main"
                 android:textSize="18sp"
                 app:cornerRadius="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/rvSchedule"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/rvSchedule"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rvSchedule" />
 
             <View

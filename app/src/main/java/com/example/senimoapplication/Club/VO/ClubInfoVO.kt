@@ -3,10 +3,8 @@ package com.example.senimoapplication.Club.VO
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-
 data class ClubInfoVO(
     // 모임명, 이미지, 전체회원수, 정원, 카테고리, 모임소개, 활동지역
-
     @SerializedName("club_img_url")
     var clubImageUri: String? = null, // 이미지 경로를 String 타입으로 저장
     @SerializedName("joined_user_cnt")
@@ -20,16 +18,10 @@ data class ClubInfoVO(
     @SerializedName("keyword_name")
     val keywordName : String,
     @SerializedName("club_introduce")
-    val clubIntroduce : String,
+    val clubIntroduce : String? = null,
+    @SerializedName("user_id")
+    val clubStaff : MemberVO
 
-
-//    val clubImg : String="",
-//    val joinedUserCnt : Int =0,
-//    val maxCnt : Int=0,
-//    val clubName : String="",
-//    val clubLocation : String="",
-//    val keywordName : String="",
-//    val clubIntroduce : String=""
 
     ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -40,6 +32,7 @@ data class ClubInfoVO(
         keywordName = parcel.readString() ?:"",
         clubLocation = parcel.readString() ?: "",
         clubIntroduce = parcel.readString() ?:"",
+        clubStaff = parcel.readParcelable(MemberVO::class.java.classLoader) ?: MemberVO()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -52,6 +45,7 @@ data class ClubInfoVO(
         parcel.writeString(clubLocation)
         parcel.writeString(keywordName)
         parcel.writeString(clubIntroduce)
+        parcel.writeParcelable(clubStaff, flags)
     }
 
     override fun describeContents(): Int {

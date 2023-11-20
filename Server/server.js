@@ -10,7 +10,9 @@ const userRouter = require('./routes/user');
 
 app.use(cors())
 
-app.set('port', process.env.PORT || 3333);
+//app.set('port', process.env.PORT || 3333);
+// ngrok tunnel --label edge=edghts_2YKdAEOOgOIr0zDkBYxQMo8mcyg http://localhost:80
+app.set('port', process.env.PORT || 80);
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', appMainRouter)
