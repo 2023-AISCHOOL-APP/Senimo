@@ -129,7 +129,7 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         Glide.with(context)
             .load(imageUrl)
             .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
-            .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
+            .error(R.drawable.ic_meeting_profile) // 로딩 실패 시 표시될 이미지
             .into(holder.Img_M_Meeting)
     }
 

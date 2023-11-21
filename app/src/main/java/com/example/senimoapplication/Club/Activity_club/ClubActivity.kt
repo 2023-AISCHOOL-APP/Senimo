@@ -3,17 +3,26 @@ package com.example.senimoapplication.Club.Activity_club
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
+import com.example.senimoapplication.Club.VO.InterestedResVO
 import com.example.senimoapplication.Club.fragment.BoardFragment
 import com.example.senimoapplication.Club.fragment.ChatFragment
 import com.example.senimoapplication.Club.fragment.GalleryFragment
 import com.example.senimoapplication.Club.fragment.HomeFragment
 import com.example.senimoapplication.Club.adapter.FragmentAdapter
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
+import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
+import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.UserData.userId
 import com.google.android.material.tabs.TabLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.http.FieldMap
 
 class ClubActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +45,17 @@ class ClubActivity : AppCompatActivity() {
         val img = findViewById<ImageView>(R.id.imgLike)
         val tvClubName = findViewById<TextView>(R.id.tvClubName)
 
-
-
+        // 모임명 표시
+        val clickedMeeting = intent.getParcelableExtra<MeetingVO>("clickedMeeting")
+        if (clickedMeeting != null) {
+            Log.d("ClubActivity", clickedMeeting.toString())
+            val title = clickedMeeting.title
+            tvClubName.text = if (title.length > 13) {
+                title.substring(0, 13) + "..."
+            } else {
+                title
+            }
+        }
 
 
         // 1) 앱 바 기능 구현
@@ -54,16 +72,47 @@ class ClubActivity : AppCompatActivity() {
         var cnt = 0
         img.setOnClickListener {
             cnt++
-            if (cnt%2 == 1) {
-                img.setImageResource(R.drawable.ic_fullheart)
-                // 서버로 데이터 보내기
-            }else{
-                img.setImageResource(R.drawable.ic_lineheart)
-                // 서버로 데이터 보내기
+            val clickedMeeting = intent.getParcelableExtra<MeetingVO>("clickedMeeting")
+            val userId = clickedMeeting?.userId.toString()
+            val clubCode = clickedMeeting?.club_code.toString()
+
+            if (clickedMeeting != null) {
+                val clubCode = clickedMeeting.club_code
+                val params = mapOf("club_code" to clubCode, "user_id" to userId)
+
+                if (cnt % 2 == 1) {
+                    img.setImageResource(R.drawable.ic_fullheart)
+                } else {
+                    img.setImageResource(R.drawable.ic_lineheart)
+                }
+                updateInterestStatus(params)
             }
         }
+    }
 
+    fun updateInterestStatus(@FieldMap params: Map<String, String>) {
+        val service = Server(this).service
+        service.updateInterestStatus(params).enqueue(object : Callback<InterestedResVO> {
+            override fun onResponse(call: Call<InterestedResVO>, response: Response<InterestedResVO>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    if (apiResponse?.status == true) {
+                        // 성공적으로 업데이트되었을 때의 처리
+                        Log.d("InterestedUpdate", "관심 모임 설정 성공")
+                    } else {
+                        // 서버로부터 실패 응답을 받았을 때의 처리
+                        Log.d("InterestedUpdate", "관심 모임 설정 실패")
+                    }
+                } else {
+                    // 서버로부터 에러 응답을 받았을 때의 처리
+                    Log.d("InterestedUpdate", "서버에러 - 관심 모임 설정 실패")
+                }
+            }
 
-
+            override fun onFailure(call: Call<InterestedResVO>, t: Throwable) {
+                // 통신 실패 시 처리
+                Log.e("FavoriteUpdate", "통신 실패", t)
+            }
+        })
     }
 }

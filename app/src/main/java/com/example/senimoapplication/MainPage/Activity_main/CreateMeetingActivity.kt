@@ -1,5 +1,6 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -16,9 +17,11 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
+import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityCreateMeetingBinding
 import com.example.senimoapplication.server.Server
@@ -45,163 +48,267 @@ class CreateMeetingActivity : AppCompatActivity() {
     private var selfImprovementChecked = false
     private var financialChecked = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityCreateMeetingBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
+        val intent_meetingVO: MeetingVO? = intent.getParcelableExtra("MeetingVO")
+        val title: String? = intent.getStringExtra("title")
+        val btnTitle: String? = intent.getStringExtra("btnTitle")
 
-        // 사진 1장 선택
-        val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the
-            // photo picker.
-            if (uri != null) {
-                // 이미지를 선택한 후에 URI를 변수에 저장
-                imageUri = uri
-                imageName = getFileName(uri) // 파일이름 추출
-                Glide.with(this).load(uri).into(binding.imgMButton)
-                Log.d("PhotoPicker_main","Selected URI: $uri")
+        Log.d("click", "$intent_meetingVO")
+        setupKeywordImageViews()
+        if (intent_meetingVO != null) {
+            // 모임 수정하기
+            binding.tvMToptitle.text = title
+            binding.btnSetMeeting.text = btnTitle
+            setSelectedKeyword(intent_meetingVO.keyword)
+            intent_meetingVO.title?.let { title ->
+                binding.etMeetingName.text = Editable.Factory.getInstance().newEditable(title)
+            }
+            intent_meetingVO.content?.let { content ->
+                binding.etMeetingIntro.text = Editable.Factory.getInstance().newEditable(content)
+            }
 
-                // 이미지뷰에 이미지 표시
-                binding.imgMButton.setImageURI(uri)
-                binding.imgMButton.visibility = ImageView.VISIBLE
-                binding.imgMIcon.visibility = ImageView.INVISIBLE
+            // 지역 선택 스피너
+            val spinner = findViewById<Spinner>(R.id.sp_M_gulist)
+            val districtArray = resources.getStringArray(R.array.districts)
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, districtArray)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+            intent_meetingVO?.gu?.let { selectedDistrict ->
+                val position = districtArray.indexOf(selectedDistrict)
+                if (position >= 0) {
+                    spinner.setSelection(position)
+                }
+            }
 
+            // 인원 수
+            binding.tvMAllMember.text = intent_meetingVO.allMember.toString()
+            setClubMembers { updatedMembers -> binding.tvMAllMember.text = updatedMembers.toString() }
+            // 뒤로가기 버튼
+            binding.ImgMBackbtnToFrag2.setOnClickListener { finish() }
 
-            } else {
-                Log.d("PhotoPicker_main", "No media selected")
+            // 사진 세팅
+            binding.imgMButton.visibility = ImageView.VISIBLE
+            binding.imgMIcon.visibility = ImageView.INVISIBLE
+
+            // 이미지가 존재하는 경우에만 로드
+            if (!intent_meetingVO.imageUri.isNullOrEmpty()) {
+                Glide.with(this).load(intent_meetingVO.imageUri).into(binding.imgMButton)
+            }
+            // 이미지 선택
+            val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    imageUri = uri
+                    imageName = getFileName(uri) // 파일이름 추출
+                    intent_meetingVO.imageUri = uri.toString()
+                    Glide.with(this).load(uri).into(binding.imgMButton)
+                    Log.d("PhotoPicker_main", "선택된 URI: $uri")
+                } else {
+                    Glide.with(this).load(intent_meetingVO.imageUri).into(binding.imgMButton)
+                    binding.imgMIcon.visibility = ImageView.VISIBLE
+                    Log.d("PhotoPicker_main", "미디어가 선택되지 않았습니다.")
+                }
+            }
+            binding.imgMButton.setOnClickListener {
+                pickMediaMain.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
+            // 수정 내용 취합 및 전송
+            binding.btnSetMeeting.setOnClickListener {
+                val selectedGu = binding.spMGulist.selectedItem.toString()
+                if (selectedKeyword != null) {
+                    val meetingVO =
+                        MeetingVO(
+                            gu = selectedGu,
+                            title = binding.etMeetingName.text.toString(),
+                            content = binding.etMeetingIntro.text.toString(),
+                            keyword = selectedKeyword!!,
+                            attendance = intent_meetingVO.attendance,
+                            allMember = binding.tvMAllMember.text.toString().toInt(),
+                            imageUri = imageName.toString(), // 이미지 URI 사용
+                            club_code = intent_meetingVO.club_code, // db에서 uuid로 생성된 값으로 저장되서 MeetingVO형식 맞추기위해 사용한값
+                            userId = UserData.userId // 로그인한 사용자 id 정보 받아와야함
+                        )
+                    Log.d("click 모임 수정 정보 전송", meetingVO.toString())
+
+                    modifyMeeting(meetingVO)
+                }
+            }
+
+        }
+        else {
+            // 모임 일정 등록
+            // 모임 이미지 선택
+            val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) {
+                    imageUri = uri
+                    imageName = getFileName(uri) // 파일이름 추출
+                    Glide.with(this).load(uri).into(binding.imgMButton)
+                    Log.d("PhotoPicker_main","Selected URI: $uri")
+                    binding.imgMButton.setImageURI(uri)
+                    binding.imgMButton.visibility = ImageView.VISIBLE
+                    binding.imgMIcon.visibility = ImageView.INVISIBLE
+                } else {
+                    Log.d("PhotoPicker_main", "No media selected")
+                }
+            }
+            binding.imgMButton.setOnClickListener {
+                pickMediaMain.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
+            // 지역 선택 스피너
+            val spinner = findViewById<Spinner>(R.id.sp_M_gulist)
+            val districtArray = resources.getStringArray(R.array.districts)
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, districtArray)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+
+            // 뒤로가기 버튼
+            binding.ImgMBackbtnToFrag2.setOnClickListener {
+                val intent = Intent(this@CreateMeetingActivity, MainActivity::class.java)
+                intent.putExtra("selected_tab", "tab2")  // "tab2"는 Fragment2를 나타냅니다
+                startActivity(intent)
+                finish()
+            }
+
+            // 모임명
+            binding.etMeetingName.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    // 입력 전 필요한 로직 (필요한 경우)
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // 입력 중 필요한 로직 (필요한 경우)
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    val currentLength = s?.length ?: 0
+                    binding.tvMLetterCnt1.text = "$currentLength"
+                    if (currentLength > 20) {
+                        binding.tvMLetterCnt1.setTextColor(
+                            ContextCompat.getColor(
+                                this@CreateMeetingActivity,
+                                R.color.point
+                            )
+                        )
+                        binding.tvMNameWarning.visibility = View.VISIBLE // 경고 메시지 표시
+                    } else {
+                        binding.tvMLetterCnt1.setTextColor(
+                            ContextCompat.getColor(
+                                this@CreateMeetingActivity,
+                                R.color.txt_gray70
+                            )
+                        )
+                        binding.tvMNameWarning.visibility = View.GONE // 경고 메시지 숨김
+                    }
+                }
+            })
+
+            // 모임 소개글
+            binding.etMeetingIntro.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    // 입력 전 필요한 로직 (필요한 경우)
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // 입력 중 필요한 로직 (필요한 경우)
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    val currentLength = s?.length ?: 0
+                    binding.tvMLetterCnt2.text = "$currentLength"
+                    if (currentLength > 300) {
+                        binding.tvMLetterCnt2.setTextColor(
+                            ContextCompat.getColor(
+                                this@CreateMeetingActivity,
+                                R.color.point
+                            )
+                        )
+                        binding.tvMIntroWarning.visibility = View.VISIBLE // 경고 메시지 표시
+                    } else {
+                        binding.tvMLetterCnt2.setTextColor(
+                            ContextCompat.getColor(
+                                this@CreateMeetingActivity,
+                                R.color.txt_gray70
+                            )
+                        )
+                        binding.tvMIntroWarning.visibility = View.GONE // 경고 메시지 숨김
+                    }
+                }
+            })
+
+            setSelectedKeyword("운동")
+            updateKeywordCheckState()
+
+            // 버튼 누르면 인원수 변경
+            setClubMembers { updatedMembers ->
+                binding.tvMAllMember.text = updatedMembers.toString()
+            }
+
+            binding.ImgMBackbtnToFrag2.setOnClickListener {
+                val intent = Intent(this@CreateMeetingActivity, MainActivity::class.java)
+                intent.putExtra("selected_tab", "M_tab2")
+                startActivity(intent)
+                finish()
+            }
+
+            // 모임 만들기 버튼 클릭 시 정보 취합하기
+            binding.btnSetMeeting.setOnClickListener {
+                val selectedGu = binding.spMGulist.selectedItem.toString()
+
+                if (selectedKeyword != null) {
+                    val meetingVO =
+                        MeetingVO(
+                            gu = selectedGu,
+                            title = binding.etMeetingName.text.toString(),
+                            content = binding.etMeetingIntro.text.toString(),
+                            keyword = selectedKeyword!!,
+                            attendance = 0, // 참석자수 0명 고정
+                            allMember = binding.tvMAllMember.text.toString().toInt(),
+                            imageUri = imageName.toString(), // 이미지 URI 사용
+                            club_code = "", // db에서 uuid로 생성된 값으로 저장되서 MeetingVO형식 맞추기위해 사용한값
+                            userId = UserData.userId // 로그인한 사용자 id 정보 받아와야함
+                        )
+                    Log.d("click CreateMeeting 기능",meetingVO.toString())
+                    sendMeetingInfo(meetingVO)
+                }
             }
         }
-
-        binding.imgMButton.setOnClickListener {
-            pickMediaMain.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+    // 모임 멤버 설정 함수
+    fun setClubMembers(onMemberChanged: (Int) -> Unit) {
+        var meetingMembers: Int = 10
+        binding.imgMPlus.setOnClickListener {
+            val updatedMembers = if (meetingMembers + 10 <= 30) meetingMembers + 10 else 30
+            meetingMembers = updatedMembers
+            onMemberChanged(updatedMembers)
         }
-
-        // 스피너 초기화
-        val spinner = findViewById<Spinner>(R.id.sp_M_gulist)
-
-        // stings.xml에서 문자열 배열을 가져오기   (광산구, 남구, 동구, 북구, 서구)
-        val districtArray = resources.getStringArray(R.array.districts)
-
-        // 어댑터 생성하고 스피너에 설정하기
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, districtArray)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+        binding.imgMMinus.setOnClickListener {
+            val updatedMembers = if (meetingMembers - 10 >= 10) meetingMembers - 10 else 0
+            meetingMembers = updatedMembers
+            onMemberChanged(updatedMembers)
+        }
 
         binding.ImgMBackbtnToFrag2.setOnClickListener {
             val intent = Intent(this@CreateMeetingActivity, MainActivity::class.java)
-            intent.putExtra("selected_tab","tab2")  // "tab2"는 Fragment2를 나타냅니다
+            intent.putExtra("selected_tab", "M_tab2")
             startActivity(intent)
             finish()
         }
-
-        // val setMeetingList : ArrayList<MeetingVO> = ArrayList()
-
-
-        // 회원 모임명 , 소개글 글자 수 제한
-
-        // 회원 모임명
-        binding.etMeetingName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // 입력 전 필요한 로직 (필요한 경우)
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // 입력 중 필요한 로직 (필요한 경우)
-            }
-            override fun afterTextChanged(s: Editable?) {
-                val currentLength = s?.length ?: 0
-                binding.tvMLetterCnt1.text = "$currentLength"
-                if (currentLength > 20) {
-                    binding.tvMLetterCnt1.setTextColor(ContextCompat.getColor(this@CreateMeetingActivity, R.color.main))
-                    binding.tvMNameWarning.visibility = View.VISIBLE // 경고 메시지 표시
-                } else {
-                    binding.tvMLetterCnt1.setTextColor(ContextCompat.getColor(this@CreateMeetingActivity, R.color.txt_gray70))
-                    binding.tvMNameWarning.visibility = View.GONE // 경고 메시지 숨김
-                }
-            }
-        })
-
-        // 회원 소개글
-        binding.etMeetingIntro.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // 입력 전 필요한 로직 (필요한 경우)
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // 입력 중 필요한 로직 (필요한 경우)
-            }
-            override fun afterTextChanged(s: Editable?) {
-                val currentLength = s?.length ?: 0
-                binding.tvMLetterCnt2.text = "$currentLength"
-                if (currentLength > 300) {
-                    binding.tvMLetterCnt2.setTextColor(ContextCompat.getColor(this@CreateMeetingActivity, R.color.main))
-                    binding.tvMIntroWarning.visibility = View.VISIBLE // 경고 메시지 표시
-                } else {
-                    binding.tvMLetterCnt2.setTextColor(ContextCompat.getColor(this@CreateMeetingActivity, R.color.txt_gray70))
-                    binding.tvMIntroWarning.visibility = View.GONE // 경고 메시지 숨김
-                }
-            }
-        })
-
-
-
-        // 이미지뷰 클릭 이벤트 처리
-        binding.imgMCheckExercise.setOnClickListener {
-            setSelectedKeyword("운동")
-        }
-
-        binding.imgMCheckHobby.setOnClickListener {
-            setSelectedKeyword("취미")
-        }
-
-        binding.imgMCheckConcert.setOnClickListener {
-            setSelectedKeyword("전시/공연")
-        }
-
-        binding.imgMCheckTrip.setOnClickListener {
-            setSelectedKeyword("여행")
-        }
-
-        binding.imgMCheckSelfimprovement.setOnClickListener {
-            setSelectedKeyword("자기계발")
-        }
-
-        binding.imgMCheckFinancial.setOnClickListener {
-            setSelectedKeyword("재테크")
-        }
-
-
-        // 버튼 누르면 인원 수 변경 시키기 (일정 참가자수 상한선 : 30명)
-        var meetingMembers : Int = 0
-        binding.imgMPlus.setOnClickListener {
-            if (meetingMembers < 30) {
-                meetingMembers += 10
-                if (meetingMembers > 30) {
-                    meetingMembers = 30
-                }
-                binding.tvMAllMember.text = meetingMembers.toString()
-            }
-        }
-
-        binding.imgMMinus.setOnClickListener {
-            if (meetingMembers > 0) {
-                meetingMembers -= 10
-                if (meetingMembers < 0) {
-                    meetingMembers = 0
-                }
-                binding.tvMAllMember.text = meetingMembers.toString()
-            }
-        }
-
-        binding.ImgMBackbtnToFrag2.setOnClickListener {
-            val intent = Intent(this@CreateMeetingActivity,MainActivity::class.java)
-            intent.putExtra("selected_tab","M_tab2")
-            startActivity(intent)
-            finish()
-        }
-
 
 
 
@@ -222,14 +329,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                         imageUri = imageName.toString(), // 이미지 URI 사용
                         club_code = "", // db에서 uuid로 생성된 값으로 저장되서 MeetingVO형식 맞추기위해 사용한값
                         userId = UserData.userId // 로그인한 사용자 id 정보 받아와야함
-                        // selectedGu,
-//                        binding.etMeetingName.text.toString(),
-//                        binding.etMeetingIntro.text.toString(),
-//                        meetingKeywords,
-//                        0,
-//                        binding.tvMAllMember.text.toString().toInt(),
-//                        binding.imgMButton.toString(),
-//                        binding.imgMButton.setImageResource(R.drawable.golf_img)
+
 
                     )
                 Log.d("CreateMeeting1",meetingVO.toString())
@@ -247,61 +347,28 @@ class CreateMeetingActivity : AppCompatActivity() {
 //                Toast.makeText(this@CreateMeetingActivity, "모임 생성에 실패하셨습니다", Toast.LENGTH_SHORT).show()
 //            }
 
-//            // 선택된 키워드를 담을 리스트
-//            val selectedKeywordList = ArrayList<String>()
-//
-//            if (exerciseChecked) {
-//                selectedKeywordList.add("운동")
-//            }
-//            if (hobbyChecked) {
-//                selectedKeywordList.add("취미")
-//            }
-//            if (concertChecked) {
-//                selectedKeywordList.add("전시/공연")
-//            }
-//            if (tripChecked) {
-//                selectedKeywordList.add("여행")
-//            }
-//            if (selfImprovementChecked) {
-//                selectedKeywordList.add("자기계발")
-//            }
-//            if (financialChecked) {
-//                selectedKeywordList.add("재테크")
-//            }
-
-//            // 선택된 키워드가 하나 이상인 경우에만 MeetingVO에 추가
-//            if (selectedKeywordList.isNotEmpty()) {
-//                val meetingKeywords = selectedKeywordList.joinToString("/")
-//                val meetingVO =
-//                    MeetingVO(
-//                        selectedGu,
-//                        binding.etMeetingName.text.toString(),
-//                        binding.etMeetingIntro.text.toString(),
-//                        meetingKeywords,
-//                        0,
-//                        binding.tvMAllMember.text.toString().toInt(),
-//                        binding.imgMButton.toString()
-////                        binding.imgMButton.setImageResource(R.drawable.golf_img)
-//                    )
-//
-//                // 결과를 설정하고 현재 액티비티를 종료
-//                val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
-//                intent.putExtra("meetingVO", meetingVO)
-//                // setResult(RESULT_OK, intent)
-//                startActivity(intent)
-//
-//                // 로그로 모임 정보 출력
-//                Log.d("CreateMeetingActivity", "새로운 모임 생성: $meetingVO")
-//                Toast.makeText(this@CreateMeetingActivity,"모임이 생성되었습니다",Toast.LENGTH_SHORT).show()
-//            } else {
-//                Toast.makeText(this@CreateMeetingActivity, "모임 생성에 실패하셨습니다", Toast.LENGTH_SHORT).show()
-//            }
-
-
-
 
         }
 
+
+    }
+
+    // 키워드 클릭 리스너
+    private fun setupKeywordImageViews() {
+        // 키워드와 해당하는 이미지뷰를 매핑
+        val keywordImageViewMap = mapOf(
+            binding.imgMCheckExercise to "운동",
+            binding.imgMCheckHobby to "취미",
+            binding.imgMCheckConcert to "전시/공연",
+            binding.imgMCheckTrip to "여행",
+            binding.imgMCheckSelfimprovement to "자기계발",
+            binding.imgMCheckFinancial to "재테크"
+        )
+
+        // 각 이미지뷰에 동일한 클릭 리스너 설정
+        keywordImageViewMap.forEach { (imageView, keyword) ->
+            imageView.setOnClickListener { setSelectedKeyword(keyword) }
+        }
     }
 
     // 선택된 키워드를 설정하고 UI를 업데이트하는 함수
@@ -341,7 +408,7 @@ class CreateMeetingActivity : AppCompatActivity() {
         return imageName
     }
 
-    //모임생성 요청 함수
+    //모임 생성 요청 함수
     private fun sendMeetingInfo(meetingVO: MeetingVO) {
         val service = Server(this).service
         service.createMeeting(meetingVO).enqueue(object : Callback<MeetingVO> {
@@ -371,7 +438,36 @@ class CreateMeetingActivity : AppCompatActivity() {
         })
     }
 
+    // 모임 수정 처리 함수
+    private fun modifyMeeting(meetingVO: MeetingVO) {
+        val service = Server(this).service
+        service.modifyMeeting(meetingVO).enqueue(object : Callback<modifyResult> {
+            override fun onResponse(call: Call<modifyResult>, response: Response<modifyResult>) {
+                if (response.isSuccessful) {
+                    val modifyResult = response.body()
+                    if (modifyResult != null && modifyResult.result) {
+                        Log.d("ModifyMeeting", "Response: ${response.body()}")
+                        Toast.makeText(this@CreateMeetingActivity, "모임 정보가 수정되었습니다.", Toast.LENGTH_SHORT).show()
 
+                        // 성공적으로 수정됐을 때 결과 반환
+                        val returnIntent = Intent()
+                        returnIntent.putExtra("CreateMeeting", meetingVO) // 수정된 MeetingVO 객체 반환
+                        setResult(Activity.RESULT_OK, returnIntent)
+                        finish()
+                    } else {
+                        Toast.makeText(this@CreateMeetingActivity, "모임 정보 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this@CreateMeetingActivity, "모임 정보 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<modifyResult>, t: Throwable) {
+                Log.d("ModifyMeeting", "서버 연결 실패: ${t.message}")
+                Toast.makeText(this@CreateMeetingActivity, "서버 연결 실패: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 
 
 }

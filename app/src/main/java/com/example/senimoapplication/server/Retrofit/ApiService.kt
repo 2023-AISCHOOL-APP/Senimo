@@ -1,14 +1,20 @@
 package com.example.senimoapplication.server.Retrofit
 
+import com.example.senimoapplication.Club.VO.AllMemberResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.MakeScheResVo
+import com.example.senimoapplication.Club.VO.InterestedResVO
+import com.example.senimoapplication.Club.VO.MemberRoleResVO
+import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
+import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
+import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -69,6 +75,19 @@ interface ApiService {
                        @Field("max_num") maxNum: Int,
                        @Field("fee") scheFee: Int,
                        @Field("sche_img") scheImg: String?): Call<MakeScheResVo>
+
+    @POST("/postModifyMeeting")
+    fun modifyMeeting(@Body meetingVO: MeetingVO) : Call<modifyResult>
+
+    @FormUrlEncoded
+    @POST("/updateInterestedClub")
+    fun updateInterestStatus(@FieldMap params: Map<String, String>): Call<InterestedResVO>
+
+    @POST("/getAllMembers/{clubCode}")
+    fun getAllMembers(@Path("clubCode") clubCode: String) : Call<AllMemberResVO>
+
+    @POST("/updateMemberRole")
+    fun updateMemberRole(@Body memberVO: MemberVO) : Call<MemberRoleResVO>
 
 }
 

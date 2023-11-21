@@ -163,7 +163,7 @@ class EnterMyInfoActivity : AppCompatActivity() {
         val currentLength = s?.length ?: 0
         binding.tvMLetterCnt3.text = "$currentLength"
         if (currentLength > 300) {
-          binding.tvMLetterCnt3.setTextColor(ContextCompat.getColor(this@EnterMyInfoActivity, R.color.main))
+          binding.tvMLetterCnt3.setTextColor(ContextCompat.getColor(this@EnterMyInfoActivity, R.color.point))
           binding.tvMUserIntroWarning.visibility = View.VISIBLE // 경고 메시지 표시
         } else {
           binding.tvMLetterCnt3.setTextColor(ContextCompat.getColor(this@EnterMyInfoActivity, R.color.txt_gray70))

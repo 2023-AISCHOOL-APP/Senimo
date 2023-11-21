@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    val tokenManager = TokenManager(this)
-    tokenManager.refreshTokenIfNeeded()
+//    val tokenManager = TokenManager(this)
+//    tokenManager.refreshTokenIfNeeded()
     // 바인딩 객체 획득
     binding = ActivityMainBinding.inflate(layoutInflater)
     val view = binding.root
