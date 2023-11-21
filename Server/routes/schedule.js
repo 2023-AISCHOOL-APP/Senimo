@@ -29,4 +29,23 @@ router.get('/get/Sche_intro/:sche_code', (req, res) => {
 });
 
 
+router.post('/makeSche', (req, res) => {
+  console.log('makeSche router', req.body);
+  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, sche_img } = req.body
+  const formattedDate = new Date(sche_date)
+
+  const makeScheSql = `insert into tb_schedule (club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, sche_img)
+    values(?,?,?,?,?,?,?,?)`
+  conn.query(makeScheSql, [club_code, sche_title, sche_content, formattedDate, sche_location, max_num, fee, sche_img], (err, rows) => {
+    console.log('일정 생성 : ', rows);
+    if (err) {
+      console.error('일정 생성 실패 : ', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('일정등록 성공');
+      res.json({ rows: 'success' });
+    }
+  });
+})
+
 module.exports = router;

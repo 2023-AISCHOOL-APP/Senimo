@@ -144,6 +144,9 @@ class HomeFragment : Fragment() {
         // 모임 일정 등록 액티비티로 이동
         binding.btnNewSchedule.setOnClickListener {
             val intent = Intent(view.context, MakeScheduleActivity::class.java)
+            val clubCode = clickedMeeting?.club_code.toString()
+            intent.putExtra("club_code", clubCode)
+            Log.d("club_code", clubCode)
             view.context.startActivity(intent)
         }
 

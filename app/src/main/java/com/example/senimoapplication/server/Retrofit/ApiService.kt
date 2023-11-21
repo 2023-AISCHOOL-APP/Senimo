@@ -1,8 +1,8 @@
 package com.example.senimoapplication.server.Retrofit
 
 import com.example.senimoapplication.Club.VO.ClubInfoVO
+import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.ScheduleVO
-import com.example.senimoapplication.Login.VO.LoginResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.server.Token.TokenResponse
@@ -13,7 +13,6 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-
 
 
 interface ApiService {
@@ -55,9 +54,22 @@ interface ApiService {
                @Field("user_gu") userGu: String,
                @Field("user_dong") userDong: String,
                @Field("user_introduce") userIntroduce: String?): Call<SignUpResVO>
+
     @FormUrlEncoded
     @POST("/checkUserId")
     fun checkId(@Field("user_id") userId: String): Call<SignUpResVO>
+
+    @FormUrlEncoded
+    @POST("/makeSche")
+    fun createSchedule(@Field("club_code") clubCode: String,
+                       @Field("sche_title") scheTitle: String,
+                       @Field("sche_content") scheContent: String,
+                       @Field("sche_date") scheDate: String,
+                       @Field("sche_location") scheLocation: String,
+                       @Field("max_num") maxNum: Int,
+                       @Field("fee") scheFee: Int,
+                       @Field("sche_img") scheImg: String?): Call<MakeScheResVo>
+
 }
 
 
