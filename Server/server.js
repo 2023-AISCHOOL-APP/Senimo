@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 
-const authController = require('./routes/token/authController')
+const authController = require('./token/authController')
 const appMainRouter = require('./routes/appMain');
 const clubMainRouter = require('./routes/clubMain');
 const scheduleRouter = require('./routes/schedule')
@@ -24,6 +24,7 @@ app.use('/', clubMainRouter)
 app.use('/', scheduleRouter)
 app.use('/', userRouter)
 app.use('/',createMeeting)
+
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');
 })
