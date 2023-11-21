@@ -11,7 +11,9 @@ const userRouter = require('./routes/user');
 const createMeeting = require('./routes/createMeeting')
 const modifyMeeting = require('./routes/modifyMeeting')
 const updateInterestedClub = require('./routes/updateInterestedClub')
-const postClubMember = require('./routes/postClubMember')
+const getAllMembers = require('./routes/getAllMembers')
+const updateMemberRole = require('./routes/updateMemberRole')
+
 app.use(cors())
 
 app.set('port', process.env.PORT || 3333);
@@ -28,7 +30,8 @@ app.use('/', userRouter)
 app.use('/',createMeeting)
 app.use('/', modifyMeeting)
 app.use('/', updateInterestedClub)
-app.use('/', postClubMember)
+app.use('/', getAllMembers)
+app.use('/', updateMemberRole)
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');
 })

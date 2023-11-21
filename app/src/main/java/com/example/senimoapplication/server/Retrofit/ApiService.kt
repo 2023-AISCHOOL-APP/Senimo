@@ -1,7 +1,9 @@
 package com.example.senimoapplication.server.Retrofit
 
+import com.example.senimoapplication.Club.VO.AllMemberResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.InterestedResVO
+import com.example.senimoapplication.Club.VO.MemberRoleResVO
 import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Login.VO.LoginResVO
@@ -70,9 +72,11 @@ interface ApiService {
     @POST("/updateInterestedClub")
     fun updateInterestStatus(@FieldMap params: Map<String, String>): Call<InterestedResVO>
 
-    @POST("/postClubMember")
-    fun clubMember(@Body memberVO: MemberVO) : Call<MemberVO>
+    @POST("/getAllMembers/{clubCode}")
+    fun getAllMembers(@Path("clubCode") clubCode: String) : Call<AllMemberResVO>
 
+    @POST("/updateMemberRole")
+    fun updateMemberRole(@Body memberVO: MemberVO) : Call<MemberRoleResVO>
 }
 
 

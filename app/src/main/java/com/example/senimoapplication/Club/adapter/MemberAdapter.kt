@@ -11,11 +11,18 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.senimoapplication.Club.VO.AllMemberResVO
+import com.example.senimoapplication.Club.VO.MemberRoleResVO
 import com.example.senimoapplication.Club.VO.MemberVO
+import com.example.senimoapplication.Club.fragment.MemberManager
 import com.example.senimoapplication.Common.showFragmentDialogBox
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.R
 import com.google.android.material.imageview.ShapeableImageView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 class MemberAdapter(
     val context: Context,
@@ -24,6 +31,7 @@ class MemberAdapter(
 ) : RecyclerView.Adapter<MemberAdapter.ViewHolder>() {
 
     val inflater = LayoutInflater.from(context)
+
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvUserName: TextView
@@ -37,6 +45,7 @@ class MemberAdapter(
             imgUserProfile = view.findViewById(R.id.userProfile)
             btnMore = view.findViewById(R.id.imgbtnMore)
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -78,48 +87,52 @@ class MemberAdapter(
         }
 
         // 회원 관리 기능
+
         holder.btnMore.setOnClickListener { view ->
-            val member = data[position].userName
-            val popupMenu = PopupMenu(context, view)
-            val menuInflater = popupMenu.menuInflater
-            menuInflater.inflate(R.menu.member_option_menu, popupMenu.menu)
+        val member = data[position].userName
+        val popupMenu = PopupMenu(context, view)
+        val menuInflater = popupMenu.menuInflater
+        menuInflater.inflate(R.menu.member_option_menu, popupMenu.menu)
+        val memberManager = MemberManager()
 
-            popupMenu.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.member_option1 -> {
-                        // 운영진으로 전환
-                        showFragmentDialogBox(view.context, "운영진으로 임명할까요?", "임명하기", "운영진이 되었습니다")
-                        true
-                    }
-
-                    R.id.member_option2 -> {
-                        // 일반회원으로 전환
-                        showFragmentDialogBox(view.context, "일반 회원으로 전환할까요?", "전환하기", "일반 회원이 되었습니다")
-                        true
-                    }
-
-                    R.id.member_option3 -> {
-                        showFragmentDialogBox(
-                            view.context,
-                            "모임장 권한을 위임하시겠습니까?",
-                            "위임하기",
-                            "권한이 위임되었습니다"
-                        )
-                        // 모임장 위임하기
-
-                        true
-                    }
-                    R.id.member_option4 -> {
-                        // 강퇴하기
-                        showFragmentDialogBox(view.context, "이 회원을 모임에서 내보낼까요?", "내보내기", "모임에서 내보냈습니다.")
-                        true
-                    }
-                    else -> false
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.member_option1 -> {
+                    // 운영진으로 전환
+                    showFragmentDialogBox(view.context, "운영진으로 임명할까요?", "임명하기", "운영진이 되었습니다")
+                    true
                 }
-            }
 
-            popupMenu.show()
+                R.id.member_option2 -> {
+                    // 일반회원으로 전환
+                    showFragmentDialogBox(view.context, "일반 회원으로 전환할까요?", "전환하기", "일반 회원이 되었습니다")
+                    true
+                }
+
+                R.id.member_option3 -> {
+                    showFragmentDialogBox(
+                        view.context,
+                        "모임장 권한을 위임하시겠습니까?",
+                        "위임하기",
+                        "권한이 위임되었습니다"
+                    )
+                    // 모임장 위임하기
+
+                    true
+                }
+                R.id.member_option4 -> {
+                    // 강퇴하기
+                    showFragmentDialogBox(view.context, "이 회원을 모임에서 내보낼까요?", "내보내기", "모임에서 내보냈습니다.")
+                    true
+                }
+                else -> false
+            }
         }
+
+        popupMenu.show()
+    }
+
+
     }
 
     override fun getItemCount(): Int {
