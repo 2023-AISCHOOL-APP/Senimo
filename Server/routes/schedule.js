@@ -48,4 +48,39 @@ router.post('/makeSche', (req, res) => {
   });
 })
 
+router.post('/joinSche', (req, res) => {
+  console.log('joinSche router', req.body);
+  const { user_id, sche_code } = req.body
+
+  const joinScheSql = `insert into tb_sche_joined_user (user_id, sche_code) values (?,?)`
+
+  conn.query(joinScheSql, [user_id, sche_code], (err, rows) => {
+    console.log('일정 참가 : ', rows);
+    if (err) {
+      console.error('일정 참가 실패', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('일정 참가 성공');
+      res.json({ rows: 'success'});
+    }
+  });
+})
+
+router.post('/cancelJoinSche', (req, res) => {
+  console.log('cancelJoinSche router', req.body);
+  const { user_id, sche_code } = req.body;
+
+  const cancelJoinScheSql = `delete from tb_sche_joined_user where user_id = ? and sche_code = ?`;
+
+  conn.query(cancelJoinScheSql, [user_id, sche_code], (err, rows) => {
+    if (err) {
+      console.error('일정 참가 취소 실패', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('일정 참가 취소 성공');
+      res.json({ rows: 'success' });
+    }
+  });
+});
+
 module.exports = router;

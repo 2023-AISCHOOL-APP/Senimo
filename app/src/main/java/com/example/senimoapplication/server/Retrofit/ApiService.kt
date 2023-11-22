@@ -1,9 +1,11 @@
 package com.example.senimoapplication.server.Retrofit
 
 import com.example.senimoapplication.Club.VO.AllMemberResVO
+import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
+import com.example.senimoapplication.Club.VO.JoinScheResVO
 import com.example.senimoapplication.Club.VO.MemberRoleResVO
 import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
@@ -89,6 +91,15 @@ interface ApiService {
     @POST("/updateMemberRole")
     fun updateMemberRole(@Body memberVO: MemberVO) : Call<MemberRoleResVO>
 
+    @FormUrlEncoded
+    @POST("/joinSche")
+    fun joinSche(@Field("user_id") userId: String,
+                 @Field("sche_code") sche_code: String) : Call<JoinScheResVO>
+
+    @FormUrlEncoded
+    @POST("/cancelJoinSche")
+    fun cancelJoinSche(@Field("user_id") userId: String,
+                       @Field("sche_code") sche_code: String) : Call<CancelJoinScheResVO>
 }
 
 
