@@ -49,7 +49,7 @@ dependencies {
   // Glide를 위한 Kotlin 지원 라이브러리
   kapt ("com.github.bumptech.glide:compiler:4.16.0")
 
-  implementation ("androidx.core:core-ktx:latest_version")
+  implementation("androidx.core:core-ktx:1.9.0")
   implementation("androidx.appcompat:appcompat:1.6.1")
   implementation("androidx.activity:activity-compose:1.8.0")
   implementation ("androidx.activity:activity-ktx:1.6.1")
