@@ -26,7 +26,6 @@
     <style name="RoundedImageView">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">10dp</item>
-        <item name="cornerSizeBottomLeft">10dp</item>
         <item name="cornerSizeBottomRight">10dp</item>
         <item name="color">@color/white</item>
     </style>

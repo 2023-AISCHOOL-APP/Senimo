@@ -78,7 +78,7 @@ class MemberAdapter(
         val imageUrl = data[position].imgUri
         Glide.with(context)
             .load(imageUrl)
-            .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
+            .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
             .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
             .into(holder.imgUserProfile)
 
