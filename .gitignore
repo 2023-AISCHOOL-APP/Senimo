@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/Server/config/database.js
+/Server/node_modules

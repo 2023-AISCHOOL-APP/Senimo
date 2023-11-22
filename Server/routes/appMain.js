@@ -54,5 +54,43 @@ LIMIT 20;`
 });
 
 
+router.get('/getLatestSchedule', (req,res) => {
+  const user_id = req.query.userId;
+  console.log("아이디다",user_id)
+  // SQL 쿼리를 실행
+  const query = `
+  SELECT 
+        CONCAT('${config.baseURL}/uploads/', s.sche_img) AS sche_img ,
+        s.sche_title,
+        s.sche_content,
+        DATEDIFF(s.sche_date, CURRENT_DATE()) AS days_left,
+        s.sche_date,
+        s.sche_code,
+        s.fee,
+        s.max_num,
+        s.sche_location
+    FROM 
+        tb_sche_joined_user sj
+    JOIN 
+        tb_schedule s ON sj.sche_code = s.sche_code
+    WHERE 
+        sj.user_id = ? AND
+        s.sche_date >= CURRENT_DATE()
+    ORDER BY 
+        s.sche_date ASC
+    LIMIT 1`;
+  
+    conn.query(query, [user_id], (err, rows) => {
+      console.log('rows :', rows);
+      if (err) {
+        res.status(500).send('서버 에러: ' + err.message);
+      } else {
+        // 결과를 JSON 형태로 클라이언트에 전송합니다.
+        res.json(rows);
+      }
+    });
+})
+
+
 
 module.exports = router;
