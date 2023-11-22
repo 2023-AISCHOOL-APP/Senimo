@@ -5,15 +5,21 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 class MemberVO (
+    @SerializedName("club_code")
+    val clubCode : String ="",
+    @SerializedName("user_id")
+    val userId : String ="",
     @SerializedName("user_name")
     val userName : String ="",
     @SerializedName("club_role")
-    val clubRole : Int = 3,
+    var clubRole : Int = 3,
     @SerializedName("user_img")
-    val imgUri : String? = null
+    var imgUri : String? = null
 
     ) : Parcelable {
     constructor(parcel: Parcel) : this(
+            clubCode = parcel.readString() ?: "",
+            userId = parcel.readString() ?: "",
             userName = parcel.readString() ?: "",
             clubRole = parcel.readInt(),
             imgUri = parcel.readString() ?: "",
@@ -21,7 +27,8 @@ class MemberVO (
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
 //        parcel.writeString(gu)
-
+            parcel.writeString(clubCode)
+            parcel.writeString(userId)
             parcel.writeString(userName)
             parcel.writeInt(clubRole)
             parcel.writeString(imgUri)
@@ -41,7 +48,25 @@ class MemberVO (
                 return arrayOfNulls(size)
             }
         }
-    constructor(userName: String, clubRole : Int) : this(userName, clubRole, null)
+    constructor(clubCode: String) : this(clubCode, "", "",0, "")
     }
 
+data class AllMemberResVO(
+    val data: List<MemberVO>
+)
 
+data class UpdateMemberVO(
+    @SerializedName("club_code")
+    val clubCode : String ="",
+    @SerializedName("user_id")
+    val userId : String ="",
+    @SerializedName("club_role")
+    var clubRole : Int = 3
+)
+
+data class DeleteMemberVO(
+    @SerializedName("club_code")
+    val clubCode : String ="",
+    @SerializedName("user_id")
+    val userId : String =""
+)

@@ -28,7 +28,6 @@ router.post('/postModifyMeeting', (req, res) => {
                 } else {
                     console.log("새로생성된id : ", result.insertId); 
                     res.status(200).json({ result: true })
-                    console.log("성공",result);
                     console.log("보내는값 : ",result);
                 }
             });

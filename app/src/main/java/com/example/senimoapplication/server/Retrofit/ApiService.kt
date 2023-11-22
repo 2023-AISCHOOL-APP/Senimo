@@ -1,15 +1,20 @@
 package com.example.senimoapplication.server.Retrofit
 
+import com.example.senimoapplication.Club.VO.AllMemberResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
+import com.example.senimoapplication.Club.VO.DeleteMemberVO
+import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
-import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
-import com.example.senimoapplication.Login.VO.LoginResVO
+import com.example.senimoapplication.Club.VO.UpdateMemberVO
+
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
+import com.google.gson.JsonObject
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FieldMap
@@ -17,7 +22,6 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-
 
 
 interface ApiService {
@@ -59,9 +63,21 @@ interface ApiService {
                @Field("user_gu") userGu: String,
                @Field("user_dong") userDong: String,
                @Field("user_introduce") userIntroduce: String?): Call<SignUpResVO>
+
     @FormUrlEncoded
     @POST("/checkUserId")
     fun checkId(@Field("user_id") userId: String): Call<SignUpResVO>
+
+    @FormUrlEncoded
+    @POST("/makeSche")
+    fun createSchedule(@Field("club_code") clubCode: String,
+                       @Field("sche_title") scheTitle: String,
+                       @Field("sche_content") scheContent: String,
+                       @Field("sche_date") scheDate: String,
+                       @Field("sche_location") scheLocation: String,
+                       @Field("max_num") maxNum: Int,
+                       @Field("fee") scheFee: Int,
+                       @Field("sche_img") scheImg: String?): Call<MakeScheResVo>
 
     @POST("/postModifyMeeting")
     fun modifyMeeting(@Body meetingVO: MeetingVO) : Call<modifyResult>
@@ -70,10 +86,15 @@ interface ApiService {
     @POST("/updateInterestedClub")
     fun updateInterestStatus(@FieldMap params: Map<String, String>): Call<InterestedResVO>
 
-    @POST("/postClubMember")
-    fun clubMember(@Body memberVO: MemberVO) : Call<MemberVO>
+    @POST("/getAllMembers/{clubCode}")
+    fun getAllMembers(@Path("clubCode") clubCode: String) : Call<AllMemberResVO>
 
-}
+    @POST("/updateMember")
+    fun updateMember(@Body updateMemberVO: UpdateMemberVO): Call<JsonObject>
+
+    @POST("/deleteMember")
+    fun deleteMember(@Body deleteMemberVO: DeleteMemberVO): Call<JsonObject>
+
 
 
 

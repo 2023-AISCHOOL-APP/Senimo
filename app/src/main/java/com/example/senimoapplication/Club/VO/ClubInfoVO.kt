@@ -18,9 +18,8 @@ data class ClubInfoVO(
     @SerializedName("keyword_name")
     val keywordName : String,
     @SerializedName("club_introduce")
-    val clubIntroduce : String? = null,
-    @SerializedName("user_id")
-    val clubStaff : MemberVO
+    val clubIntroduce : String? = null
+
 
 
     ) : Parcelable {
@@ -32,7 +31,7 @@ data class ClubInfoVO(
         keywordName = parcel.readString() ?:"",
         clubLocation = parcel.readString() ?: "",
         clubIntroduce = parcel.readString() ?:"",
-        clubStaff = parcel.readParcelable(MemberVO::class.java.classLoader) ?: MemberVO()
+
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -45,7 +44,7 @@ data class ClubInfoVO(
         parcel.writeString(clubLocation)
         parcel.writeString(keywordName)
         parcel.writeString(clubIntroduce)
-        parcel.writeParcelable(clubStaff, flags)
+
     }
 
     override fun describeContents(): Int {

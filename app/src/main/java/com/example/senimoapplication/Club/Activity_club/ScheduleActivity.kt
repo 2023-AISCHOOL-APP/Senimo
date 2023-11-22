@@ -148,17 +148,17 @@ class ScheduleActivity : AppCompatActivity() {
                         Log.d("ScheduleActivity", response.body().toString())
                         response.body()?.let { schedules ->
                             // null이 아니면 기존 목록을 지우고 새 데이터로 채웁니다.
-                            findViewById<TextView>(R.id.tv_C_S_Time).text = formatDate(schedules.scheduleDate)
+                            findViewById<TextView>(R.id.tv_C_S_Time).text = formatDate(schedules.scheDate)
                             findViewById<TextView>(R.id.tvClubName2).text = schedules.clubName
-                            findViewById<TextView>(R.id.tv_C_ScheduleName3).text = schedules.scheduleName
-                            findViewById<TextView>(R.id.tv_C_Schedule_Intro).text = schedules.scheduleIntro
-                            findViewById<TextView>(R.id.tv_C_S_Loca).text = schedules.scheduleLoca
-                            findViewById<TextView>(R.id.tv_C_S_Fee).text = "${schedules.scheduleFee} 원"
-                            findViewById<TextView>(R.id.tv_C_S_attendance).text = "${schedules.attendance}/${schedules.allMembers}명"
+                            findViewById<TextView>(R.id.tv_C_ScheduleName3).text = schedules.scheTitle
+                            findViewById<TextView>(R.id.tv_C_Schedule_Intro).text = schedules.scheContent
+                            findViewById<TextView>(R.id.tv_C_S_Loca).text = schedules.scheLoca
+                            findViewById<TextView>(R.id.tv_C_S_Fee).text = "${schedules.scheFee} 원"
+                            findViewById<TextView>(R.id.tv_C_S_attendance).text = "${schedules.attendUserCnt}/${schedules.maxNum}명"
                             // binding.tvCScheduleIntro.text = schedules.scheduleName
                            //binding.imgCSchedule.setImageResource(schedules.imageUri)
                             Glide.with(this@ScheduleActivity)
-                                .load(schedules.imageUri) // MeetingVO 객체의 imageUri
+                                .load(schedules.scheImg) // MeetingVO 객체의 imageUri
                                 .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
                                 .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
                                 .into(binding.imgCSchedule) // 이미지를 표시할 ImageView
