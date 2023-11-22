@@ -2,16 +2,17 @@ package com.example.senimoapplication.server.Retrofit
 
 import com.example.senimoapplication.Club.VO.AllMemberResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
+import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.InterestedResVO
-import com.example.senimoapplication.Club.VO.MemberRoleResVO
-import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
-import com.example.senimoapplication.Login.VO.LoginResVO
+import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
+import com.google.gson.JsonObject
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FieldMap
@@ -75,8 +76,11 @@ interface ApiService {
     @POST("/getAllMembers/{clubCode}")
     fun getAllMembers(@Path("clubCode") clubCode: String) : Call<AllMemberResVO>
 
-    @POST("/updateMemberRole")
-    fun updateMemberRole(@Body memberVO: MemberVO) : Call<MemberRoleResVO>
+    @POST("/updateMember")
+    fun updateMember(@Body updateMemberVO: UpdateMemberVO): Call<JsonObject>
+
+    @POST("/deleteMember")
+    fun deleteMember(@Body deleteMemberVO: DeleteMemberVO): Call<JsonObject>
 }
 
 

@@ -51,11 +51,22 @@ class MemberVO (
     constructor(clubCode: String) : this(clubCode, "", "",0, "")
     }
 
-data class MemberRoleResVO(
-    val result : Boolean,
-    val message : String
-)
-
 data class AllMemberResVO(
     val data: List<MemberVO>
+)
+
+data class UpdateMemberVO(
+    @SerializedName("club_code")
+    val clubCode : String ="",
+    @SerializedName("user_id")
+    val userId : String ="",
+    @SerializedName("club_role")
+    var clubRole : Int = 3
+)
+
+data class DeleteMemberVO(
+    @SerializedName("club_code")
+    val clubCode : String ="",
+    @SerializedName("user_id")
+    val userId : String =""
 )

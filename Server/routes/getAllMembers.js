@@ -3,6 +3,7 @@ const router = express.Router()
 const conn = require('../config/database');
 const config = require('../config/config')
 
+//전체 회원 목록
 router.post('/getAllMembers/:club_code', (req, res) => {
   console.log('request값 확인',req.params);
   const club_code = req.params.club_code; 
@@ -12,7 +13,6 @@ router.post('/getAllMembers/:club_code', (req, res) => {
       LEFT JOIN tb_user b ON a.user_id = b.user_id
       WHERE a.club_code = ?
   `;
-  // club_code, user_id, user_name, club_role, user_img
   conn.query(findMemberQuery, [club_code], (err, results) => {
       if (err) {
           return res.status(500).json({ error: err.message });
