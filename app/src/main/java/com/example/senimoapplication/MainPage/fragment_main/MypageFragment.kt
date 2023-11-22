@@ -9,14 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.MainPage.Activity_main.EditMyPageActivity
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentMypageBinding
-import com.google.android.material.imageview.ShapeableImageView
 
 class MypageFragment : Fragment() {
 
@@ -53,7 +51,7 @@ class MypageFragment : Fragment() {
         val badges = listOf(true, false, true, true, false, false, false, false, false)
 
         myProfile = MyPageVO(
-            "content://media/external/file/24",
+            "content://media/external/file/25",
             "체리마루",
             "남구",
             1995,
@@ -116,7 +114,7 @@ class MypageFragment : Fragment() {
         // 여기에서 프로필 정보를 UI 요소에 설정
         Glide.with(this)
             .load(profile.img)
-            .placeholder(R.drawable.loading)
+            .placeholder(R.drawable.animation_loading)
             .error(R.drawable.ic_profile_circle)
             .centerCrop()
             .into(binding.imgMMypageImg)

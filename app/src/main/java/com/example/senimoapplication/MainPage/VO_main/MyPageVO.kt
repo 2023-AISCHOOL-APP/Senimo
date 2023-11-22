@@ -2,15 +2,22 @@ package com.example.senimoapplication.MainPage.VO_main
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 
-class MyPageVO(val img: String = "",            // 사진
+class MyPageVO(
+               @SerializedName("user_img")
+               val img: String = "",            // 사진
+               @SerializedName("user_id")
                val name: String = "",      // 닉네임 또는 이름
+               @SerializedName("user_gu")
                val gu: String = "",          // 지역 구
+               @SerializedName("birth_year")
                val birth: Int = 0,             // 생년 (0000년생)
+               @SerializedName("gender")
                val gender : String = "" ,      // 성별
+               @SerializedName("user_introduce")
                val intro: String = "",          // 소개글
-               val badges : List<Boolean> = listOf() // 뱃지 활성화 상태 리스트 추가
-
+               val badges : List<Boolean> = listOf(), // 뱃지 활성화 상태 리스트 추가
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         img = parcel.readString() ?: "",

@@ -55,7 +55,7 @@ class ChatAdapter (val context: Context, val layout: Int, val data: ArrayList<Ch
             // 다른 사람이 보낸 메시지
             Glide.with(context)
                 .load(imageUrl)
-                .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
+                .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
                 .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
                 .into(holder.imgUserProfile)
             holder.tvChatUserName.text = data[position].userName

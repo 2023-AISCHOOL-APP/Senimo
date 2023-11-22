@@ -19,29 +19,26 @@ import com.example.senimoapplication.Club.Activity_club.MakeScheduleActivity
 import com.example.senimoapplication.Club.Activity_club.ScheduleActivity
 import com.example.senimoapplication.Club.VO.AllMemberResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
-import com.example.senimoapplication.Club.VO.MemberRoleResVO
+import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
+import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
-import com.example.senimoapplication.Club.fragment.MemberManager
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
-import com.example.senimoapplication.MainPage.Activity_main.MainActivity
-import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.server.Retrofit.ApiService
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentHomeBinding
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.UserData
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import java.util.concurrent.TimeoutException
 
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
@@ -51,15 +48,16 @@ class HomeFragment : Fragment() {
     val memberList: ArrayList<MemberVO> = ArrayList()
     val userId = UserData.userId
     var clubCode: String? =null
+    var staffList : List<String> = emptyList()
+    var joinedList : List<String> = emptyList()
+    var clubLeader : String? = null
 
+    // 모임정보 수정 내용 바로 반영하기 (모임 정보 : displayMeetingInfo())
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val updatedMeeting: MeetingVO? = result.data?.getParcelableExtra("CreateMeeting")
-                updatedMeeting?.let {
-                    // 여기에서 UI 업데이트 수행
-                    displayMeetingInfo(it)
-                }
+                updatedMeeting?.let {displayMeetingInfo(it)}
             }
         }
 
@@ -68,39 +66,79 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        // intent 데이터 관리
         clickedMeeting =
             activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
         createMeeting =
             activity?.intent?.getParcelableExtra<MeetingVO>("CreateMeeting")
         //clickedMeetinghome = activity?.intent?.getParcelableArrayListExtra("clickedMeetinghome") ?: ArrayList()
+
         Log.d("getclickedMeetinghome", clickedMeeting.toString())
-        Log.d("datacheck", memberList.toString())
+        Log.d("Home_getData_memberList", memberList.toString())
 
 
-        // 현재 club_code랑 userId는 안받고 있음
-
-        val view = binding.root
         val scheduleList: ArrayList<ScheduleVO> = ArrayList()
         val s_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, scheduleList)
         val memberManager = MemberManager()
         fetchClubInfo()
 
-
-        // 전체 회원 목록 통신으로 가져오기, 회원 목록 리사이클러뷰 어댑터 연결
+        // 전체 회원 목록 통신으로 가져오기 => 회원 목록 리사이클러뷰 어댑터 연결
         clubCode = clickedMeeting?.club_code
+        clubLeader = clickedMeeting?.userId
+
         clubCode?.let { code ->
             memberManager.getAllMembers(code, object : Callback<AllMemberResVO> {
                 override fun onResponse(call: Call<AllMemberResVO>, response: Response<AllMemberResVO>) {
                     if (response.isSuccessful) {
                         val allMemberResVO: AllMemberResVO? = response.body()
                         if (allMemberResVO != null) {
-                            Log.d("member", "${allMemberResVO}")
-
                             val memberList: List<MemberVO> = allMemberResVO.data
-                            Log.d("member", "${memberList}")
-                            val m_adapter = MemberAdapter(requireContext(), R.layout.club_member_list, ArrayList(memberList ?: emptyList()))
+                            staffList = memberList.filter { it.clubRole == 1 || it.clubRole == 2 }.map { it.userId }.toList()
+                            joinedList = memberList.map { it.userId }
+
+                            val m_adapter = MemberAdapter(requireContext(), R.layout.club_member_list, ArrayList(memberList ?: emptyList()), clubLeader)
                             binding.rvMember.adapter = m_adapter
                             binding.rvMember.layoutManager = LinearLayoutManager(view.context)
+
+                            // 운영진만 보이는 버튼
+                            if(userId in staffList){
+                                binding.tvMoveEdit.visibility = VISIBLE
+                                binding.btnNewSchedule.visibility = VISIBLE
+
+                                binding.tvMoveEdit.setOnClickListener {
+                                    val intent =
+                                        Intent(view.context, CreateMeetingActivity::class.java)
+                                    intent.putExtra("MeetingVO", clickedMeeting)
+                                    intent.putExtra("title", "모임 정보 수정")
+                                    intent.putExtra("btnTitle", "모임 정보 수정하기")
+                                    startForResult.launch(intent)
+                                    Log.d("click", "모임 수정페이지로 값을 전송합니다. ${clickedMeeting}")
+                                }
+
+                                binding.btnNewSchedule.setOnClickListener {
+                                    val intent = Intent(view.context, MakeScheduleActivity::class.java)
+                                    view.context.startActivity(intent)
+                                }
+                            } else {
+                                binding.tvMoveEdit.visibility = INVISIBLE
+                                binding.btnNewSchedule.visibility = GONE
+                            }
+
+                            if(userId in joinedList){
+                                binding.btnJoinClub.setOnClickListener {
+                                    binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.main))
+                                    binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
+                                    binding.btnJoinClub.text = "모임 탈퇴하기"
+                                }
+                            } else {
+                                binding.btnJoinClub.setOnClickListener {
+                                    binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
+                                        binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.white))
+                                        binding.btnJoinClub.text = "모임 가입하기"
+                                }
+                            }
                         }
                     } else {
                         Log.d("member", "멤버 리스트 만들기 실패")
@@ -108,39 +146,16 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<AllMemberResVO>, t: Throwable) {
-                    // 스택 트레이스 출력
                     Log.d("member", "스택 트레이스: ", t)
                 }
             })
         }
-
-//        // 관리자 여부 확인해서 버튼 보이기
-//        if (clubInfo.clubRole == 3) {
-//            binding.tvMoveEdit.visibility = INVISIBLE
-//            binding.btnNewSchedule.visibility = GONE
-//        } else {
-//            // 관리자, 운영자인 경우
-//            binding.tvMoveEdit.visibility = VISIBLE
-//            binding.btnNewSchedule.visibility = VISIBLE
-//        }
-
-        binding.tvMoveEdit.setOnClickListener {
-            val intent = Intent(view.context, CreateMeetingActivity::class.java)
-            intent.putExtra("MeetingVO", clickedMeeting)
-            intent.putExtra("title", "모임 정보 수정")
-            intent.putExtra("btnTitle", "모임 정보 수정하기")
-            startForResult.launch(intent)
-            Log.d("click", "모임 수정페이지로 값을 전송합니다. ${clickedMeeting}")
-        }
-
 
         // 일정 리사이클러뷰 어댑터 연결
         binding.rvSchedule.adapter = s_adapter
         binding.rvSchedule.layoutManager = LinearLayoutManager(view.context)
 
         // 모임 일정 가데이터
-
-
         scheduleList.add(
             ScheduleVO(
                 "축구보자축구",
@@ -168,9 +183,7 @@ class HomeFragment : Fragment() {
                 "모집중",
                 "R.drawable.img_sample2"
             )
-        ) // 도운이 수정함 fee int로 바꿔서"삭제
-
-        //scheduleList.add(ScheduleVO("점심을 공유합시다","2023-11-6 17:00","30000", "광주 동구 동부식당", 26,20,"모집마감" ))
+        )
 
         // 모임 상세 페이지로 이동
         binding.rvSchedule.addOnItemTouchListener(
@@ -188,6 +201,7 @@ class HomeFragment : Fragment() {
                 })
         )
 
+
         // 모임 일정 등록 액티비티로 이동
         binding.btnNewSchedule.setOnClickListener {
             val intent = Intent(view.context, MakeScheduleActivity::class.java)
@@ -197,7 +211,7 @@ class HomeFragment : Fragment() {
             view.context.startActivity(intent)
         }
 
-        // 모임 가입 상태 체크 및 버튼 전환 (join
+        // 모임 가입 상태 체크 및 버튼 전환 
         var joinstate: Int = 0
         binding.btnJoinClub.setOnClickListener {
             if (joinstate == 0) {
@@ -254,7 +268,7 @@ class HomeFragment : Fragment() {
                                     binding.tvKeyword.text = clubInfos.keywordName
                                     Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
                                         .load(clubInfos.clubImageUri) // MeetingVO 객체의 imageUri
-                                        .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
+                                        .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
                                         .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
                                         .into(binding.clubImage) // 이미지를 표시할 ImageView
                                 }
@@ -284,8 +298,9 @@ class HomeFragment : Fragment() {
         binding.tvClubIntro.text = meeting.content
         binding.tvKeyword.text = meeting.keyword
         Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
+            .asGif()
             .load(meeting.imageUri) // MeetingVO 객체의 imageUri
-            .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
+            .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
             .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
             .into(binding.clubImage) // 이미지를 표시할 ImageView
     }
@@ -304,15 +319,21 @@ class MemberManager {
         apiService = retrofit.create(ApiService::class.java)
     }
 
-    // 멤버 역할을 업데이트하는 함수
-    fun updateMemberRole(memberVO: MemberVO, callback: Callback<MemberRoleResVO>) {
-        val call = apiService.updateMemberRole(memberVO)
-        call.enqueue(callback)
-    }
-
     // 클럽 코드를 기반으로 멤버 목록을 가져오는 함수
     fun getAllMembers(clubCode: String, callback: Callback<AllMemberResVO>) {
         val call = apiService.getAllMembers(clubCode)
+        call.enqueue(callback)
+    }
+
+    // 멤버 역할 업데이트 함수
+    fun updateMember(updateMemberVO: UpdateMemberVO, callback: Callback<JsonObject>) {
+        val call = apiService.updateMember(updateMemberVO)
+        call.enqueue(callback)
+    }
+
+    // 멤버 내보내기 함수
+    fun deleteMember(deleteMemberVO: DeleteMemberVO, callback: Callback<JsonObject>) {
+        val call = apiService.deleteMember(deleteMemberVO)
         call.enqueue(callback)
     }
 }
