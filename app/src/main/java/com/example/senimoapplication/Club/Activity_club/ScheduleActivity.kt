@@ -83,7 +83,7 @@ class ScheduleActivity : AppCompatActivity() {
     // 일정 참가하기 버튼
     binding.btnJoinSchedule.setOnClickListener {
       val userId = UserData.userId.toString()
-      val scheCode = "sche_code1"
+      val scheCode = "test1"
 
       if (isJoined) {
         joinSche(userId, scheCode)
@@ -141,7 +141,7 @@ class ScheduleActivity : AppCompatActivity() {
 
     // 서버에 요청을 보낼 '전화기'를 만들어요.
     val service = Server(this).service
-    val sche_code = "sche_code1" // 예시 ID
+    val sche_code = "test1" // 예시 ID
     // '전화'를 걸어요. 서버에 데이터를 달라고 요청해요.
     service.getScheIntro(sche_code).enqueue(object : Callback<ScheduleVO> {
       // 서버에서 답이 오면 이 부분이 실행돼요.

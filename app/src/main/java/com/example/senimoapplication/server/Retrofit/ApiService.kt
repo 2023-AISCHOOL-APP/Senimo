@@ -12,6 +12,7 @@ import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
+import com.example.senimoapplication.Club.VO.WritePostResVO
 
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
@@ -125,6 +126,13 @@ interface ApiService {
     @POST("/quitClub")
     fun quitClub(@Field("club_code") clubCode: String,
                  @Field("user_id") userId: String) : Call<QuitClubResVO>
+
+    @FormUrlEncoded
+    @POST("/writePost")
+    fun writePost(@Field("user_id") userId: String,
+                  @Field("club_code") clubCode: String,
+                  @Field("post_content") postContent: String?,
+                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
 }
 
 
