@@ -107,6 +107,8 @@ fun showUpdateDialogBox(context: Context, message: String?, okay: String?, succe
 
     val tvMessage: TextView = dialog.findViewById(R.id.tvMessage)
     val btnOkay: Button = dialog.findViewById(R.id.btnOkay)
+
+
     val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
 
     tvMessage.text = message
