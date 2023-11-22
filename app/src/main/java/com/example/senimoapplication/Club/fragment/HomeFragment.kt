@@ -201,6 +201,39 @@ class HomeFragment : Fragment() {
                 })
         )
 
+
+        // 모임 일정 등록 액티비티로 이동
+        binding.btnNewSchedule.setOnClickListener {
+            val intent = Intent(view.context, MakeScheduleActivity::class.java)
+            val clubCode = clickedMeeting?.club_code.toString()
+            intent.putExtra("club_code", clubCode)
+            Log.d("club_code", clubCode)
+            view.context.startActivity(intent)
+        }
+
+        // 모임 가입 상태 체크 및 버튼 전환 
+        var joinstate: Int = 0
+        binding.btnJoinClub.setOnClickListener {
+            if (joinstate == 0) {
+                binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context, R.color.main))
+                binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
+                binding.btnJoinClub.text = "모임 탈퇴하기"
+                joinstate = 1
+            } else {
+                binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
+                binding.btnJoinClub.setTextColor(
+                    ContextCompat.getColor(
+                        view.context,
+                        R.color.white
+                    )
+                )
+                binding.btnJoinClub.text = "모임 가입하기"
+                joinstate = 0
+            }
+        }
+
+
+
         return view
     }
 

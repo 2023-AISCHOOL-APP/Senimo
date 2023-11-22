@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../config/database');
-const { generateTokens } = require('./token/jwt');
+const { generateTokens } = require('../token/jwt');
 
 // 로그인 기능
 router.post('/login', (req, res) => {
@@ -24,6 +24,7 @@ router.post('/login', (req, res) => {
       console.log("1user_Id",tokens.accessToken);
     } else {
       res.json({ rows: 'failed' })
+      console.error('회원가입 실패:', err);
     }
   });
 });

@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 
-const authController = require('./routes/token/authController')
+const authController = require('./token/authController')
 const appMainRouter = require('./routes/appMain');
 const clubMainRouter = require('./routes/clubMain');
 const scheduleRouter = require('./routes/schedule')

@@ -86,6 +86,14 @@ class LoginActivity : AppCompatActivity() {
             } else {
               Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
             }
+//          val LoginResVO = response.body()
+//          if (LoginResVO != null && LoginResVO.rows == "success") {
+//            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
+//            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//            startActivity(intent)
+//            finishAffinity()
+//          } else {
+//            Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
           }
         } else {
           Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()

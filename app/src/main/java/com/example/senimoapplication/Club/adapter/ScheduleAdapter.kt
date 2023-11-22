@@ -79,7 +79,7 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
         val MAX_TEXT_LENGTH = 10 // 최대 글자 수
 
         // 모임 제목 가져오기
-        val scheduleName = data[position].scheduleName // ScheduleVO에서 가져옴
+        val scheduleName = data[position].scheTitle // ScheduleVO에서 가져옴
 
         // 글자 수가 최대 길이보다 길 경우 생략 부호(...) 추가하여 자르기
         val truncatedName = if (scheduleName.length > MAX_TEXT_LENGTH) {
@@ -90,12 +90,12 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
 
         // holder.tvClubScheduleName.text = data[position].scheduleName
         holder.tvClubScheduleName.text = truncatedName
-        holder.tvScheduleDate.text = formatDate(data[position].scheduleDate)
-        holder.tvScheduleLoca.text = data[position].scheduleLoca
-        holder.tvScheduleFee.text = "${data[position].scheduleFee}원"
-        holder.tvScheduleDay.text = dDate(data[position].scheduleDate)
+        holder.tvScheduleDate.text = formatDate(data[position].scheDate)
+        holder.tvScheduleLoca.text = data[position].scheLoca
+        holder.tvScheduleFee.text = "${data[position].scheFee}원"
+        holder.tvScheduleDay.text = dDate(data[position].scheDate)
         holder.tvScheduleState.text = data[position].state
-        holder.tvScheduleMemNum.text = "${data[position].attendance}/${data[position].allMembers.toString()}"
+        holder.tvScheduleMemNum.text = "${data[position].attendUserCnt}/${data[position].maxNum.toString()}"
 
 
         val state = holder.tvScheduleState.text
