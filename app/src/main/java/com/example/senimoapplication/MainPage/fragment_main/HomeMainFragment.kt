@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.MainPage.Activity_main.SearchActivity
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
+import com.example.senimoapplication.Club.Activity_club.ScheduleActivity
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.server.Retrofit.ApiService
@@ -35,6 +36,7 @@ class HomeMainFragment : Fragment() {
     private lateinit var adapter: MeetingAdapter
     private lateinit var myScheduleAdapter: MyScheduleAdapter
     val MeetingList: ArrayList<MeetingVO> = ArrayList()
+    val myScheduleList: ArrayList<MyScheduleVO> = ArrayList()
     private lateinit var apiService: ApiService
 
     private var isScrolling = false
@@ -65,17 +67,26 @@ class HomeMainFragment : Fragment() {
         val img_M_Financial = view.findViewById<ImageView>(R.id.img_M_Financial)
 
         // MyScheduleVO 객체 생성
-        val mySchedule = MyScheduleVO(R.drawable.tea_img,"충장로 먹부림 모임", "일이삼사오육칠팔구십십일십이십삼십사", "2023-11-18T12:00:08.123Z")
+        // val mySchedule = MyScheduleVO(R.drawable.tea_img,"충장로 먹부림 모임", "일이삼사오육칠팔구십십일십이십삼십사", "2023-11-18T12:00:08.123Z")
 
         // MyScheduleVO 객체를 리스트에 추가
-        val myScheduleList = ArrayList<MyScheduleVO>()
-        myScheduleList.add(mySchedule)
+        // val myScheduleList = ArrayList<MyScheduleVO>()
+        // myScheduleList.add(mySchedule)
 
         // 내 일정 RecyclerView 어댑터 생성 및 설정
-        myScheduleAdapter =
-            MyScheduleAdapter(requireContext(), R.layout.myschedule_list, myScheduleList)
+        myScheduleAdapter = MyScheduleAdapter(requireContext(), R.layout.myschedule_list, myScheduleList)
+
         rv_M_MySchedule.adapter = myScheduleAdapter
         rv_M_MySchedule.layoutManager = LinearLayoutManager(requireContext())
+
+        myScheduleAdapter.setOnClickListener(object : MyScheduleAdapter.OnItemClickListener {
+            override fun onItemClick(schedule: MyScheduleVO) {
+                // 클릭된 아이템에 대한 처리
+                val intent = Intent(requireContext(), ScheduleActivity::class.java)
+                intent.putExtra("scheduleData", schedule)
+                startActivity(intent)
+            }
+        })
 
         // 모임 RecyclerView 어댑터 생성 및 설정
         adapter = MeetingAdapter(requireContext(), R.layout.meeting_list, MeetingList)
@@ -143,6 +154,7 @@ class HomeMainFragment : Fragment() {
             intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
+            activity?.finish()
         }
         img_M_Hobby.setOnClickListener {
             val categoryKeyword = "취미"
@@ -152,6 +164,7 @@ class HomeMainFragment : Fragment() {
             intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
+            activity?.finish()
         }
         img_M_Concert.setOnClickListener {
             val categoryKeyword = "전시/공연"
@@ -161,6 +174,7 @@ class HomeMainFragment : Fragment() {
             intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
+            activity?.finish()
         }
         img_M_Trip.setOnClickListener {
             val categoryKeyword = "여행"
@@ -170,6 +184,7 @@ class HomeMainFragment : Fragment() {
             intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
+            activity?.finish()
         }
         img_M_Selfimprovement.setOnClickListener {
             val categoryKeyword = "자기계발"
@@ -179,6 +194,7 @@ class HomeMainFragment : Fragment() {
             intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
+            activity?.finish()
         }
         img_M_Financial.setOnClickListener {
             val categoryKeyword = "재테크"
@@ -188,6 +204,7 @@ class HomeMainFragment : Fragment() {
             intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
+            activity?.finish()
         }
 
         // 검색바 이부분은 전체모임정보가 들어가게 수정해야함(따로요청을 보내야하나?)
@@ -198,6 +215,7 @@ class HomeMainFragment : Fragment() {
             intent.putExtra("isFromSearchBar", true) // 검색 바에서 온 것임을 나타내는 플래그
             startActivity(intent)
             activity?.finish()
+
 
         }
 
@@ -233,12 +251,17 @@ class HomeMainFragment : Fragment() {
             }
         }
 
+
+
+
+
         return view
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         fetchMeetings() // 여기에서 데이터 로딩을 호출합니다.
+        fetchLatestSchedule()
     }
 
     private fun fetchMeetings() {
@@ -287,6 +310,44 @@ class HomeMainFragment : Fragment() {
             override fun onFailure(call: Call<List<MeetingVO>>, t: Throwable) {
                 // 네트워크 요청 실패 시 처리
                 Log.e("HomeMainFragment", "네트워크 요청 실패", t)
+            }
+        })
+    }
+
+    private fun fetchLatestSchedule() {
+        val userId = "T2"
+        val service = Server(requireContext()).service
+        service.getLatestSchedule(userId).enqueue(object : Callback<List<MyScheduleVO>> {
+            override fun onResponse(
+                call: Call<List<MyScheduleVO>>,
+                response: Response<List<MyScheduleVO>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let { latestSchedules ->
+                        // 여기서 latestSchedules에 대한 처리를 합니다.
+                        // 예: myScheduleList에 데이터 추가 후 어댑터에 알림
+                         myScheduleList.clear()
+                         myScheduleList.addAll(latestSchedules)
+                        if (::myScheduleAdapter.isInitialized) {
+                            myScheduleAdapter.notifyDataSetChanged()// 어댑터에 데이터 변경을 알립니다.
+
+                            Log.d("myScheduleList", latestSchedules.toString())
+                            Log.d("myScheduleList", myScheduleList.toString())
+                        } } ?: run {
+                        // 응답이 null이면 사용자에게 알려줄 수 있는 방법을 사용하세요.
+                        // 예를 들어, Toast 메시지를 표시합니다.
+                        // Toast.makeText(context, "모임 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+                        Log.d("HomeMainFragment5", "모임 정보가 없습니다.")
+                    }
+                }else {
+                    // 서버로부터 응답이 있으나, 오류 발생
+                    Log.e("HomeMainFragment5", "응답 실패 : ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<MyScheduleVO>>, t: Throwable) {
+                // 네트워크 요청 실패 시 처리
+                Log.e("HomeMainFragment5", "네트워크 요청 실패", t)
             }
         })
     }

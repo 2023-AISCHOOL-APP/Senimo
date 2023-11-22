@@ -19,6 +19,7 @@ import com.example.senimoapplication.R
 import com.example.senimoapplication.Club.adapter.ScheduleMemberAdapter
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showActivityDialogBox
+import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.server.Server
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,8 +33,16 @@ class ScheduleActivity : AppCompatActivity() {
   lateinit var binding: ActivityScheduleBinding
   var isJoined = true
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_schedule)
+
+        val scheduleData = intent.getParcelableExtra<MyScheduleVO>("scheduleData")
+        if (scheduleData != null) {
+            Log.d("ScheduleActivity", "받아온 일정 데이터 : $scheduleData")
+        } else {
+            Log.d("ScheduleActivity", "일정 데이터 못 받음")
+        }
 
     binding = ActivityScheduleBinding.inflate(layoutInflater)
     val view = binding.root

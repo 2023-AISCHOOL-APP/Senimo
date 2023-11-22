@@ -295,7 +295,7 @@ class HomeFragment : Fragment() {
         binding.tvClubIntro.text = meeting.content
         binding.tvKeyword.text = meeting.keyword
         Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
-            .asGif()
+            // .asGif()
             .load(meeting.imageUri) // MeetingVO 객체의 imageUri
             .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
             .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지

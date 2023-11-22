@@ -16,6 +16,7 @@ import com.example.senimoapplication.Club.VO.WritePostResVO
 
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
+import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import com.google.gson.JsonObject
@@ -28,11 +29,15 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface ApiService {
     @GET("/getMeetings")
     fun getMeetings(): Call<List<MeetingVO>>
+
+    @GET("/getLatestSchedule")
+    fun getLatestSchedule(@Query("userId") userId: String?): Call<List<MyScheduleVO>>
 
 //    @Multipart
 //    @POST("/db/postImg")
