@@ -73,7 +73,15 @@ class PostActivity : AppCompatActivity() {
 
             Log.d("포스트 회원 아이디", userId)
             Log.d("포스트 모임코드", clubCode)
+
             writePost(userId, clubCode, postContent, postImg)
+
+            // 게시글 등록 후 ClubActivity로 이동
+            val intent = Intent(this@PostActivity, ClubActivity::class.java)
+            intent.putExtra("clickedMeeting", clickedMeeting) // clickedMeeting 객체를 Intent에 추가하여 ClubActivity로 전달
+            intent.putExtra("user_id", userId)
+            startActivity(intent)
+            finish()
         }
 
         binding.icBack.setOnClickListener {
@@ -93,9 +101,6 @@ class PostActivity : AppCompatActivity() {
                     val writePostRes = response.body()
                     if (writePostRes != null && writePostRes.rows == "success") {
                         Toast.makeText(this@PostActivity, "게시글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@PostActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
                     } else {
                         Log.d("writePost", "not success")
                     }
