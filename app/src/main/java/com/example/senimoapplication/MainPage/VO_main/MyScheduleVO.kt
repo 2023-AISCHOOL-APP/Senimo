@@ -1,37 +1,67 @@
 package com.example.senimoapplication.MainPage.VO_main
+
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 class MyScheduleVO(
-    @SerializedName("sche_img_url")
-    // var imageUri: String? = null, // 이미지 경로를 String 타입으로 저장
-    var imageUri: Int, // 이미지 경로를 String 타입으로 저장
+    @SerializedName("club_name")
+    val clubName: String = "",
     @SerializedName("sche_title")
-    val myscheduleTitle: String = "",
+    val scheTitle: String = "",
     @SerializedName("sche_content")
-    val myscheduleContent: String = "",
+    val scheContent: String = "",
     @SerializedName("sche_date")
-    val myscheduleDate: String = ""
+    val scheDate: String = "",
+    @SerializedName("fee")
+    val scheFee: Int = 0,
+    @SerializedName("sche_location")
+    val scheLoca: String = "",
+    @SerializedName("max_num")
+    val maxNum: Int = 0,
+    @SerializedName("attend_user_cnt")
+    val attendUserCnt: Int = 0,
+    val state: String = "모집중",
+    @SerializedName("sche_img")
+    var scheImg: String, // 이미지 경로를 String 타입으로 저장
+    @SerializedName("sche_code")
+    val scheCode : String = "",
 ) : Parcelable {
+
     constructor(parcel: Parcel) : this(
-        // imageUri = parcel.readString() ?:"",
-        imageUri = parcel.readInt(),
-        myscheduleTitle = parcel.readString() ?: "",
-        myscheduleContent = parcel.readString() ?: "",
-        myscheduleDate = parcel.readString() ?: ""
+        clubName = parcel.readString() ?: "",
+        scheTitle = parcel.readString() ?: "",
+        scheContent = parcel.readString() ?: "",
+        scheDate = parcel.readString() ?: "",
+        scheFee = parcel.readInt(),
+        scheLoca = parcel.readString() ?: "",
+        maxNum = parcel.readInt(),
+        attendUserCnt = parcel.readInt(),
+        state = parcel.readString() ?: "",
+        scheImg = parcel.readString() ?: "",
+        scheCode = parcel.readString() ?: ""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        // parcel.writeString(imageUri?.toString())
-        parcel.writeInt(imageUri) // 이미지 리소스 ID를 Int로 씀
-        parcel.writeString(myscheduleTitle)
-        parcel.writeString(myscheduleContent)
-        parcel.writeString(myscheduleDate)
+        parcel.writeString(clubName)
+        parcel.writeString(scheTitle)
+        parcel.writeString(scheContent)
+        parcel.writeString(scheDate)
+        parcel.writeInt(scheFee)
+        parcel.writeString(scheLoca)
+        parcel.writeInt(maxNum)
+        parcel.writeInt(attendUserCnt)
+        parcel.writeString(state)
+        parcel.writeString(scheImg)
+        parcel.writeString(scheCode)
     }
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    override fun toString(): String {
+        return "MyScheduleVO(clubName='$clubName', scheTitle='$scheTitle', scheContent='$scheContent', scheDate='$scheDate', scheFee=$scheFee, scheLoca='$scheLoca', maxNum=$maxNum, attendUserCnt=$attendUserCnt, state='$state', scheImg='$scheImg')"
     }
 
     companion object CREATOR : Parcelable.Creator<MyScheduleVO> {

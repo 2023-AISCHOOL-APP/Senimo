@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -17,6 +18,8 @@ import com.example.senimoapplication.R
 import com.example.senimoapplication.Club.adapter.ScheduleMemberAdapter
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showActivityDialogBox
+import com.example.senimoapplication.Login.Activity_login.IntroActivity
+import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.server.Retrofit.ApiService
 import com.example.senimoapplication.server.Server
 import retrofit2.Call
@@ -31,10 +34,19 @@ class ScheduleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_schedule)
+
+        val scheduleData = intent.getParcelableExtra<MyScheduleVO>("scheduleData")
+        if (scheduleData != null) {
+            Log.d("ScheduleActivity", "받아온 일정 데이터 : $scheduleData")
+        } else {
+            Log.d("ScheduleActivity", "일정 데이터 못 받음")
+        }
 
         binding = ActivityScheduleBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
 
         val color = ContextCompat.getColor(this, R.color.white)
         binding.icMore.setImageTintList(ColorStateList.valueOf(color))

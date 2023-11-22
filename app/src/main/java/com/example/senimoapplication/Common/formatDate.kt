@@ -1,6 +1,7 @@
 package com.example.senimoapplication.Common
 
 import android.content.Context
+import android.util.Log
 import com.example.senimoapplication.R
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -62,7 +63,13 @@ fun dDate(inputDate: String): String {
 
         // 두 날짜 사이의 시간 차이 계산
         val diffInMillies = eventDate.time - currentDate.time
+        if (diffInMillies < 0) {
+            // 이벤트가 과거인 경우 아무것도 반환하지 않음
+            return "종료"
+        }
         val days = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS)
+
+        Log.d("dDate", "eventDate: $eventDate, currentDate: $currentDate, diffInMillies: $diffInMillies, days: $days")
 
         // D-day 문자열 생성
         val dDayString = if (days == 0L) {
