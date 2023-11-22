@@ -10,6 +10,7 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -20,7 +21,9 @@ import com.example.senimoapplication.Club.Activity_club.ScheduleActivity
 import com.example.senimoapplication.Club.VO.AllMemberResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
+import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.MemberVO
+import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.adapter.MemberAdapter
@@ -51,6 +54,7 @@ class HomeFragment : Fragment() {
     var staffList : List<String> = emptyList()
     var joinedList : List<String> = emptyList()
     var clubLeader : String? = null
+    var joinstate: Int = 0
 
     // 모임정보 수정 내용 바로 반영하기 (모임 정보 : displayMeetingInfo())
     private val startForResult =
@@ -211,28 +215,21 @@ class HomeFragment : Fragment() {
             view.context.startActivity(intent)
         }
 
-        // 모임 가입 상태 체크 및 버튼 전환 
-        var joinstate: Int = 0
+        // 모임 가입 상태 체크 및 버튼 전환
         binding.btnJoinClub.setOnClickListener {
+            val userId = UserData.userId.toString()
+            val clubCode = clickedMeeting?.club_code.toString()
+
             if (joinstate == 0) {
-                binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context, R.color.main))
-                binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
-                binding.btnJoinClub.text = "모임 탈퇴하기"
+                // 버튼이 모임 가입하기 상태일 때
+                joinClub(clubCode, userId)
                 joinstate = 1
             } else {
-                binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
-                binding.btnJoinClub.setTextColor(
-                    ContextCompat.getColor(
-                        view.context,
-                        R.color.white
-                    )
-                )
-                binding.btnJoinClub.text = "모임 가입하기"
+                // 버튼이 모임 탈퇴하기 상태일 때
+                quitClub(clubCode, userId)
                 joinstate = 0
             }
         }
-
-
 
         return view
     }
@@ -303,6 +300,58 @@ class HomeFragment : Fragment() {
             .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
             .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
             .into(binding.clubImage) // 이미지를 표시할 ImageView
+    }
+
+    fun joinClub(clubCode: String, userId: String) {
+        val service = Server(requireContext()).service
+        val call = service.joinClub(clubCode, userId)
+
+        call.enqueue(object : Callback<JoinClubResVO> {
+            override fun onResponse(call: Call<JoinClubResVO>, response: Response<JoinClubResVO>) {
+                if (response.isSuccessful) {
+                    val joinClubRes = response.body()
+                    if (joinClubRes != null && joinClubRes.rows == "success") {
+                        binding.btnJoinClub.setTextColor(ContextCompat.getColor(requireContext(), R.color.main))
+                        binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
+                        binding.btnJoinClub.text = "모임 탈퇴하기"
+                        Toast.makeText(activity, "모임에 가입되었습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.d("joinClud", "not success")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<JoinClubResVO>, t: Throwable) {
+                Log.e("HomeFragment joinClub", "joinClub 네트워크 요청 실패", t)
+            }
+
+        })
+    }
+
+    fun quitClub(clubCode: String, userId: String) {
+        val service = Server(requireContext()).service
+        val call = service.quitClub(clubCode, userId)
+
+        call.enqueue(object : Callback<QuitClubResVO> {
+            override fun onResponse(call: Call<QuitClubResVO>, response: Response<QuitClubResVO>) {
+                if (response.isSuccessful) {
+                    val quitClubRes = response.body()
+                    if (quitClubRes != null && quitClubRes.rows == "success") {
+                        binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
+                        binding.btnJoinClub.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        binding.btnJoinClub.text = "모임 가입하기"
+                        Toast.makeText(activity, "모임에서 탈퇴되었습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.d("quitClud", "not success")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<QuitClubResVO>, t: Throwable) {
+                Log.e("HomeFragment quitClub", "quitClub 네트워크 요청 실패", t)
+            }
+
+        })
     }
 
 }

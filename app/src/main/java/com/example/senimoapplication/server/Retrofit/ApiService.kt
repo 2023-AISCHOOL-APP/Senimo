@@ -6,8 +6,10 @@ import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
+import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
 import com.example.senimoapplication.Club.VO.MemberVO
+import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 
@@ -107,12 +109,22 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/joinSche")
     fun joinSche(@Field("user_id") userId: String,
-                 @Field("sche_code") sche_code: String) : Call<JoinScheResVO>
+                 @Field("sche_code") scheCode: String) : Call<JoinScheResVO>
 
     @FormUrlEncoded
     @POST("/cancelJoinSche")
     fun cancelJoinSche(@Field("user_id") userId: String,
-                       @Field("sche_code") sche_code: String) : Call<CancelJoinScheResVO>
+                       @Field("sche_code") scheCode: String) : Call<CancelJoinScheResVO>
+
+    @FormUrlEncoded
+    @POST("/joinClub")
+    fun joinClub(@Field("club_code") clubCode: String,
+                 @Field("user_id") userId: String) : Call<JoinClubResVO>
+
+    @FormUrlEncoded
+    @POST("/quitClub")
+    fun quitClub(@Field("club_code") clubCode: String,
+                 @Field("user_id") userId: String) : Call<QuitClubResVO>
 }
 
 
