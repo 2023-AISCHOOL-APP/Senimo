@@ -3,6 +3,7 @@ const router = express.Router()
 const conn = require('../config/database');
 const config = require('../config/config')
 
+// 일정 정보 조회
 router.get('/get/Sche_intro/:sche_code', (req, res) => {
   console.log('result', req.body);
   // 클라이언트로부터 받은 schedule_id를 사용하여 쿼리문을 생성
@@ -28,7 +29,7 @@ router.get('/get/Sche_intro/:sche_code', (req, res) => {
   });
 });
 
-
+// 일정 생성
 router.post('/makeSche', (req, res) => {
   console.log('makeSche router', req.body);
   const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, sche_img } = req.body
@@ -48,6 +49,7 @@ router.post('/makeSche', (req, res) => {
   });
 })
 
+// 일정 참가
 router.post('/joinSche', (req, res) => {
   console.log('joinSche router', req.body);
   const { user_id, sche_code } = req.body
@@ -66,6 +68,7 @@ router.post('/joinSche', (req, res) => {
   });
 })
 
+// 일정 탈퇴
 router.post('/cancelJoinSche', (req, res) => {
   console.log('cancelJoinSche router', req.body);
   const { user_id, sche_code } = req.body;
