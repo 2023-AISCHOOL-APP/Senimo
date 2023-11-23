@@ -1,6 +1,5 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -188,7 +187,6 @@ class MainActivity : AppCompatActivity() {
   }
 
   // 뒤로가기 버튼을 눌렀을 때 M_tab1로 이동하도록 설정
-  @SuppressLint("MissingSuperCall")
   override fun onBackPressed() {
     val currentTabId = binding.bnvMain.selectedItemId
     if (currentTabId != R.id.M_tab1) {
