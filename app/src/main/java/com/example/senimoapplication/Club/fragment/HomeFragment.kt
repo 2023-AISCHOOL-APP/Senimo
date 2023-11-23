@@ -263,6 +263,11 @@ class HomeFragment : Fragment() {
                                     binding.tvClubLoca.text = clubInfos.clubLocation
                                     binding.tvClubIntro.text = clubInfos.clubIntroduce
                                     binding.tvKeyword.text = clubInfos.keywordName
+
+                                    // 키워드 색상 변경
+                                    val keywordBackground = getKeywordBackground(clubInfos.keywordName)
+                                    binding.tvKeyword.setBackgroundResource(keywordBackground)
+
                                     Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
                                         .load(clubInfos.clubImageUri) // MeetingVO 객체의 imageUri
                                         .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
@@ -285,8 +290,21 @@ class HomeFragment : Fragment() {
             }
 
         }
+
+
     }
 
+    private fun getKeywordBackground(keyword: String): Int {
+        return when (keyword) {
+            "운동" -> R.drawable.keyword
+            "취미" -> R.drawable.keyword_color2
+            "전시/공연" -> R.drawable.keyword_color3
+            "여행" -> R.drawable.keyword_color4
+            "자기계발" -> R.drawable.keyword_color5
+            "재테크" -> R.drawable.keyword_color6
+            else -> R.drawable.keyword_color6 // 기본 배경색
+        }
+    }
     private fun displayMeetingInfo(meeting: MeetingVO) {
         binding.tvMemberAllNum.text = "/${meeting.allMember}명"
         binding.tvMemberNum.text = "${meeting.attendance}"
@@ -294,6 +312,10 @@ class HomeFragment : Fragment() {
         binding.tvClubLoca.text = meeting.gu
         binding.tvClubIntro.text = meeting.content
         binding.tvKeyword.text = meeting.keyword
+
+        val keywordBackground = getKeywordBackground(meeting.keyword)
+        binding.tvKeyword.setBackgroundResource(keywordBackground)
+
         Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
             // .asGif()
             .load(meeting.imageUri) // MeetingVO 객체의 imageUri
