@@ -1,10 +1,11 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.fragment.ChatFragment
 import com.example.senimoapplication.MainPage.VO_main.ChatListVO
@@ -15,7 +16,8 @@ import com.example.senimoapplication.MainPage.fragment_main.HomeMainFragment
 import com.example.senimoapplication.MainPage.fragment_main.MymeetingFragment
 import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.R
-import com.example.senimoapplication.server.Token.TokenManager
+
+//import com.example.senimoapplication.server.Token.TokenManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,8 +25,6 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-//    val tokenManager = TokenManager(this)
-//    tokenManager.refreshTokenIfNeeded()
     // 바인딩 객체 획득
     binding = ActivityMainBinding.inflate(layoutInflater)
     val view = binding.root
@@ -38,6 +38,25 @@ class MainActivity : AppCompatActivity() {
     binding.imgMBackbtnToFrag1.setOnClickListener {
       navigateBackToChatMainFragment()
     }
+
+    var backPressedTime:Long = 0
+
+    val callback = object : OnBackPressedCallback(true){
+      override fun handleOnBackPressed() {
+        val currentTabId = binding.bnvMain.selectedItemId
+        if (currentTabId == R.id.M_tab1) {
+          if(System.currentTimeMillis() - backPressedTime >= 2000){
+            backPressedTime = System.currentTimeMillis()
+            Toast.makeText(this@MainActivity, "뒤로가기 버튼을 한번 더 누르면 앱을 종료합니다.", Toast.LENGTH_SHORT).show()
+          }else if (System.currentTimeMillis() - backPressedTime < 2000){
+            finish()
+          }
+        } else {
+          binding.bnvMain.selectedItemId = R.id.M_tab1
+        }
+      }
+    }
+    this.onBackPressedDispatcher.addCallback(this, callback)
   }
 
   /** 하단 바 네비게이션 함수 */
@@ -67,7 +86,7 @@ class MainActivity : AppCompatActivity() {
       // 아이콘 변경
       for (tabId in defaultIcons.keys) {
         val menuItem = binding.bnvMain.menu.findItem(tabId)
-        if(tabId == item.itemId){
+        if (tabId == item.itemId) {
           // 선택한 탭의 아이콘을 색상이 변경된 버전으로 설정
           menuItem.icon = getDrawable(selectedIcon[tabId] ?: R.drawable.ic_home_gray)
         } else {
@@ -77,43 +96,111 @@ class MainActivity : AppCompatActivity() {
       }
 
       // 모임 일정 리스트 가데이터
-      val myscheduleList : List<ScheduleVO> = listOf(
+      val myscheduleList: List<ScheduleVO> = listOf(
 
-        ScheduleVO("","모임명","가나다라마바사아자차카타파하","","2023-11-22T12:00:08.123Z","광주 동구 제봉로 대성학원 3층",30000, 26, 20,""),
-        ScheduleVO("","모임명","시험 공부 준비합시다~!!","","2023-11-22T12:00:08.123Z","광주 동구 제봉로 대성학원 3층",20000, 10, 30,""),
-        ScheduleVO("","모임명","빼빼로 만들자~","광주역 3번출구에서 만나요!!!!","2023-12-22T12:00:08.123Z","광주역앞10,",15000, 10,6 ,"")
+        ScheduleVO(
+          "",
+          "모임명",
+          "가나다라마바사아자차카타파하",
+          "",
+          "2023-11-22T12:00:08.123Z",
+          "광주 동구 제봉로 대성학원 3층",
+          30000,
+          26,
+          20,
+          ""
+        ),
+        ScheduleVO(
+          "",
+          "모임명",
+          "시험 공부 준비합시다~!!",
+          "",
+          "2023-11-22T12:00:08.123Z",
+          "광주 동구 제봉로 대성학원 3층",
+          20000,
+          10,
+          30,
+          ""
+        ),
+        ScheduleVO(
+          "",
+          "모임명",
+          "빼빼로 만들자~",
+          "광주역 3번출구에서 만나요!!!!",
+          "2023-12-22T12:00:08.123Z",
+          "광주역앞10,",
+          15000,
+          10,
+          6,
+          ""
+        )
 
         // 변수가 서로 다름 지금 지혜누나는 fee를 loca 위치에 써놓고, attendance에 모집중 모집마감이라 써져있음 ,"모임명",추가함 schedulvo에 club_code 추가해서
 
       )
 
       // 가입한 모임 리스트 가데이터
-      val joinList : List<MeetingVO> = listOf(
-        MeetingVO("동구","가나다라마바사아자차카타파하", "같이 골프 합시다~", "운동", 7,20,R.drawable.golf_img.toString(),""),
-        MeetingVO("북구","동명동 티 타임dddddddddddddddddddd", "우리 같이 차 마셔요~ddddddddddddddddddddd", "취미", 5,10,R.drawable.tea_img.toString(),""),
-        MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString(),""),
+      val joinList: List<MeetingVO> = listOf(
+        MeetingVO(
+          "동구",
+          "가나다라마바사아자차카타파하",
+          "같이 골프 합시다~",
+          "운동",
+          7,
+          20,
+          R.drawable.golf_img.toString(),
+          ""
+        ),
+        MeetingVO(
+          "북구",
+          "동명동 티 타임dddddddddddddddddddd",
+          "우리 같이 차 마셔요~ddddddddddddddddddddd",
+          "취미",
+          5,
+          10,
+          R.drawable.tea_img.toString(),
+          ""
+        ),
+        MeetingVO(
+          "광산구",
+          "열정 모임!!",
+          "열정만 있다면 모두 가능합니다~",
+          "자기계발",
+          8,
+          10,
+          R.drawable.tea_img.toString(),
+          ""
+        ),
 
         )
 
 
-
       // 관심 모임 리스트 가데이터
-      val interestList : List<MeetingVO> = listOf(
-        MeetingVO("남구","운암동 수영 모임", "헤엄 헤엄~", "운동", 8,30,R.drawable.tea_img.toString(),""),
-        MeetingVO("북구","동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5,10,R.drawable.tea_img.toString(),""),
-        MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString(),""),
+      val interestList: List<MeetingVO> = listOf(
+        MeetingVO("남구", "운암동 수영 모임", "헤엄 헤엄~", "운동", 8, 30, R.drawable.tea_img.toString(), ""),
+        MeetingVO("북구", "동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5, 10, R.drawable.tea_img.toString(), ""),
+        MeetingVO(
+          "광산구",
+          "열정 모임!!",
+          "열정만 있다면 모두 가능합니다~",
+          "자기계발",
+          8,
+          10,
+          R.drawable.tea_img.toString(),
+          ""
+        ),
       )
 
 
       // 환경설정 아이콘
       binding.imgMSettingbtn.setOnClickListener {
-        val intent = Intent(this@MainActivity,SettingActivity::class.java)
+        val intent = Intent(this@MainActivity, SettingActivity::class.java)
         startActivity(intent)
         finish()
       }
 
-      when(item.itemId){
-        R.id.M_tab1 ->{
+      when (item.itemId) {
+        R.id.M_tab1 -> {
           supportFragmentManager.beginTransaction().replace(
             R.id.fl,
             HomeMainFragment()
@@ -125,7 +212,8 @@ class MainActivity : AppCompatActivity() {
           binding.imgMSettingbtn.visibility = View.INVISIBLE
           binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
         }
-        R.id.M_tab2 ->{
+
+        R.id.M_tab2 -> {
           supportFragmentManager.beginTransaction().replace(
             R.id.fl,
             MymeetingFragment(myscheduleList, joinList, interestList)
@@ -138,7 +226,8 @@ class MainActivity : AppCompatActivity() {
           binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
 
         }
-        R.id.M_tab3 ->{
+
+        R.id.M_tab3 -> {
           supportFragmentManager.beginTransaction().replace(
             R.id.fl,
             ChatMainFragment()
@@ -150,11 +239,10 @@ class MainActivity : AppCompatActivity() {
           binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
 
 
-
         }
 
 
-        R.id.M_tab4 ->{
+        R.id.M_tab4 -> {
           supportFragmentManager.beginTransaction().replace(
             R.id.fl,
             MypageFragment()
@@ -177,7 +265,7 @@ class MainActivity : AppCompatActivity() {
   private fun handleSelectedTabFromIntent() {
     // CreateMeetingActivity로부터 선택한 탭 정보 받기
     val selectedTab = intent.getStringExtra("selected_tab")
-    if(selectedTab != null){
+    if (selectedTab != null) {
       when (selectedTab) {
         "M_tab1" -> binding.bnvMain.selectedItemId = R.id.M_tab1
         "M_tab2" -> binding.bnvMain.selectedItemId = R.id.M_tab2
@@ -188,15 +276,14 @@ class MainActivity : AppCompatActivity() {
   }
 
   // 뒤로가기 버튼을 눌렀을 때 M_tab1로 이동하도록 설정
-  @SuppressLint("MissingSuperCall")
-  override fun onBackPressed() {
-    val currentTabId = binding.bnvMain.selectedItemId
-    if (currentTabId != R.id.M_tab1) {
-      binding.bnvMain.selectedItemId = R.id.M_tab1
-    } else {
-      super.onBackPressed()
-    }
-  }
+//  override fun onBackPressed() {
+//    val currentTabId = binding.bnvMain.selectedItemId
+//    if (currentTabId != R.id.M_tab1) {
+//      binding.bnvMain.selectedItemId = R.id.M_tab1
+//    } else {
+//      super.onBackPressed()
+//    }
+//  }
 
   // ChatMainFragment 에서 ChatFragment로 이동시키게 하는 함수 만들기
   // 내 모임리스트 -> 내 모임 방
@@ -220,7 +307,7 @@ class MainActivity : AppCompatActivity() {
     binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE // 버튼 숨기기
   }
 
-  }
+}
 
 
 interface OnChatItemClickListener {

@@ -56,7 +56,7 @@ LIMIT 20;`
 
 router.get('/getLatestSchedule', (req,res) => {
   const user_id = req.query.userId;
-
+  console.log("아이디다",user_id)
   // SQL 쿼리를 실행
   const query = `
   SELECT 
@@ -83,6 +83,7 @@ router.get('/getLatestSchedule', (req,res) => {
   ORDER BY 
     s.sche_date ASC
   LIMIT 1;`
+
   
     conn.query(query, [user_id], (err, rows) => {
       console.log('rows :', rows);

@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 data class ClubInfoVO(
     // 모임명, 이미지, 전체회원수, 정원, 카테고리, 모임소개, 활동지역
-    @SerializedName("club_img_url")
+    @SerializedName("club_img")
     var clubImageUri: String? = null, // 이미지 경로를 String 타입으로 저장
     @SerializedName("joined_user_cnt")
     val joinedUserCnt : Int,

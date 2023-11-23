@@ -1,6 +1,5 @@
 package com.example.senimoapplication.MainPage.fragment_main
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -38,7 +37,6 @@ class MypageFragment : Fragment() {
 
     }
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

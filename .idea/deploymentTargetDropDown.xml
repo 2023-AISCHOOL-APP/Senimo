@@ -8,6 +8,7 @@
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
             <value value="C:\Users\gjaischool1\.android\avd\newSenimo.avd" />
+            <value value="C:\Users\gjaischool\.android\avd\senimo_newphone.avd" />
           </Key>
         </deviceKey>
       </Target>

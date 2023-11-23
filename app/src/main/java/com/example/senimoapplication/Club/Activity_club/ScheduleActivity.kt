@@ -132,6 +132,7 @@ class ScheduleActivity : AppCompatActivity() {
                 scheCode?.let { it1 -> cancelJoinSche(userId, it1) }
 
             } else {
+
                 Log.d("joinlist3","중복감지안됨")
 
                 // 버튼 view 변경하기
@@ -140,13 +141,20 @@ class ScheduleActivity : AppCompatActivity() {
                 binding.btnJoinSchedule.setTextColor(
                     ContextCompat.getColor(this@ScheduleActivity, R.color.main)) // 메인 텍스트 색상으로 변경
                 scheCode?.let { it1 -> joinSche(userId, it1) }
-
+                
+                
+                cancelJoinSche(userId, scheCode)
+                isJoined = true
             }
         }
 
-        // 뒤로가기 버튼
+        
+        // 뒤로가기 아이콘
         binding.icBack.setOnClickListener {
-            onBackPressed()
+            val intent = Intent(this@ScheduleActivity, ClubActivity::class.java)
+            startActivity(intent)
+            finish()
+
         }
 
         // 앱바 - 게시물 관리 기능 추가
@@ -176,10 +184,6 @@ class ScheduleActivity : AppCompatActivity() {
             }
             popupMenu.show()
         }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 
     fun joinSche(userId: String, scheCode: String) {
