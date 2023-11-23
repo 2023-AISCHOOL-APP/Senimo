@@ -61,7 +61,7 @@ class MyScheduleVO(
     }
 
     override fun toString(): String {
-        return "MyScheduleVO(clubName='$clubName', scheTitle='$scheTitle', scheContent='$scheContent', scheDate='$scheDate', scheFee=$scheFee, scheLoca='$scheLoca', maxNum=$maxNum, attendUserCnt=$attendUserCnt, state='$state', scheImg='$scheImg')"
+        return "MyScheduleVO(clubName='$clubName', scheTitle='$scheTitle', scheContent='$scheContent', scheDate='$scheDate', scheFee=$scheFee, scheLoca='$scheLoca', maxNum=$maxNum, attendUserCnt=$attendUserCnt, state='$state', scheImg='$scheImg', scheCode = '$scheCode')"
     }
 
     companion object CREATOR : Parcelable.Creator<MyScheduleVO> {

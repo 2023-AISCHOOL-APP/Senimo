@@ -131,9 +131,10 @@
 
                 <TextView
                     android:id="@+id/tv_C_S_Time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="20dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:text="2023.10.30(월) 19:00"
                     android:textColor="@color/txt_gray90"
@@ -147,9 +148,10 @@
 
                 <TextView
                     android:id="@+id/tv_C_S_Loca"
-                    android:layout_width="145dp"
+                    android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="20dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:text="광주 동구 동명동 야간비행"
                     android:textColor="@color/txt_gray90"
@@ -163,9 +165,10 @@
 
                 <TextView
                     android:id="@+id/tv_C_S_Fee"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="20dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:text="2만원"
                     android:textColor="@color/txt_gray90"

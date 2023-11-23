@@ -58,6 +58,28 @@ class ScheduleActivity : AppCompatActivity() {
     binding.rvAttendance.layoutManager = LinearLayoutManager(this)
 
 
+      // 메인 홈 일정 바 클릭 시 가져온 데이터 입력
+      // UI 컴포넌트에 데이터를 설정합니다.
+      scheduleData?.let { schedule ->
+        findViewById<TextView>(R.id.tv_C_S_Time).text = formatDate(schedule.scheDate)
+        findViewById<TextView>(R.id.tvClubName2).text = schedule.clubName
+        findViewById<TextView>(R.id.tv_C_ScheduleName3).text = schedule.scheTitle
+        findViewById<TextView>(R.id.tv_C_Schedule_Intro).text = schedule.scheContent
+        findViewById<TextView>(R.id.tv_C_S_Loca).text = schedule.scheLoca
+        findViewById<TextView>(R.id.tv_C_S_Fee).text = "${schedule.scheFee} 원"
+        findViewById<TextView>(R.id.tv_C_S_attendance).text = "${schedule.attendUserCnt}/${schedule.maxNum}명"
+
+        // Glide를 사용하여 이미지를 로드합니다.
+        Glide.with(this)
+          .load(schedule.scheImg)
+          .placeholder(R.drawable.loading)
+          .error(R.drawable.golf_img)
+          .into(binding.imgCSchedule)
+      } ?: run {
+        Log.e("ScheduleActivity", "받아온 일정 데이터가 없습니다.")
+      }
+
+
     //가데이터
     val schedule = ScheduleVO(
       "축구보자축구",
@@ -151,6 +173,7 @@ class ScheduleActivity : AppCompatActivity() {
     // 서버에 요청을 보낼 '전화기'를 만들어요.
     val service = Server(this).service
     val sche_code = "sche_code1" // 예시 ID
+    // val sche_code = scheduleData.scheCode // 예시 ID
     // '전화'를 걸어요. 서버에 데이터를 달라고 요청해요.
     service.getScheIntro(sche_code).enqueue(object : Callback<ScheduleVO> {
       // 서버에서 답이 오면 이 부분이 실행돼요.
