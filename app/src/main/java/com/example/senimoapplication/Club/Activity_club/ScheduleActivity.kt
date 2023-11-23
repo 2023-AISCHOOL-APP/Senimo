@@ -144,7 +144,7 @@ class ScheduleActivity : AppCompatActivity() {
         // 일정 참가하기 버튼
         binding.btnJoinSchedule.setOnClickListener {
             val userId = UserData.userId.toString()
-            val scheCode = "test1"
+            val scheCode = clickedSchedule?.scheCode.toString()
 
             if (isJoined) {
                 joinSche(userId, scheCode)
