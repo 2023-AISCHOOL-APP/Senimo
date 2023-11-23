@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../config/database');
+const config = require('../config/config')
 
 router.get('/getClubInfo/:club_code', (req, res) => {
   console.log('result', req.body);
   let clubCode = req.params.club_code
 
   const query = `
-    select c1.club_code, c1.club_img, count(j.user_id) as joined_user_cnt, c1.max_cnt, c1.club_name, c1.club_location, k.keyword_name, c1.club_introduce,CONCAT('http://192.168.70.207:3333/uploads/', c1.club_img) AS club_img_url
+    select c1.club_code, c1.club_img, count(j.user_id) as joined_user_cnt, c1.max_cnt, c1.club_name, c1.club_location, k.keyword_name, c1.club_introduce,CONCAT('${config.baseURL}/uploads/', c1.club_img) AS club_img 
     from tb_club c1 
     left join tb_keyword k on c1.keyword_code = k.keyword_code
     left join tb_join j on c1.club_code = j.club_code

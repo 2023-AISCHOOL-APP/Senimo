@@ -14,7 +14,7 @@ import com.example.senimoapplication.MainPage.fragment_main.HomeMainFragment
 import com.example.senimoapplication.MainPage.fragment_main.MymeetingFragment
 import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.R
-import com.example.senimoapplication.server.Token.TokenManager
+//import com.example.senimoapplication.server.Token.TokenManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,8 +22,6 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-//    val tokenManager = TokenManager(this)
-//    tokenManager.refreshTokenIfNeeded()
     // 바인딩 객체 획득
     binding = ActivityMainBinding.inflate(layoutInflater)
     val view = binding.root

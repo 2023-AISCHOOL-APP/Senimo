@@ -2,6 +2,7 @@ package com.example.senimoapplication.MainPage.Activity_main
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,15 +18,20 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityCreateMeetingBinding
+import com.example.senimoapplication.server.ImageUploader
 import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.PreferenceManager
 import com.example.senimoapplication.server.Token.UserData
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,6 +67,7 @@ class CreateMeetingActivity : AppCompatActivity() {
         Log.d("click", "$intent_meetingVO")
         setupKeywordImageViews()
         if (intent_meetingVO != null) {
+            Log.d("시작부분 확인", "모임수정하는부분")
             // 모임 수정하기
             binding.tvMToptitle.text = title
             binding.btnSetMeeting.text = btnTitle
@@ -106,7 +113,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                     imageName = getFileName(uri) // 파일이름 추출
                     intent_meetingVO.imageUri = uri.toString()
                     Glide.with(this).load(uri).into(binding.imgMButton)
-                    Log.d("PhotoPicker_main", "선택된 URI: $uri")
+                    Log.d("PhotoPicker_main","선택된 URI: $uri")
                 } else {
                     Glide.with(this).load(intent_meetingVO.imageUri).into(binding.imgMButton)
                     binding.imgMIcon.visibility = ImageView.VISIBLE
@@ -139,8 +146,9 @@ class CreateMeetingActivity : AppCompatActivity() {
                 }
             }
 
-        }
+        } //ddddddddddddddddddddddddddddddddddddddddddddddddddddddd
         else {
+            Log.d("시작부분 확인", "else로 시작")
             // 모임 일정 등록
             // 모임 이미지 선택
             val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -268,8 +276,9 @@ class CreateMeetingActivity : AppCompatActivity() {
 
             // 모임 만들기 버튼 클릭 시 정보 취합하기
             binding.btnSetMeeting.setOnClickListener {
+                Log.d("CreateMeeting", "버튼 클릭됨") // 버튼 클릭 로그
                 val selectedGu = binding.spMGulist.selectedItem.toString()
-
+                val userData = PreferenceManager.getUser(this)
                 if (selectedKeyword != null) {
                     val meetingVO =
                         MeetingVO(
@@ -281,10 +290,18 @@ class CreateMeetingActivity : AppCompatActivity() {
                             allMember = binding.tvMAllMember.text.toString().toInt(),
                             imageUri = imageName.toString(), // 이미지 URI 사용
                             club_code = "", // db에서 uuid로 생성된 값으로 저장되서 MeetingVO형식 맞추기위해 사용한값
-                            userId = UserData.userId // 로그인한 사용자 id 정보 받아와야함
+                            userId = userData?.user_id // 로그인한 사용자 id 정보 받아와야함
                         )
                     Log.d("click CreateMeeting 기능",meetingVO.toString())
-                    sendMeetingInfo(meetingVO)
+                    // 이미지 URI가 있으면 이미지와 함께 모임 정보 전송
+                    imageUri?.let {
+                            val imagePart = ImageUploader(this).prepareImagePart(it)
+                            sendMeetingInfo(meetingVO, imagePart)
+                            Log.d("imagePart", imagePart.toString())
+                    } ?: run {
+                        // 이미지 URI가 없는 경우에는 모임 정보만 전송
+                        sendMeetingInfo(meetingVO, null)
+                    }
                 }
             }
         }
@@ -311,13 +328,13 @@ class CreateMeetingActivity : AppCompatActivity() {
         }
     }
 
-            // 결과를 설정하고 현재 액티비티를 종료
+    // 결과를 설정하고 현재 액티비티를 종료
 //                val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
 //                intent.putExtra("meetingVO", meetingVO)
 //                // setResult(RESULT_OK, intent)
 //                startActivity(intent)
 
-            // 로그로 모임 정보 출력
+    // 로그로 모임 정보 출력
 //                Log.d("CreateMeetingActivity", "새로운 모임 생성: $meetingVO")
 //                Toast.makeText(this@CreateMeetingActivity,"모임이 생성되었습니다",Toast.LENGTH_SHORT).show()
 //            } else {
@@ -381,13 +398,18 @@ class CreateMeetingActivity : AppCompatActivity() {
     }
 
     //모임 생성 요청 함수
-    private fun sendMeetingInfo(meetingVO: MeetingVO) {
+    private fun sendMeetingInfo(meetingVO: MeetingVO,imagePart: MultipartBody.Part?) {
+        val meetingJson = Gson().toJson(meetingVO) //MeetingVO 객체를 JSON 문자열로 변환
+        val meetingBody =
+            meetingJson.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull()) //변환된 JSON 문자열을 RequestBody 객체로 만듭니다.
+        Log.d("meetingJson", meetingJson.toString())
+        Log.d("meetingBody", meetingBody.toString())
         val service = Server(this).service
-        service.createMeeting(meetingVO).enqueue(object : Callback<MeetingVO> {
+        service.createMeeting(meetingVO,imagePart).enqueue(object : Callback<MeetingVO> {
             override fun onResponse(call: Call<MeetingVO>, response: Response<MeetingVO>) {
                 if (response.isSuccessful) {
                     // 서버로부터 성공적으로 응답을 받았을 떄의 처리
-                    Log.d("CreateMeeting",response.toString())
+                    Log.d("CreateMeetingr",response.toString())
                     Toast.makeText(this@CreateMeetingActivity,"모임이 생성되었습니다.", Toast.LENGTH_SHORT).show()
                     Log.d("CreateMeetingm",meetingVO.toString())
                     Log.d("CreateMeetingm1",response.body().toString())

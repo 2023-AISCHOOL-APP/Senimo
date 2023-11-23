@@ -10,7 +10,7 @@ const scheduleRouter = require('./routes/schedule')
 const userRouter = require('./routes/user');
 const createMeeting = require('./routes/createMeeting')
 const modifyMeeting = require('./routes/modifyMeeting')
-const updateInterestedClub = require('./routes/updateInterestedClub')
+const updateInterestedClub = require('./routes/UpdateInterestedClub')
 const getAllMembers = require('./routes/getAllMembers')
 const updateMember = require('./routes/updateMember')
 const updateLeader = require('./routes/updateLeader')
@@ -19,11 +19,13 @@ const getSchedules = require('./routes/getSchedules')
 const getScheduleMembers = require('./routes/getScheduleMembers')
 const boardRouter = require('./routes/board')
 
+
 app.use(cors())
 
 app.set('port', process.env.PORT || 3333);
 // ngrok tunnel --label edge=edghts_2YKdAEOOgOIr0zDkBYxQMo8mcyg http://localhost:80
 //app.set('port', process.env.PORT || 80);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/uploads', express.static("C:/Users/gjaischool/Desktop/final_project/Senimo/Server/uploads"));
@@ -32,7 +34,7 @@ app.use('/', appMainRouter)
 app.use('/', clubMainRouter)
 app.use('/', scheduleRouter)
 app.use('/', userRouter)
-app.use('/', createMeeting)
+app.use('/',createMeeting)
 app.use('/', modifyMeeting)
 app.use('/', updateInterestedClub)
 app.use('/', getAllMembers)
