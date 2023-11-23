@@ -1,17 +1,31 @@
 package com.example.senimoapplication.server.Retrofit
 
+import com.example.senimoapplication.Club.VO.AllMemberResVO
+import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
+import com.example.senimoapplication.Club.VO.DeleteMemberVO
+import com.example.senimoapplication.Club.VO.MakeScheResVo
+import com.example.senimoapplication.Club.VO.InterestedResVO
+import com.example.senimoapplication.Club.VO.JoinClubResVO
+import com.example.senimoapplication.Club.VO.JoinScheResVO
+import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
+import com.example.senimoapplication.Club.VO.UpdateMemberVO
+import com.example.senimoapplication.Club.VO.WritePostResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
+import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
+import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import com.example.senimoapplication.server.Token.TokenValidationResponse
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import com.google.gson.JsonObject
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
+import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -19,16 +33,21 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
-
+import retrofit2.http.Query
 
 
 interface ApiService {
     @GET("/getMeetings")
     fun getMeetings(): Call<List<MeetingVO>>
 
+
     @Multipart
     @POST("/upload")
     fun uploadImage(@Part image: MultipartBody.Part) : Call<ResponseBody>
+
+    @GET("/getLatestSchedule")
+    fun getLatestSchedule(@Query("userId") userId: String?): Call<List<MyScheduleVO>>
+
 //    @Multipart
 //    @POST("/db/postImg")
 //    fun postImg(@Part photo: MultipartBody.Part): Call<ResponseDC> // 사진을 업로드 하는 함수
@@ -49,14 +68,16 @@ interface ApiService {
     @Multipart
     @POST("/postCreateMeeting")
     fun createMeeting(
-        @Part("meeting") meeting: RequestBody, // JSON 형식의 MeetingVO @part 매개변수는 RequestBody , //서버 측에서는 이 "meeting" 파트를 찾아 그 내용을 읽고 처리
+        @Part("meeting") meeting: MeetingVO, // JSON 형식의 MeetingVO @part 매개변수는 RequestBody , //서버 측에서는 이 "meeting" 파트를 찾아 그 내용을 읽고 처리
         @Part image: MultipartBody.Part? // 이미지 파일 데이터를 전달하는 역할
     ): Call<MeetingVO>
 
     @FormUrlEncoded
     @POST("/login")
-    fun loginUser(@Field("user_id") userId: String,
-                  @Field("user_pw") userPw: String):Call<TokenResponse> //Call<LoginResVO>
+    fun loginUser(
+        @Field("user_id") userId: String,
+        @Field("user_pw") userPw: String
+    ): Call<TokenResponse> //Call<LoginResVO>
 
     @FormUrlEncoded
     @POST("/signup")
@@ -71,7 +92,66 @@ interface ApiService {
 
     @POST("/validateToken")
     fun validateToken(@Header("Authorization") token: String): Call<TokenValidationResponse>
-}
 
+    @FormUrlEncoded
+    @POST("/checkUserId")
+    fun checkId(@Field("user_id") userId: String): Call<SignUpResVO>
+
+    @FormUrlEncoded
+    @POST("/makeSche")
+    fun createSchedule(
+        @Field("club_code") clubCode: String,
+        @Field("sche_title") scheTitle: String,
+        @Field("sche_content") scheContent: String,
+        @Field("sche_date") scheDate: String,
+        @Field("sche_location") scheLocation: String,
+        @Field("max_num") maxNum: Int,
+        @Field("fee") scheFee: Int,
+        @Field("sche_img") scheImg: String?
+    ): Call<MakeScheResVo>
+
+    @POST("/postModifyMeeting")
+    fun modifyMeeting(@Body meetingVO: MeetingVO): Call<modifyResult>
+
+    @FormUrlEncoded
+    @POST("/updateInterestedClub")
+    fun updateInterestStatus(@FieldMap params: Map<String, String>): Call<InterestedResVO>
+
+    @POST("/getAllMembers/{clubCode}")
+    fun getAllMembers(@Path("clubCode") clubCode: String): Call<AllMemberResVO>
+
+    @POST("/updateMember")
+    fun updateMember(@Body updateMemberVO: UpdateMemberVO): Call<JsonObject>
+
+    @POST("/deleteMember")
+    fun deleteMember(@Body deleteMemberVO: DeleteMemberVO): Call<JsonObject>
+
+    @FormUrlEncoded
+    @POST("/joinSche")
+    fun joinSche(@Field("user_id") userId: String,
+                 @Field("sche_code") scheCode: String) : Call<JoinScheResVO>
+
+    @FormUrlEncoded
+    @POST("/cancelJoinSche")
+    fun cancelJoinSche(@Field("user_id") userId: String,
+                       @Field("sche_code") scheCode: String) : Call<CancelJoinScheResVO>
+
+    @FormUrlEncoded
+    @POST("/joinClub")
+    fun joinClub(@Field("club_code") clubCode: String,
+                 @Field("user_id") userId: String) : Call<JoinClubResVO>
+
+    @FormUrlEncoded
+    @POST("/quitClub")
+    fun quitClub(@Field("club_code") clubCode: String,
+                 @Field("user_id") userId: String) : Call<QuitClubResVO>
+
+    @FormUrlEncoded
+    @POST("/writePost")
+    fun writePost(@Field("user_id") userId: String,
+                  @Field("club_code") clubCode: String,
+                  @Field("post_content") postContent: String?,
+                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
+}
 
 

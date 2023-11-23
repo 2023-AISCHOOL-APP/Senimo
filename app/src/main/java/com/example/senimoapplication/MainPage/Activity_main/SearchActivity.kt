@@ -15,6 +15,8 @@ import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.databinding.ActivitySearchBinding
 import android.os.Parcelable
 import android.text.Editable
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintSet
 
 class SearchActivity : AppCompatActivity() {
 
@@ -120,5 +122,49 @@ class SearchActivity : AppCompatActivity() {
                     }
                 })
         )
+
+        setupKeywordTextViews()
     }
+
+    private fun setupKeywordTextViews() {
+        binding.tvMKeyword.setOnClickListener {
+            updateKeywordVisibility(binding.tvMKeyword, binding.tvMKeyword2, binding.tvMKeyword3)
+        }
+        binding.tvMKeyword2.setOnClickListener {
+            updateKeywordVisibility(binding.tvMKeyword2, binding.tvMKeyword, binding.tvMKeyword3)
+        }
+        binding.tvMKeyword3.setOnClickListener {
+            updateKeywordVisibility(binding.tvMKeyword3, binding.tvMKeyword, binding.tvMKeyword2)
+        }
+    }
+
+    private fun updateKeywordVisibility(clickedView: TextView, otherView1: TextView, otherView2: TextView) {
+        clickedView.visibility = View.GONE
+
+        // ConstraintSet을 사용하여 레이아웃 업데이트
+        val constraintSet = ConstraintSet()
+        val constraintLayout = binding.constraintLayout
+        constraintSet.clone(constraintLayout)
+
+        val marginTop = 10 // marginTop 값
+
+        when (clickedView) {
+            otherView1 -> {
+                // otherView1을 클릭한 경우
+                otherView1.visibility = View.GONE
+                constraintSet.connect(otherView2.id, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 0)
+                constraintSet.connect(otherView2.id, ConstraintSet.TOP, R.id.tv_M_Locationmeeting, ConstraintSet.BOTTOM, marginTop)
+            }
+            otherView2 -> {
+                // otherView2를 클릭한 경우
+                otherView2.visibility = View.GONE
+            }
+            // otherView3가 없는 경우 아무 동작을 하지 않습니다.
+        }
+
+        // 변경된 제약 조건 적용
+        constraintSet.applyTo(constraintLayout)
+
+    }
+
 }

@@ -2,6 +2,7 @@ package com.example.senimoapplication.MainPage.Activity_main
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,6 +18,11 @@ import androidx.compose.ui.graphics.LinearGradientShader
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.example.senimoapplication.Common.BadgeManager
 import com.example.senimoapplication.Login.Activity_login.SignUpActivity
 import com.example.senimoapplication.Login.adapter.DongAdapter
 import com.example.senimoapplication.Login.adapter.GuAdapter
@@ -42,7 +48,6 @@ class EditMyPageActivity : AppCompatActivity() {
         setContentView(view)
 
 
-        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
 
         // 사진 1장 선택
         val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -54,26 +59,31 @@ class EditMyPageActivity : AppCompatActivity() {
 //                binding.imgMEditPhoto.visibility = ImageView.VISIBLE
 
                 imageUri = uri // 클래스 수준 변수에 URI 저장
-                Glide.with(this).load(uri).into(binding.imgMEditMypageImg)
-
-                // Gride를 사용하여 이미지 로딩
-//                Glide.with(this@EditMyPageActivity)
-//                    .load(uri) // 이미지 URI
-//                    .centerCrop() // 이미지가 ImageView를 가득 채우도록 조정
-//                    .into(binding.imgMEditMypageImg) // 이미지를 설정할 ImageView
-//                    // 이미지를 선택한 후에 URI를 변수에 저장
-//                    val imageUriString = uri.toString() // Uri 객체를 String으로 변환하여 저장
+                Glide.with(this)
+                    .load(imageUri)
+                    .error(R.drawable.ic_profile_circle) // 로드 실패 시 기본 이미지
+                    .into(binding.imgMEditMypageImg)
 
             } else {
                 Log.d("PhotoPicker_main", "No media selected")
             }
         }
 
+        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
+        // 뷰에 데이터 설정
+        Glide.with(this).load(myProfile.img).into(binding.imgMEditMypageImg)
+        binding.etMUserName.setText(myProfile.name)
+        binding.etMUserBirth.setText(myProfile.birth.toString())
+        binding.etMGender.setText(myProfile.gender)
+        binding.etMMyPageIntro.setText(myProfile.intro)
+
+
         binding.imgMEditPhoto.setOnClickListener {
             pickMediaMain.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        val editGuList = arrayListOf<String>("광주 전체","광산구","남구","동구","북구","서구")
+
+
 
         val gwangjuDistricts = ArrayList<String>()
         val gwangsanList = arrayListOf<String>("고룡동","광산동","남산동","내산동","대산동","덕림동","도덕동","도산동","도천동","도호동","동림동","동산동","동호동","두정동","등임동","명도동",
@@ -97,12 +107,21 @@ class EditMyPageActivity : AppCompatActivity() {
         gwangjuDistricts.addAll(northList)
         gwangjuDistricts.addAll(westList)
 
+        // GuAdapter 설정
+        val editGuList = arrayListOf<String>("광주 전체","광산구","남구","동구","북구","서구")
         val GuAdapter = GuAdapter(R.layout.gu_list, editGuList, applicationContext)
-        DongAdapter = DongAdapter(R.layout.dong_list, gwangjuDistricts, applicationContext)
-
         binding.rvMEditGu.adapter = GuAdapter
-        binding.rvMEditGu.layoutManager = LinearLayoutManager(this@EditMyPageActivity)
+        binding.rvMEditGu.layoutManager = LinearLayoutManager(this)
 
+        // 현재 선택된 구 설정
+        val selectedGuIndex = editGuList.indexOf(myProfile.gu)
+        if (selectedGuIndex != -1) {
+            GuAdapter.selectedPosition = selectedGuIndex
+            GuAdapter.notifyDataSetChanged()
+        }
+
+        // DongAdapter 설정
+        DongAdapter = DongAdapter(R.layout.dong_list, gwangjuDistricts, applicationContext)
         binding.rvMEditDong.adapter = DongAdapter
 
         val girdLayoutManager = GridLayoutManager(applicationContext, 2)
@@ -190,7 +209,8 @@ class EditMyPageActivity : AppCompatActivity() {
                 gu = selectedGu,
                 birth = binding.etMUserBirth.text.toString().toIntOrNull() ?: myProfile?.birth ?: 0,
                 gender = binding.etMGender.text.toString(),
-                intro = binding.etMMyPageIntro.text.toString()
+                intro = binding.etMMyPageIntro.text.toString(),
+                badges = myProfile?.badges ?: listOf()
             )
 
             // 로그 출력

@@ -109,7 +109,7 @@ class PostAdapter(val context: Context, val layout : Int, val data: ArrayList<Po
                 when (item.itemId) {
                     R.id.menu_option1 -> {
                         // 게시물 수정
-                        val intent = Intent(view.context, MakeScheduleActivity::class.java)
+                        val intent = Intent(view.context, PostActivity::class.java)
                         view.context.startActivity(intent)
                         true
                     }

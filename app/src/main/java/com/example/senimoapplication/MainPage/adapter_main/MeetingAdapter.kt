@@ -1,6 +1,8 @@
 package com.example.senimoapplication.MainPage.adapter_main
 
 import android.content.Context
+import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.senimoapplication.R
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import kotlin.math.min
@@ -77,7 +83,7 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val TITLE_MAX_TEXT_LENGTH = 10 // 최대 글자 수
+        val TITLE_MAX_TEXT_LENGTH = 11 // 최대 글자 수
         val CONTENT_MAX_TEXT_LENGTH = 18 // 최대 내용 수
 
         // 모임 타이틀 , 소개글 가져오기
@@ -85,30 +91,15 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         val content = data[position].content
 
         // 글자 수가 최대 길이보다 길 경우 생략 부호(...) 추가하여 자르기
-        val title_truncatedName = if (title.length > TITLE_MAX_TEXT_LENGTH) {
-            title.substring(0, TITLE_MAX_TEXT_LENGTH) + "..."
-        } else {
-            title // 글자 수 최대 길이 이하인 경우 그대로 표시
-        }
-
-        val content_truncatedName = if (content.length > CONTENT_MAX_TEXT_LENGTH) {
-            content.substring(0, CONTENT_MAX_TEXT_LENGTH) + "..."
-        } else {
-            content // 글자 수 최대 길이 이하인 경우 그대로 표시
-        }
-
-        // ViewHolder클래스가 찾아온 뷰들을 컨트롤 할 수 있는 곳
-        // 데이터 + 디자인
+        val title_truncatedName = truncateText(title, TITLE_MAX_TEXT_LENGTH)
+        val content_truncatedName = truncateText(content, CONTENT_MAX_TEXT_LENGTH)
 
         holder.tv_M_Gu.text = data[position].gu
-
-        // holder.tv_M_Title.text = data[position].title
-        holder.tv_M_Title.text = title_truncatedName // 글자 제한 title
-
-        // holder.tv_M_Content.text = data[position].content
-        holder.tv_M_Content.text = content_truncatedName // 글자 제한 content
-
+        holder.tv_M_Title.text = title_truncatedName
+        holder.tv_M_Content.text = content_truncatedName
         holder.tv_M_Keyword.text = data[position].keyword
+
+
         when(data[position].keyword){
             "운동" -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword)
             "취미" -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword_color2)
@@ -127,10 +118,13 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         // Glide를 사용하여 이미지 로드 및 표시
         val imageUrl = data[position].imageUri
         Glide.with(context)
+            // .asGif()
             .load(imageUrl)
-            .placeholder(R.drawable.loading) // 로딩 중 표시될 이미지
-            .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
+            .placeholder(R.drawable.ic_loading6) // 로딩 중 표시될 이미지
+            .error(R.drawable.ic_meeting_profile) // 로딩 실패 시 표시될 이미지
             .into(holder.Img_M_Meeting)
+
+
     }
 
     override fun getItemCount(): Int {
@@ -141,4 +135,23 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
             min(2, data.size)
         }
     }
+
+    private fun truncateText(text: String, maxLength: Int): String {
+        val lines = text.split("\n")
+        val firstLine = lines.firstOrNull() ?: ""
+        val remainingLines = lines.drop(1)
+
+        val truncatedFirstLine = if (firstLine.length > maxLength) {
+            firstLine.substring(0, maxLength - 3) + "..."
+        } else {
+            firstLine
+        }
+
+        return if (remainingLines.isEmpty()) {
+            truncatedFirstLine
+        } else {
+            "$truncatedFirstLine ..."
+        }
+    }
+
 }
