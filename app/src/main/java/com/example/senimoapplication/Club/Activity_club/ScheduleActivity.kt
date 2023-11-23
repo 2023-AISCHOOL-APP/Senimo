@@ -153,12 +153,13 @@ class ScheduleActivity : AppCompatActivity() {
                 cancelJoinSche(userId, scheCode)
                 isJoined = true
             }
+        }
 
-            // 뒤로가기 버튼
-            binding.icBack.setOnClickListener {
-                onBackPressed()
-            }
-
+        // 뒤로가기 아이콘
+        binding.icBack.setOnClickListener {
+            val intent = Intent(this@ScheduleActivity, ClubActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         // 앱바 - 게시물 관리 기능 추가
@@ -188,10 +189,6 @@ class ScheduleActivity : AppCompatActivity() {
             }
             popupMenu.show()
         }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 
     fun joinSche(userId: String, scheCode: String) {
