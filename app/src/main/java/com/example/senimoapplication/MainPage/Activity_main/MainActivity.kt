@@ -202,6 +202,9 @@ class MainActivity : AppCompatActivity() {
   // 내 모임리스트 -> 내 모임 방
   // tab3 에서 fl화면 전환
   fun navigateToChatFragment(chatListVO: ChatListVO) {
+    // BottomNavigation 숨기기
+    binding.bnvMain.visibility = View.GONE
+
     supportFragmentManager.beginTransaction().replace(
       R.id.fl,
       ChatFragment.newInstance(chatListVO)
@@ -213,6 +216,9 @@ class MainActivity : AppCompatActivity() {
 
   // ChatFragment에서 ChatMainFragment로 이동하는 함수
   fun navigateBackToChatMainFragment() {
+    // BottomNavigation 표시
+    binding.bnvMain.visibility = View.VISIBLE
+
     supportFragmentManager.beginTransaction().replace(
       R.id.fl,
       ChatMainFragment()
