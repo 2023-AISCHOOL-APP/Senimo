@@ -31,11 +31,9 @@ import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.Common.RecyclerItemClickListener
-import com.example.senimoapplication.Login.Activity_login.IntroActivity
+import com.example.senimoapplication.Common.showAlertDialogBox
 import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
-import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
-import com.example.senimoapplication.server.Retrofit.ApiService
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentHomeBinding
 import com.example.senimoapplication.server.Server
@@ -44,8 +42,6 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class HomeFragment : Fragment() {
 
@@ -55,12 +51,11 @@ class HomeFragment : Fragment() {
     var createMeeting: MeetingVO? = null
     val memberList: ArrayList<MemberVO> = ArrayList()
     val userId = UserData.userId
-    var clubCode: String? =null
+    var clubCode: String? = null
     var staffList : List<String> = emptyList()
     var joinedList : List<String> = emptyList()
     var clubLeader : String? = null
     var clubName : String? = null
-    var joinstate: Int = 0
 
     // 모임정보 수정 내용 바로 반영하기 (모임 정보 : displayMeetingInfo())
     private val startForResult =
@@ -122,20 +117,31 @@ class HomeFragment : Fragment() {
                                     binding.btnNewSchedule.visibility = GONE
                                 }
 
-                                binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.main))
-                                binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
-                                binding.btnJoinClub.text = "모임 탈퇴하기"
+                                // 가입하기 버튼
                                 if(userId in joinedList){
+                                    // 이미 모임에 가입된 회원인 경우
+                                    Log.d("joinedList","유저${userId}, 가입자목록 ${joinedList}")
+                                    binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.main))
+                                    binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
+                                    binding.btnJoinClub.text = "모임 탈퇴하기"
+
                                     binding.btnJoinClub.setOnClickListener {
-                                        binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.main))
-                                        binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
-                                        binding.btnJoinClub.text = "모임 탈퇴하기"
-                                    }
-                                } else {
-                                    binding.btnJoinClub.setOnClickListener {
+                                        quitClub(clubCode,userId)
                                         binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
                                         binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.white))
                                         binding.btnJoinClub.text = "모임 가입하기"
+                                    }
+                                } else {
+                                    // 모임에 가입하지 않은 회원인 경우
+                                    binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
+                                    binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.white))
+                                    binding.btnJoinClub.text = "모임 가입하기"
+
+                                    binding.btnJoinClub.setOnClickListener {
+                                        joinClub(clubCode,userId)
+                                        binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.main))
+                                        binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
+                                        binding.btnJoinClub.text = "모임 탈퇴하기"
                                     }
                                 }
                             }
@@ -188,6 +194,7 @@ class HomeFragment : Fragment() {
                             staffList = memberList.filter { it.clubRole == 1 || it.clubRole == 2 }.map { it.userId }.toList()
                             joinedList = memberList.map { it.userId }
                             Log.d("getclickedMeetinghome", "기존 모임장 ${clubLeader}")
+                            Log.d("joinedList", "가입회원목록 ${joinedList}")
                             val m_adapter = MemberAdapter(requireContext(), R.layout.club_member_list, ArrayList(memberList ?: emptyList()), clubLeader, this@HomeFragment)
                             binding.rvMember.adapter = m_adapter
                             binding.rvMember.layoutManager = LinearLayoutManager(view?.context)
@@ -215,20 +222,28 @@ class HomeFragment : Fragment() {
                                 binding.btnNewSchedule.visibility = GONE
                             }
 
-                            binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.main))
-                            binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
-                            binding.btnJoinClub.text = "모임 탈퇴하기"
-
+                            // 가입하기 버튼
                             if(userId in joinedList){
-                                Log.d("getclickedMeetinghome", "모임 가입/탈퇴 버튼")
+                                // 이미 모임에 가입된 회원인 경우
+                                Log.d("joinedList","유저${userId}, 가입자목록 ${joinedList}")
+                                binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.main))
+                                binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
+                                binding.btnJoinClub.text = "모임 탈퇴하기"
+
                                 binding.btnJoinClub.setOnClickListener {
+                                    quitClub(clubCode,userId)
                                     binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
                                     binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.white))
-
                                     binding.btnJoinClub.text = "모임 가입하기"
                                 }
                             } else {
+                                // 모임에 가입하지 않은 회원인 경우
+                                binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
+                                binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.white))
+                                binding.btnJoinClub.text = "모임 가입하기"
+
                                 binding.btnJoinClub.setOnClickListener {
+                                    joinClub(clubCode,userId)
                                     binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.main))
                                     binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
                                     binding.btnJoinClub.text = "모임 탈퇴하기"
@@ -239,12 +254,13 @@ class HomeFragment : Fragment() {
                         Log.d("getclickedMeetinghome", "멤버 리스트 만들기 실패")
                     }
                 }
-
                 override fun onFailure(call: Call<AllMemberResVO>, t: Throwable) {
                     Log.d("getclickedMeetinghome", "스택 트레이스: ", t)
                 }
             })
         }
+
+        Log.d("joinedList","밖에서도 사용가능${joinedList}")
 
         // 모임 일정 데이터 가져오기
         clubCode?.let { code ->
@@ -254,23 +270,27 @@ class HomeFragment : Fragment() {
                     if (response.isSuccessful) {
                         val scheduleList: List<ScheduleVO>? = response.body()?.data
                         Log.d("getclickedSchedule", "${scheduleList}")
-                        joinedList = memberList.map { it.userId }
                         if (scheduleList != null) {
                             val s_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, scheduleList)
                             binding.rvSchedule.adapter = s_adapter
                             binding.rvSchedule.layoutManager = LinearLayoutManager(view.context)
                             binding.rvSchedule.addOnItemTouchListener(
-                                RecyclerItemClickListener(requireContext(),binding.rvSchedule,
+                                RecyclerItemClickListener(requireContext(), binding.rvSchedule,
                                     object : RecyclerItemClickListener.OnItemClickListener {
                                         override fun onItemClick(view: View, position: Int) {
                                             val clickedSchedule = scheduleList[position] // 클릭된 아이템의 ScheduleVO 가져오기
-                                            
-                                            // 새로운 액티비티로 이동
-                                            val intent = Intent(requireContext(), ScheduleActivity::class.java)
-                                            intent.putExtra("ScheduleInfo", clickedSchedule)
-                                            intent.putExtra("clubName", clubName)
-                                            intent.putExtra("scheCode", clickedSchedule.scheCode)
-                                            startActivity(intent)
+                                            Log.d("joinedList","일정탭_가입회원 목록: ${joinedList}, 현재 유저 ${userId}")
+                                            if (joinedList.contains(userId)) {
+                                                // 새로운 액티비티로 이동
+                                                val intent = Intent(requireContext(), ScheduleActivity::class.java)
+                                                intent.putExtra("ScheduleInfo", clickedSchedule)
+                                                intent.putExtra("clubName", clubName)
+                                                intent.putExtra("scheCode", clickedSchedule.scheCode)
+                                                startActivity(intent)
+                                            } else {
+                                                // 여기서 showAlertDialogBox 함수를 호출할 때 Context를 전달합니다.
+                                                showAlertDialogBox(requireContext(), "모임 회원만 확인할 수 있습니다.", "확인")
+                                            }
                                         }
                                     })
                             )
@@ -293,22 +313,6 @@ class HomeFragment : Fragment() {
             intent.putExtra("club_code", clubCode)
             Log.d("club_code", clubCode)
             view.context.startActivity(intent)
-        }
-
-        // 모임 가입 상태 체크 및 버튼 전환
-        binding.btnJoinClub.setOnClickListener {
-            val userId = UserData.userId.toString()
-            val clubCode = clickedMeeting?.club_code.toString()
-
-            if (joinstate == 0) {
-                // 버튼이 모임 가입하기 상태일 때
-                joinClub(clubCode, userId)
-                joinstate = 1
-            } else {
-                // 버튼이 모임 탈퇴하기 상태일 때
-                quitClub(clubCode, userId)
-                joinstate = 0
-            }
         }
 
         return view
@@ -381,7 +385,7 @@ class HomeFragment : Fragment() {
             .into(binding.clubImage) // 이미지를 표시할 ImageView
     }
 
-    fun joinClub(clubCode: String, userId: String) {
+    fun joinClub(clubCode: String?, userId: String?) {
         val service = Server(requireContext()).service
         val call = service.joinClub(clubCode, userId)
 
@@ -394,6 +398,7 @@ class HomeFragment : Fragment() {
                         binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape)
                         binding.btnJoinClub.text = "모임 탈퇴하기"
                         Toast.makeText(activity, "모임에 가입되었습니다.", Toast.LENGTH_SHORT).show()
+                        refreshMemberList(view)
                     } else {
                         Log.d("joinClud", "not success")
                     }
@@ -407,7 +412,7 @@ class HomeFragment : Fragment() {
         })
     }
 
-    fun quitClub(clubCode: String, userId: String) {
+    fun quitClub(clubCode: String?, userId: String?) {
         val service = Server(requireContext()).service
         val call = service.quitClub(clubCode, userId)
 
@@ -420,6 +425,7 @@ class HomeFragment : Fragment() {
                         binding.btnJoinClub.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
                         binding.btnJoinClub.text = "모임 가입하기"
                         Toast.makeText(activity, "모임에서 탈퇴되었습니다.", Toast.LENGTH_SHORT).show()
+                        refreshMemberList(view)
                     } else {
                         Log.d("quitClud", "not success")
                     }
