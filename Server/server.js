@@ -17,6 +17,7 @@ const updateLeader = require('./routes/updateLeader')
 const deleteMember = require('./routes/deleteMember')
 const getSchedules = require('./routes/getSchedules')
 const getScheduleMembers = require('./routes/getScheduleMembers')
+const boardRouter = require('./routes/board')
 
 app.use(cors())
 
@@ -26,7 +27,7 @@ app.set('port', process.env.PORT || 3333);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/uploads', express.static("C:/Users/gjaischool/Desktop/final_project/Senimo/Server/uploads"));
-app.use('/',authController)
+app.use('/', authController)
 app.use('/', appMainRouter)
 app.use('/', clubMainRouter)
 app.use('/', scheduleRouter)
@@ -40,6 +41,9 @@ app.use('/', updateLeader)
 app.use('/', deleteMember)
 app.use('/', getSchedules)
 app.use('/', getScheduleMembers)
+app.use('/', deleteMember)
+app.use('/', boardRouter)
+
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');
 })

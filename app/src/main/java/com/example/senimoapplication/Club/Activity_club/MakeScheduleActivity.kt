@@ -310,14 +310,14 @@ class MakeScheduleActivity : ComponentActivity() {
             finish()
           } else {
             // 서버 응답은 성공했지만 'rows'가 'success'가 아닌 경우
-            Toast.makeText(this@MakeScheduleActivity, "서버 응답 실패", Toast.LENGTH_SHORT).show()
+            Log.d("makeSche", "not success")
           }
         }
       }
 
       override fun onFailure(call: Call<MakeScheResVo>, t: Throwable) {
         // 네트워크 요청 실패 시
-        Log.e("MakeScheduleActivity", "네트워크 요청 실패", t)
+        Log.e("MakeScheduleActivity", "makeSche 네트워크 요청 실패", t)
       }
     })
   }

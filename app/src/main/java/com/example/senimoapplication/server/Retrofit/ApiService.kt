@@ -3,15 +3,20 @@ package com.example.senimoapplication.server.Retrofit
 import com.example.senimoapplication.Club.VO.AllMemberResVO
 import com.example.senimoapplication.Club.VO.AllScheduleMemberResVO
 import com.example.senimoapplication.Club.VO.AllSchedulesResVO
+import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
+import com.example.senimoapplication.Club.VO.JoinClubResVO
+import com.example.senimoapplication.Club.VO.JoinScheResVO
+import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
-
+import com.example.senimoapplication.Club.VO.WritePostResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
+import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import com.google.gson.JsonObject
@@ -24,11 +29,15 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface ApiService {
     @GET("/getMeetings")
     fun getMeetings(): Call<List<MeetingVO>>
+
+    @GET("/getLatestSchedule")
+    fun getLatestSchedule(@Query("userId") userId: String?): Call<List<MyScheduleVO>>
 
 //    @Multipart
 //    @POST("/db/postImg")
@@ -109,8 +118,37 @@ interface ApiService {
     @POST("/deleteMember")
     fun deleteMember(@Body deleteMemberVO: DeleteMemberVO): Call<JsonObject>
 
+
     @POST("/getScheduleMembers/{scheCode}")
     fun getScheduleMembers(@Path("scheCode") scheCode: String): Call<AllScheduleMemberResVO>
+
+    @FormUrlEncoded
+    @POST("/joinSche")
+    fun joinSche(@Field("user_id") userId: String,
+                 @Field("sche_code") scheCode: String) : Call<JoinScheResVO>
+
+    @FormUrlEncoded
+    @POST("/cancelJoinSche")
+    fun cancelJoinSche(@Field("user_id") userId: String,
+                       @Field("sche_code") scheCode: String) : Call<CancelJoinScheResVO>
+
+    @FormUrlEncoded
+    @POST("/joinClub")
+    fun joinClub(@Field("club_code") clubCode: String,
+                 @Field("user_id") userId: String) : Call<JoinClubResVO>
+
+    @FormUrlEncoded
+    @POST("/quitClub")
+    fun quitClub(@Field("club_code") clubCode: String,
+                 @Field("user_id") userId: String) : Call<QuitClubResVO>
+
+    @FormUrlEncoded
+    @POST("/writePost")
+    fun writePost(@Field("user_id") userId: String,
+                  @Field("club_code") clubCode: String,
+                  @Field("post_content") postContent: String?,
+                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
+
 }
 
 

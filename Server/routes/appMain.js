@@ -54,5 +54,47 @@ LIMIT 20;`
 });
 
 
+router.get('/getLatestSchedule', (req,res) => {
+  const user_id = req.query.userId;
+
+  // SQL 쿼리를 실행
+  const query = `
+  SELECT 
+    c.club_name,
+    s.sche_title,
+    s.sche_content,
+    s.sche_date,
+    s.fee,
+    s.sche_location,
+    s.max_num,
+    (SELECT COUNT(*) FROM tb_sche_joined_user WHERE sche_code = s.sche_code) AS attend_user_cnt,
+    '모집중' AS state,  -- 이 부분은 실제 상태에 따라 달라질 수 있습니다.
+    CONCAT('${config.baseURL}/uploads/', s.sche_img) AS sche_img,
+    s.sche_code
+  FROM 
+    tb_schedule s
+  JOIN 
+    tb_club c ON s.club_code = c.club_code
+  JOIN 
+    tb_sche_joined_user sj ON s.sche_code = sj.sche_code
+  WHERE 
+    sj.user_id = ? AND
+    s.sche_date >= CURRENT_DATE()
+  ORDER BY 
+    s.sche_date ASC
+  LIMIT 1;`
+  
+    conn.query(query, [user_id], (err, rows) => {
+      console.log('rows :', rows);
+      if (err) {
+        res.status(500).send('서버 에러: ' + err.message);
+      } else {
+        // 결과를 JSON 형태로 클라이언트에 전송합니다.
+        res.json(rows);
+      }
+    });
+})
+
+
 
 module.exports = router;
