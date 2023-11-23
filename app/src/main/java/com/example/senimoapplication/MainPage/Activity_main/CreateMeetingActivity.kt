@@ -106,7 +106,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                     imageName = getFileName(uri) // 파일이름 추출
                     intent_meetingVO.imageUri = uri.toString()
                     Glide.with(this).load(uri).into(binding.imgMButton)
-                    Log.d("PhotoPicker_main", "선택된 URI: $uri")
+                    Log.d("PhotoPicker_main",                                       "선택된 URI: $uri")
                 } else {
                     Glide.with(this).load(intent_meetingVO.imageUri).into(binding.imgMButton)
                     binding.imgMIcon.visibility = ImageView.VISIBLE

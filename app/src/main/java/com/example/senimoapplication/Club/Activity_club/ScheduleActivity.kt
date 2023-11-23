@@ -18,6 +18,7 @@ import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Club.adapter.ScheduleMemberAdapter
+import com.example.senimoapplication.Club.fragment.HomeFragment
 import com.example.senimoapplication.Club.fragment.MemberManager
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.Common.formatDate
@@ -36,6 +37,7 @@ class ScheduleActivity : AppCompatActivity() {
     lateinit var binding: ActivityScheduleBinding
     var isJoined = true
     var clubName: String? = null
+    var scheCode : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +57,7 @@ class ScheduleActivity : AppCompatActivity() {
         // Intent 데이터 관리
         val clickedSchedule = intent.getParcelableExtra<ScheduleVO>("ScheduleInfo")
         clubName = intent.getStringExtra("clubName")
+        scheCode = intent.getStringExtra("scheCode")
         Log.d("ScheduleActivity", "${clubName}")
         Log.d("ScheduleActivity", "${clickedSchedule}")
 
@@ -144,21 +147,19 @@ class ScheduleActivity : AppCompatActivity() {
         // 일정 참가하기 버튼
         binding.btnJoinSchedule.setOnClickListener {
             val userId = UserData.userId.toString()
-            val scheCode = "test1"
 
             if (isJoined) {
-                joinSche(userId, scheCode)
+                scheCode?.let { it1 -> joinSche(userId, it1) }
                 isJoined = false
             } else {
-                cancelJoinSche(userId, scheCode)
+                scheCode?.let { it1 -> cancelJoinSche(userId, it1) }
                 isJoined = true
             }
+        }
 
-            // 뒤로가기 버튼
-            binding.icBack.setOnClickListener {
-                onBackPressed()
-            }
-
+        // 뒤로가기 버튼
+        binding.icBack.setOnClickListener {
+            onBackPressed()
         }
 
         // 앱바 - 게시물 관리 기능 추가
@@ -199,10 +200,7 @@ class ScheduleActivity : AppCompatActivity() {
         val call = service.joinSche(userId, scheCode)
 
         call.enqueue(object : Callback<JoinScheResVO> {
-            override fun onResponse(
-                call: Call<JoinScheResVO>,
-                response: Response<JoinScheResVO>
-            ) {
+            override fun onResponse(call: Call<JoinScheResVO>, response: Response<JoinScheResVO>) {
                 if (response.isSuccessful) {
                     val joinScheRes = response.body()
                     if (joinScheRes != null && joinScheRes.rows == "success") {
@@ -210,19 +208,14 @@ class ScheduleActivity : AppCompatActivity() {
                         binding.btnJoinSchedule.text = "일정 참가 취소하기"
                         binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape) // 선택된 배경으로 변경
                         binding.btnJoinSchedule.setTextColor(
-                            ContextCompat.getColor(
-                                this@ScheduleActivity,
-                                R.color.main
-                            )
-                        ) // 메인 텍스트 색상으로 변경
-                        Toast.makeText(this@ScheduleActivity, "참가 신청 완료", Toast.LENGTH_SHORT)
-                            .show()
+                            ContextCompat.getColor(this@ScheduleActivity, R.color.main)) // 메인 텍스트 색상으로 변경
+                        Toast.makeText(this@ScheduleActivity, "참가 신청 완료", Toast.LENGTH_SHORT).show()
+
                     } else {
-                        Log.d("joinSche", "not success")
+                        Log.d("joinSche", "일정 참가하기 실패")
                     }
                 }
             }
-
             override fun onFailure(call: Call<JoinScheResVO>, t: Throwable) {
                 Log.e("ScheduleActivity", "joinSche 네트워크 요청 실패", t)
             }
@@ -234,10 +227,7 @@ class ScheduleActivity : AppCompatActivity() {
         val call = service.cancelJoinSche(userId, scheCode)
 
         call.enqueue(object : Callback<CancelJoinScheResVO> {
-            override fun onResponse(
-                call: Call<CancelJoinScheResVO>,
-                response: Response<CancelJoinScheResVO>
-            ) {
+            override fun onResponse(call: Call<CancelJoinScheResVO>, response: Response<CancelJoinScheResVO>) {
                 if (response.isSuccessful) {
                     val cancelJoinScheRes = response.body()
                     if (cancelJoinScheRes != null && cancelJoinScheRes.rows == "success") {
@@ -245,18 +235,10 @@ class ScheduleActivity : AppCompatActivity() {
                         binding.btnJoinSchedule.text = "일정 참가하기"
                         binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape_main) // 디폴트 배경으로 변경
                         binding.btnJoinSchedule.setTextColor(
-                            ContextCompat.getColor(
-                                this@ScheduleActivity,
-                                R.color.white
-                            )
-                        ) // 디폴트 텍스트 색상으로 변경
-                        Toast.makeText(
-                            this@ScheduleActivity,
-                            "일정 참가 취소가 완료되었습니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            ContextCompat.getColor(this@ScheduleActivity, R.color.white)) // 디폴트 텍스트 색상으로 변경
+                        Toast.makeText(this@ScheduleActivity, "일정 참가 취소가 완료되었습니다.", Toast.LENGTH_SHORT).show()
                     } else {
-                        Log.d("cancelJoinSche", "not success")
+                        Log.d("cancelJoinSche", "일정 참가 취소하기 실패")
                     }
                 }
             }

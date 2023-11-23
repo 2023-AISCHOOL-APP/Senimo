@@ -254,21 +254,22 @@ class HomeFragment : Fragment() {
                     if (response.isSuccessful) {
                         val scheduleList: List<ScheduleVO>? = response.body()?.data
                         Log.d("getclickedSchedule", "${scheduleList}")
+                        joinedList = memberList.map { it.userId }
                         if (scheduleList != null) {
                             val s_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, scheduleList)
                             binding.rvSchedule.adapter = s_adapter
                             binding.rvSchedule.layoutManager = LinearLayoutManager(view.context)
                             binding.rvSchedule.addOnItemTouchListener(
-                                RecyclerItemClickListener(
-                                    requireContext(),
-                                    binding.rvSchedule,
+                                RecyclerItemClickListener(requireContext(),binding.rvSchedule,
                                     object : RecyclerItemClickListener.OnItemClickListener {
                                         override fun onItemClick(view: View, position: Int) {
                                             val clickedSchedule = scheduleList[position] // 클릭된 아이템의 ScheduleVO 가져오기
+                                            
                                             // 새로운 액티비티로 이동
                                             val intent = Intent(requireContext(), ScheduleActivity::class.java)
                                             intent.putExtra("ScheduleInfo", clickedSchedule)
                                             intent.putExtra("clubName", clubName)
+                                            intent.putExtra("scheCode", clickedSchedule.scheCode)
                                             startActivity(intent)
                                         }
                                     })
@@ -431,7 +432,6 @@ class HomeFragment : Fragment() {
 
         })
     }
-
 }
 
 
@@ -448,8 +448,6 @@ class MemberManager(private val server: Server) {
         val call = server.service.getScheduleMembers(scheCode)
         call.enqueue(callback)
     }
-
-
 
     // 멤버 역할 업데이트 함수
     fun updateMember(updateMemberVO: UpdateMemberVO, callback: Callback<JsonObject>) {
