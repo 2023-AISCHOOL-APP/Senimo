@@ -67,7 +67,7 @@ router.get('/getLatestSchedule', (req,res) => {
     s.fee,
     s.sche_location,
     s.max_num,
-    (SELECT COUNT(*) FROM tb_sche_joined_user WHERE sche_code = s.sche_code) AS attend_user_cnt,
+    (SELECT COUNT(*) FROM tb_sche_joined_user WHERE sche_code = s.sche_code) AS joined_members,
     '모집중' AS state,  -- 이 부분은 실제 상태에 따라 달라질 수 있습니다.
     CONCAT('${config.baseURL}/uploads/', s.sche_img) AS sche_img,
     s.sche_code
