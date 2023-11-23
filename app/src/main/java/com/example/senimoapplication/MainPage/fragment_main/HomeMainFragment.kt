@@ -107,7 +107,7 @@ class HomeMainFragment : Fragment() {
                         val intent = Intent(requireContext(), ClubActivity::class.java)
                         intent.putExtra("clickedMeeting", clickedMeeting) // Parcelable로 넘김
                         startActivity(intent)
-
+                        activity?.finish()
                     }
                 })
         )

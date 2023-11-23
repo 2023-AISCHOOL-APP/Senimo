@@ -12,14 +12,18 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
+import com.example.senimoapplication.Club.fragment.HomeFragment
 import com.example.senimoapplication.Club.fragment.MemberManager
 import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.Login.Activity_login.LoginActivity
 import com.example.senimoapplication.R
+import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.UserData.userId
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,10 +44,8 @@ fun showActivityDialogBox(activity: Activity, message: String?, okay: String?, s
     tvMessage.text = message
     btnOkay.text = okay
     btnOkay.setOnClickListener {
-
         Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
-        // DB 데이터 삭제
         val intent = Intent(activity, ClubActivity::class.java)
         activity.startActivity(intent)
     }
@@ -55,7 +57,8 @@ fun showActivityDialogBox(activity: Activity, message: String?, okay: String?, s
 }
 
 // 회원 삭제 다이얼로그
-fun showDeleteDialogBox(context: Context, message: String?, okay: String?, successMessage : String?, user:String, clubCode:String) {
+fun showDeleteDialogBox(context: Context, message: String?, okay: String?, successMessage: String?, user: String, clubCode: String, fragment: HomeFragment) {
+
     val dialog = Dialog(context)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)
@@ -69,11 +72,13 @@ fun showDeleteDialogBox(context: Context, message: String?, okay: String?, succe
     tvMessage.text = message
     btnOkay.text = okay
     btnOkay.setOnClickListener {
-        val memberManager = MemberManager()
+        val server = Server(context)
+        val memberManager = MemberManager(server)
         val callback = object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful && response.body()?.getAsBoolean() == true) {
                     Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
+                    fragment.refreshMemberList(fragment.view) // HomeFragment의 함수 호출
                     dialog.dismiss()
                 } else {
                     Toast.makeText(context, "멤버 삭제에 실패했습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
@@ -82,13 +87,13 @@ fun showDeleteDialogBox(context: Context, message: String?, okay: String?, succe
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                // Delete member failure handling (e.g., network error)
                 Toast.makeText(context, "네트워크 오류가 발생했습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
         }
         val deleteMemberVO = DeleteMemberVO(clubCode, user)
         memberManager.deleteMember(deleteMemberVO, callback)
+
     }
     btnCancel.setOnClickListener {
         dialog.dismiss()
@@ -98,7 +103,7 @@ fun showDeleteDialogBox(context: Context, message: String?, okay: String?, succe
 }
 
 // 회원 역할 업데이트 다이얼로그
-fun showUpdateDialogBox(context: Context, message: String?, okay: String?, successMessage: String?, clubCode: String,user: String,clubRole: Int) {
+fun showUpdateDialogBox(context: Context, message: String?, okay: String?, successMessage: String?, user: String, clubCode: String, clubRole: Int, fragment: HomeFragment) {
     val dialog = Dialog(context)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)
@@ -107,34 +112,76 @@ fun showUpdateDialogBox(context: Context, message: String?, okay: String?, succe
 
     val tvMessage: TextView = dialog.findViewById(R.id.tvMessage)
     val btnOkay: Button = dialog.findViewById(R.id.btnOkay)
-
-
     val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
 
     tvMessage.text = message
     btnOkay.text = okay
     btnOkay.setOnClickListener {
-        // 서버 통신 요청
-        val memberManager = MemberManager()
+        val server = Server(context)
+        val memberManager = MemberManager(server)
         val callback = object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful && response.body() != null) {
                     Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
+                    fragment.refreshMemberList(fragment.view) // HomeFragment의 함수 호출
                     dialog.dismiss()
                 } else {
-                    Toast.makeText(context, "회원 전환에 실패했습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "회원 역할 변경에 실패했습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                // 역할 변경 실패 시 처리 (예: 네트워크 오류)
                 Toast.makeText(context, "네트워크 오류가 발생했습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
         }
         val updateMemberVO = UpdateMemberVO(clubCode, user, clubRole)
         memberManager.updateMember(updateMemberVO, callback)
+    }
+    btnCancel.setOnClickListener {
+        dialog.dismiss()
+    }
+
+    dialog.show()
+}
+
+// 모임장 위임 다이얼로그
+fun showLeaderUpdateDialogBox(context: Context, message: String?, okay: String?, successMessage: String?, user: String, clubCode: String, clubRole: Int, fragment: HomeFragment) {
+    val dialog = Dialog(context)
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.setCancelable(false)
+    dialog.setContentView(R.layout.layout_custom_dialog)
+    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+    val tvMessage: TextView = dialog.findViewById(R.id.tvMessage)
+    val btnOkay: Button = dialog.findViewById(R.id.btnOkay)
+    val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
+
+    tvMessage.text = message
+    btnOkay.text = okay
+    btnOkay.setOnClickListener {
+        val server = Server(context)
+        val memberManager = MemberManager(server)
+        val callback = object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if (response.isSuccessful && response.body() != null) {
+                    Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
+                    fragment.refreshMemberList(fragment.view) // HomeFragment의 함수 호출
+                    dialog.dismiss()
+                } else {
+                    Toast.makeText(context, "모임장 위임에 실패했습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Toast.makeText(context, "네트워크 오류가 발생했습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+        }
+        val updateMemberVO = UpdateMemberVO(clubCode, user, clubRole)
+        memberManager.updateLeader(updateMemberVO, callback)
     }
     btnCancel.setOnClickListener {
         dialog.dismiss()
@@ -188,7 +235,6 @@ fun showSettingDialogBox(activity: Activity, message: String?, okay: String?, su
 
         Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
-        // DB 데이터 삭제
         val intent = Intent(activity, IntroActivity::class.java)
         activity.startActivity(intent)
     }

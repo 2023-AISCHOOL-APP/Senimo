@@ -70,3 +70,4 @@ data class DeleteMemberVO(
     @SerializedName("user_id")
     val userId : String =""
 )
+

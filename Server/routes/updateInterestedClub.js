@@ -3,7 +3,7 @@ const router = express.Router()
 const conn = require('../config/database');
 const config = require('../config/config')
 
-router.post('/postModifyMeeting', (req, res) => {
+router.post('/updateInterestedClub', (req, res) => {
   console.log('result', req.body);
   const { club_code, user_id } = req.body;
   const InterestQuery = `SELECT interest_code FROM tb_interested_club WHERE user_id = ? AND club_code = ?;`;

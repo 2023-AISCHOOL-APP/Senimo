@@ -88,7 +88,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_C_ScheduleName3"
+                android:id="@+id/tvScheduleName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -103,17 +103,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/img_C_schedule" />
 
             <TextView
-                android:id="@+id/tv_C_Schedule_Intro"
+                android:id="@+id/tvScheduleIntro"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/pretendard_regular"
                 android:text="일정 소개글 영역입니다."
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/tv_C_ScheduleName3"
+                app:layout_constraintEnd_toEndOf="@+id/tvScheduleName"
                 app:layout_constraintHorizontal_bias="0.082"
-                app:layout_constraintStart_toStartOf="@+id/tv_C_ScheduleName3"
-                app:layout_constraintTop_toBottomOf="@+id/tv_C_ScheduleName3" />
+                app:layout_constraintStart_toStartOf="@+id/tvScheduleName"
+                app:layout_constraintTop_toBottomOf="@+id/tvScheduleName" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -124,12 +124,12 @@
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/badge_shape"
                 android:backgroundTint="@color/per2"
-                app:layout_constraintEnd_toEndOf="@+id/tv_C_Schedule_Intro"
-                app:layout_constraintStart_toStartOf="@+id/tv_C_Schedule_Intro"
-                app:layout_constraintTop_toBottomOf="@+id/tv_C_Schedule_Intro">
+                app:layout_constraintEnd_toEndOf="@+id/tvScheduleIntro"
+                app:layout_constraintStart_toStartOf="@+id/tvScheduleIntro"
+                app:layout_constraintTop_toBottomOf="@+id/tvScheduleIntro">
 
                 <TextView
-                    android:id="@+id/tv_C_S_Time"
+                    android:id="@+id/tvScheduleTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -145,7 +145,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/tv_C_S_Loca"
+                    android:id="@+id/tvScheduleLoca"
                     android:layout_width="145dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
@@ -161,7 +161,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/tv_C_S_Fee"
+                    android:id="@+id/tvScheduleFee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -177,7 +177,7 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/tv_C_S_attendance"
+                    android:id="@+id/tvScheduleMember"
                     android:layout_width="wrap_content"
                     android:layout_height="27dp"
                     android:layout_marginStart="8dp"
@@ -289,7 +289,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
                 android:fontFamily="@font/pretendard_bold"
-                android:text="참여 인원"
+                android:text="참여 회원"
                 android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="@+id/btnJoinSchedule"
                 app:layout_constraintTop_toBottomOf="@+id/btnJoinSchedule" />

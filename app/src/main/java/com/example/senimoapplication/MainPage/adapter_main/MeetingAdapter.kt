@@ -118,7 +118,6 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         // Glide를 사용하여 이미지 로드 및 표시
         val imageUrl = data[position].imageUri
         Glide.with(context)
-            .asGif()
             .load(imageUrl)
             .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
             .error(R.drawable.ic_meeting_profile) // 로딩 실패 시 표시될 이미지
