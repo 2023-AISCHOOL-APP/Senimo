@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,8 @@ import com.example.senimoapplication.server.Token.UserData
 class BoardFragment : Fragment() {
     lateinit var binding: FragmentBoardBinding
     var clickedMeeting: MeetingVO? = null
+    private var isScrolling = false
+    private var isAtTop = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,6 +63,8 @@ class BoardFragment : Fragment() {
 
         val userId = UserData.userId.toString()
 
+
+        // 작성하기 버튼
         binding.imgFloatingNewpost.setOnClickListener {
             val intent = Intent(requireContext(), PostActivity::class.java)
             intent.putExtra("clickedMeeting", clickedMeeting)

@@ -7,23 +7,18 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.Fragment
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.fragment.HomeFragment
 import com.example.senimoapplication.Club.fragment.MemberManager
 import com.example.senimoapplication.Login.Activity_login.IntroActivity
-import com.example.senimoapplication.Login.Activity_login.LoginActivity
 import com.example.senimoapplication.R
 import com.example.senimoapplication.server.Server
-import com.example.senimoapplication.server.Token.UserData.userId
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -217,7 +212,7 @@ fun showFragmentDialogBox(context: Context, message: String?, okay: String?, suc
 }
 
 
-// 환경설정 관리 다이얼로그
+// 로그아웃 다이얼로그
 fun showSettingDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?) {
     val dialog = Dialog(activity)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -239,6 +234,26 @@ fun showSettingDialogBox(activity: Activity, message: String?, okay: String?, su
         activity.startActivity(intent)
     }
     btnCancel.setOnClickListener {
+        dialog.dismiss()
+    }
+
+    dialog.show()
+}
+
+// 접근 권한 안내 다이얼로그
+fun showAlertDialogBox(context: Context, message: String?, okay: String?) {
+    val dialog = Dialog(context)
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.setCancelable(false)
+    dialog.setContentView(R.layout.layout_custom_dialog_one)
+    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+    val tvMessage: TextView = dialog.findViewById(R.id.tvMessage)
+    val btnOkay: Button = dialog.findViewById(R.id.btnOkay)
+
+    tvMessage.text = message
+    btnOkay.text = okay
+    btnOkay.setOnClickListener {
         dialog.dismiss()
     }
 

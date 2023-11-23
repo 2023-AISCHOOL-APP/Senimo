@@ -16,6 +16,7 @@ import com.example.senimoapplication.databinding.ActivitySearchBinding
 import android.os.Parcelable
 import android.text.Editable
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintSet
 
 class SearchActivity : AppCompatActivity() {
@@ -104,6 +105,16 @@ class SearchActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@SearchActivity, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
 
         // val searchRecyclerView = view.findViewById<RecyclerView>(R.id.rv_M_CategoryMeeting)
         searchRecyclerView.addOnItemTouchListener(

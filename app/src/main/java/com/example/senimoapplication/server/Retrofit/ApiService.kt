@@ -24,7 +24,6 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import com.google.gson.JsonObject
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FieldMap
@@ -150,13 +149,15 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/joinClub")
-    fun joinClub(@Field("club_code") clubCode: String,
-                 @Field("user_id") userId: String) : Call<JoinClubResVO>
+    fun joinClub(@Field("club_code") clubCode: String?,
+                 @Field("user_id") userId: String?
+    ) : Call<JoinClubResVO>
 
     @FormUrlEncoded
     @POST("/quitClub")
-    fun quitClub(@Field("club_code") clubCode: String,
-                 @Field("user_id") userId: String) : Call<QuitClubResVO>
+    fun quitClub(@Field("club_code") clubCode: String?,
+                 @Field("user_id") userId: String?
+    ) : Call<QuitClubResVO>
 
 
 //    @Multipart

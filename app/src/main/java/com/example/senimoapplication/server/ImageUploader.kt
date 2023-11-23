@@ -35,5 +35,4 @@ class ImageUploader(private val context: Context) {
         // MultipartBody.Part 생성 및 반환
         return MultipartBody.Part.createFormData("picture", file.name, requestFile)
     }
-
 }
