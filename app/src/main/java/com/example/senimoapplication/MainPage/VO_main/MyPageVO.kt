@@ -11,6 +11,8 @@ class MyPageVO(
                val name: String = "",      // 닉네임 또는 이름
                @SerializedName("user_gu")
                val gu: String = "",          // 지역 구
+               @SerializedName("user_dong")
+               val dong: String = "",          // 지역 동
                @SerializedName("birth_year")
                val birth: Int = 0,             // 생년 (0000년생)
                @SerializedName("gender")
@@ -18,11 +20,13 @@ class MyPageVO(
                @SerializedName("user_introduce")
                val intro: String = "",          // 소개글
                val badges : List<Boolean> = listOf(), // 뱃지 활성화 상태 리스트 추가
+
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         img = parcel.readString() ?: "",
         name = parcel.readString() ?: "",
         gu = parcel.readString() ?: "",
+        dong = parcel.readString() ?: "",
         birth = parcel.readInt(),
         gender = parcel.readString() ?: "",
         intro = parcel.readString() ?: "",
@@ -34,6 +38,7 @@ class MyPageVO(
         parcel.writeString(img)
         parcel.writeString(name)
         parcel.writeString(gu)
+        parcel.writeString(dong)
         parcel.writeInt(birth)
         parcel.writeString(gender)
         parcel.writeString(intro)
@@ -47,7 +52,7 @@ class MyPageVO(
 
     // toString() 메서드
     override fun toString(): String {
-        return "MyPageVO(img='$img', name='$name', gu='$gu', birth=$birth, gender='$gender', intro='$intro', badges=$badges)"
+        return "MyPageVO(img='$img', name='$name', gu='$gu', dong='$dong', birth=$birth, gender='$gender', intro='$intro', badges=$badges)"
     }
 
     companion object CREATOR : Parcelable.Creator<MyPageVO> {

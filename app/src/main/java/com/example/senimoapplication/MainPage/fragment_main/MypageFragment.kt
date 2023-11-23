@@ -53,7 +53,8 @@ class MypageFragment : Fragment() {
         myProfile = MyPageVO(
             "content://media/external/file/25",
             "체리마루",
-            "남구",
+            "북구",
+            "누문동",
             1995,
             "여성",
             "안녕하세요~호호호호호홍가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라",
@@ -90,7 +91,7 @@ class MypageFragment : Fragment() {
         // 로그 사용하여 데이터 확인
         Log.d(
             "ProfileData",
-            "이미지 : ${myProfile.img},닉네임 : ${myProfile.name}, 구 : ${myProfile.gu}, 생년 : ${myProfile.birth}, 성별 : ${myProfile.gender}, 소개 : ${myProfile.intro}"
+            "이미지 : ${myProfile.img},닉네임 : ${myProfile.name}, 구 : ${myProfile.gu}, 동 : ${myProfile.dong},생년 : ${myProfile.birth}, 성별 : ${myProfile.gender}, 소개 : ${myProfile.intro}"
         )
 
         binding.tvMUserIntroMore.setOnClickListener {
@@ -101,7 +102,8 @@ class MypageFragment : Fragment() {
         binding.tvMMoveEdit.setOnClickListener {
             val intent = Intent(requireContext(),EditMyPageActivity::class.java)
             // myProfile 객체를 Intent에 추가
-             intent.putExtra("myProfileData", myProfile)
+            intent.putExtra("myProfileData", myProfile)
+            intent.putExtra("introLength", myProfile.intro.length)
              editProfileResultLauncher.launch(intent)
 //            startActivity(intent)
 //            activity?.finish()
@@ -154,6 +156,7 @@ class MypageFragment : Fragment() {
         Log.d("MypageFragment", "이미지 : ${profile.img}")
         Log.d("MypageFragment", "이름: ${profile.name}")
         Log.d("MypageFragment", "구: ${profile.gu}")
+        Log.d("MypageFragment", "동: ${profile.dong}")
         Log.d("MypageFragment", "출생년도: ${profile.birth}")
         Log.d("MypageFragment", "성별: ${profile.gender}")
         Log.d("MypageFragment", "소개글: $introText")

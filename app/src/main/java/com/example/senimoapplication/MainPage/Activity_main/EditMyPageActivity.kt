@@ -48,6 +48,10 @@ class EditMyPageActivity : AppCompatActivity() {
         setContentView(view)
 
 
+        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
+        // 인텐트에서 소개글 길이 받기
+        val introLength = intent.getIntExtra("introLength", 0)
+        binding.tvMLetterCntMyPage.text = introLength.toString()
 
         // 사진 1장 선택
         val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -115,10 +119,11 @@ class EditMyPageActivity : AppCompatActivity() {
 
         // 현재 선택된 구 설정
         val selectedGuIndex = editGuList.indexOf(myProfile.gu)
-        if (selectedGuIndex != -1) {
-            GuAdapter.selectedPosition = selectedGuIndex
-            GuAdapter.notifyDataSetChanged()
-        }
+
+        // 현재 선택된 동 설정
+        val selectedDongIndex : Int
+
+
 
         // DongAdapter 설정
         DongAdapter = DongAdapter(R.layout.dong_list, gwangjuDistricts, applicationContext)
@@ -126,6 +131,8 @@ class EditMyPageActivity : AppCompatActivity() {
 
         val girdLayoutManager = GridLayoutManager(applicationContext, 2)
         binding.rvMEditDong.layoutManager = girdLayoutManager
+
+
 
         GuAdapter.itemClickListener = object : GuAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
@@ -157,6 +164,31 @@ class EditMyPageActivity : AppCompatActivity() {
                     }
                 }
                 binding.rvMEditDong.smoothScrollToPosition(0)
+            }
+        }
+
+        if (selectedGuIndex != -1) {
+            GuAdapter.selectedPosition = selectedGuIndex
+            GuAdapter.notifyDataSetChanged()
+
+            // 사용자의 현재 구 위치에 따라 동 목록 설정
+            val currentDongList = when (myProfile.gu) {
+                "광산구" -> gwangsanList
+                "남구" -> southList
+                "동구" -> eastList
+                "북구" -> northList
+                "서구" -> westList
+                else -> gwangjuDistricts // 기본값
+            }
+
+            // DongAdapter 업데이트
+            DongAdapter.updateData(currentDongList)
+
+            // 현재 선택된 동 위치 확인 및 설정
+            selectedDongIndex = currentDongList.indexOf(myProfile.dong)
+            if (selectedDongIndex != -1) {
+                DongAdapter.selectedPosition = selectedDongIndex
+                DongAdapter.notifyDataSetChanged()
             }
         }
 
@@ -200,6 +232,7 @@ class EditMyPageActivity : AppCompatActivity() {
         binding.btnMSave.setOnClickListener {
             // GuAdapter에서 선택된 항목 가져오기
             val selectedGu = GuAdapter.getSelectedItem()
+            val selectedDong = DongAdapter.getSelectedDongName()
             val imageUriString = imageUri?.toString() // URI를 String으로 변환
 
             // 사용자가 입력한 데이터로 myProfile 객체를 업데이트
@@ -207,6 +240,7 @@ class EditMyPageActivity : AppCompatActivity() {
                 img = imageUriString ?: myProfile?.img ?: "", // null 체크하여 기존 값 또는 빈 문자열 사용
                 name = binding.etMUserName.text.toString(),
                 gu = selectedGu,
+                dong = selectedDong,
                 birth = binding.etMUserBirth.text.toString().toIntOrNull() ?: myProfile?.birth ?: 0,
                 gender = binding.etMGender.text.toString(),
                 intro = binding.etMMyPageIntro.text.toString(),
