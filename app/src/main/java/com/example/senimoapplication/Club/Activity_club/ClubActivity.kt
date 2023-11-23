@@ -17,7 +17,6 @@ import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.server.Server
-import com.example.senimoapplication.server.Token.UserData.userId
 import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -57,7 +56,6 @@ class ClubActivity : AppCompatActivity() {
             }
         }
 
-
         // 1) 앱 바 기능 구현
         // 뒤로가기 버튼
         icBack.setOnClickListener {
@@ -65,6 +63,8 @@ class ClubActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+
         // 모임명 변경 (데이터 연동 필요)
         // tvClubName.text = 서버에서 받아온 값
 

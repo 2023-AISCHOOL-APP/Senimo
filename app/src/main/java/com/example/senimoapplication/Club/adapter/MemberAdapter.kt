@@ -15,8 +15,10 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.VO.MemberVO
+import com.example.senimoapplication.Club.fragment.HomeFragment
 import com.example.senimoapplication.Club.fragment.MemberManager
 import com.example.senimoapplication.Common.showDeleteDialogBox
+import com.example.senimoapplication.Common.showLeaderUpdateDialogBox
 import com.example.senimoapplication.Common.showUpdateDialogBox
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.R
@@ -32,6 +34,7 @@ class MemberAdapter(
     val layout: Int,
     val data: ArrayList<MemberVO>,
     private val clubLeader : String?,
+    private val fragment: HomeFragment
 ) : RecyclerView.Adapter<MemberAdapter.ViewHolder>() {
 
     val inflater = LayoutInflater.from(context)
@@ -106,7 +109,8 @@ class MemberAdapter(
                         R.id.member_option1 -> {
                             Log.d("memberAdatper_menu:","tab1")
                             // 운영진으로 전환
-                            showUpdateDialogBox(view.context, "운영진으로 임명할까요?", "임명하기", "운영진이 되었습니다", user, clubCode, 2)
+                            showUpdateDialogBox(view.context, "운영진으로 임명할까요?", "임명하기", "운영진이 되었습니다", user, clubCode, 2,fragment)
+                            Log.d("getclickedMeetinghome:","운영진 위임")
                             true
 
                         }
@@ -114,21 +118,23 @@ class MemberAdapter(
                         R.id.member_option2 -> {
                             Log.d("memberAdatper_menu:","tab2")
                             // 일반회원으로 전환
-                            showUpdateDialogBox(view.context, "일반 회원으로 전환할까요?", "전환하기", "일반 회원이 되었습니다", user, clubCode, 3)
+                            showUpdateDialogBox(view.context, "일반 회원으로 전환할까요?", "전환하기", "일반 회원이 되었습니다", user, clubCode, 3,fragment)
+                            Log.d("getclickedMeetinghome:","일반 전환")
                             true
                         }
 
                         R.id.member_option3 -> {
-                            Log.d("memberAdatper_menu:","tab3")
-                            // 모임장 위임하기
-                            showUpdateDialogBox(view.context,"모임장 권한을 위임하시겠습니까?","위임하기", "권한이 위임되었습니다", user, clubCode, 1)
 
+                            // 모임장 위임하기
+                            showLeaderUpdateDialogBox(view.context,"모임장 권한을 위임하시겠습니까?","위임하기", "권한이 위임되었습니다", user, clubCode, 1,fragment)
+                            Log.d("getclickedMeetinghome:","모임장 위임")
 
                             true
                         }
                         R.id.member_option4 -> {
                             Log.d("memberAdatper_menu:","tab4")
-                            showDeleteDialogBox(view.context,"이 회원을 모임에서 내보낼까요?","내보내기","회원을 내보냈습니다",user, clubCode)
+                            showDeleteDialogBox(view.context,"이 회원을 모임에서 내보낼까요?","내보내기","회원을 내보냈습니다",user, clubCode,fragment)
+                            Log.d("getclickedMeetinghome:","회원 탈퇴")
                             true
                         }
                         else -> false

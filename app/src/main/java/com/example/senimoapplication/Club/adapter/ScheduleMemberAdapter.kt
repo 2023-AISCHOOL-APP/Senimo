@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.R
 import com.google.android.material.imageview.ShapeableImageView
 
-class ScheduleMemberAdapter(val context: Context, val layout : Int, val data : ArrayList<ScheduleMemberVO>): RecyclerView.Adapter<ScheduleMemberAdapter.ViewHolder> (){
+class ScheduleMemberAdapter(val context: Context, val layout : Int, val data : List<ScheduleMemberVO>): RecyclerView.Adapter<ScheduleMemberAdapter.ViewHolder> (){
 
     val inflater = LayoutInflater.from(context)
 
@@ -36,7 +37,7 @@ class ScheduleMemberAdapter(val context: Context, val layout : Int, val data : A
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tvUserName.text = data[position].userName
-        when(data[position].userLevel){
+        when(data[position].clubRole){
             1 -> {
                 holder.tvUserLevel.text = "모임장"
                 holder.tvUserLevel.setBackgroundResource(R.drawable.user_level_leader)
@@ -51,11 +52,11 @@ class ScheduleMemberAdapter(val context: Context, val layout : Int, val data : A
             }
         }
 
-
-
-
-
-        holder.imgUserProfile.setImageResource(data[position].imgId)
+        Glide.with(context)
+            .load(data[position].userImg)
+            .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
+            .error(R.drawable.ic_profile_circle) // 로딩 실패 시 표시될 이미지
+            .into(holder.imgUserProfile)
         holder.imgbtnMore.visibility = INVISIBLE
     }
 

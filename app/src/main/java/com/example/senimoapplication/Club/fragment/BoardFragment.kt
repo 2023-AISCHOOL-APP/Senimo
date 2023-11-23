@@ -3,6 +3,7 @@ package com.example.senimoapplication.Club.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +14,15 @@ import com.example.senimoapplication.Club.Activity_club.PostActivity
 import com.example.senimoapplication.Club.VO.CommentVO
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.adapter.PostAdapter
+import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentBoardBinding
+import com.example.senimoapplication.server.Token.UserData
 
 
 class BoardFragment : Fragment() {
     lateinit var binding: FragmentBoardBinding
+    var clickedMeeting: MeetingVO? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +30,8 @@ class BoardFragment : Fragment() {
     ): View? {
         binding = FragmentBoardBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        clickedMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
 
         val postList : ArrayList<PostVO> = ArrayList()
 
@@ -52,9 +58,14 @@ class BoardFragment : Fragment() {
         binding.rvBoard.adapter = adapter
         binding.rvBoard.layoutManager = LinearLayoutManager(requireContext())
 
+        val userId = UserData.userId.toString()
 
         binding.imgFloatingNewpost.setOnClickListener {
             val intent = Intent(requireContext(), PostActivity::class.java)
+            intent.putExtra("clickedMeeting", clickedMeeting)
+            intent.putExtra("user_id", userId)
+            Log.d("보드프래그먼트 회원 아이디", userId)
+            Log.d("보드프래그먼트 모임코드", clickedMeeting?.club_code.toString())
             startActivity(intent)
         }
 

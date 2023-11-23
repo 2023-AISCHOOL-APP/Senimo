@@ -1,6 +1,8 @@
 package com.example.senimoapplication.server.Retrofit
 
 import com.example.senimoapplication.Club.VO.AllMemberResVO
+import com.example.senimoapplication.Club.VO.AllScheduleMemberResVO
+import com.example.senimoapplication.Club.VO.AllSchedulesResVO
 import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
@@ -8,11 +10,10 @@ import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
 import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
-import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
-
+import com.example.senimoapplication.Club.VO.WritePostResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
@@ -21,7 +22,6 @@ import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import com.google.gson.JsonObject
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FieldMap
@@ -52,6 +52,9 @@ interface ApiService {
 
     @GET("/getSche_intro/{sche_code}")
     fun getScheIntro(@Path("sche_code") sche_code: String): Call<ScheduleVO> // 특정 일정 ID를 사용하여 상세 정보 가져오기
+
+    @GET("/getSchedules/{club_code}")
+    fun getSchedules(@Path("club_code") clubCode: String) : Call<AllSchedulesResVO>
 
     @GET("/getClubInfo/{club_code}")
     fun getClubInfo(@Path("club_code") club_code: String): Call<ClubInfoVO>
@@ -96,7 +99,7 @@ interface ApiService {
         @Field("sche_img") scheImg: String?
     ): Call<MakeScheResVo>
 
-    @POST("/postModifyMeeting")
+    @POST("/modifyMeeting")
     fun modifyMeeting(@Body meetingVO: MeetingVO): Call<modifyResult>
 
     @FormUrlEncoded
@@ -109,8 +112,15 @@ interface ApiService {
     @POST("/updateMember")
     fun updateMember(@Body updateMemberVO: UpdateMemberVO): Call<JsonObject>
 
+    @POST("/updateLeader")
+    fun updateLeader(@Body updateMemberVO: UpdateMemberVO): Call<JsonObject>
+
     @POST("/deleteMember")
     fun deleteMember(@Body deleteMemberVO: DeleteMemberVO): Call<JsonObject>
+
+
+    @POST("/getScheduleMembers/{scheCode}")
+    fun getScheduleMembers(@Path("scheCode") scheCode: String): Call<AllScheduleMemberResVO>
 
     @FormUrlEncoded
     @POST("/joinSche")
@@ -132,9 +142,15 @@ interface ApiService {
     fun quitClub(@Field("club_code") clubCode: String,
                  @Field("user_id") userId: String) : Call<QuitClubResVO>
 
-
     @GET("/getUserBadgesInfo")
     fun getUserBadgesInfo(@Query("userId") userId: String?): Call<List<MyPageVO>>
+
+    @FormUrlEncoded
+    @POST("/writePost")
+    fun writePost(@Field("user_id") userId: String,
+                  @Field("club_code") clubCode: String,
+                  @Field("post_content") postContent: String?,
+                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
 }
 
 

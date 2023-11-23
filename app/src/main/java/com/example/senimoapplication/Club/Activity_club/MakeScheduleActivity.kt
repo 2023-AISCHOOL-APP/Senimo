@@ -188,10 +188,10 @@ class MakeScheduleActivity : ComponentActivity() {
     // 버튼 누르면 인원 수 변경 시키기 (일정 참가자수 상한선 : 30명)
     var members: Int = 0
     binding.imgPlus.setOnClickListener {
-      if (members < 30) {
+      if (members <50) {
         members += 10
-        if (members > 30) {
-          members = 30
+        if (members > 50) {
+          members = 50
         }
         binding.tvAllMember.text = members.toString()
       }
