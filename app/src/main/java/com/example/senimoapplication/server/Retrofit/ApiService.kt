@@ -15,6 +15,7 @@ import com.example.senimoapplication.Club.VO.UpdateMemberVO
 
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
+import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
@@ -130,6 +131,10 @@ interface ApiService {
     @POST("/quitClub")
     fun quitClub(@Field("club_code") clubCode: String,
                  @Field("user_id") userId: String) : Call<QuitClubResVO>
+
+
+    @GET("/getUserBadgesInfo")
+    fun getUserBadgesInfo(@Query("userId") userId: String?): Call<List<MyPageVO>>
 }
 
 

@@ -6,18 +6,39 @@ const { json } = require('body-parser');
 const e = require('express');
 
 
-router.get('/getUserBadges/:userId', (req, res) => {
-    const userId = req.params.userId;
-    const sql = `SELECT tb_badge.badge_name
-                 FROM tb_user_badge
-                 JOIN tb_badge ON tb_user_badge.badge_code = tb_badge.badge_code
-                 WHERE tb_user_badge.user_id = ?`;
+router.get('/getUserBadges', (req, res) => {
+    const userId = req.query.userId;
 
-    conn.query(sql, [userId], (error, results, fields) => {
-        if (error) {
-            res.status(500).send({ error: 'Something failed!' });
+    // SQL 쿼리를 실행
+    const query = `
+    SELECT
+        b.badge_code, 
+        b.badge_name, 
+        ub.badge_get_dt, 
+        u.user_id, 
+        u.user_name, 
+        u.gender, 
+        u.birth_year, 
+        u.user_gu, 
+        u.user_dong, 
+        u.user_introduce, 
+        u.user_img
+    FROM 
+        tb_user_badge ub
+    JOIN 
+        tb_badge b ON ub.badge_code = b.badge_code
+    JOIN 
+        tb_user u ON ub.user_id = u.user_id
+    WHERE 
+        ub.user_id = ?`;
+
+        conn.query(query, [userId], (err, rows) => {
+        console.log('rows :', rows);
+        if (err) {
+            res.status(500).send('서버 에러: ' + err.message);
         } else {
-            res.json(results);
+            // 결과를 JSON 형태로 클라이언트에 전송합니다.
+            res.json({result:rows});
         }
     });
 });
