@@ -315,7 +315,7 @@ class HomeMainFragment : Fragment() {
     }
 
     private fun fetchLatestSchedule() {
-        val userId = "T2"
+        val userId = "T1"
         val service = Server(requireContext()).service
         service.getLatestSchedule(userId).enqueue(object : Callback<List<MyScheduleVO>> {
             override fun onResponse(

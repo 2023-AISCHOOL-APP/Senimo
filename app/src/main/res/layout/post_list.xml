@@ -92,7 +92,7 @@
                     android:layout_marginTop="-2dp"
                     android:fontFamily="@font/pretendard_medium"
                     android:text="11월 13일 오후 3:12"
-                    android:textColor="@color/txt_gray70"
+                    android:textColor="@color/txt_gray80"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/tv_P_userName"
                     app:layout_constraintTop_toBottomOf="@+id/tv_P_userName" />
@@ -115,6 +115,7 @@
                     android:layout_marginTop="15dp"
                     android:fontFamily="@font/pretendard_regular"
                     android:text="게시물 내용입니다. 처음에는 최대 2줄만 보일 수 있도록 영역을 설정하고 싶어요. 영역을 넘어가는 게시물의 ..."
+                    android:textColor="@color/txt_gray70"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

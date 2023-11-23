@@ -24,7 +24,7 @@
         android:layout_marginStart="10dp"
         android:fontFamily="@font/pretendard_semibold"
         android:text="국지호"
-        android:textColor="#000000"
+        android:textColor="@color/txt_black"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/imgUserProfile"
         app:layout_constraintTop_toTopOf="@+id/imgUserProfile" />
@@ -49,6 +49,7 @@
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/pretendard_regular"
         android:text="댓글 내용을 표시하는 영역입니다. 글자수가 어떻게 될진 아무도 몰라요 후후후후"
+        android:textColor="@color/txt_gray80"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
