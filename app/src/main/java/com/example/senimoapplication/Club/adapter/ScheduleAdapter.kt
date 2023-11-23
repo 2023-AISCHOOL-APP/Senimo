@@ -94,8 +94,8 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
         holder.tvScheduleLoca.text = data[position].scheLoca
         holder.tvScheduleFee.text = "${data[position].scheFee}원"
         holder.tvScheduleDay.text = dDate(data[position].scheDate)
-        holder.tvScheduleState.text = data[position].state
-        holder.tvScheduleMemNum.text = "${data[position].attendUserCnt}/${data[position].maxNum.toString()}"
+        holder.tvScheduleState.text = if (data[position].maxNum <= data[position].joinedMembers) "모집마감" else "모집중"
+        holder.tvScheduleMemNum.text = "${data[position].joinedMembers}/${data[position].maxNum.toString()}"
 
 
         val state = holder.tvScheduleState.text

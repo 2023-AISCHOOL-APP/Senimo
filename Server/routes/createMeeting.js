@@ -72,7 +72,7 @@ router.post('/postCreateMeeting',upload.single('picture'), (req, res) => {
 });
 
 
-// 모임 가입
+// 일반회원 모임 가입
 router.post('/joinClub', (req, res) => {
 	console.log('joinClub router', req.body);
 	const { club_code, user_id } = req.body
