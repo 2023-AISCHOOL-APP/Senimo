@@ -47,5 +47,11 @@ object PreferenceManager {
         val json = sharedPreferences.getString(USER_DATA_KEY, null)
         return if (json != null) gson.fromJson(json, UserDatas::class.java) else null
     }
+
+    // 토큰 제거 메소드
+    fun clearToken(context: Context) {
+        val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        sharedPreferences.edit().remove(ACCESS_TOKEN_KEY).remove(REFRESH_TOKEN_KEY).apply()
+    }
 }
 

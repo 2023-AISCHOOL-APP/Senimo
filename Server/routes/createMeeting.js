@@ -24,55 +24,97 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // 모임 정보 생성 및 사진 업로드 라우트
-router.post('/postCreateMeeting',upload.single('picture'), (req, res) => {
-    console.log('Request Body:', req.body);
+router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
+        // 트랜잭션 시작
+        conn.beginTransaction(err => {
+            if (err) {
+                return res.status(500).json({ error: '트랜잭션 시작 오류: ' + err.message });
+                console.log("트랜잭션 시작 오류",err.message);
+            }
 
-    // JSON 문자열을 객체로 변환
-    const meetingData = JSON.parse(req.body.meeting);
+            // JSON 문자열을 객체로 변환
+            const meetingData = JSON.parse(req.body.meeting);
+            const { user_id, club_name, club_introduce, max_cnt, club_location, keyword_name } = meetingData;
+            const club_img = req.file ? req.file.filename : null;
 
-    const { user_id, club_name, club_introduce, max_cnt, club_location, keyword_name} = meetingData;
-    const club_img = req.file ? req.file.filename : null; // 업로드된 파일 이름const club_img = req.file ? req.file.filename : null; // 업로드된 파일 이름
-    console.log('club_img 사진: ', club_img);
-    // 먼저 keyword_code를 조회합니다.
-    const findKeywordCodeQuery = `SELECT keyword_code FROM tb_keyword WHERE keyword_name = ?;`;
-    conn.query(findKeywordCodeQuery, [keyword_name], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        console.log("1",results)
-        if (results.length > 0) {
-            // keyword_code를 찾았으면, 이제 모임을 생성합니다.
+            // 0단계 : keywordcode 찾기
+            const findKeywordCodeQuery = `SELECT keyword_code FROM tb_keyword WHERE keyword_name = ?;`;
+        conn.query(findKeywordCodeQuery, [keyword_name], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+                console.log("0단계 : keywordcode 찾기",err.message);
+            }
             const keyword_code = results[0].keyword_code;
-            const insertQuery = `
-            INSERT INTO tb_club (user_id ,club_name ,club_introduce ,max_cnt ,club_location, keyword_code ,club_img)
-            VALUES (?, ?, ?, ?, ?, ?, ?);`;
-            conn.query(insertQuery, [user_id, club_name, club_introduce, max_cnt, club_location, keyword_code, club_img], (err, result) => {
+            // 1단계: 모임 생성
+            const insertClubQuery = `
+                INSERT INTO tb_club (user_id, club_name, club_introduce, max_cnt, club_location, keyword_code, club_img) 
+                VALUES (?, ?, ?, ?, ?, ?, ?);
+            `;
+            conn.query(insertClubQuery, [user_id, club_name, club_introduce, max_cnt, club_location, keyword_code, club_img], (err, insertResult) => {
                 if (err) {
-                    res.status(500).json({ error: err.message });
-                    console.log("실패",err.message)
-                } else {
-                    console.log("새로생성된id : ", result.insertId); 
-                    const club_img_url = `${config.baseURL}/uploads/${club_img}`
-                    res.status(200).json({ message: '모임이 생성되었습니다' ,
-                    club_name, 
-                    club_introduce, 
-                    max_cnt, 
-                    club_location, 
-                    keyword_name, 
-                    club_img : club_img_url});
-                    console.log("clubcode: ");
-                    console.log("성공");
-                    console.log("보내는값 : ",club_name,club_introduce,max_cnt,club_location,keyword_name,club_img,club_img_url);
+                    return conn.rollback(() => {
+                        res.status(500).json({ error: '모임 생성 오류: ' + err.message });
+                        console.log("1단계: 모임 생성",err.message);
+                    });
                 }
+
+                // 2단계: 생성된 클럽의 코드 조회
+                const clubCodeQuery = `
+                    SELECT club_code FROM tb_club WHERE user_id = ? ORDER BY opened_dt DESC LIMIT 1;
+                `;
+                conn.query(clubCodeQuery, [user_id], (err, codeResults) => {
+                    if (err || codeResults.length === 0) {
+                        return conn.rollback(() => {
+                            res.status(500).json({ error: '클럽 코드 조회 오류: ' + err.message });
+                            console.log("2단계: 생성된 클럽의 코드 조회",err.message);
+                        });
+                    }
+
+                    const club_code = codeResults[0].club_code;
+
+                    // 3단계: 모임장으로 클럽 가입
+                    const insertJoinQuery = `
+                        INSERT INTO tb_join (club_code, user_id, club_role) VALUES (?, ?, 1);
+                    `;
+                    conn.query(insertJoinQuery, [club_code, user_id], (err, joinResult) => {
+                        if (err) {
+                            return conn.rollback(() => {
+                                res.status(500).json({ error: '모임장 가입 오류: ' + err.message });
+                                console.log(" 3단계: 모임장으로 클럽 가입",err.message);
+                            });
+                        }
+
+                        // 트랜잭션 커밋
+                        conn.commit(err => {
+                            if (err) {
+                                return conn.rollback(() => {
+                                    res.status(500).json({ error: '트랜잭션 커밋 오류: ' + err.message });
+                                    console.log(" 트랜잭션 커밋",err.message);
+                                });
+                            }
+
+                            // 성공 응답
+                            res.json({
+                                message: '모임이 성공적으로 생성되었습니다.',
+                                club_code,
+                                club_name,
+                                club_introduce,
+                                max_cnt,
+                                club_location,
+                                keyword_name,
+                                club_img: `${config.baseURL}/uploads/${club_img}`
+                            });
+                            console.log("성공적으로 모임을 생성하였습니다.",res)
+                        });
+                    });
+                });
             });
-        }else {
-            return res.status(404).json({ error: "해당하는 키워드가 없습니다." });
-        }
+        });
     });
 });
 
 
-// 일반회원 모임 가입
+// 모임 가입
 router.post('/joinClub', (req, res) => {
 	console.log('joinClub router', req.body);
 	const { club_code, user_id } = req.body
