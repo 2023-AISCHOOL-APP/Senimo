@@ -12,6 +12,7 @@ router.post('/getAllMembers/:club_code', (req, res) => {
       FROM tb_join a
       LEFT JOIN tb_user b ON a.user_id = b.user_id
       WHERE a.club_code = ?
+      ORDER BY a.club_role ASC
   `;
   conn.query(findMemberQuery, [club_code], (err, results) => {
       if (err) {

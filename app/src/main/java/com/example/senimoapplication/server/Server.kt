@@ -7,16 +7,6 @@ import com.google.gson.annotations.SerializedName
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
-
-//class Server {
-//    val retrofit = Retrofit.Builder()
-//        .baseUrl("https://improved-sadly-snake.ngrok-free.app") // 도운IP
-//        //.baseUrl("http://192.168.70.154:3333") // 희준IP
-//        .addConverterFactory(GsonConverterFactory.create())
-//        .build()
-//    val service = retrofit.create(ApiService::class.java)
-//} // 기존꺼 토큰 없앨수도 있기때문에 남겨두세요~
 class Server(private val context: Context) {
     val retrofit: Retrofit by lazy {
         val client = OkHttpClient.Builder()
@@ -26,8 +16,8 @@ class Server(private val context: Context) {
         Retrofit.Builder()
             //.baseUrl("https://improved-sadly-snake.ngrok-free.app") // 원격서버 URL
             //.baseUrl("http://192.168.70.207:3333") // 도운IP 같은 와이파로 접근할때
-            .baseUrl("http://192.168.70.205:3333") // 희준IP
-            //.baseUrl("http://192.168.70.243:3333") // 희준IP
+//            .baseUrl("http://192.168.70.205:3333") // 지혜IP
+            .baseUrl("http://192.168.70.69:3333") // 희준IP
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
