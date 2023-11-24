@@ -133,19 +133,23 @@ interface ApiService {
     @POST("/deleteMember")
     fun deleteMember(@Body deleteMemberVO: DeleteMemberVO): Call<JsonObject>
 
+    @POST("/scheduleInfo/{scheCode}")
+    fun scheduleInfo(@Path("scheCode") scheCode: String) : Call<ScheduleVO>
 
     @POST("/getScheduleMembers/{scheCode}")
     fun getScheduleMembers(@Path("scheCode") scheCode: String): Call<AllScheduleMemberResVO>
 
     @FormUrlEncoded
     @POST("/joinSche")
-    fun joinSche(@Field("user_id") userId: String,
-                 @Field("sche_code") scheCode: String) : Call<JoinScheResVO>
+    fun joinSche(@Field("user_id") userId: String?,
+                 @Field("sche_code") scheCode: String?
+    ) : Call<JoinScheResVO>
 
     @FormUrlEncoded
     @POST("/cancelJoinSche")
-    fun cancelJoinSche(@Field("user_id") userId: String,
-                       @Field("sche_code") scheCode: String) : Call<CancelJoinScheResVO>
+    fun cancelJoinSche(@Field("user_id") userId: String?,
+                       @Field("sche_code") scheCode: String?
+    ) : Call<CancelJoinScheResVO>
 
     @FormUrlEncoded
     @POST("/joinClub")
@@ -166,6 +170,9 @@ interface ApiService {
                   @Field("post_content") postContent: String?,
                   @Field("post_img") postImg: String?) : Call<WritePostResVO>
 
+
+
 }
+
 
 
