@@ -45,11 +45,11 @@ class ScheduleActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val scheduleData = intent.getParcelableExtra<MyScheduleVO>("scheduleData")
+        val scheduleData = intent.getParcelableExtra<ScheduleVO>("scheduleData")
         if (scheduleData != null) {
-            Log.d("ScheduleActivity", "받아온 일정 데이터 : $scheduleData")
+            Log.d("Schedule", "받아온 일정 데이터 : $scheduleData")
         } else {
-            Log.d("ScheduleActivity", "일정 데이터 못 받음")
+            Log.d("Schedule", "일정 데이터 못 받음")
         }
 
         // Intent 데이터 관리
@@ -80,90 +80,96 @@ class ScheduleActivity : AppCompatActivity() {
 
 
 
-//      // 메인 홈 일정 바 클릭 시 가져온 데이터 입력
-//      // UI 컴포넌트에 데이터를 설정합니다.
-//      scheduleData?.let { schedule ->
-//        findViewById<TextView>(R.id.tv_C_S_Time).text = formatDate(schedule.scheDate)
-//        findViewById<TextView>(R.id.tvClubName2).text = schedule.clubName
-//        findViewById<TextView>(R.id.tv_C_ScheduleName3).text = schedule.scheTitle
-//        findViewById<TextView>(R.id.tv_C_Schedule_Intro).text = schedule.scheContent
-//        findViewById<TextView>(R.id.tv_C_S_Loca).text = schedule.scheLoca
-//        findViewById<TextView>(R.id.tv_C_S_Fee).text = "${schedule.scheFee} 원"
-//        findViewById<TextView>(R.id.tv_C_S_attendance).text = "${schedule.attendUserCnt}/${schedule.maxNum}명"
-//
-//        // Glide를 사용하여 이미지를 로드합니다.
-//        Glide.with(this)
-//          .load(schedule.scheImg)
-//          .placeholder(R.drawable.loading)
-//          .error(R.drawable.golf_img)
-//          .into(binding.imgCSchedule)
-//      } ?: run {
-//        Log.e("ScheduleActivity", "받아온 일정 데이터가 없습니다.")
-//      }
+      // 메인 홈 일정 바 클릭 시 가져온 데이터 입력
+      // UI 컴포넌트에 데이터를 설정합니다.
+      scheduleData?.let { schedule ->
+          binding.tvClubName2.text = schedule?.clubName
+          val color = ContextCompat.getColor(this, R.color.white)
+          binding.icMore.setColorFilter(
+              ContextCompat.getColor(this, R.color.black),
+              PorterDuff.Mode.SRC_IN
+          )
+          binding.tvScheduleName.text = schedule?.scheTitle
+          binding.tvScheduleIntro.text = schedule?.scheContent
+          binding.tvScheduleTime.text = formatDate("${schedule?.scheDate}")
+          binding.tvScheduleLoca.text = schedule?.scheLoca
+          binding.tvScheduleFee.text = "${schedule?.scheFee}원"
+          binding.tvScheduleMember.text =
+              "${schedule?.joinedMembers}/${schedule?.maxNum}명"
+
+        // Glide를 사용하여 이미지를 로드합니다.
+          Glide.with(this)
+              .load(schedule?.scheImg)
+              .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
+              .error(R.drawable.basic_club) // 로딩 실패 시 표시될 이미지
+              .into(binding.imgCSchedule)
+      } ?: run {
+        Log.e("Schedule", "받아온 일정 데이터가 없습니다.")
+      }
 
 
 
-        // 일정 참여 멤버 목록 가져오기
-        val server = Server(this)
-        val memberManager = MemberManager(server)
-        clickedSchedule?.scheCode?.let { code ->
-            MemberManager(server).getScheduleMembers(
-                code,
-                object : Callback<AllScheduleMemberResVO> {
-                    override fun onResponse(
-                        call: Call<AllScheduleMemberResVO>,
-                        response: Response<AllScheduleMemberResVO>
-                    ) {
-                        Log.d("getScheduleMember", "통신시작")
-                        if (response.isSuccessful) {
-                            val scheduleMemberList: List<ScheduleMemberVO>? =
-                                response.body()?.data
-                            Log.d("getScheduleMember", "${scheduleMemberList}")
-                            if (scheduleMemberList != null) {
-                                val sm_adapter = ScheduleMemberAdapter(
+    // 일정 참여 멤버 목록 가져오기
+    val server = Server(this)
+    val memberManager = MemberManager(server)
+    clickedSchedule?.scheCode?.let { code ->
+        MemberManager(server).getScheduleMembers(
+            code,
+            object : Callback<AllScheduleMemberResVO> {
+                override fun onResponse(
+                    call: Call<AllScheduleMemberResVO>,
+                    response: Response<AllScheduleMemberResVO>
+                ) {
+                    Log.d("getScheduleMember", "통신시작")
+                    if (response.isSuccessful) {
+                        val scheduleMemberList: List<ScheduleMemberVO>? =
+                            response.body()?.data
+                        Log.d("getScheduleMember", "${scheduleMemberList}")
+                        if (scheduleMemberList != null) {
+                            val sm_adapter = ScheduleMemberAdapter(
+                                this@ScheduleActivity,
+                                R.layout.club_member_list,
+                                ArrayList(scheduleMemberList)
+                            )
+                            binding.rvAttendance.adapter = sm_adapter
+                            binding.rvAttendance.layoutManager =
+                                LinearLayoutManager(view.context)
+                            binding.rvAttendance.addOnItemTouchListener(
+                                RecyclerItemClickListener(
                                     this@ScheduleActivity,
-                                    R.layout.club_member_list,
-                                    ArrayList(scheduleMemberList)
-                                )
-                                binding.rvAttendance.adapter = sm_adapter
-                                binding.rvAttendance.layoutManager =
-                                    LinearLayoutManager(view.context)
-                                binding.rvAttendance.addOnItemTouchListener(
-                                    RecyclerItemClickListener(
-                                        this@ScheduleActivity,
-                                        binding.rvAttendance,
-                                        object : RecyclerItemClickListener.OnItemClickListener {
-                                            override fun onItemClick(
-                                                view: View,
-                                                position: Int
-                                            ) {
-                                                val clickedSchedule =
-                                                    scheduleMemberList[position]
-                                                // 새로운 액티비티로 이동
-                                                val intent = Intent(
-                                                    this@ScheduleActivity,
-                                                    MainActivity::class.java
-                                                )
-                                                intent.putExtra("selected_tab", "M_tab4")
-                                                intent.putExtra(
-                                                    "selected_user",
-                                                    "${clickedSchedule.userId}"
-                                                )
-                                                startActivity(intent)
-                                            }
-                                        })
-                                )
-                            }
-                        } else {
-                            Log.d("getScheduleMember", "일정 멤버 리스트 가져오기 실패")
+                                    binding.rvAttendance,
+                                    object : RecyclerItemClickListener.OnItemClickListener {
+                                        override fun onItemClick(
+                                            view: View,
+                                            position: Int
+                                        ) {
+                                            val clickedSchedule =
+                                                scheduleMemberList[position]
+                                            // 새로운 액티비티로 이동
+                                            val intent = Intent(
+                                                this@ScheduleActivity,
+                                                MainActivity::class.java
+                                            )
+                                            intent.putExtra("selected_tab", "M_tab4")
+                                            intent.putExtra(
+                                                "selected_user",
+                                                "${clickedSchedule.userId}"
+                                            )
+                                            startActivity(intent)
+                                        }
+                                    })
+                            )
                         }
+                    } else {
+                        Log.d("getScheduleMember", "일정 멤버 리스트 가져오기 실패")
                     }
+                }
 
-                    override fun onFailure(call: Call<AllScheduleMemberResVO>, t: Throwable) {
-                        Log.d("getclickedSchedule", "스택 트레이스: ", t)
-                    }
-                })
-        }
+                override fun onFailure(call: Call<AllScheduleMemberResVO>, t: Throwable) {
+                    Log.d("getclickedSchedule", "스택 트레이스: ", t)
+                }
+            })
+    }
 
         // 일정 참가하기 버튼
         binding.btnJoinSchedule.setOnClickListener {
