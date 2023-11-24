@@ -27,6 +27,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
+
+
 // 게시물 관리 다이얼로그
 fun showActivityDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?) {
     val dialog = Dialog(activity)
@@ -225,6 +228,8 @@ fun showQuitDialogBox(context: Context, message: String?, okay: String?, success
     val tvMessage: TextView = dialog.findViewById(R.id.tvMessage)
     val btnOkay: Button = dialog.findViewById(R.id.btnOkay)
     val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
+    val UserData = PreferenceManager.getUser(context)
+    val userId = UserData?.user_id
 
     tvMessage.text = message
     btnOkay.text = okay
