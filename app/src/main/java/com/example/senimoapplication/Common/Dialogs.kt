@@ -21,7 +21,7 @@ import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.R
 import com.example.senimoapplication.server.Server
-import com.example.senimoapplication.server.Token.UserData.userId
+import com.example.senimoapplication.server.Token.PreferenceManager
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -257,9 +257,10 @@ fun showSettingDialogBox(activity: Activity, message: String?, okay: String?, su
     tvMessage.text = message
     btnOkay.text = okay
     btnOkay.setOnClickListener {
-
         Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
+        PreferenceManager.clearToken(activity)
+        // 로그아웃 후 처리 (예: 로그인 화면으로 이동)
         val intent = Intent(activity, IntroActivity::class.java)
         activity.startActivity(intent)
     }
@@ -289,3 +290,4 @@ fun showAlertDialogBox(context: Context, message: String?, okay: String?) {
 
     dialog.show()
 }
+

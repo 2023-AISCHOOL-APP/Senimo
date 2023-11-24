@@ -211,6 +211,68 @@ class ScheduleActivity : AppCompatActivity() {
                 }
             })
         }
+
+        // 일정 참가하기 버튼
+        binding.btnJoinSchedule.setOnClickListener {
+            val userId = UserData.userId.toString()
+
+            if(joinedMemberList?.contains(userId) == true){
+                Log.d("joinlist2","중복감지")
+                binding.btnJoinSchedule.text = "일정 참가 취소하기"
+                binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape_main) // 디폴트 배경으로 변경
+                binding.btnJoinSchedule.setTextColor(ContextCompat.getColor(this@ScheduleActivity, R.color.white))
+                scheCode?.let { it1 -> cancelJoinSche(userId, it1) }
+
+            } else {
+
+                Log.d("joinlist3","중복감지안됨")
+
+                // 버튼 view 변경하기
+                binding.btnJoinSchedule.text = "일정 참가하기"
+                binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape) // 선택된 배경으로 변경
+                binding.btnJoinSchedule.setTextColor(
+                    ContextCompat.getColor(this@ScheduleActivity, R.color.main)) // 메인 텍스트 색상으로 변경
+                scheCode?.let { it1 -> joinSche(userId, it1) }
+
+            }
+        }
+
+        
+        // 뒤로가기 아이콘
+        binding.icBack.setOnClickListener {
+            val intent = Intent(this@ScheduleActivity, ClubActivity::class.java)
+            startActivity(intent)
+            finish()
+
+        }
+
+        // 앱바 - 게시물 관리 기능 추가
+        binding.icMore.setOnClickListener { view ->
+            val popupMenu = PopupMenu(this, view)
+            val menuInflater = popupMenu.menuInflater
+
+            menuInflater.inflate(R.menu.option_menu, popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_option1 -> {
+                        // 게시물 수정
+                        val intent = Intent(this, MakeScheduleActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+
+                    R.id.menu_option2 -> {
+                        // 게시물 삭제
+                        showActivityDialogBox(this, "게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.")
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
     }
 
 
