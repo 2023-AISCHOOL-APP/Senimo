@@ -2,11 +2,12 @@ const express = require('express')
 const router = express.Router()
 const conn = require('../config/database')
 const config = require('../config/config');
-const { json } = require('body-parser');
-const e = require('express');
+
+
 
 
 router.get('/getUserBadges', (req, res) => {
+    console.log("요청왔다")
     const userId = req.query.userId;
 
     // SQL 쿼리를 실행

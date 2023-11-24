@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
-import com.example.senimoapplication.Common.BadgeManagerSingleton
 import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
@@ -152,35 +151,35 @@ class MymeetingFragment(private val myscheduleList : List<ScheduleVO>, val joinL
     }
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // 호기심탐험가
-        // 관심 모임 개수 확인
-        val interestedClubsCount = interestList.size
-
-        // 사용자 ID
-        val userId = "" // 현재 사용자의 ID를 얻는 방법에 따라 달라짐
-
-        // 관심 모임 개수가 5개 이상이면 BadgeManager의 함수 호출
-        if (interestedClubsCount >= 5) {
-            BadgeManagerSingleton.instance.updateForInterestedClubs(userId, interestedClubsCount)
-        }
-
-
-        // 새싹모임러, 이구역모임왕
-        val joinedMeetingCount = joinList.size
-
-        // 가입한 모임 개수에 따라 BadgeManager의 함수 호출
-        val isFirstJoin = joinedMeetingCount == 1 // 첫 번째 가입인 경우
-        if (isFirstJoin) {
-            BadgeManagerSingleton.instance.updateForNewJoin(userId, joinedMeetingCount, isFirstJoin)
-        }
-
-        if (joinedMeetingCount >= 5) {
-            BadgeManagerSingleton.instance.updateForNewJoin(userId, joinedMeetingCount, false)
-        }
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        // 호기심탐험가
+//        // 관심 모임 개수 확인
+//        val interestedClubsCount = interestList.size
+//
+//        // 사용자 ID
+//        val userId = "" // 현재 사용자의 ID를 얻는 방법에 따라 달라짐
+//
+//        // 관심 모임 개수가 5개 이상이면 BadgeManager의 함수 호출
+//        if (interestedClubsCount >= 5) {
+//            BadgeManagerSingleton.instance.updateForInterestedClubs(userId, interestedClubsCount)
+//        }
+//
+//
+//        // 새싹모임러, 이구역모임왕
+//        val joinedMeetingCount = joinList.size
+//
+//        // 가입한 모임 개수에 따라 BadgeManager의 함수 호출
+//        val isFirstJoin = joinedMeetingCount == 1 // 첫 번째 가입인 경우
+//        if (isFirstJoin) {
+//            BadgeManagerSingleton.instance.updateForNewJoin(userId, joinedMeetingCount, isFirstJoin)
+//        }
+//
+//        if (joinedMeetingCount >= 5) {
+//            BadgeManagerSingleton.instance.updateForNewJoin(userId, joinedMeetingCount, false)
+//        }
+//    }
 
 
 }
