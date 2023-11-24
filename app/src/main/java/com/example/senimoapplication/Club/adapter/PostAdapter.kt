@@ -100,8 +100,6 @@ class PostAdapter(val context: Context, val layout : Int, val data: ArrayList<Po
         }
         holder.tvDateTime.text = formatDate(data[position].created_dt)
 
-
-
         holder.imgPostMore.setOnClickListener { view->
             val popupMenu = PopupMenu(view.context, view)
             val menuInflater = popupMenu.menuInflater

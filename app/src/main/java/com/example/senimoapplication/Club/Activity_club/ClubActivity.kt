@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.viewpager.widget.ViewPager
 import com.example.senimoapplication.Club.VO.InterestedResVO
 import com.example.senimoapplication.Club.fragment.BoardFragment
@@ -64,6 +66,15 @@ class ClubActivity : AppCompatActivity() {
             finish()
         }
 
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@ClubActivity, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                finish()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
 
         // 모임명 변경 (데이터 연동 필요)
         // tvClubName.text = 서버에서 받아온 값

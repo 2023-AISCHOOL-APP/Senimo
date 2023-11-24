@@ -8,10 +8,11 @@ router.post('/getAllMembers/:club_code', (req, res) => {
   console.log('request값 확인',req.params);
   const club_code = req.params.club_code; 
   const findMemberQuery = `
-      SELECT a.club_code, a.user_id, b.user_name, a.club_role, b.user_img
+      SELECT a.club_code, a.user_id, b.user_name, a.club_role, b.user_img, a.join_dt
       FROM tb_join a
       LEFT JOIN tb_user b ON a.user_id = b.user_id
       WHERE a.club_code = ?
+      ORDER BY a.club_role ASC, a.join_dt ASC;
   `;
   conn.query(findMemberQuery, [club_code], (err, results) => {
       if (err) {

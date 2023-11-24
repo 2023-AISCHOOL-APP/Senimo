@@ -1,6 +1,5 @@
 package com.example.senimoapplication.MainPage.fragment_main
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -22,7 +21,6 @@ import com.example.senimoapplication.databinding.MeetingListBinding
 class MymeetingFragment(private val myscheduleList : List<ScheduleVO>, val joinList : List<MeetingVO>, val interestList : List<MeetingVO> ) : Fragment() {
 
     private var showAllItems = false // 플래그 추가
-    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
