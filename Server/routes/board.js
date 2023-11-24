@@ -21,6 +21,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// 게시물 등록
 router.post('/writePost', upload.single('picture') ,(req, res) => {
   console.log('writePost router', req.body);
   const writePost = JSON.parse(req.body.writePostResVO)
@@ -32,7 +33,7 @@ router.post('/writePost', upload.single('picture') ,(req, res) => {
   const writePostSql = `insert into tb_post (user_id, club_code, post_content, post_img)
     values(?,?,?,?)`
 
-  conn.query(writePostSql, [user_id, club_code, post_content, req.file.postImgFilename], (err, rows) => {
+  conn.query(writePostSql, [user_id, club_code, post_content, postImgFilename], (err, rows) => {
     console.log('게시글 : ', rows);
     if (err) {
       console.error('게시글 등록 실패 : ', err);
@@ -40,11 +41,11 @@ router.post('/writePost', upload.single('picture') ,(req, res) => {
     } else {
       console.log('게시글 등록 성공');
       res.json({ rows: 'success' });
-      console.log(success)
     }
   });
 })
 
+// 게시글 리스트 가져오기
 router.get('/getPostContent/:club_code', (req, res) => {
   console.log('getPostContent', req.body);
   let club_code = req.params.club_code
@@ -73,6 +74,7 @@ router.get('/getPostContent/:club_code', (req, res) => {
   });
 })
 
+// 댓글 리스트 가져오기
 router.get('/getReview/:post_code', (req, res) => {
   console.log('getReview', req.body);
   let post_code = req.params.post_code
@@ -96,6 +98,24 @@ router.get('/getReview/:post_code', (req, res) => {
         res.status(404).json({ error: "review content not found." });
     }
   });
+})
+
+// 게시글 삭제
+router.post('/deletePost', (req, res) => {
+  console.log('게시글 삭제 라우터', req.body);
+  const { post_code } = req.body;
+
+  const deletePostSql = `delete from tb_post where post_code = ?`
+
+  conn.query(deletePostSql, [ post_code ], (err, rows) => {
+    if (err) {
+      console.error('게시글 삭제 실패', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('게시글 삭제 성공');
+      res.json({ rows: 'success' });
+    }
+  })
 })
 
 module.exports = router;

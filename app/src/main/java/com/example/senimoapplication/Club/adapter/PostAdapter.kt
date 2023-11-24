@@ -14,15 +14,17 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.Activity_club.PostActivity
 import com.example.senimoapplication.Club.VO.CommentVO
+import com.example.senimoapplication.Club.VO.DeletePostResVO
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Common.formatDate
-import com.example.senimoapplication.Common.showActivityDialogBox
+import com.example.senimoapplication.Common.showPostDialogBox
 import com.example.senimoapplication.R
 import com.example.senimoapplication.server.Server
 import com.google.android.material.imageview.ShapeableImageView
@@ -105,7 +107,36 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
         })
     }
 
+    companion object{
+        fun deletePostData(activity: Activity, postCode: String) {
+            val service = Server(activity).service
+            val call = service.deletePost(postCode)
+            call.enqueue(object : Callback<DeletePostResVO> {
+                override fun onResponse(
+                    call: Call<DeletePostResVO>,
+                    response: Response<DeletePostResVO>
+                ) {
+                    Log.d("게시글 삭제", response.toString())
+                    if (response.isSuccessful) {
+                        val deletePostRes = response.body()
+                        if (deletePostRes != null && deletePostRes.rows == "success") {
+                            Log.d("deletePost", "${postCode} 삭제 성공")
+                        } else {
+                            Log.d("deletePost", "${postCode} 삭제 실패")
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<DeletePostResVO>, t: Throwable) {
+                    Log.e("deletePost", "deletePost 네트워크 요청 실패", t)
+                }
+
+            })
+        }
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val postCode = data[position].postCode
 
         // 기본 세팅
         holder.rvComment.visibility = GONE
@@ -168,7 +199,7 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
 
                     R.id.menu_option2 -> {
                         // 게시물 삭제
-                        showActivityDialogBox(view.context as Activity,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.")
+                        showPostDialogBox(view.context as Activity,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.", postCode)
                         true
                     }
 
@@ -182,7 +213,7 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
 
         holder.tvCommentCnt.text = data[position].reviewCount.toString()
 
-        val postCode = data[position].postCode
+        // 리뷰 데이터 가져호는 함수 실행
         fetchReviewData(holder, postCode)
 
         // 게시물 내용, 더보기 버튼, 댓글을 눌렀을 때 게시물 확장하는 코드
