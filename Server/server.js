@@ -18,12 +18,13 @@ const deleteMember = require('./routes/deleteMember')
 const getSchedules = require('./routes/getSchedules')
 const getScheduleMembers = require('./routes/getScheduleMembers')
 const boardRouter = require('./routes/board')
+const scheduleInfo = require('./routes/scheduleInfo')
 
 
 app.use(cors())
 
 app.set('port', process.env.PORT || 3333);
-// ngrok tunnel --label edge=edghts_2YKdAEOOgOIr0zDkBYxQMo8mcyg http://localhost:80
+//ngrok tunnel --label edge=edghts_2YKdAEOOgOIr0zDkBYxQMo8mcyg http://localhost:80
 //app.set('port', process.env.PORT || 80);
 
 app.use(bodyParser.json());
@@ -45,6 +46,7 @@ app.use('/', getSchedules)
 app.use('/', getScheduleMembers)
 app.use('/', deleteMember)
 app.use('/', boardRouter)
+app.use('/', scheduleInfo)
 
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');

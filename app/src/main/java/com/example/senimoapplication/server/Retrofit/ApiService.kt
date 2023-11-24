@@ -10,10 +10,13 @@ import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
 import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
+import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.VO.WritePostResVO
+import com.example.senimoapplication.Club.VO.getPostResVO
+import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
@@ -135,19 +138,23 @@ interface ApiService {
     @POST("/deleteMember")
     fun deleteMember(@Body deleteMemberVO: DeleteMemberVO): Call<JsonObject>
 
+    @POST("/scheduleInfo/{scheCode}")
+    fun scheduleInfo(@Path("scheCode") scheCode: String) : Call<ScheduleVO>
 
     @POST("/getScheduleMembers/{scheCode}")
     fun getScheduleMembers(@Path("scheCode") scheCode: String): Call<AllScheduleMemberResVO>
 
     @FormUrlEncoded
     @POST("/joinSche")
-    fun joinSche(@Field("user_id") userId: String,
-                 @Field("sche_code") scheCode: String) : Call<JoinScheResVO>
+    fun joinSche(@Field("user_id") userId: String?,
+                 @Field("sche_code") scheCode: String?
+    ) : Call<JoinScheResVO>
 
     @FormUrlEncoded
     @POST("/cancelJoinSche")
-    fun cancelJoinSche(@Field("user_id") userId: String,
-                       @Field("sche_code") scheCode: String) : Call<CancelJoinScheResVO>
+    fun cancelJoinSche(@Field("user_id") userId: String?,
+                       @Field("sche_code") scheCode: String?
+    ) : Call<CancelJoinScheResVO>
 
     @FormUrlEncoded
     @POST("/joinClub")
@@ -191,6 +198,14 @@ interface ApiService {
 //                  @Field("post_content") postContent: String?,
 //                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
 
+
+
+    @GET("getPostContent/{club_code}")
+    fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>
+
+    @GET("getReview/{post_code}")
+    fun getReview(@Path("post_code") postCode: String?): Call<getReviewResVO>
 }
+
 
 

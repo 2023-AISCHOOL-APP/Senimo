@@ -116,40 +116,40 @@ router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
 
 // 모임 가입
 router.post('/joinClub', (req, res) => {
-	console.log('joinClub router', req.body);
-	const { club_code, user_id } = req.body
+   console.log('joinClub router', req.body);
+   const { club_code, user_id } = req.body
 
-	const joinClubSql = `insert into tb_join (club_code, user_id) values (?,?)`
+   const joinClubSql = `insert into tb_join (club_code, user_id) values (?,?)`
 
-	conn.query(joinClubSql, [club_code, user_id], (err, rows) => {
-		console.log('모임 가입 : ', rows);
-		if (err) {
-			console.error('모임 가입 실패', err);
+   conn.query(joinClubSql, [club_code, user_id], (err, rows) => {
+      console.log('모임 가입 : ', rows);
+      if (err) {
+         console.error('모임 가입 실패', err);
       res.json({ rows: 'failed' });
     } else {
       console.log('모임 가입 성공');
       res.json({ rows: 'success'});
     }
-	})
+   })
 })
 
 // 모임 탈퇴
 router.post('/quitClub', (req, res) => {
-	console.log('quitClub router', req.body);
-	const { club_code, user_id } = req.body
+   console.log('quitClub router', req.body);
+   const { club_code, user_id } = req.body
 
-	const joinClubSql = `delete from tb_join where club_code = ? and user_id = ?`
+   const joinClubSql = `delete from tb_join where club_code = ? and user_id = ?`
 
-	conn.query(joinClubSql, [club_code, user_id], (err, rows) => {
-		console.log('모임 탈퇴 : ', rows);
-		if (err) {
-			console.error('모임 탈퇴 실패', err);
+   conn.query(joinClubSql, [club_code, user_id], (err, rows) => {
+      console.log('모임 탈퇴 : ', rows);
+      if (err) {
+         console.error('모임 탈퇴 실패', err);
       res.json({ rows: 'failed' });
     } else {
       console.log('모임 탈퇴 성공');
       res.json({ rows: 'success'});
     }
-	})
+   })
 })
 
 module.exports = router;

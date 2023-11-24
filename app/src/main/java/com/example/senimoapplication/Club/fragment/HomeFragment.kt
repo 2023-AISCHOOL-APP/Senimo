@@ -32,11 +32,13 @@ import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.Common.showAlertDialogBox
+import com.example.senimoapplication.Common.showQuitDialogBox
 import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentHomeBinding
 import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.PreferenceManager
 import com.example.senimoapplication.server.Token.UserData
 import com.google.gson.JsonObject
 import retrofit2.Call
@@ -50,7 +52,7 @@ class HomeFragment : Fragment() {
     var clickedMeeting: MeetingVO? = null // MeetingVO? 타입으로 선언
     var createMeeting: MeetingVO? = null
     val memberList: ArrayList<MemberVO> = ArrayList()
-    val userId = UserData.userId
+    var userId: String? =null
     var clubCode: String? = null
     var staffList : List<String> = emptyList()
     var joinedList : List<String> = emptyList()
@@ -158,17 +160,26 @@ class HomeFragment : Fragment() {
         }
     }
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        val UserData = PreferenceManager.getUser(requireContext())
+        userId = UserData?.user_id
+
         // intent 데이터 관리
         clickedMeeting =
             activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
         createMeeting =
             activity?.intent?.getParcelableExtra<MeetingVO>("CreateMeeting")
-        //clickedMeetinghome = activity?.intent?.getParcelableArrayListExtra("clickedMeetinghome") ?: ArrayList()
+
+        // 모임상세 -> 클럽 액티비티에서 넘어온 값
+        val joinedMemberCount = arguments?.getString("JOINED_MEMBER_COUNT")
+        val selectedScheCode = arguments?.getString("SELECTED_SCHE_CODE")
+
 
         Log.d("getclickedMeetinghome", clickedMeeting.toString())
 
@@ -231,7 +242,7 @@ class HomeFragment : Fragment() {
                                 binding.btnJoinClub.text = "모임 탈퇴하기"
 
                                 binding.btnJoinClub.setOnClickListener {
-                                    quitClub(clubCode,userId)
+                                    showQuitDialogBox(requireContext(),"정말 모임에서 탈퇴하시겠어요?","탈퇴하기","모임에서 탈퇴되었습니다.", this@HomeFragment, code)
                                     binding.btnJoinClub.setBackgroundResource(R.drawable.button_shape_main)
                                     binding.btnJoinClub.setTextColor(ContextCompat.getColor(view.context,R.color.white))
                                     binding.btnJoinClub.text = "모임 가입하기"
@@ -260,8 +271,6 @@ class HomeFragment : Fragment() {
             })
         }
 
-        Log.d("joinedList","밖에서도 사용가능${joinedList}")
-
         // 모임 일정 데이터 가져오기
         clubCode?.let { code ->
             ScheduleManager(server).getSchedules(code, object : Callback<AllSchedulesResVO> {
@@ -271,7 +280,7 @@ class HomeFragment : Fragment() {
                         val scheduleList: List<ScheduleVO>? = response.body()?.data
                         Log.d("getclickedSchedule", "${scheduleList}")
                         if (scheduleList != null) {
-                            val s_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, scheduleList)
+                            val s_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, scheduleList,joinedMemberCount,selectedScheCode )
                             binding.rvSchedule.adapter = s_adapter
                             binding.rvSchedule.layoutManager = LinearLayoutManager(view.context)
                             binding.rvSchedule.addOnItemTouchListener(
@@ -286,6 +295,7 @@ class HomeFragment : Fragment() {
                                                 intent.putExtra("ScheduleInfo", clickedSchedule)
                                                 intent.putExtra("clubName", clubName)
                                                 intent.putExtra("scheCode", clickedSchedule.scheCode)
+                                                intent.putStringArrayListExtra("staffList", ArrayList(staffList))
                                                 startActivity(intent)
                                             } else {
                                                 // 여기서 showAlertDialogBox 함수를 호출할 때 Context를 전달합니다.
@@ -496,9 +506,14 @@ class MemberManager(private val server: Server) {
 }
 
 // 모임 스케줄 가져오기
-class ScheduleManager(private val server: Server){
-    fun getSchedules(clubCode: String, callback : Callback<AllSchedulesResVO>){
+class ScheduleManager(private val server: Server) {
+    fun getSchedules(clubCode: String, callback: Callback<AllSchedulesResVO>) {
         val call = server.service.getSchedules(clubCode)
+        call.enqueue(callback)
+    }
+
+    fun scheduleInfo(scheCode: String, callback: Callback<ScheduleVO>) {
+        val call = server.service.scheduleInfo(scheCode) // 올바른 메서드 호출
         call.enqueue(callback)
     }
 }

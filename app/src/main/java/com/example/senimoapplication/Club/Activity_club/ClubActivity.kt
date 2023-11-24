@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.viewpager.widget.ViewPager
 import com.example.senimoapplication.Club.VO.InterestedResVO
@@ -29,6 +28,13 @@ class ClubActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_club)
+
+        // Intent관리
+        val joinedMemberCnt = intent.getStringExtra("joinedMemberCnt")
+        val selectedSchecode = intent.getStringExtra("previousSchedule")
+        if (joinedMemberCnt != null || selectedSchecode != null) {
+            navigateToHomeFragment(joinedMemberCnt, selectedSchecode)
+        }
 
         var viewPager = findViewById(R.id.viewPager) as ViewPager
         var tabLayout = findViewById(R.id.tabLayout) as TabLayout
@@ -99,6 +105,19 @@ class ClubActivity : AppCompatActivity() {
                 updateInterestStatus(params)
             }
         }
+    }
+    private fun navigateToHomeFragment(joinedMemberCnt: String?, selectedSchecode: String?) {
+
+        val homeFragment = HomeFragment().apply {
+            arguments = Bundle().apply {
+                putString("JOINED_MEMBER_COUNT", joinedMemberCnt)
+                putString("SELECTED_SCHE_CODE", selectedSchecode)
+            }
+        }
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentClubHome, homeFragment)
+            .commit()
     }
 
     fun updateInterestStatus(@FieldMap params: Map<String, String>) {

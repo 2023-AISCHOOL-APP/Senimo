@@ -40,8 +40,6 @@ data class ScheduleVO(
         joinedMembers = parcel.readInt(),
         scheImg = parcel.readString() ?:"",
         clubName = parcel.readString() ?:""
-
-
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
