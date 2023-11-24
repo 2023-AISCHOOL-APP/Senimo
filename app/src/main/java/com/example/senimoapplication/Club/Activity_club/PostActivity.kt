@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
@@ -17,14 +18,21 @@ import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.WritePostResVO
 import com.example.senimoapplication.Club.adapter.PostAdapter
 import com.example.senimoapplication.Club.fragment.BoardFragment
+import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
 import com.example.senimoapplication.databinding.ActivityPostBinding
 import com.example.senimoapplication.databinding.FragmentBoardBinding
+import com.example.senimoapplication.server.ImageUploader
 import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.PreferenceManager
 import com.example.senimoapplication.server.Token.UserData
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,10 +54,10 @@ class PostActivity : AppCompatActivity() {
 
         // 사진 1장 선택
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the
-            // photo picker.
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
+                imageUri = uri
+                imageName = getFileName(uri)
                 binding.imgButton2.setImageURI(uri)
                 binding.imgButton2.visibility = ImageView.VISIBLE
             } else {
@@ -65,21 +73,32 @@ class PostActivity : AppCompatActivity() {
         binding.btnNewPost.setOnClickListener {
             // 게시물 등록하고 게시판 화면으로 돌아가기
             val clickedMeeting = intent.getParcelableExtra<MeetingVO>("clickedMeeting")
-            val clubCode = clickedMeeting?.club_code.toString()
+            //val clubCode = clickedMeeting?.club_code.toString()
 //            val userId = UserData.userId.toString()
-            val userId = intent.getStringExtra("user_id").toString()
-            val postContent = binding.etPostContent.text.toString()
-            val postImg = imageName.toString()
+           // val userId =  PreferenceManager.getUser(this)?.user_id.toString()//intent.getStringExtra("user_id").toString()
+            //val postContent = binding.etPostContent.text.toString()
+            val writePostResVO = WritePostResVO(
+                rows = "",
+                userId = PreferenceManager.getUser(this)?.user_id.toString(),
+                clubCode =clickedMeeting?.club_code.toString(),
+                postContent =binding.etPostContent.text.toString(),
+                postImg = imageName.toString()
+            )
+            Log.d("포스트 보내는값", writePostResVO.toString())
+            // 이미지 URI가 있으면 이미지와 함께 일정 정보 전송
+            imageUri?.let{
+                val imagePart = ImageUploader(this).prepareImagePart(it)
+                writePost(writePostResVO,imagePart)
+            } ?: run {
+            // 이미지 URI가 없는 경우에는 일정 정보만 전송
+            writePost(writePostResVO,null)
+        }
 
-            Log.d("포스트 회원 아이디", userId)
-            Log.d("포스트 모임코드", clubCode)
-
-            writePost(userId, clubCode, postContent, postImg)
 
             // 게시글 등록 후 ClubActivity로 이동
             val intent = Intent(this@PostActivity, ClubActivity::class.java)
             intent.putExtra("clickedMeeting", clickedMeeting) // clickedMeeting 객체를 Intent에 추가하여 ClubActivity로 전달
-            intent.putExtra("user_id", userId)
+            intent.putExtra("user_id", PreferenceManager.getUser(this)?.user_id.toString())
             startActivity(intent)
             finish()
         }
@@ -90,9 +109,14 @@ class PostActivity : AppCompatActivity() {
 
     }
 
-    fun writePost(userId: String, clubCode: String, postContent: String, postImg: String) {
+    fun writePost(writePostResVO: WritePostResVO,imagePart: MultipartBody.Part?) {
+        val writePostJson = Gson().toJson(writePostResVO)
+        val writePostBody =
+            writePostJson.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull()) //변환된 JSON 문자열을 RequestBody 객체로 만듭니다.
+        Log.d("writePostJson", writePostJson.toString())
+        Log.d("writePostBody", writePostBody.toString())
         val service = Server(this).service
-        val call = service.writePost(userId, clubCode, postContent, postImg)
+        val call = service.writePost(writePostResVO,imagePart)
 
         call.enqueue(object : Callback<WritePostResVO> {
             override fun onResponse(call: Call<WritePostResVO>, response: Response<WritePostResVO>) {
@@ -112,5 +136,20 @@ class PostActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    // 이미지 URI에서 파일 이름을 추출하는 함수
+    fun getFileName(uri: Uri):String?{
+        var imageName: String? = null
+        val cursor = contentResolver.query(uri,null,null,null,null)
+        cursor?.use{
+            if (it.moveToFirst()) {
+                val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (it.moveToFirst()) {
+                    imageName = it.getString(nameIndex)
+                }
+            }
+        }
+        return imageName
     }
 }

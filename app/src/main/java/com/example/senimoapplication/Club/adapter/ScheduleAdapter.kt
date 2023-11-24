@@ -16,7 +16,7 @@ import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import kotlin.math.min
 
-class ScheduleAdapter(val context: Context, val layout: Int, val data: List<ScheduleVO>) :
+class ScheduleAdapter(val context: Context, val layout: Int, val data: List<ScheduleVO>, val cnt : String?=null, val schecode : String? =null ) :
 RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
 
     private var showAllItems = false // 플래그 추가
@@ -95,7 +95,12 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
         holder.tvScheduleFee.text = "${data[position].scheFee}원"
         holder.tvScheduleDay.text = dDate(data[position].scheDate)
         holder.tvScheduleState.text = if (data[position].maxNum <= data[position].joinedMembers) "모집마감" else "모집중"
-        holder.tvScheduleMemNum.text = "${data[position].joinedMembers}/${data[position].maxNum.toString()}"
+
+        if (schecode == data[position].scheCode){
+            holder.tvScheduleMemNum.text = "${cnt}/${data[position].maxNum.toString()}"
+        } else {
+            holder.tvScheduleMemNum.text = "${data[position].joinedMembers}/${data[position].maxNum.toString()}"
+        }
 
 
         val state = holder.tvScheduleState.text

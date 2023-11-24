@@ -37,8 +37,6 @@ data class ScheduleVO(
         maxNum = parcel.readInt(),
         joinedMembers = parcel.readInt(),
         scheImg = parcel.readString() ?:""
-
-
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

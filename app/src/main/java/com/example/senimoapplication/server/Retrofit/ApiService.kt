@@ -135,19 +135,23 @@ interface ApiService {
     @POST("/deleteMember")
     fun deleteMember(@Body deleteMemberVO: DeleteMemberVO): Call<JsonObject>
 
+    @POST("/scheduleInfo/{scheCode}")
+    fun scheduleInfo(@Path("scheCode") scheCode: String) : Call<ScheduleVO>
 
     @POST("/getScheduleMembers/{scheCode}")
     fun getScheduleMembers(@Path("scheCode") scheCode: String): Call<AllScheduleMemberResVO>
 
     @FormUrlEncoded
     @POST("/joinSche")
-    fun joinSche(@Field("user_id") userId: String,
-                 @Field("sche_code") scheCode: String) : Call<JoinScheResVO>
+    fun joinSche(@Field("user_id") userId: String?,
+                 @Field("sche_code") scheCode: String?
+    ) : Call<JoinScheResVO>
 
     @FormUrlEncoded
     @POST("/cancelJoinSche")
-    fun cancelJoinSche(@Field("user_id") userId: String,
-                       @Field("sche_code") scheCode: String) : Call<CancelJoinScheResVO>
+    fun cancelJoinSche(@Field("user_id") userId: String?,
+                       @Field("sche_code") scheCode: String?
+    ) : Call<CancelJoinScheResVO>
 
     @FormUrlEncoded
     @POST("/joinClub")
@@ -161,15 +165,31 @@ interface ApiService {
                  @Field("user_id") userId: String?
     ) : Call<QuitClubResVO>
 
-    @FormUrlEncoded
+
+//    @Multipart
+//    @POST("/postCreateMeeting")
+//    fun createMeeting(
+//        @Part("meeting") meeting: MeetingVO, // JSON 형식의 MeetingVO @part 매개변수는 RequestBody , //서버 측에서는 이 "meeting" 파트를 찾아 그 내용을 읽고 처리
+//        @Part image: MultipartBody.Part? // 이미지 파일 데이터를 전달하는 역할
+//    ): Call<MeetingVO>
+    @Multipart
     @POST("/writePost")
-    fun writePost(@Field("user_id") userId: String,
-                  @Field("club_code") clubCode: String,
-                  @Field("post_content") postContent: String?,
-                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
+    fun writePost(@Part("writePostResVO") writePostResVO: WritePostResVO,
+                  @Part image: MultipartBody.Part?
+    ) : Call<WritePostResVO>
+
+//    @FormUrlEncoded
+//    @POST("/writePost")
+//    fun writePost(@Field("user_id") userId: String,
+//                  @Field("club_code") clubCode: String,
+//                  @Field("post_content") postContent: String?,
+//                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
+
+
 
     @GET("getPostContent/{club_code}")
     fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>
 }
+
 
 

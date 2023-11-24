@@ -3,18 +3,17 @@ const router = express.Router()
 const conn = require('../config/database');
 const config = require('../config/config')
 
-//전체 회원 목록
+// 일정 참가 회원 목록
 router.post('/getScheduleMembers/:sche_code', (req, res) => {
   console.log('request값 확인',req.params);
   const sche_code = req.params.sche_code; 
   const findMemberQuery = `
-  SELECT 
-  u.user_img, u.user_name, j.club_role, u.user_id
+  SELECT u.user_id, u.user_name, j.club_role ,u.user_img
   FROM tb_sche_joined_user sju
   JOIN tb_user u ON sju.user_id = u.user_id
   JOIN tb_schedule sch ON sju.sche_code = sch.sche_code
   JOIN tb_join j ON sju.user_id = j.user_id AND sch.club_code = j.club_code
-  WHERE sju.sche_code = ? ; 
+  WHERE sju.sche_code = ? ;
   `;
   conn.query(findMemberQuery, [sche_code], (err, results) => {
       if (err) {
