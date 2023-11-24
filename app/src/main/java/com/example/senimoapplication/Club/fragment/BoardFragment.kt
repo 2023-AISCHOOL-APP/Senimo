@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,6 +46,7 @@ class BoardFragment : Fragment() {
             binding.imgFloatingNewpost.visibility = INVISIBLE
         }
 
+        // 게시글 데이터 가져오기 함수 실행
         fetchPostList()
 
         // 작성하기 버튼
@@ -74,6 +76,8 @@ class BoardFragment : Fragment() {
                         val postAdapter = PostAdapter(requireContext(), R.layout.post_list, postList)
                         binding.rvBoard.adapter = postAdapter
                         binding.rvBoard.layoutManager = LinearLayoutManager(requireContext())
+                        binding.tvAnnounceMain.visibility = GONE
+                        binding.tvAnnounceSub.visibility = GONE
                     }
                 } else {
                     Log.d("BoardFragment", "게시글 가져오기 실패")
