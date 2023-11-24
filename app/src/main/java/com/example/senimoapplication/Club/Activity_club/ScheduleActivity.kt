@@ -141,10 +141,6 @@ class ScheduleActivity : AppCompatActivity() {
                 binding.btnJoinSchedule.setTextColor(
                     ContextCompat.getColor(this@ScheduleActivity, R.color.main)) // 메인 텍스트 색상으로 변경
                 scheCode?.let { it1 -> joinSche(userId, it1) }
-                
-                
-                cancelJoinSche(userId, scheCode)
-                isJoined = true
             }
         }
 

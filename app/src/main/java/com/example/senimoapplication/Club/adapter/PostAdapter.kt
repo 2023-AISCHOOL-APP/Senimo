@@ -15,7 +15,6 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.senimoapplication.Club.Activity_club.MakeScheduleActivity
 import com.example.senimoapplication.Club.Activity_club.PostActivity
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Common.formatDate
@@ -24,7 +23,7 @@ import com.example.senimoapplication.R
 import com.google.android.material.imageview.ShapeableImageView
 
 
-class PostAdapter(val context: Context, val layout : Int, val data: ArrayList<PostVO>) : RecyclerView.Adapter<PostAdapter.ViewHolder> (){
+class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>) : RecyclerView.Adapter<PostAdapter.ViewHolder> (){
 
     val inflater = LayoutInflater.from(context)
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -82,9 +81,9 @@ class PostAdapter(val context: Context, val layout : Int, val data: ArrayList<Po
 
         holder.imgPost.setImageResource(R.drawable.img_sample)
         holder.userProfileImg.setImageResource(R.drawable.img_sample)
-        holder.tvContent.text = data[position].post_content
-        holder.tvUserName.text = data[position].user_name
-        when(data[position].club_role){
+        holder.tvContent.text = data[position].postContent
+        holder.tvUserName.text = data[position].userName
+        when(data[position].clubRole){
             1 -> {
                 holder.tvUserLevel.text = "모임장"
                 holder.tvUserLevel.setBackgroundResource(R.drawable.user_level_leader)
@@ -98,7 +97,7 @@ class PostAdapter(val context: Context, val layout : Int, val data: ArrayList<Po
                 holder.tvUserLevel.setBackgroundResource(R.drawable.user_level_basic)
             }
         }
-        holder.tvDateTime.text = formatDate(data[position].created_dt)
+        holder.tvDateTime.text = formatDate(data[position].createdDt)
 
         holder.imgPostMore.setOnClickListener { view->
             val popupMenu = PopupMenu(view.context, view)
@@ -129,15 +128,11 @@ class PostAdapter(val context: Context, val layout : Int, val data: ArrayList<Po
 
         }
 
+        holder.tvCommentCnt.text = data[position].reviewCount.toString()
 
-        holder.tvCommentCnt.text = data[position].reviewed_cnt.toString()
-
-
-        val commentAdapter = CommentAdapter(context, R.layout.comment_list, data[position].review_content)
+        val commentAdapter = CommentAdapter(context, R.layout.comment_list, data)
         holder.rvComment.adapter = commentAdapter
         holder.rvComment.layoutManager = LinearLayoutManager(context)
-
-
 
         // 게시물 내용, 더보기 버튼, 댓글을 눌렀을 때 게시물 확장하는 코드
         val clickableViews = listOf(holder.tvContent, holder.tvCommentTitle, holder.tvBtnMore, holder.imgPost)
