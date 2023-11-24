@@ -16,6 +16,7 @@ import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.VO.WritePostResVO
 import com.example.senimoapplication.Club.VO.getPostResVO
+import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
@@ -189,6 +190,9 @@ interface ApiService {
 
     @GET("getPostContent/{club_code}")
     fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>
+
+    @GET("getReview/{post_code}")
+    fun getReview(@Path("post_code") postCode: String?): Call<getReviewResVO>
 }
 
 

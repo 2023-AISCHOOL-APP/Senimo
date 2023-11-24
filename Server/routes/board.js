@@ -73,4 +73,29 @@ router.get('/getPostContent/:club_code', (req, res) => {
   });
 })
 
+router.get('/getReview/:post_code', (req, res) => {
+  console.log('getReview', req.body);
+  let post_code = req.params.post_code
+
+  const getReviewSql = `
+    select b.user_img, b.user_name, a.review_content, a.reviewed_dt
+    from tb_review a
+    left join tb_user b on a.user_id = b.user_id
+    where a.post_code = ?;
+  `
+
+  conn.query(getReviewSql, [post_code], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (results.length > 0) {
+        console.log("안드로이드로 보내는 review content 값", results);
+        res.status(200).json({ data: results });
+    } else {
+        res.status(404).json({ error: "review content not found." });
+    }
+  });
+})
+
 module.exports = router;

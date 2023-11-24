@@ -3,6 +3,7 @@ package com.example.senimoapplication.Club.adapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -15,12 +16,20 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.Activity_club.PostActivity
+import com.example.senimoapplication.Club.VO.CommentVO
 import com.example.senimoapplication.Club.VO.PostVO
+import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showActivityDialogBox
 import com.example.senimoapplication.R
+import com.example.senimoapplication.server.Server
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>) : RecyclerView.Adapter<PostAdapter.ViewHolder> (){
@@ -71,6 +80,31 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
         return data.size
     }
 
+    private fun fetchReviewData(holder: ViewHolder, postCode: String) {
+        val service = Server(context).service
+        val call = service.getReview(postCode)
+        call.enqueue(object : Callback<getReviewResVO> {
+            override fun onResponse(call: Call<getReviewResVO>, response: Response<getReviewResVO>) {
+                if (response.isSuccessful) {
+                    val reviewList: List<CommentVO>? = response.body()?.data
+                    val jsonResponse = Gson().toJson(reviewList) // Convert to JSON string
+                    Log.d("댓글 리스트", jsonResponse)
+                    if (reviewList != null) {
+                        val commentAdapter = CommentAdapter(context, R.layout.comment_list, reviewList)
+                        holder.rvComment.adapter = commentAdapter
+                        holder.rvComment.layoutManager = LinearLayoutManager(context)
+                    }
+                } else {
+                    // 리뷰 데이터를 받아오지 못했을 때 처리
+                }
+            }
+
+            override fun onFailure(call: Call<getReviewResVO>, t: Throwable) {
+                // 통신 실패 시 처리
+            }
+        })
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         // 기본 세팅
@@ -79,8 +113,26 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
         holder.tvCommentSend.visibility = GONE
         holder.CommentuserProfileImg.visibility = GONE
 
-        holder.imgPost.setImageResource(R.drawable.img_sample)
-        holder.userProfileImg.setImageResource(R.drawable.img_sample)
+        // 게시글 이미지 로드 및 표시
+        val postImgUrl = data[position].postImg
+        if (postImgUrl == null || postImgUrl == "") {
+            holder.imgPost.visibility = GONE
+        } else {
+            Glide.with(context)
+                .load(postImgUrl)
+                .placeholder(R.drawable.ic_loading6) // 로딩 중 표시될 이미지
+                .error(R.drawable.ic_meeting_profile) // 로딩 실패 시 표시될 이미지
+                .into(holder.imgPost)
+        }
+
+        // 게시글 유저 이미지 로드 및 표시
+        val userImgUrl = data[position].userImg
+        Glide.with(context)
+            .load(userImgUrl)
+            .placeholder(R.drawable.ic_loading6) // 로딩 중 표시될 이미지
+            .error(R.drawable.ic_profile_circle) // 로딩 실패 시 표시될 이미지
+            .into(holder.userProfileImg)
+
         holder.tvContent.text = data[position].postContent
         holder.tvUserName.text = data[position].userName
         when(data[position].clubRole){
@@ -130,9 +182,8 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
 
         holder.tvCommentCnt.text = data[position].reviewCount.toString()
 
-        val commentAdapter = CommentAdapter(context, R.layout.comment_list, data)
-        holder.rvComment.adapter = commentAdapter
-        holder.rvComment.layoutManager = LinearLayoutManager(context)
+        val postCode = data[position].postCode
+        fetchReviewData(holder, postCode)
 
         // 게시물 내용, 더보기 버튼, 댓글을 눌렀을 때 게시물 확장하는 코드
         val clickableViews = listOf(holder.tvContent, holder.tvCommentTitle, holder.tvBtnMore, holder.imgPost)
