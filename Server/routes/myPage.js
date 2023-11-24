@@ -14,22 +14,11 @@ router.get('/getUserBadges', (req, res) => {
     const query = `
     SELECT
         b.badge_code, 
-        b.badge_name, 
-        ub.badge_get_dt, 
-        u.user_id, 
-        u.user_name, 
-        u.gender, 
-        u.birth_year, 
-        u.user_gu, 
-        u.user_dong, 
-        u.user_introduce, 
-        u.user_img
+        b.badge_name
     FROM 
         tb_user_badge ub
     JOIN 
         tb_badge b ON ub.badge_code = b.badge_code
-    JOIN 
-        tb_user u ON ub.user_id = u.user_id
     WHERE 
         ub.user_id = ?`;
 
