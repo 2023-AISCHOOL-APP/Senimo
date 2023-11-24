@@ -18,6 +18,7 @@ import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
+import com.example.senimoapplication.MainPage.VO_main.UserBadgeResponse
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import com.google.gson.JsonObject
@@ -37,7 +38,7 @@ interface ApiService {
     fun getMeetings(): Call<List<MeetingVO>>
 
     @GET("/getLatestSchedule")
-    fun getLatestSchedule(@Query("userId") userId: String?): Call<List<MyScheduleVO>>
+    fun getLatestSchedule(@Query("userId") userId: String?): Call<List<ScheduleVO>>
 
 //    @Multipart
 //    @POST("/db/postImg")
@@ -142,8 +143,8 @@ interface ApiService {
     fun quitClub(@Field("club_code") clubCode: String,
                  @Field("user_id") userId: String) : Call<QuitClubResVO>
 
-    @GET("/getUserBadgesInfo")
-    fun getUserBadgesInfo(@Query("userId") userId: String?): Call<List<MyPageVO>>
+    @GET("/getUserBadges")
+    fun getUserBadges(@Query("userId") userId: String?): Call<UserBadgeResponse>
 
     @FormUrlEncoded
     @POST("/writePost")
