@@ -28,6 +28,7 @@ import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showPostDialogBox
 import com.example.senimoapplication.R
 import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.PreferenceManager
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.Gson
 import retrofit2.Call
@@ -184,6 +185,15 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>,
             }
         }
         holder.tvDateTime.text = formatDate(data[position].createdDt)
+
+        val userData = PreferenceManager.getUser(context)
+        val loginedUserId = userData?.user_id
+        val postUserId = data[position].userId
+        if (loginedUserId == postUserId) {
+            holder.imgPostMore.visibility == VISIBLE
+        } else {
+            holder.imgPostMore.visibility = GONE
+        }
 
         holder.imgPostMore.setOnClickListener { view->
             val popupMenu = PopupMenu(view.context, view)

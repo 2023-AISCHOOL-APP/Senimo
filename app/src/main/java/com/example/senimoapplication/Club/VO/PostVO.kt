@@ -19,12 +19,10 @@ class PostVO (
     val postImg: String = "",
     @SerializedName("club_role")
     val clubRole: Int = 0,
-//    @SerializedName("review_content")
-//    val reviewContent: String = "",
-//    @SerializedName("reviewed_dt")
-//    val reviewedDt: String = "",
     @SerializedName("review_count")
-    val reviewCount: Int = 0
+    val reviewCount: Int = 0,
+    @SerializedName("user_id")
+    val userId: String = ""
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         postCode = parcel.readString() ?: "",
@@ -34,9 +32,8 @@ class PostVO (
         postContent = parcel.readString() ?: "",
         postImg = parcel.readString() ?: "",
         clubRole = parcel.readInt(),
-//        reviewContent = parcel.readString() ?: "",
-//        reviewedDt = parcel.readString() ?: "",
-        reviewCount = parcel.readInt()
+        reviewCount = parcel.readInt(),
+        userId = parcel.readString() ?: ""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -47,9 +44,8 @@ class PostVO (
         parcel.writeString(postContent)
         parcel.writeString(postImg)
         parcel.writeInt(clubRole)
-//        parcel.writeString(reviewContent)
-//        parcel.writeString(reviewedDt)
         parcel.writeInt(reviewCount)
+        parcel.writeString(userId)
     }
 
     override fun describeContents(): Int {

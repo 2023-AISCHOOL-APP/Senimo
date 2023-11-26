@@ -51,13 +51,22 @@ router.get('/getPostContent/:club_code', (req, res) => {
   let club_code = req.params.club_code
 
   const getPostSql = `
-    select tp.post_code, tu.user_img, tu.user_name, tp.created_dt, tp.post_content, tp.post_img, tj.club_role, count(tr.review_code) as review_count
+    select 
+      tp.post_code, 
+      tu.user_img, 
+      tu.user_name, 
+      tp.created_dt, 
+      tp.post_content, 
+      tp.post_img, 
+      tj.club_role, 
+      count(tr.review_code) as review_count,
+      tu.user_id
     from tb_post tp
     left join tb_user tu on tp.user_id = tu.user_id
     left join tb_join tj on tp.club_code = tj.club_code and tu.user_id = tj.user_id
     left join tb_review tr on tp.post_code = tr.post_code
     where tp.club_code = ?
-    group by tp.post_code, tu.user_img, tu.user_name, tp.created_dt, tp.post_content, tp.post_img, tj.club_role;
+    group by tp.post_code, tu.user_img, tu.user_name, tp.created_dt, tp.post_content, tp.post_img, tj.club_role, tu.user_id;
   `
 
   conn.query(getPostSql, [club_code], (err, results) => {
