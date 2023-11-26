@@ -23,6 +23,7 @@ import com.example.senimoapplication.Club.VO.CommentVO
 import com.example.senimoapplication.Club.VO.DeletePostResVO
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
+import com.example.senimoapplication.Common.PostDeleteListener
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showPostDialogBox
 import com.example.senimoapplication.R
@@ -34,7 +35,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>) : RecyclerView.Adapter<PostAdapter.ViewHolder> (){
+class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>, val listener: PostDeleteListener) : RecyclerView.Adapter<PostAdapter.ViewHolder> (){
 
     val inflater = LayoutInflater.from(context)
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -108,7 +109,7 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
     }
 
     companion object{
-        fun deletePostData(activity: Activity, postCode: String) {
+        fun deletePostData(activity: Activity, postCode: String, listener: PostDeleteListener) {
             val service = Server(activity).service
             val call = service.deletePost(postCode)
             call.enqueue(object : Callback<DeletePostResVO> {
@@ -121,6 +122,8 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
                         val deletePostRes = response.body()
                         if (deletePostRes != null && deletePostRes.rows == "success") {
                             Log.d("deletePost", "${postCode} 삭제 성공")
+                            // 삭제 성공 시, 인터페이스를 통해 삭제 이벤트 전달
+                            listener.onDeletePost()
                         } else {
                             Log.d("deletePost", "${postCode} 삭제 실패")
                         }
@@ -199,7 +202,7 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
 
                     R.id.menu_option2 -> {
                         // 게시물 삭제
-                        showPostDialogBox(view.context as Activity,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.", postCode)
+                        showPostDialogBox(view.context as Activity,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.", postCode, listener)
                         true
                     }
 
