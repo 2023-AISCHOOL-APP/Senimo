@@ -16,7 +16,7 @@ import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import kotlin.math.min
 
-class ScheduleAdapter(val context: Context, val layout: Int, val data: List<ScheduleVO>, val cnt : String?=null, val schecode : String? =null ) :
+class ScheduleAdapter(val context: Context, val layout: Int, val data: List<ScheduleVO>, val cnt : Int?=null, val schecode : String? =null ) :
 RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
 
     private var showAllItems = false // 플래그 추가
@@ -139,7 +139,6 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
 
             // ClubActivity 시작
             context.startActivity(intent)
-
         }
 
         // 아이템 클릭 이벤트 처리

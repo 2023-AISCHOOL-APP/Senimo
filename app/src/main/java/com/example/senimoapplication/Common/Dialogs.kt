@@ -79,7 +79,7 @@ fun showDeleteDialogBox(context: Context, message: String?, okay: String?, succe
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful && response.body()?.getAsBoolean() == true) {
                     Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
-                    fragment.refreshMemberList(fragment.view) // HomeFragment의 함수 호출
+                    fragment.fetchMemberList(fragment.view) // HomeFragment의 함수 호출
                     dialog.dismiss()
                 } else {
                     Toast.makeText(context, "멤버 삭제에 실패했습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
@@ -124,7 +124,7 @@ fun showUpdateDialogBox(context: Context, message: String?, okay: String?, succe
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful && response.body() != null) {
                     Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
-                    fragment.refreshMemberList(fragment.view) // HomeFragment의 함수 호출
+                    fragment.fetchMemberList(fragment.view) // HomeFragment의 함수 호출
                     dialog.dismiss()
                 } else {
                     Toast.makeText(context, "회원 역할 변경에 실패했습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()
@@ -168,7 +168,7 @@ fun showLeaderUpdateDialogBox(context: Context, message: String?, okay: String?,
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful && response.body() != null) {
                     Toast.makeText(context, successMessage, Toast.LENGTH_SHORT).show()
-                    fragment.refreshMemberList(fragment.view) // HomeFragment의 함수 호출
+                    fragment.fetchMemberList(fragment.view) // HomeFragment의 함수 호출
                     dialog.dismiss()
                 } else {
                     Toast.makeText(context, "모임장 위임에 실패했습니다. \n다시 시도해주세요.", Toast.LENGTH_SHORT).show()

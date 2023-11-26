@@ -133,11 +133,8 @@ interface ApiService {
     @POST("/deleteMember")
     fun deleteMember(@Body deleteMemberVO: DeleteMemberVO): Call<JsonObject>
 
-    @POST("/scheduleInfo/{scheCode}")
-    fun scheduleInfo(@Path("scheCode") scheCode: String) : Call<ScheduleVO>
-
-    @POST("/getScheduleMembers/{scheCode}")
-    fun getScheduleMembers(@Path("scheCode") scheCode: String): Call<AllScheduleMemberResVO>
+    @GET("/getScheduleMembers/{sche_code}")
+    fun getScheduleMembers(@Path("sche_code") scheCode: String): Call<AllScheduleMemberResVO>
 
     @FormUrlEncoded
     @POST("/joinSche")

@@ -95,6 +95,7 @@ class CreateMeetingActivity : AppCompatActivity() {
             // 인원 수
             binding.tvMAllMember.text = intent_meetingVO.allMember.toString()
             setClubMembers { updatedMembers -> binding.tvMAllMember.text = updatedMembers.toString() }
+
             // 뒤로가기 버튼
             binding.ImgMBackbtnToFrag2.setOnClickListener { finish() }
 
@@ -149,8 +150,7 @@ class CreateMeetingActivity : AppCompatActivity() {
         } //ddddddddddddddddddddddddddddddddddddddddddddddddddddddd
         else {
             Log.d("시작부분 확인", "else로 시작")
-            // 모임 일정 등록
-            // 모임 이미지 선택
+            // 모임 생성 하기
             val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     imageUri = uri
@@ -267,6 +267,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                 binding.tvMAllMember.text = updatedMembers.toString()
             }
 
+            // 뒤로가기 버튼
             binding.ImgMBackbtnToFrag2.setOnClickListener {
                 val intent = Intent(this@CreateMeetingActivity, MainActivity::class.java)
                 intent.putExtra("selected_tab", "M_tab2")
@@ -306,7 +307,7 @@ class CreateMeetingActivity : AppCompatActivity() {
             }
         }
     }
-    // 모임 멤버 설정 함수
+    // 모임 멤버 인원 설정 함수
     fun setClubMembers(onMemberChanged: (Int) -> Unit) {
         var meetingMembers: Int = 10
         binding.imgMPlus.setOnClickListener {
@@ -320,26 +321,7 @@ class CreateMeetingActivity : AppCompatActivity() {
             onMemberChanged(updatedMembers)
         }
 
-        binding.ImgMBackbtnToFrag2.setOnClickListener {
-            val intent = Intent(this@CreateMeetingActivity, MainActivity::class.java)
-            intent.putExtra("selected_tab", "M_tab2")
-            startActivity(intent)
-            finish()
-        }
     }
-
-    // 결과를 설정하고 현재 액티비티를 종료
-//                val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
-//                intent.putExtra("meetingVO", meetingVO)
-//                // setResult(RESULT_OK, intent)
-//                startActivity(intent)
-
-    // 로그로 모임 정보 출력
-//                Log.d("CreateMeetingActivity", "새로운 모임 생성: $meetingVO")
-//                Toast.makeText(this@CreateMeetingActivity,"모임이 생성되었습니다",Toast.LENGTH_SHORT).show()
-//            } else {
-//                Toast.makeText(this@CreateMeetingActivity, "모임 생성에 실패하셨습니다", Toast.LENGTH_SHORT).show()
-//            }
 
 
     // 키워드 클릭 리스너
