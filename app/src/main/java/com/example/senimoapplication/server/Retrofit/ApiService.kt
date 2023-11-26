@@ -6,14 +6,18 @@ import com.example.senimoapplication.Club.VO.AllSchedulesResVO
 import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
+import com.example.senimoapplication.Club.VO.DeletePostResVO
 import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
 import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
+import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.VO.WritePostResVO
+import com.example.senimoapplication.Club.VO.getPostResVO
+import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
@@ -182,6 +186,15 @@ interface ApiService {
 
 
 
+    @GET("/getPostContent/{club_code}")
+    fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>
+
+    @GET("/getReview/{post_code}")
+    fun getReview(@Path("post_code") postCode: String?): Call<getReviewResVO>
+
+    @FormUrlEncoded
+    @POST("/deletePost")
+    fun deletePost(@Field("post_code") postCode: String): Call<DeletePostResVO>
 }
 
 
