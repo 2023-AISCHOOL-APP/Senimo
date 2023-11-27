@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.MainPage.Activity_main.EditMyPageActivity
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
+import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentMypageBinding
 import com.example.senimoapplication.server.Server
@@ -27,35 +28,37 @@ class MypageFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var myProfile: MyPageVO // MyPageVO 객체를 담을 변수
 
-    private val INTRO_MAX_TEXT_LENGTH = 52 // 클래스 레벨로 상수 이동 : 최대 글자 수
+    private val INTRO_MAX_TEXT_LENGTH = 64 // 클래스 레벨로 상수 이동 : 최대 글자 수
 
-    private val editProfileResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val updatedProfile = result.data?.getParcelableExtra<MyPageVO>("updatedProfileData")
-            updatedProfile?.let {
-                // myProfile 객체 업데이트
-                myProfile = it
-                updateUIWithProfile(it) // UI 업데이트 함수 호출
-
-            }
-        }
-
-    }
+//    private val editProfileResultLauncher = registerForActivityResult(
+//        ActivityResultContracts.StartActivityForResult()
+//    ) { result ->
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            val updatedProfile = result.data?.extras?.getParcelable<getMyPageVO>("updatedProfileData")
+//            updatedProfile?.let {
+//                // myProfile 객체 업데이트
+//                myProfile = it.result
+//                updateUIWithProfile(myProfile) // UI 업데이트 함수 호출
+//                Log.d("MypageFragment", "수정된 프로필 받음: $myProfile")
+//            } ?: Log.e("MypageFragment", "수정된 프로필 데이터가 null임")
+//        } else {
+//            Log.e("MypageFragment", "결과가 OK가 아님. 결과 코드: ${result.resultCode}")
+//        }
+//
+//    }
 
     private fun updateUIWithProfile(it: MyPageVO) {
         Glide.with(this)
-            .load(it?.img)
+            .load(it.img)
             .placeholder(R.drawable.animation_loading)
             .error(R.drawable.ic_profile_circle)
             .centerCrop()
             .into(binding.imgMMypageImg)
 
-        binding.tvMUserName.text = it?.name                               // 이름
-        binding.tvMUserGu.text = it?.gu                                  // 구
+        binding.tvMUserName.text = it.name                               // 이름
+        binding.tvMUserGu.text = it.gu                                  // 구
 
-        val birthYearText = "${it?.birth}"
+        val birthYearText = "${it.birth}"
         binding.tvMBirthYear.text = if (birthYearText.length > 4) {           // 출생년도
             birthYearText.substring(0, 4) + "년생"
         } else {
@@ -63,20 +66,21 @@ class MypageFragment : Fragment() {
         }
 
         // 성별 데이터 변환
-        val genderTransformed = when (it?.gender) {
+        val genderTransformed = when (it.gender) {
             "F", "여" -> "여"
             "M", "남" -> "남"
-            else -> it?.gender
+            else -> it.gender
         }
         binding.tvMGender.text = genderTransformed                        // 성별
 
 
-        val introText = if ((it?.intro?.length ?: 0) > INTRO_MAX_TEXT_LENGTH) {
+        val INTRO_MAX_TEXT_LENGTH = 64
+        val introText = if ((it.intro.length ?: 0) > INTRO_MAX_TEXT_LENGTH) {
             binding.tvMUserIntroMore.visibility = View.VISIBLE
-            it?.intro?.substring(0, INTRO_MAX_TEXT_LENGTH) + "..."
+            it.intro.substring(0, INTRO_MAX_TEXT_LENGTH) + "..."
         } else {
             binding.tvMUserIntroMore.visibility = View.INVISIBLE
-            it?.intro
+            it.intro
         }
         binding.tvMUserIntro.text = introText                               // 소개글
 
@@ -140,7 +144,10 @@ class MypageFragment : Fragment() {
         )
 
         binding.tvMUserIntroMore.setOnClickListener {
-            binding.tvMUserIntro.text = myProfile.intro
+//            binding.tvMUserIntro.text = myProfile.intro
+//            binding.tvMUserIntroMore.visibility = View.INVISIBLE
+            val latestUserData = PreferenceManager.getUser(requireContext())
+            binding.tvMUserIntro.text = latestUserData?.user_introduce
             binding.tvMUserIntroMore.visibility = View.INVISIBLE
         }
 
@@ -150,7 +157,7 @@ class MypageFragment : Fragment() {
 //            // userData 객체를 Intent에 추가
 //            intent.putExtra("myProfileData", userData)
 //            intent.putExtra("introLength", userData?.user_introduce?.length ?: 0)
-            editProfileResultLauncher.launch(intent)
+            // editProfileResultLauncher.launch(intent)
             startActivity(intent)
             activity?.finish()
         }
@@ -193,6 +200,7 @@ class MypageFragment : Fragment() {
         binding.tvMGender.text = genderTransformed                        // 성별
 
 
+        val INTRO_MAX_TEXT_LENGTH = 64
         val introText = if ((userData?.user_introduce?.length ?: 0) > INTRO_MAX_TEXT_LENGTH) {
             binding.tvMUserIntroMore.visibility = View.VISIBLE
             userData?.user_introduce?.substring(0, INTRO_MAX_TEXT_LENGTH) + "..."
@@ -219,24 +227,26 @@ class MypageFragment : Fragment() {
     fun fetchUserData() {
         val userData = PreferenceManager.getUser(requireContext())
         val userId = userData?.user_id
-        val service = Server(requireContext()).service
-        service.getUserProfile(userId).enqueue(object : Callback<MyPageVO> {
-            override fun onResponse(call: Call<MyPageVO>, response: Response<MyPageVO>) {
-                if(response.isSuccessful) {
-                    response.body()?.let {
-                        updateUIWithProfile()
+        if (userId != null) {
+            val service = Server(requireContext()).service
+            service.getUserProfile(userId).enqueue(object : Callback<MyPageVO> {
+                override fun onResponse(call: Call<MyPageVO>, response: Response<MyPageVO>) {
+                    if(response.isSuccessful) {
+                        val userProfile = response.body()
+                        userProfile?.let { updateUIWithProfile(it) }
+                    } else {
+                        Log.e("MypageFragment", "응답 실패 : ${response.code()}")
                     }
-                } else {
-                    Log.e("MypageFragment", "응답 실패 : ${response.code()}")
                 }
-            }
 
-            override fun onFailure(call: Call<MyPageVO>, t: Throwable) {
-                Log.e("MypageFragment", "네트워크 요청 실패", t)
-            }
+                override fun onFailure(call: Call<MyPageVO>, t: Throwable) {
+                    Log.e("MypageFragment", "네트워크 요청 실패", t)
+                }
 
-        })
-
+            })
+        } else {
+            Log.e("MypageFragment", "User ID is null")
+        }
 
     }
 

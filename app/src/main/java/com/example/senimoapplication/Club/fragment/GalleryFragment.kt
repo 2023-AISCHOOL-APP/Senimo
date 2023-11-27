@@ -22,7 +22,6 @@ import com.example.senimoapplication.databinding.FragmentGalleryBinding
 import com.example.senimoapplication.server.ImageUploader
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

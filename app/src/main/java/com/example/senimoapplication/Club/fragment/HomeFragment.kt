@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.senimoapplication.Club.Activity_club.MakeScheduleActivity
 import com.example.senimoapplication.Club.Activity_club.ScheduleActivity
 import com.example.senimoapplication.Club.VO.AllMemberResVO
@@ -33,14 +32,12 @@ import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.Common.showAlertDialogBox
-import com.example.senimoapplication.Common.showQuitDialogBox
 import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentHomeBinding
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
-import com.example.senimoapplication.server.Token.UserData
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback

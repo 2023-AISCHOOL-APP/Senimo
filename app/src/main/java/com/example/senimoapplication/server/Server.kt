@@ -3,7 +3,6 @@ package com.example.senimoapplication.server
 import android.content.Context
 import com.example.senimoapplication.server.Retrofit.ApiService
 import com.example.senimoapplication.server.Token.AuthInterceptor
-import com.google.gson.annotations.SerializedName
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -14,8 +13,6 @@ class Server(private val context: Context) {
             .build()
 
         Retrofit.Builder()
-
-
             // .baseUrl("https://improved-sadly-snake.ngrok-free.app") // 원격서버 URL
             //.baseUrl("http://192.168.70.207:3333") // 도운IP 같은 와이파로 접근할때
             .baseUrl("http://192.168.70.151:3333") // 지혜IP

@@ -33,38 +33,7 @@ router.get('/getUserBadges', (req, res) => {
     });
 });
 
-router.get('/getUserProfile', (req, res) => {
-    console.log("요청왔다")
-    const userId = req.query.userId;
 
-    if (!userId) {
-        return res.status(400).json({ message: 'userId is required' });
-    }
-
-    // 데이터베이스에서 사용자 정보를 검색하는 쿼리
-    const query = `
-    SELECT user_name, gender, birth_year, user_gu, user_dong, user_introduce, user_img
-    FROM tb_user
-    WHERE user_id = ?;
-`;
-
-conn.query(query, [userId], (err, results) => {
-    if (err) {
-        // 쿼리 실행 중 에러 발생 시
-        return res.status(500).json({ error: err.message });
-    }
-
-    if (results.length === 0) {
-        // 사용자를 찾을 수 없는 경우
-        return res.status(404).json({ message: 'User not found' });
-    }
-
-    // 사용자 정보를 성공적으로 찾은 경우
-    res.status(200).json(results[0]);
-});
-
-
-});
 
 
 module.exports = router;

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true">
+        <!-- 선택된 상태의 배경 색상 -->
+        <color android:color="@color/white"/>
+    </item>
+    <item>
+        <!-- 기본 배경 색상 -->
+        <color android:color="@color/white"/>
+    </item>
+</selector>

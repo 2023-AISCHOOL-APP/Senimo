@@ -86,4 +86,22 @@ router.post('/cancelJoinSche', (req, res) => {
   });
 });
 
+// 일정 삭제
+router.post('/deleteSche', (req, res) => {
+  console.log('일정 삭제 라우터', req.body);
+  const { sche_code } = req.body;
+
+  const deletePostSql = `delete from tb_schedule where sche_code = ?`
+
+  conn.query(deletePostSql, [ sche_code ], (err, rows) => {
+    if (err) {
+      console.error('일정 삭제 실패', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('일정 삭제 성공');
+      res.json({ rows: 'success' });
+    }
+  })
+})
+
 module.exports = router;

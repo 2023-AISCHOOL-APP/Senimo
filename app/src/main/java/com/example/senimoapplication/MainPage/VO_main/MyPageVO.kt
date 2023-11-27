@@ -72,7 +72,27 @@ class MyPageVO(
     }
 }
 
-data class getMyPageVO (
-    val result :MyPageVO,
-) : Serializable
+data class getMyPageVO(
+    val result: MyPageVO
+) : Parcelable {
+    constructor(parcel: Parcel) : this(parcel.readParcelable(MyPageVO::class.java.classLoader)!!)
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeParcelable(result, flags)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<getMyPageVO> {
+        override fun createFromParcel(parcel: Parcel): getMyPageVO {
+            return getMyPageVO(parcel)
+        }
+
+        override fun newArray(size: Int): Array<getMyPageVO?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
 
