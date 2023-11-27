@@ -27,16 +27,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:elevation="15dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView56"
+                app:layout_constraintBottom_toBottomOf="@+id/tvScheduleTitleM"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView56"
+                app:layout_constraintTop_toTopOf="@+id/tvScheduleTitleM"
                 app:layout_constraintVertical_bias="0.516"
-                app:srcCompat="@drawable/ic_back"
+                android:src="@drawable/ic_back"
                 tools:layout_conversion_absoluteHeight="25dp"
                 tools:layout_conversion_absoluteWidth="25dp" />
 
             <TextView
-                android:id="@+id/textView56"
+                android:id="@+id/tvScheduleTitleM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendard_bold"
@@ -76,6 +76,7 @@
                 android:layout_marginTop="80dp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="일정 제목"
+                android:textColor="@color/txt_black"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -88,6 +89,7 @@
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="일시"
+                android:textColor="@color/txt_black"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imgButton" />
@@ -99,6 +101,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="장소"
+                android:textColor="@color/txt_black"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@+id/btnScheduleDate"
                 app:layout_constraintTop_toBottomOf="@+id/time_picker" />
@@ -110,6 +113,7 @@
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="일정 소개"
+                android:textColor="@color/txt_black"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@+id/textView12"
                 app:layout_constraintTop_toBottomOf="@+id/etScheduleName" />
@@ -121,6 +125,7 @@
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="참여 인원"
+                android:textColor="@color/txt_black"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@+id/etScheduleLoca"
                 app:layout_constraintTop_toBottomOf="@+id/etScheduleLoca" />
@@ -132,6 +137,7 @@
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="회비"
+                android:textColor="@color/txt_black"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@+id/textView17"
                 app:layout_constraintTop_toBottomOf="@+id/tvAllMember" />
@@ -333,7 +339,7 @@
                 android:gravity="center"
                 android:paddingTop="15dp"
                 android:paddingBottom="14dp"
-                android:text="0"
+                android:text="10"
                 android:textColor="@color/txt_gray70"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/imgMinus"
@@ -385,7 +391,7 @@
                 android:insetBottom="0dp"
                 android:paddingTop="13dp"
                 android:paddingBottom="13dp"
-                android:text="일정 등록"
+                android:text="일정 등록하기"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:visibility="visible"

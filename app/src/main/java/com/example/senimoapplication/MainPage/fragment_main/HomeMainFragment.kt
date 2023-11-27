@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.MainPage.Activity_main.SearchActivity
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.Activity_club.ScheduleActivity
+import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.server.Retrofit.ApiService
@@ -37,7 +38,7 @@ class HomeMainFragment : Fragment() {
     private lateinit var adapter: MeetingAdapter
     private lateinit var myScheduleAdapter: MyScheduleAdapter
     val MeetingList: ArrayList<MeetingVO> = ArrayList()
-    val myScheduleList: ArrayList<MyScheduleVO> = ArrayList()
+    val myScheduleList: ArrayList<ScheduleVO> = ArrayList()
     private lateinit var apiService: ApiService
 
     private var isScrolling = false
@@ -81,13 +82,15 @@ class HomeMainFragment : Fragment() {
         rv_M_MySchedule.layoutManager = LinearLayoutManager(requireContext())
 
         myScheduleAdapter.setOnClickListener(object : MyScheduleAdapter.OnItemClickListener {
-            override fun onItemClick(schedule: MyScheduleVO) {
+            override fun onItemClick(schedule: ScheduleVO) {
                 // 클릭된 아이템에 대한 처리
                 val intent = Intent(requireContext(), ScheduleActivity::class.java)
-                intent.putExtra("scheduleData", schedule)
+                intent.putExtra("ScheduleInfo", schedule)
+                Log.d("scheduleData1","Sending data: $schedule")
                 startActivity(intent)
             }
         })
+
 
         // 모임 RecyclerView 어댑터 생성 및 설정
         adapter = MeetingAdapter(requireContext(), R.layout.meeting_list, MeetingList)
@@ -317,12 +320,12 @@ class HomeMainFragment : Fragment() {
 
     private fun fetchLatestSchedule() {
         val userData = PreferenceManager.getUser(requireContext())
-        val userId = userData?.user_id
+        val userId =  userData?.user_id
         val service = Server(requireContext()).service
-        service.getLatestSchedule(userId).enqueue(object : Callback<List<MyScheduleVO>> {
+        service.getLatestSchedule(userId).enqueue(object : Callback<List<ScheduleVO>> {
             override fun onResponse(
-                call: Call<List<MyScheduleVO>>,
-                response: Response<List<MyScheduleVO>>
+                call: Call<List<ScheduleVO>>,
+                response: Response<List<ScheduleVO>>
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let { latestSchedules ->
@@ -347,7 +350,7 @@ class HomeMainFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<List<MyScheduleVO>>, t: Throwable) {
+            override fun onFailure(call: Call<List<ScheduleVO>>, t: Throwable) {
                 // 네트워크 요청 실패 시 처리
                 Log.e("HomeMainFragment5", "네트워크 요청 실패", t)
             }

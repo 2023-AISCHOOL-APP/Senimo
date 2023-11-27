@@ -2,7 +2,6 @@ package com.example.senimoapplication.MainPage.Activity_main
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,13 +20,11 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
-import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityCreateMeetingBinding
 import com.example.senimoapplication.server.ImageUploader
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
-import com.example.senimoapplication.server.Token.UserData
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -42,7 +39,7 @@ class CreateMeetingActivity : AppCompatActivity() {
     private var imageUri: Uri? = null // selectedImageUri를 클래스 수준에 선언
     private var imageName: String? = null // 선택된 이미지의 이름을 저장
     private var selectedKeyword : String? = null // 선택된 키워드를 저장하는 변수
-
+    var meetingMembers: Int = 30
 
     val Meetinginfo: ArrayList<MeetingVO> = ArrayList()
 
@@ -95,6 +92,8 @@ class CreateMeetingActivity : AppCompatActivity() {
             // 인원 수
             binding.tvMAllMember.text = intent_meetingVO.allMember.toString()
             setClubMembers { updatedMembers -> binding.tvMAllMember.text = updatedMembers.toString() }
+            meetingMembers = intent_meetingVO.allMember
+
 
             // 뒤로가기 버튼
             binding.ImgMBackbtnToFrag2.setOnClickListener { finish() }
@@ -319,16 +318,21 @@ class CreateMeetingActivity : AppCompatActivity() {
     }
     // 모임 멤버 인원 설정 함수
     fun setClubMembers(onMemberChanged: (Int) -> Unit) {
-        var meetingMembers: Int = 10
+        // 버튼 누르면 인원 수 변경 시키기 (일정 참가자수 상한선 : 50명)
+        val incrementAmount = 5 // 증가 또는 감소할 인원 수
+
         binding.imgMPlus.setOnClickListener {
-            val updatedMembers = if (meetingMembers + 10 <= 50) meetingMembers + 10 else 50
-            meetingMembers = updatedMembers
-            onMemberChanged(updatedMembers)
+            if (meetingMembers + incrementAmount <= 50) {
+                meetingMembers += incrementAmount
+                binding.tvMAllMember.text = meetingMembers.toString()
+            }
         }
+
         binding.imgMMinus.setOnClickListener {
-            val updatedMembers = if (meetingMembers - 10 >= 50) meetingMembers - 10 else 0
-            meetingMembers = updatedMembers
-            onMemberChanged(updatedMembers)
+            if (meetingMembers - incrementAmount >= 0) {
+                meetingMembers -= incrementAmount
+                binding.tvMAllMember.text = meetingMembers.toString()
+            }
         }
 
     }

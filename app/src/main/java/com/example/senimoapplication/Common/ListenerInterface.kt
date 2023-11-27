@@ -1,5 +1,5 @@
 package com.example.senimoapplication.Common
 
-interface PostDeleteListener {
-  fun onDeletePost()
+interface PostUpdateListener {
+  fun onUpdatePost()
 }

@@ -1,7 +1,6 @@
 package com.example.senimoapplication.Login.Activity_login
 
 import android.content.Intent
-import android.content.pm.PackageManager.ComponentEnabledSetting
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -10,7 +9,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.widget.addTextChangedListener
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivitySignUpBinding
@@ -18,7 +16,6 @@ import com.example.senimoapplication.server.Server
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.io.path.PathWalkOption
 
 class SignUpActivity : AppCompatActivity() {
 

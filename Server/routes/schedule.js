@@ -32,7 +32,7 @@ router.get('/get/Sche_intro/:sche_code', (req, res) => {
 // 일정 생성
 router.post('/makeSche', (req, res) => {
   console.log('makeSche router', req.body);
-  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, sche_img } = req.body
+  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img } = req.body
   const formattedDate = new Date(sche_date)
 
   const makeScheSql = `insert into tb_schedule (club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, sche_img)
@@ -85,5 +85,23 @@ router.post('/cancelJoinSche', (req, res) => {
     }
   });
 });
+
+// 일정 삭제
+router.post('/deleteSche', (req, res) => {
+  console.log('일정 삭제 라우터', req.body);
+  const { sche_code } = req.body;
+
+  const deletePostSql = `delete from tb_schedule where sche_code = ?`
+
+  conn.query(deletePostSql, [ sche_code ], (err, rows) => {
+    if (err) {
+      console.error('일정 삭제 실패', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('일정 삭제 성공');
+      res.json({ rows: 'success' });
+    }
+  })
+})
 
 module.exports = router;

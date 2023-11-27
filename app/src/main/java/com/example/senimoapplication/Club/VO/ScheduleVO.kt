@@ -25,7 +25,10 @@ data class ScheduleVO(
     @SerializedName("joined_members")
     var joinedMembers: Int= 0,
     @SerializedName("sche_img")
-    var scheImg: String? = null
+    var scheImg: String? = null,
+    @SerializedName("club_name")
+    var clubName : String? = null
+
 )  : Parcelable {
     constructor(parcel: Parcel) : this(
         scheCode = parcel.readString() ?: "",
@@ -37,7 +40,8 @@ data class ScheduleVO(
         scheFee = parcel.readInt(),
         maxNum = parcel.readInt(),
         joinedMembers = parcel.readInt(),
-        scheImg = parcel.readString() ?:""
+        scheImg = parcel.readString() ?:"",
+        clubName = parcel.readString() ?:""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -51,6 +55,7 @@ data class ScheduleVO(
         parcel.writeInt(maxNum)
         parcel.writeInt(joinedMembers)
         parcel.writeString(scheImg)
+        parcel.writeString(clubName)
 
 
     }

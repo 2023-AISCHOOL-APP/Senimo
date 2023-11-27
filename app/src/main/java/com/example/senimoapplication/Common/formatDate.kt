@@ -147,7 +147,18 @@ fun ChattingTime(inputDate: String): String {
     }
 }
 
+fun DivideDateTime(dateTimeString: String): Pair<String, String> {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.KOREAN)
+    val date: Date = inputFormat.parse(dateTimeString) ?: return Pair("", "")
 
+    val dateOutputFormat = SimpleDateFormat("YYYY-MM-dd",Locale.KOREAN)
+    val timeOutputFormat = SimpleDateFormat("a hh:mm",Locale.KOREAN)
+
+    val formattedDate = dateOutputFormat.format(date)
+    val formattedTime = timeOutputFormat.format(date)
+
+    return Pair(formattedDate, formattedTime)
+}
 
 
 fun main() {

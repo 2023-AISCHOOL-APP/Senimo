@@ -12,7 +12,6 @@ import com.example.senimoapplication.databinding.ActivityLoginBinding
 import com.example.senimoapplication.server.Token.PreferenceManager
 import com.example.senimoapplication.server.Token.TokenResponse
 import com.example.senimoapplication.server.Server
-import com.example.senimoapplication.server.Token.UserData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

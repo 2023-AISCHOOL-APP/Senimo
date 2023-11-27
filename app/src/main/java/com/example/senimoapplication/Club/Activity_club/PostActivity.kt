@@ -6,30 +6,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.util.Log
-import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.WritePostResVO
-import com.example.senimoapplication.Club.adapter.PostAdapter
-import com.example.senimoapplication.Club.fragment.BoardFragment
-import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
-import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
-import com.example.senimoapplication.R
-import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
 import com.example.senimoapplication.databinding.ActivityPostBinding
-import com.example.senimoapplication.databinding.FragmentBoardBinding
 import com.example.senimoapplication.server.ImageUploader
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
-import com.example.senimoapplication.server.Token.UserData
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -37,7 +25,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.sql.Timestamp
 
 class PostActivity : AppCompatActivity() {
 

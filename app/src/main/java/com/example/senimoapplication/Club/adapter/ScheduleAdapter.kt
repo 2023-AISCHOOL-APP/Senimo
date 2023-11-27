@@ -66,12 +66,13 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
     }
 
     override fun getItemCount(): Int {
-        return if (showAllItems) {
-            data.size // 플래그에 따라 항목 수가 달라집니다.
-        } else {
-            // 최대 2개까지만 표시
-            min(2, data.size)
-        }
+//        return if (showAllItems) {
+//            data.size // 플래그에 따라 항목 수가 달라집니다.
+//        } else {
+//            // 최대 2개까지만 표시
+//            min(2, data.size)
+//        }
+        return data.size
 
     }
 

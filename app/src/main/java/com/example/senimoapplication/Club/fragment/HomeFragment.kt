@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.senimoapplication.Club.Activity_club.MakeScheduleActivity
 import com.example.senimoapplication.Club.Activity_club.ScheduleActivity
 import com.example.senimoapplication.Club.VO.AllMemberResVO
@@ -33,14 +32,12 @@ import com.example.senimoapplication.Club.adapter.MemberAdapter
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.Common.showAlertDialogBox
-import com.example.senimoapplication.Common.showQuitDialogBox
 import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentHomeBinding
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
-import com.example.senimoapplication.server.Token.UserData
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -83,6 +80,8 @@ class HomeFragment : Fragment() {
         }
 
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -98,6 +97,8 @@ class HomeFragment : Fragment() {
         clickedMeeting = activity?.intent?.getParcelableExtra("clickedMeeting")
         createMeeting = activity?.intent?.getParcelableExtra("CreateMeeting")
         Log.d("getclickedMeetinghome", clickedMeeting.toString())
+
+        clubCode = activity?.intent?.getStringExtra("clubCodeFromMakeSchedule")
 
         fetchClubInfo()
 
@@ -116,7 +117,7 @@ class HomeFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        fetchScheduleData()
+        // fetchScheduleData()
     }
 
     // 클럽 전체 회원 목록 새로고침
@@ -161,9 +162,10 @@ class HomeFragment : Fragment() {
 
                                     binding.btnNewSchedule.setOnClickListener {
                                         val intent = Intent(view.context, MakeScheduleActivity::class.java)
-                                        val clubCode = clickedMeeting?.club_code.toString()
-                                        intent.putExtra("club_code", clubCode)
-                                        view.context?.startActivity(intent)
+                                        val clubCode = code
+                                        intent.putExtra("club_code", code)
+                                        Log.d("club_code", code)
+                                        view.context.startActivity(intent)
                                     }
                                 } else {
                                     binding.tvMoveEdit.visibility = INVISIBLE
@@ -248,7 +250,7 @@ class HomeFragment : Fragment() {
                             intent.putExtra("clubInfo", clickedMeeting)
                             intent.putExtra("clubName", clubName)
                             intent.putStringArrayListExtra("staffList", ArrayList(staffList))
-                            Log.d("HomeFragment", "Launching ScheduleActivity")
+                            Log.d("HomeFragment", "${clickedMeeting},${clickedSchedule},${clubName}")
                             startForResultSchedule.launch(intent)
                         } else {
                             // 여기서 showAlertDialogBox 함수를 호출할 때 Context를 전달합니다.
@@ -288,6 +290,11 @@ class HomeFragment : Fragment() {
                                     binding.tvClubLoca.text = clubInfos.clubLocation
                                     binding.tvClubIntro.text = clubInfos.clubIntroduce
                                     binding.tvKeyword.text = clubInfos.keywordName
+
+                                    // 키워드 색상 변경
+                                    val keywordBackground = getKeywordBackground(clubInfos.keywordName)
+                                    binding.tvKeyword.setBackgroundResource(keywordBackground)
+
                                     Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
                                         .load(clubInfos.clubImageUri) // MeetingVO 객체의 imageUri
                                         .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
@@ -310,6 +317,20 @@ class HomeFragment : Fragment() {
             }
 
         }
+
+
+    }
+
+    private fun getKeywordBackground(keyword: String): Int {
+        return when (keyword) {
+            "운동" -> R.drawable.keyword
+            "취미" -> R.drawable.keyword_color2
+            "전시/공연" -> R.drawable.keyword_color3
+            "여행" -> R.drawable.keyword_color4
+            "자기계발" -> R.drawable.keyword_color5
+            "재테크" -> R.drawable.keyword_color6
+            else -> R.drawable.keyword_color6 // 기본 배경색
+        }
     }
 
     // 메인 -> 모임홈 : 데이터 view에 적용하기
@@ -320,6 +341,10 @@ class HomeFragment : Fragment() {
         binding.tvClubLoca.text = meeting.gu
         binding.tvClubIntro.text = meeting.content
         binding.tvKeyword.text = meeting.keyword
+
+        val keywordBackground = getKeywordBackground(meeting.keyword)
+        binding.tvKeyword.setBackgroundResource(keywordBackground)
+
         Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
             .load(meeting.imageUri) // MeetingVO 객체의 imageUri
             .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지

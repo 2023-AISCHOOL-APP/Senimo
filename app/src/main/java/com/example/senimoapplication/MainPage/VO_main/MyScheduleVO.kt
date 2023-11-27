@@ -19,7 +19,7 @@ class MyScheduleVO(
     val scheLoca: String = "",
     @SerializedName("max_num")
     val maxNum: Int = 0,
-    @SerializedName("attend_user_cnt")
+    @SerializedName("joined_members")
     val attendUserCnt: Int = 0,
     val state: String = "모집중",
     @SerializedName("sche_img")
@@ -29,7 +29,7 @@ class MyScheduleVO(
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-        clubName = parcel.readString() ?: "",
+
         scheTitle = parcel.readString() ?: "",
         scheContent = parcel.readString() ?: "",
         scheDate = parcel.readString() ?: "",
@@ -61,7 +61,7 @@ class MyScheduleVO(
     }
 
     override fun toString(): String {
-        return "MyScheduleVO(clubName='$clubName', scheTitle='$scheTitle', scheContent='$scheContent', scheDate='$scheDate', scheFee=$scheFee, scheLoca='$scheLoca', maxNum=$maxNum, attendUserCnt=$attendUserCnt, state='$state', scheImg='$scheImg')"
+        return "MyScheduleVO(clubName='$clubName', scheTitle='$scheTitle', scheContent='$scheContent', scheDate='$scheDate', scheFee=$scheFee, scheLoca='$scheLoca', maxNum=$maxNum, attendUserCnt=$attendUserCnt, state='$state', scheImg='$scheImg', scheCode = '$scheCode')"
     }
 
     companion object CREATOR : Parcelable.Creator<MyScheduleVO> {
