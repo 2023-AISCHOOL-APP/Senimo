@@ -85,8 +85,8 @@ class HomeMainFragment : Fragment() {
             override fun onItemClick(schedule: ScheduleVO) {
                 // 클릭된 아이템에 대한 처리
                 val intent = Intent(requireContext(), ScheduleActivity::class.java)
-                intent.putExtra("scheduleData", schedule)
-                Log.d("scheduleData1",schedule.toString())
+                intent.putExtra("ScheduleInfo", schedule)
+                Log.d("scheduleData1","Sending data: $schedule")
                 startActivity(intent)
             }
         })

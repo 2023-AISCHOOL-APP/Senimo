@@ -22,7 +22,7 @@ data class ScheduleVO(
     @SerializedName("max_num")
     val maxNum: Int =0,
     @SerializedName("joined_members")
-    val joinedMembers: Int= 0,
+    var joinedMembers: Int= 0,
     @SerializedName("sche_img")
     var scheImg: String? = null,
     @SerializedName("club_name")
