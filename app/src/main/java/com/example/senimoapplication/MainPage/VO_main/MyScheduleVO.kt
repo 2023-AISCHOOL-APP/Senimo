@@ -19,7 +19,7 @@ class MyScheduleVO(
     val scheLoca: String = "",
     @SerializedName("max_num")
     val maxNum: Int = 0,
-    @SerializedName("attend_user_cnt")
+    @SerializedName("joined_members")
     val attendUserCnt: Int = 0,
     val state: String = "모집중",
     @SerializedName("sche_img")
