@@ -24,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
 //            startActivity(intent)
 //            finish()
 //        },3000)
-        Log.d("여기까지는 안전합니다.","hi")
+
         validateAccessToken()
 
     }
@@ -37,7 +37,7 @@ class SplashActivity : AppCompatActivity() {
             service.validateToken("Bearer ${accessToken}").enqueue(object : Callback<TokenValidationResponse> {
                 override fun onResponse(call: Call<TokenValidationResponse>, response: Response<TokenValidationResponse>) {
                     if (response.isSuccessful && response.body()?.success == true) {
-                        Log.d("LoginInfo33", "여기도착")
+                        Log.d("splashActivity", "여기도착")
                         response.body()?.user?.let { user ->
                             PreferenceManager.setUser(this@SplashActivity, user)
                         }
@@ -47,7 +47,7 @@ class SplashActivity : AppCompatActivity() {
                     }
 
                     val responseBody = response.body()
-                    Log.d("LoginInfo1",responseBody.toString())
+                    Log.d("splashActivity",responseBody.toString())
                 }
 
                 override fun onFailure(call: Call<TokenValidationResponse>, t: Throwable) {
@@ -66,8 +66,13 @@ class SplashActivity : AppCompatActivity() {
         val userData = PreferenceManager.getUser(this)
         Log.d("SharedPreferencesTest", "Loaded User Data: ${userData.toString()}")
         Log.d("SharedPreferencesTest", "Loaded User Data: ${userData?.user_id}")
+        Log.d("이미지입니다 유저 아이디11",userData?.toString()!!)
+        // val userId : String? =null
+        //val UsrData = PreferenceManager.getUser((this))
+        //userId = userData?    .user_id
         finishAffinity()
     }
+
 
     private fun navigateToIntroActivity() {
         Handler().postDelayed({

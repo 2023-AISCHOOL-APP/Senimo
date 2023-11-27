@@ -28,6 +28,16 @@ router.post('/login', (req, res) => {
       console.error('로그인 오류:', err);
       return res.status(500).json({ error: 'Internal Server Error' }); // 수정된 부분
     }
+    const UserDatas = {
+      user_id: rows[0].user_id,
+      user_name: rows[0].user_name,
+      birth_year: rows[0].birth_year,
+      gender: rows[0].gender,
+      user_gu: rows[0].user_gu,
+      user_dong: rows[0].user_dong,
+      user_introduce: rows[0].user_introduce,
+      user_img:rows[0].user_img
+    }
 
     if (rows.length > 0) {
       console.log('로그인 성공');
@@ -48,9 +58,10 @@ router.post('/login', (req, res) => {
            rows: 'success',
            userId: user_id,
            accessToken: tokens.accessToken,
-           refreshToken: tokens.refreshToken
+           refreshToken: tokens.refreshToken,
+           user: UserDatas
          });
-         
+         console.log("userinfo : ",UserDatas)
         console.log("1user_Id",tokens.accessToken);
        });
       

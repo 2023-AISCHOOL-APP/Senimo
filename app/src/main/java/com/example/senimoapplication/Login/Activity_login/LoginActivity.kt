@@ -73,11 +73,11 @@ class LoginActivity : AppCompatActivity() {
               // 토큰 저장
               PreferenceManager.setAccessToken(this@LoginActivity, tokens.accessToken)
               PreferenceManager.setRefreshToken(this@LoginActivity, tokens.refreshToken)
+              PreferenceManager.setUser(this@LoginActivity, tokens.user)
 
-              UserData.userId = tokens.userId
-              Log.d("LoginInfo", "UserData.userId: ${UserData.userId}")
+              Log.d("LoginInfo", "UserDatas: ${tokens.user}")
               // 환영 메시지 표시
-              val welcomeMessage = "${UserData.userId}님 환영합니다"
+              val welcomeMessage = "${tokens.user.user_id}님 환영합니다"
               Toast.makeText(this@LoginActivity, welcomeMessage, Toast.LENGTH_LONG).show()
               // 메인 액티비티로 이동
               val intent = Intent(this@LoginActivity, MainActivity::class.java)

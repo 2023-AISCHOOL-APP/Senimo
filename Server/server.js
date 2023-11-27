@@ -18,6 +18,7 @@ const deleteMember = require('./routes/deleteMember')
 const getSchedules = require('./routes/getSchedules')
 const getScheduleMembers = require('./routes/getScheduleMembers')
 const boardRouter = require('./routes/board')
+const galleryRouter = require('./routes/gallery')
 
 
 app.use(cors())
@@ -45,6 +46,7 @@ app.use('/', getSchedules)
 app.use('/', getScheduleMembers)
 app.use('/', deleteMember)
 app.use('/', boardRouter)
+app.use('/',galleryRouter)
 
 
 app.listen(app.get('port'), () => {

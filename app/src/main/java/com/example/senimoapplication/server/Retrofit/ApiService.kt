@@ -6,6 +6,7 @@ import com.example.senimoapplication.Club.VO.AllSchedulesResVO
 import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
+import com.example.senimoapplication.Club.VO.GalleryVO
 import com.example.senimoapplication.Club.VO.DeletePostResVO
 import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
@@ -119,8 +120,14 @@ interface ApiService {
         @Field("sche_img") scheImg: String?
     ): Call<MakeScheResVo>
 
+//    @POST("/modifyMeeting")
+//    fun modifyMeeting(@Body meetingVO: MeetingVO): Call<modifyResult>
+
+    @Multipart
     @POST("/modifyMeeting")
-    fun modifyMeeting(@Body meetingVO: MeetingVO): Call<modifyResult>
+    fun modifyMeeting(@Part("modifyMeeting") meetingVO: MeetingVO,
+                  @Part image: MultipartBody.Part?
+    ) : Call<MeetingVO>
 
     @FormUrlEncoded
     @POST("/updateInterestedClub")
@@ -165,26 +172,27 @@ interface ApiService {
                  @Field("user_id") userId: String?
     ) : Call<QuitClubResVO>
 
-
-//    @Multipart
-//    @POST("/postCreateMeeting")
-//    fun createMeeting(
-//        @Part("meeting") meeting: MeetingVO, // JSON 형식의 MeetingVO @part 매개변수는 RequestBody , //서버 측에서는 이 "meeting" 파트를 찾아 그 내용을 읽고 처리
-//        @Part image: MultipartBody.Part? // 이미지 파일 데이터를 전달하는 역할
-//    ): Call<MeetingVO>
+    // 게시판 작성하기
     @Multipart
     @POST("/writePost")
     fun writePost(@Part("writePostResVO") writePostResVO: WritePostResVO,
                   @Part image: MultipartBody.Part?
     ) : Call<WritePostResVO>
 
+    // 여러 개의 사진을 업로드하는 메소드
+    @Multipart
+    @POST("/uploadPhotos")
+    fun uploadPhotos(
+        @Part("galleryInfo") galleryVO: GalleryVO,
+        @Part photos: List<MultipartBody.Part>
+    ): Call<GalleryVO>
+}
 //    @FormUrlEncoded
 //    @POST("/writePost")
 //    fun writePost(@Field("user_id") userId: String,
 //                  @Field("club_code") clubCode: String,
 //                  @Field("post_content") postContent: String?,
 //                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
-
 
 
     @GET("/getPostContent/{club_code}")
