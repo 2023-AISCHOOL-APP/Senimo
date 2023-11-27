@@ -11,11 +11,9 @@ import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
-import com.example.senimoapplication.Club.adapter.PostAdapter
 import com.example.senimoapplication.Club.adapter.PostAdapter.Companion.deletePostData
 import com.example.senimoapplication.Club.fragment.HomeFragment
 import com.example.senimoapplication.Club.fragment.MemberManager
@@ -33,7 +31,14 @@ import retrofit2.Response
 
 
 // 일정 관리 다이얼로그
-fun showActivityDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?) {
+fun showActivityDialogBox(
+    activity: Activity,
+    message: String?,
+    okay: String?,
+    successMessage: String?,
+    scheCode: String?,
+    onDeleteSchedule: () -> Unit
+) {
     val dialog = Dialog(activity)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)
@@ -47,10 +52,10 @@ fun showActivityDialogBox(activity: Activity, message: String?, okay: String?, s
     tvMessage.text = message
     btnOkay.text = okay
     btnOkay.setOnClickListener {
+        // 일정 삭제 함수 호출
+        onDeleteSchedule.invoke()
         Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
-        val intent = Intent(activity, ClubActivity::class.java)
-        activity.startActivity(intent)
     }
     btnCancel.setOnClickListener {
         dialog.dismiss()

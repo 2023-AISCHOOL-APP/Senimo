@@ -2,7 +2,6 @@ package com.example.senimoapplication.MainPage.Activity_main
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,13 +20,11 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
-import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityCreateMeetingBinding
 import com.example.senimoapplication.server.ImageUploader
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
-import com.example.senimoapplication.server.Token.UserData
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody

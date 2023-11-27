@@ -14,8 +14,8 @@ import com.bumptech.glide.Glide
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.senimoapplication.Club.VO.AllScheduleMemberResVO
 import android.widget.Toast
-import androidx.activity.result.registerForActivityResult
 import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
+import com.example.senimoapplication.Club.VO.DeleteScheResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
@@ -107,7 +107,10 @@ class ScheduleActivity : AppCompatActivity() {
 
                         R.id.menu_option2 -> {
                             // 일정 삭제
-                            showActivityDialogBox(this, "일정을 삭제하시겠어요?", "삭제하기", "일정이 삭제되었습니다.")
+                            showActivityDialogBox(this, "일정을 삭제하시겠어요?", "삭제하기", "일정이 삭제되었습니다.", scheCode){
+                                // '일정 삭제하기' 버튼 클릭 시 실행할 내용
+                                deleteSche(scheCode) // deleteSche 함수 호출
+                            }
                             true
                         }
 
@@ -330,5 +333,36 @@ class ScheduleActivity : AppCompatActivity() {
             }
         })
     }
+
+    // 일정 삭제하기
+    fun deleteSche(scheCode: String?) {
+        val service = Server(this).service
+        val call = service.deleteSche(scheCode)
+
+        call.enqueue(object : Callback<DeleteScheResVO> {
+            override fun onResponse(
+                call: Call<DeleteScheResVO>,
+                response: Response<DeleteScheResVO>
+            ) {
+                if (response.isSuccessful) {
+                    val deleteScheRes = response.body()
+                    if (deleteScheRes != null && deleteScheRes.rows == "success") {
+                        Log.d("일정 삭제", "${scheCode} 삭제 성공")
+                        val intent = Intent(this@ScheduleActivity, ClubActivity::class.java)
+                        intent.putExtra("clickedMeeting", clickedMeeting)
+                        startActivity(intent)
+                    } else {
+                        Log.d("일정 삭제", "${scheCode} 삭제 실패")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<DeleteScheResVO>, t: Throwable) {
+                Log.e("일정 삭제", "일정 삭제 네트워크 요청 실패", t)
+            }
+
+        })
+    }
+
 }
 
