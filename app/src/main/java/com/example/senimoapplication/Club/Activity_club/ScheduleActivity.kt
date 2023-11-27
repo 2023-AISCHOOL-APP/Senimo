@@ -193,6 +193,7 @@ class ScheduleActivity : AppCompatActivity() {
                                             cancelJoinSche(nonNullUserId, scheCode)
                                             Log.d("joinSchedule", "참가취소 버튼 $nonNullUserId, $scheCode")
                                         }
+                                        sm_adapter.notifyDataSetChanged()
                                     } else {
                                         binding.btnJoinSchedule.text = "일정 참가하기"
                                         binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape_main)
@@ -201,7 +202,7 @@ class ScheduleActivity : AppCompatActivity() {
                                             joinSche(nonNullUserId, scheCode)
                                             Log.d("joinSchedule", "참가하기 버튼 $nonNullUserId, $scheCode")
                                         }
-
+                                        sm_adapter.notifyDataSetChanged()
                                     }
                                 }
 

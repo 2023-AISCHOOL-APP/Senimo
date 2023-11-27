@@ -219,7 +219,7 @@ interface ApiService {
 
     @POST("/writeReview")
     fun writeReview(@Body writeReviewResVO: WriteReviewResVO): Call<WriteReviewResVO>
-    
+
     @FormUrlEncoded
     @POST("/deleteSche")
     fun deleteSche(@Field("sche_code") scheCode: String?): Call<DeleteScheResVO>

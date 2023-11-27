@@ -36,7 +36,7 @@ class MakeScheduleActivity : ComponentActivity() {
 
   private var imageUri: Uri? = null // selectedImageUri를 클래스 수준에 선언
   private var imageName: String? = null // 선택된 이미지의 이름을 저장
-
+  var members: Int = 10
   lateinit var binding: ActivityMakeScheduleBinding
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -65,7 +65,8 @@ class MakeScheduleActivity : ComponentActivity() {
       binding.etScheduleIntro.text = Editable.Factory.getInstance().newEditable(clickedSchedule.scheContent)
       binding.etScheduleLoca.text = Editable.Factory.getInstance().newEditable(clickedSchedule.scheLoca)
       binding.etScheduleFee.text = Editable.Factory.getInstance().newEditable(clickedSchedule.scheFee.toString())
-      binding.tvAllMember.text = clickedSchedule.maxNum.toString()
+      members = clickedSchedule.maxNum
+      binding.tvAllMember.text = members.toString()
       Glide.with(this).load(clickedSchedule.scheImg).into(binding.imgButton)
       binding.tvLetterCnt.text = binding.etScheduleName.text.length.toString()
       binding.tvLetterCnt2.text = binding.etScheduleIntro.text.length.toString()
@@ -164,7 +165,6 @@ class MakeScheduleActivity : ComponentActivity() {
       binding.timePicker.visibility = GONE
       binding.calendarView.visibility = GONE
 
-
       // 날짜 설정
       binding.btnScheduleDate.setOnClickListener {
         binding.calendarView.visibility = VISIBLE
@@ -201,7 +201,7 @@ class MakeScheduleActivity : ComponentActivity() {
     }
 
     // 버튼 누르면 인원 수 변경 시키기 (일정 참가자수 상한선 : 50명)
-    var members: Int = 0
+
     val incrementAmount = 5 // 증가 또는 감소할 인원 수
 
     binding.imgPlus.setOnClickListener {
