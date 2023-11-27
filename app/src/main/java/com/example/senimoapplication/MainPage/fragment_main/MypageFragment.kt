@@ -1,7 +1,6 @@
 package com.example.senimoapplication.MainPage.fragment_main
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,13 +8,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.MainPage.Activity_main.EditMyPageActivity
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentMypageBinding
+import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MypageFragment : Fragment() {
 
@@ -25,19 +27,19 @@ class MypageFragment : Fragment() {
 
     private val INTRO_MAX_TEXT_LENGTH = 52 // 클래스 레벨로 상수 이동 : 최대 글자 수
 
-    private val editProfileResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val updatedProfile = result.data?.getParcelableExtra<MyPageVO>("updatedProfileData")
-            updatedProfile?.let {
-                // myProfile 객체 업데이트
-                myProfile = it
-                updateUIWithProfile(it) // UI 업데이트 함수 호출
-            }
-        }
-
-    }
+//    private val editProfileResultLauncher = registerForActivityResult(
+//        ActivityResultContracts.StartActivityForResult()
+//    ) { result ->
+//        if (result.resultCode == Activity.RESULT_OK) {
+//            val updatedProfile = result.data?.getParcelableExtra<MyPageVO>("updatedProfileData")
+//            updatedProfile?.let {
+//                // myProfile 객체 업데이트
+//                myProfile = it
+//                updateUIWithProfile(it) // UI 업데이트 함수 호출
+//            }
+//        }
+//
+//    }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -49,44 +51,45 @@ class MypageFragment : Fragment() {
         val view = binding.root
 
         // 뱃지 상태를 나타내는 가데이터
-        val badges = listOf(true, false, true, true, false, false, false, false, false)
+        // val badges = listOf(true, false, true, true, false, false, false, false, false)
+
+        val userData = PreferenceManager.getUser(requireContext())
 
         myProfile = MyPageVO(
-            "content://media/external/file/25",
-            "체리마루",
-            "북구",
-            "누문동",
-            1995,
-            "여성",
-            "안녕하세요~호호호호호홍가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라가나다라마바아자차카타파라라라라라라",
-            badges // 뱃지 상태 추가
+            img = userData?.user_img ?: "",
+            name = userData?.user_name ?: "",
+            gu = userData?.user_gu ?: "",
+            dong = userData?.user_dong ?: "",
+            birth = userData?.birth_year ?: 0,
+            gender = userData?.gender ?: "",
+            intro = userData?.user_introduce ?: "",
+            // badges = badges // 예시로 badges 목록을 추가합니다.
         )
-
-        updateUIWithProfile(myProfile) // 초기 UI 설정
+        updateUIWithProfile() // 초기 UI 설정
 
         // 뱃지 상태에 따라 이미지 리소스 업데이트
-        val badgeImageViews = listOf(
-            binding.imgMBadge1,
-            binding.imgMBadge2,
-            binding.imgMBadge3,
-            binding.imgMBadge4,
-            binding.imgMBadge5,
-            binding.imgMBadge6,
-            binding.imgMBadge7,
-            binding.imgMBadge8,
-            binding.imgMBadge9
-        )
+//        val badgeImageViews = listOf(
+//            binding.imgMBadge1,
+//            binding.imgMBadge2,
+//            binding.imgMBadge3,
+//            binding.imgMBadge4,
+//            binding.imgMBadge5,
+//            binding.imgMBadge6,
+//            binding.imgMBadge7,
+//            binding.imgMBadge8,
+//            binding.imgMBadge9
+//        )
 
-        badgeImageViews.forEachIndexed { index, imageView ->
-            val badgeActive = myProfile.badges.getOrNull(index) ?: false
-            val resource = if (badgeActive) {
-                resources.getIdentifier("ic_badge${index + 1}_on", "drawable", context?.packageName)
-            } else {
-                resources.getIdentifier("ic_badge${index + 1}_off", "drawable", context?.packageName)
-            }
-            imageView.setImageResource(resource)
-
-        }
+//        badgeImageViews.forEachIndexed { index, imageView ->
+//            val badgeActive = myProfile.badges.getOrNull(index) ?: false
+//            val resource = if (badgeActive) {
+//                resources.getIdentifier("ic_badge${index + 1}_on", "drawable", context?.packageName)
+//            } else {
+//                resources.getIdentifier("ic_badge${index + 1}_off", "drawable", context?.packageName)
+//            }
+//            imageView.setImageResource(resource)
+//
+//        }
 
 
         // 로그 사용하여 데이터 확인
@@ -101,19 +104,26 @@ class MypageFragment : Fragment() {
         }
 
         binding.tvMMoveEdit.setOnClickListener {
+            val userData = PreferenceManager.getUser(requireContext())
             val intent = Intent(requireContext(),EditMyPageActivity::class.java)
-            // myProfile 객체를 Intent에 추가
-            intent.putExtra("myProfileData", myProfile)
-            intent.putExtra("introLength", myProfile.intro.length)
-            editProfileResultLauncher.launch(intent)
-//            startActivity(intent)
-//            activity?.finish()
+//            // userData 객체를 Intent에 추가
+//            intent.putExtra("myProfileData", userData)
+//            intent.putExtra("introLength", userData?.user_introduce?.length ?: 0)
+            // editProfileResultLauncher.launch(intent)
+            startActivity(intent)
+            activity?.finish()
         }
 
         return view
     }
 
-    private fun updateUIWithProfile(myPageVO: MyPageVO) {
+    override fun onResume() {
+        super.onResume()
+        // updateUIWithProfile()
+        fetchUserData()
+    }
+
+    private fun updateUIWithProfile() {
         val userData = PreferenceManager.getUser(requireContext())
         // 여기에서 프로필 정보를 UI 요소에 설정
         Glide.with(this)
@@ -141,12 +151,6 @@ class MypageFragment : Fragment() {
         }
         binding.tvMGender.text = genderTransformed                        // 성별
 
-//        val genderText = if (userData?.gender?.length ?: 0 >2) {
-//            userData?.gender?.substring(0, 2)
-//        } else {
-//            userData?.gender
-//        }
-//        binding.tvMGender.text = genderText                            // 성별
 
         val introText = if ((userData?.user_introduce?.length ?: 0) > INTRO_MAX_TEXT_LENGTH) {
             binding.tvMUserIntroMore.visibility = View.VISIBLE
@@ -161,16 +165,6 @@ class MypageFragment : Fragment() {
 //        val badgeCount = profile.badges.count { it } // 'true'인 항목의 개수 세기
 //        binding.tvMBadgeCnt.text = badgeCount.toString()
 
-        // 로그 출력
-//        Log.d("MypageFragment", "프로필 데이터 업데이트 되었음!")
-//        Log.d("MypageFragment", "이미지 : ${profile.img}")
-//        Log.d("MypageFragment", "이름: ${profile.name}")
-//        Log.d("MypageFragment", "구: ${profile.gu}")
-//        Log.d("MypageFragment", "동: ${profile.dong}")
-//        Log.d("MypageFragment", "출생년도: ${profile.birth}")
-//        Log.d("MypageFragment", "성별: ${profile.gender}")
-//        Log.d("MypageFragment", "소개글: $introText")
-//        Log.d("MypageFragment", "뱃지 개수: $badgeCount")
         Log.d("MypageFragment", "프로필 데이터 업데이트 되었음!")
         Log.d("MypageFragment", "이미지 : ${userData?.user_img}")
         Log.d("MypageFragment", "이름: ${userData?.user_name}")
@@ -178,6 +172,31 @@ class MypageFragment : Fragment() {
         Log.d("MypageFragment", "출생년도: ${userData?.birth_year}")
         Log.d("MypageFragment", "성별: ${genderTransformed}")
         Log.d("MypageFragment", "소개글: $introText")
+    }
+
+    // 사용자 프로필 정보 업데이트 함수
+    fun fetchUserData() {
+        val userData = PreferenceManager.getUser(requireContext())
+        val userId = userData?.user_id
+        val service = Server(requireContext()).service
+        service.getUserProfile(userId).enqueue(object : Callback<MyPageVO> {
+            override fun onResponse(call: Call<MyPageVO>, response: Response<MyPageVO>) {
+                if(response.isSuccessful) {
+                    response.body()?.let {
+                        updateUIWithProfile()
+                    }
+                } else {
+                    Log.e("MypageFragment", "응답 실패 : ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<MyPageVO>, t: Throwable) {
+                Log.e("MypageFragment", "네트워크 요청 실패", t)
+            }
+
+        })
+
+
     }
 
     override fun onDestroyView() {

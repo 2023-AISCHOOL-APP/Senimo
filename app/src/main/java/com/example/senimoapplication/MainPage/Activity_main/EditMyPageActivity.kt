@@ -17,12 +17,19 @@ import com.bumptech.glide.Glide
 import com.example.senimoapplication.Login.adapter.DongAdapter
 import com.example.senimoapplication.Login.adapter.GuAdapter
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
+import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityEditMyPageBinding
+import com.example.senimoapplication.server.Retrofit.ApiService
+import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.PreferenceManager
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
 
 class EditMyPageActivity : AppCompatActivity() {
 
-    private lateinit var myProfile: MyPageVO // MyPageVO 객체를 담을 변수
+    // private lateinit var myProfile: MyPageVO // MyPageVO 객체를 담을 변수
     private var imageUri: Uri? = null // 클래스 수준 변수로 선언
 
     lateinit var GuAdapter : GuAdapter
@@ -36,11 +43,34 @@ class EditMyPageActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        // PreferenceManager를 통해 현재 사용자의 데이터 가져오기
+        val userData = PreferenceManager.getUser(this@EditMyPageActivity)
+        val userId =  userData?.user_id
+        userId?.let {
+            // 로그로 userData 확인
+            Log.d("EditMyPageActivity", "가져온 데이터: $userData")
 
-        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
-        // 인텐트에서 소개글 길이 받기
-        val introLength = intent.getIntExtra("introLength", 0)
-        binding.tvMLetterCntMyPage.text = introLength.toString()
+            Glide.with(this)
+                .load(userData?.user_img)
+                .placeholder(R.drawable.animation_loading)
+                .error(R.drawable.ic_profile_circle)
+                .centerCrop()
+                .into(binding.imgMEditMypageImg)
+
+            binding.etMUserName.setText(userData?.user_name)
+            binding.etMUserBirth.setText(userData?.birth_year.toString())
+            binding.etMGender.setText(userData?.gender)
+            binding.etMMyPageIntro.setText(userData?.user_introduce)
+        } ?: run {
+            // userData가 null인 경우 로그 출력
+            Log.e("EditMyPageActivity", "No user data available")
+        }
+
+
+//        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
+//        // 인텐트에서 소개글 길이 받기
+//        val introLength = intent.getIntExtra("introLength", 0)
+//        binding.tvMLetterCntMyPage.text = introLength.toString()
 
         // 사진 1장 선택
         val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -62,13 +92,13 @@ class EditMyPageActivity : AppCompatActivity() {
             }
         }
 
-        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
-        // 뷰에 데이터 설정
-        Glide.with(this).load(myProfile.img).into(binding.imgMEditMypageImg)
-        binding.etMUserName.setText(myProfile.name)
-        binding.etMUserBirth.setText(myProfile.birth.toString())
-        binding.etMGender.setText(myProfile.gender)
-        binding.etMMyPageIntro.setText(myProfile.intro)
+//        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
+//        // 뷰에 데이터 설정
+//        Glide.with(this).load(myProfile.img).into(binding.imgMEditMypageImg)
+//        binding.etMUserName.setText(myProfile.name)
+//        binding.etMUserBirth.setText(myProfile.birth.toString())
+//        binding.etMGender.setText(myProfile.gender)
+//        binding.etMMyPageIntro.setText(myProfile.intro)
 
 
         binding.imgMEditPhoto.setOnClickListener {
@@ -107,7 +137,8 @@ class EditMyPageActivity : AppCompatActivity() {
         binding.rvMEditGu.layoutManager = LinearLayoutManager(this)
 
         // 현재 선택된 구 설정
-        val selectedGuIndex = editGuList.indexOf(myProfile.gu)
+        // val selectedGuIndex = editGuList.indexOf(myProfile.gu)
+        val selectedGuIndex = editGuList.indexOf(userData?.user_gu)
 
         // 현재 선택된 동 설정
         val selectedDongIndex : Int
@@ -161,7 +192,7 @@ class EditMyPageActivity : AppCompatActivity() {
             GuAdapter.notifyDataSetChanged()
 
             // 사용자의 현재 구 위치에 따라 동 목록 설정
-            val currentDongList = when (myProfile.gu) {
+            val currentDongList = when (userData?.user_gu) {
                 "광산구" -> gwangsanList
                 "남구" -> southList
                 "동구" -> eastList
@@ -174,7 +205,8 @@ class EditMyPageActivity : AppCompatActivity() {
             DongAdapter.updateData(currentDongList)
 
             // 현재 선택된 동 위치 확인 및 설정
-            selectedDongIndex = currentDongList.indexOf(myProfile.dong)
+            // selectedDongIndex = currentDongList.indexOf(myProfile.dong)
+            selectedDongIndex = currentDongList.indexOf(userData?.user_dong)
             if (selectedDongIndex != -1) {
                 DongAdapter.selectedPosition = selectedDongIndex
                 DongAdapter.notifyDataSetChanged()
@@ -197,6 +229,7 @@ class EditMyPageActivity : AppCompatActivity() {
         binding.etMMyPageIntro.addTextChangedListener(object  : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 val currentLength = s?.length ?: 0
+                binding.tvMLetterCntMyPage.text = currentLength.toString()
                 if (currentLength >= 300) {
                     Toast.makeText(this@EditMyPageActivity, "300자 이내로 입력해주세요.", Toast.LENGTH_SHORT).show()
                     binding.etMMyPageIntro.text.delete(start, start+count)
@@ -219,29 +252,62 @@ class EditMyPageActivity : AppCompatActivity() {
 
 
         binding.btnMSave.setOnClickListener {
+            // 사용자 입력 데이터 가져오기
+            val updatedName = binding.etMUserName.text.toString()
+            val updatedBirth = binding.etMUserBirth.text.toString().toIntOrNull() ?: 0
+            val updatedGender = binding.etMGender.text.toString()
+            val updatedIntro = binding.etMMyPageIntro.text.toString()
+
             // GuAdapter에서 선택된 항목 가져오기
             val selectedGu = GuAdapter.getSelectedItem()
             val selectedDong = DongAdapter.getSelectedDongName()
-            val imageUriString = imageUri?.toString() // URI를 String으로 변환
+            val imageUriString = imageUri?.toString() ?: "" // URI를 String으로 변환
 
             // 사용자가 입력한 데이터로 myProfile 객체를 업데이트
+
+            val userData = PreferenceManager.getUser(this@EditMyPageActivity)
+            val userId =  userData?.user_id
+
             val updateProfile = MyPageVO(
-                img = imageUriString ?: myProfile?.img ?: "", // null 체크하여 기존 값 또는 빈 문자열 사용
-                name = binding.etMUserName.text.toString(),
+                img = imageUriString,
+                name = updatedName,
                 gu = selectedGu,
                 dong = selectedDong,
-                birth = binding.etMUserBirth.text.toString().toIntOrNull() ?: myProfile?.birth ?: 0,
-                gender = binding.etMGender.text.toString(),
-                intro = binding.etMMyPageIntro.text.toString(),
-                badges = myProfile?.badges ?: listOf()
+                birth = updatedBirth,
+                gender = updatedGender,
+                intro = updatedIntro,
+                userId = userId.toString()
+                // badges = listOf() // 뱃지 정보는 현재 상황에 맞게 설정
             )
 
             // 로그 출력
             Log.d("EditProfile","수정된 프로필 정보 : $updateProfile ")
 
-            val returnIntent = Intent()
-            returnIntent.putExtra("updatedProfileData", updateProfile)
-            setResult(RESULT_OK, returnIntent)
+
+            val service = Server(this).service
+            val call = service.updateUserProfile(updateProfile)
+
+            call.enqueue(object : retrofit2.Callback<MyPageVO> {
+                override fun onResponse(call: Call<MyPageVO>, response: Response<MyPageVO>) {
+                    if (response.isSuccessful) {
+                        val returnIntent = Intent()
+                        returnIntent.putExtra("updatedProfileData", response.body())
+                        setResult(RESULT_OK, returnIntent)
+                        finish()
+                    } else {
+                        Log.d("updatedProfileData", "not success")
+                    }
+                }
+
+                override fun onFailure(call: Call<MyPageVO>, t: Throwable) {
+                    Log.e("EditMyPageActivity", "updqtedProfileData 네트워크 요청실패", t)
+                }
+
+            })
+
+            val intent = Intent(this@EditMyPageActivity, MainActivity::class.java)
+            intent.putExtra("selected_tab","M_tab4")
+            startActivity(intent)
             finish()
         }
 
@@ -260,6 +326,8 @@ class EditMyPageActivity : AppCompatActivity() {
 
 
     }
+
+
 }
 
 

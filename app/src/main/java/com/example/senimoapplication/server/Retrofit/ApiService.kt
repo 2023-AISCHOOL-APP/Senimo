@@ -172,6 +172,14 @@ interface ApiService {
     @GET("/getUserBadges")
     fun getUserBadges(@Query("userId") userId: String?): Call<UserBadgeResponse>
 
+    @POST("/editMyProfile")
+    fun updateUserProfile(@Body profile: MyPageVO): Call<MyPageVO>
+
+    @GET("/getUserProfile")
+    fun getUserProfile(@Query("userId") userId: String?): Call<MyPageVO>
+
+
+
     @FormUrlEncoded
     @POST("/writePost")
     fun writePost(@Field("user_id") userId: String,
