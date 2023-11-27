@@ -16,6 +16,7 @@ import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.VO.WritePostResVO
+import com.example.senimoapplication.Club.VO.WriteReviewResVO
 import com.example.senimoapplication.Club.VO.getPostResVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
@@ -195,6 +196,9 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/deletePost")
     fun deletePost(@Field("post_code") postCode: String): Call<DeletePostResVO>
+
+    @POST("/writeReview")
+    fun writeReview(@Body writeReviewResVO: WriteReviewResVO): Call<WriteReviewResVO>
 }
 
 

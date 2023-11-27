@@ -45,3 +45,12 @@ class CommentVO (
 data class getReviewResVO(
   val data: List<CommentVO>
 )
+
+data class WriteReviewResVO(
+  @SerializedName("user_id")
+  val userId: String? = "",
+  @SerializedName("post_code")
+  val postCode: String = "",
+  @SerializedName("review_content")
+  val reviewContent: String = "",
+)
