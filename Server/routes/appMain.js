@@ -61,6 +61,7 @@ router.get('/getLatestSchedule', (req,res) => {
   // SQL 쿼리를 실행
   const query = `
   SELECT 
+    c.club_code,
     c.club_name,
     s.sche_title,
     s.sche_content,

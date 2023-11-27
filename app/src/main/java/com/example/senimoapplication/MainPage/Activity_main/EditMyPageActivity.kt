@@ -20,15 +20,12 @@ import com.example.senimoapplication.Login.adapter.DongAdapter
 import com.example.senimoapplication.Login.adapter.GuAdapter
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
-import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityEditMyPageBinding
-import com.example.senimoapplication.server.Retrofit.ApiService
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
 import retrofit2.Call
 import retrofit2.Response
-import javax.security.auth.callback.Callback
 
 class EditMyPageActivity : AppCompatActivity() {
 
@@ -50,13 +47,14 @@ class EditMyPageActivity : AppCompatActivity() {
 
         // PreferenceManager를 통해 현재 사용자의 데이터 가져오기
         val userData = PreferenceManager.getUser(this@EditMyPageActivity)
+        Log.d("사용자 데이터", "userData11111: $userData")
         val userId =  userData?.user_id
         userId?.let {
             // 로그로 userData 확인
             Log.d("EditMyPageActivity", "가져온 데이터: $userData")
 
             Glide.with(this)
-                .load(userData?.user_img)
+                .load(imageName)
                 .placeholder(R.drawable.animation_loading)
                 .error(R.drawable.ic_profile_circle)
                 .centerCrop()
@@ -64,7 +62,14 @@ class EditMyPageActivity : AppCompatActivity() {
 
             binding.etMUserName.setText(userData?.user_name)
             binding.etMUserBirth.setText(userData?.birth_year.toString())
-            binding.etMGender.setText(userData?.gender)
+
+            val genderTransformed = when (userData?.gender) {
+                "F", "여" -> "여"
+                "M", "남" -> "남"
+                else -> userData?.gender
+            }
+
+            binding.etMGender.setText(genderTransformed)
             binding.etMMyPageIntro.setText(userData?.user_introduce)
         } ?: run {
             // userData가 null인 경우 로그 출력
@@ -89,7 +94,7 @@ class EditMyPageActivity : AppCompatActivity() {
                 imageUri = uri // 클래스 수준 변수에 URI 저장
                 imageName = getFileName(uri)
                 Glide.with(this)
-                    .load(uri)
+                    .load(imageName)
                     .error(R.drawable.ic_profile_circle) // 로드 실패 시 기본 이미지
                     .into(binding.imgMEditMypageImg)
 
@@ -296,7 +301,7 @@ class EditMyPageActivity : AppCompatActivity() {
             call.enqueue(object : retrofit2.Callback<getMyPageVO> {
                 override fun onResponse(call: Call<getMyPageVO>, response: Response<getMyPageVO>) {
                     if (response.isSuccessful) {
-                        val returnIntent = Intent()
+                        // val returnIntent = Intent()
                         val updateProfile = MyPageVO(
                             img = imageUriString,
                             name = updatedName,
@@ -308,12 +313,11 @@ class EditMyPageActivity : AppCompatActivity() {
                             userId = userId.toString()
                             // badges = listOf() // 뱃지 정보는 현재 상황에 맞게 설정
                         )
-                        returnIntent.putExtra("updatedProfileData", updateProfile)
-                        setResult(Activity.RESULT_OK, returnIntent)
+//                        returnIntent.putExtra("updatedProfileData", updateProfile)
+//                        setResult(Activity.RESULT_OK, returnIntent)
                         Log.d("EditInfo","보내기:${updateProfile}")
-                        finish()
                     } else {
-                        Log.d("updatedProfileData", "not success")
+                        Log.e("EditMyPageActivity", "Request not successful. Response code: ${response.code()}")
                     }
                 }
 

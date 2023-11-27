@@ -74,12 +74,13 @@
         android:id="@+id/bnvMain"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        app:backgroundTint="#FFFFFF"
+        android:background="#FFFFFF"
         app:itemIconSize="55dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/main_menu_list">
+        app:menu="@menu/main_menu_list"
+        app:itemActiveIndicatorStyle="@null">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
