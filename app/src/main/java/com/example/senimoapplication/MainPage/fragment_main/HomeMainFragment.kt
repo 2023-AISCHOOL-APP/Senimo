@@ -23,6 +23,7 @@ import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.MainPage.adapter_main.MyScheduleAdapter
+import com.example.senimoapplication.server.Token.PreferenceManager
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -315,7 +316,8 @@ class HomeMainFragment : Fragment() {
     }
 
     private fun fetchLatestSchedule() {
-        val userId = "T2"
+        val userData = PreferenceManager.getUser(requireContext())
+        val userId = userData?.user_id
         val service = Server(requireContext()).service
         service.getLatestSchedule(userId).enqueue(object : Callback<List<MyScheduleVO>> {
             override fun onResponse(
