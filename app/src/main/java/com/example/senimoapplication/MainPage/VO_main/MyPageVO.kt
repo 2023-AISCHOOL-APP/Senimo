@@ -3,6 +3,7 @@ package com.example.senimoapplication.MainPage.VO_main
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 class MyPageVO(
     @SerializedName("user_img")
@@ -33,6 +34,7 @@ class MyPageVO(
         gender = parcel.readString() ?: "",
         intro = parcel.readString() ?: "",
         userId = parcel.readString() ?: "",
+
         // badges = List(parcel.readInt()) { parcel.readByte() != 0.toByte() }  // 뱃지 리스트 읽기
 
     )
@@ -69,3 +71,8 @@ class MyPageVO(
         }
     }
 }
+
+data class getMyPageVO (
+    val result :MyPageVO,
+) : Serializable
+

@@ -1,6 +1,7 @@
 package com.example.senimoapplication.MainPage.fragment_main
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.MainPage.Activity_main.EditMyPageActivity
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
@@ -27,19 +29,58 @@ class MypageFragment : Fragment() {
 
     private val INTRO_MAX_TEXT_LENGTH = 52 // 클래스 레벨로 상수 이동 : 최대 글자 수
 
-//    private val editProfileResultLauncher = registerForActivityResult(
-//        ActivityResultContracts.StartActivityForResult()
-//    ) { result ->
-//        if (result.resultCode == Activity.RESULT_OK) {
-//            val updatedProfile = result.data?.getParcelableExtra<MyPageVO>("updatedProfileData")
-//            updatedProfile?.let {
-//                // myProfile 객체 업데이트
-//                myProfile = it
-//                updateUIWithProfile(it) // UI 업데이트 함수 호출
-//            }
-//        }
-//
-//    }
+    private val editProfileResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val updatedProfile = result.data?.getParcelableExtra<MyPageVO>("updatedProfileData")
+            updatedProfile?.let {
+                // myProfile 객체 업데이트
+                myProfile = it
+                updateUIWithProfile(it) // UI 업데이트 함수 호출
+
+            }
+        }
+
+    }
+
+    private fun updateUIWithProfile(it: MyPageVO) {
+        Glide.with(this)
+            .load(it?.img)
+            .placeholder(R.drawable.animation_loading)
+            .error(R.drawable.ic_profile_circle)
+            .centerCrop()
+            .into(binding.imgMMypageImg)
+
+        binding.tvMUserName.text = it?.name                               // 이름
+        binding.tvMUserGu.text = it?.gu                                  // 구
+
+        val birthYearText = "${it?.birth}"
+        binding.tvMBirthYear.text = if (birthYearText.length > 4) {           // 출생년도
+            birthYearText.substring(0, 4) + "년생"
+        } else {
+            birthYearText + "년생"
+        }
+
+        // 성별 데이터 변환
+        val genderTransformed = when (it?.gender) {
+            "F", "여" -> "여"
+            "M", "남" -> "남"
+            else -> it?.gender
+        }
+        binding.tvMGender.text = genderTransformed                        // 성별
+
+
+        val introText = if ((it?.intro?.length ?: 0) > INTRO_MAX_TEXT_LENGTH) {
+            binding.tvMUserIntroMore.visibility = View.VISIBLE
+            it?.intro?.substring(0, INTRO_MAX_TEXT_LENGTH) + "..."
+        } else {
+            binding.tvMUserIntroMore.visibility = View.INVISIBLE
+            it?.intro
+        }
+        binding.tvMUserIntro.text = introText                               // 소개글
+
+    }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -109,7 +150,7 @@ class MypageFragment : Fragment() {
 //            // userData 객체를 Intent에 추가
 //            intent.putExtra("myProfileData", userData)
 //            intent.putExtra("introLength", userData?.user_introduce?.length ?: 0)
-            // editProfileResultLauncher.launch(intent)
+            editProfileResultLauncher.launch(intent)
             startActivity(intent)
             activity?.finish()
         }

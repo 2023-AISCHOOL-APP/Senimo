@@ -22,6 +22,7 @@ import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.UserBadgeResponse
+import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import com.example.senimoapplication.server.Token.TokenValidationResponse
@@ -173,7 +174,7 @@ interface ApiService {
     fun getUserBadges(@Query("userId") userId: String?): Call<UserBadgeResponse>
 
     @POST("/editMyProfile")
-    fun updateUserProfile(@Body profile: MyPageVO): Call<MyPageVO>
+    fun updateUserProfile(@Body profile: MyPageVO): Call<getMyPageVO>
 
     @GET("/getUserProfile")
     fun getUserProfile(@Query("userId") userId: String?): Call<MyPageVO>

@@ -23,8 +23,8 @@ router.post('/editMyProfile', (req, res) => {
 
             // 업데이트된 사용자 정보를 다시 불러옵니다.
             const selectQuery = `
-                SELECT user_name, gender, birth_year, user_gu, user_dong, user_introduce, user_img
-                FROM tb_user
+                SELECT user_name, gender, birth_year, user_gu, user_dong, user_introduce, CONCAT('${config.baseURL}/uploads/', u.user_img) AS user_img
+                FROM tb_user u
                 WHERE user_id = ?;
             `;
 
@@ -34,8 +34,9 @@ router.post('/editMyProfile', (req, res) => {
                     console.log("실패");
                 } else {
                     // 업데이트된 사용자 정보를 클라이언트에게 반환합니다.
-                    res.status(200).json({ result: selectResult[0] });
-                    console.log("보내는 값 : ", selectResult[0]);
+                    res.status(200).json({ result: selectResult[0]});
+                    console.log("보내는 값edit : ", selectResult[0],
+                    "user_img_edit: " , `${config.baseURL}/uploads/${selectResult[0].user_img}`);
                 }
             });
         }

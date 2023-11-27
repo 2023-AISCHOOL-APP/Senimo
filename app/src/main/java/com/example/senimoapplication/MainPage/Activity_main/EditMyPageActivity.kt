@@ -1,9 +1,11 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -17,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.example.senimoapplication.Login.adapter.DongAdapter
 import com.example.senimoapplication.Login.adapter.GuAdapter
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
+import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
 import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityEditMyPageBinding
@@ -31,6 +34,8 @@ class EditMyPageActivity : AppCompatActivity() {
 
     // private lateinit var myProfile: MyPageVO // MyPageVO 객체를 담을 변수
     private var imageUri: Uri? = null // 클래스 수준 변수로 선언
+    private var imageName: String? = null // 선택된 이미지의 이름을 저장
+
 
     lateinit var GuAdapter : GuAdapter
     lateinit var DongAdapter: DongAdapter
@@ -82,8 +87,9 @@ class EditMyPageActivity : AppCompatActivity() {
 //                binding.imgMEditPhoto.visibility = ImageView.VISIBLE
 
                 imageUri = uri // 클래스 수준 변수에 URI 저장
+                imageName = getFileName(uri)
                 Glide.with(this)
-                    .load(imageUri)
+                    .load(uri)
                     .error(R.drawable.ic_profile_circle) // 로드 실패 시 기본 이미지
                     .into(binding.imgMEditMypageImg)
 
@@ -287,20 +293,32 @@ class EditMyPageActivity : AppCompatActivity() {
             val service = Server(this).service
             val call = service.updateUserProfile(updateProfile)
 
-            call.enqueue(object : retrofit2.Callback<MyPageVO> {
-                override fun onResponse(call: Call<MyPageVO>, response: Response<MyPageVO>) {
+            call.enqueue(object : retrofit2.Callback<getMyPageVO> {
+                override fun onResponse(call: Call<getMyPageVO>, response: Response<getMyPageVO>) {
                     if (response.isSuccessful) {
                         val returnIntent = Intent()
-                        returnIntent.putExtra("updatedProfileData", response.body())
-                        setResult(RESULT_OK, returnIntent)
+                        val updateProfile = MyPageVO(
+                            img = imageUriString,
+                            name = updatedName,
+                            gu = selectedGu,
+                            dong = selectedDong,
+                            birth = updatedBirth,
+                            gender = updatedGender,
+                            intro = updatedIntro,
+                            userId = userId.toString()
+                            // badges = listOf() // 뱃지 정보는 현재 상황에 맞게 설정
+                        )
+                        returnIntent.putExtra("updatedProfileData", updateProfile)
+                        setResult(Activity.RESULT_OK, returnIntent)
+                        Log.d("EditInfo","보내기:${updateProfile}")
                         finish()
                     } else {
                         Log.d("updatedProfileData", "not success")
                     }
                 }
 
-                override fun onFailure(call: Call<MyPageVO>, t: Throwable) {
-                    Log.e("EditMyPageActivity", "updqtedProfileData 네트워크 요청실패", t)
+                override fun onFailure(call: Call<getMyPageVO>, t: Throwable) {
+                    Log.e("EditMyPageActivity", "updatedProfileData 네트워크 요청실패", t)
                 }
 
             })
@@ -325,6 +343,21 @@ class EditMyPageActivity : AppCompatActivity() {
 
 
 
+    }
+
+    // 이미지 URI에서 파일 이름을 추출하는 함수
+    private fun getFileName(uri: Uri):String?{
+        var imageName: String? = null
+        val cursor = contentResolver.query(uri,null,null,null,null)
+        cursor?.use{
+            if (it.moveToFirst()) {
+                val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (it.moveToFirst()) {
+                    imageName = it.getString(nameIndex)
+                }
+            }
+        }
+        return imageName
     }
 
 
