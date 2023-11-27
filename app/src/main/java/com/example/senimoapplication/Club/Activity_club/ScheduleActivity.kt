@@ -39,13 +39,12 @@ class ScheduleActivity : AppCompatActivity() {
     private lateinit var scheduleMemberAdapter: ScheduleMemberAdapter
     lateinit var binding: ActivityScheduleBinding
     var clubName: String? = null
-    var scheCode : String? = null
-    var clickedSchedule : ScheduleVO? = null
-    var joinedMemberList : List<String>? = ArrayList()
-    var userId : String? = null
-    var staffList : List<String>? = emptyList()
+    var scheCode: String? = null
+    var clickedSchedule: ScheduleVO? = null
+    var joinedMemberList: List<String>? = ArrayList()
+    var userId: String? = null
+    var staffList: List<String>? = emptyList()
     var clickedMeeting : MeetingVO? = null
-    var scheduleData : MyScheduleVO? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,16 +56,6 @@ class ScheduleActivity : AppCompatActivity() {
 
         val UserData = PreferenceManager.getUser(this)
         userId = UserData?.user_id
-
-        // HomeMain 내 일정 배너에서 넘어오는 데이터
-        // 효정이랑 VO 통일해서 수정해야할듯! - 2023.11.26
-        scheduleData = intent.getParcelableExtra<MyScheduleVO>("scheduleData")
-        if (scheduleData != null) {
-            Log.d("ScheduleActivity", "받아온 일정 데이터 : $scheduleData")
-        } else {
-            Log.d("ScheduleActivity", "일정 데이터 못 받음")
-        }
-
 
         // Intent 데이터 관리
         clickedSchedule = intent.getParcelableExtra("ScheduleInfo")
@@ -136,8 +125,25 @@ class ScheduleActivity : AppCompatActivity() {
         }
     }
 
+    private fun displayMyScheduleInfo(schedule : ScheduleVO?) {
+        Log.d("ScheduleData", "Title: ${schedule?.scheTitle}, Content: ${schedule?.scheContent}, Image URL: ${schedule?.scheImg}")
+        binding.tvClubName2.text = schedule?.clubName
+        binding.tvScheduleName.text = schedule?.scheTitle
+        binding.tvScheduleIntro.text = schedule?.scheContent
+        binding.tvScheduleTime.text = formatDate("${schedule?.scheDate}")
+        binding.tvScheduleLoca.text = schedule?.scheLoca
+        binding.tvScheduleFee.text = "${schedule?.scheFee}원"
+        binding.tvScheduleMember.text = "${schedule?.joinedMembers}/${schedule?.maxNum}명"
+        Log.d("cnt","${schedule?.joinedMembers}")
+        Glide.with(this)
+            .load(schedule?.scheImg)
+            .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
+            .error(R.drawable.basic_club) // 로딩 실패 시 표시될 이미지
+            .into(binding.imgCSchedule)
+    }
 
     private fun displayScheduleInfo(scheduleInfo : ScheduleVO?){
+        binding.tvClubName2.text = scheduleInfo?.clubName
         binding.tvScheduleName.text = scheduleInfo?.scheTitle
         binding.tvScheduleIntro.text = scheduleInfo?.scheContent
         binding.tvScheduleTime.text = formatDate("${scheduleInfo?.scheDate}")

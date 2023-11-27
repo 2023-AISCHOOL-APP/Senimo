@@ -1,5 +1,6 @@
 package com.example.senimoapplication.MainPage.fragment_main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,11 +17,11 @@ import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivit
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.R
-import com.example.senimoapplication.databinding.MeetingListBinding
 
 class MymeetingFragment(private val myscheduleList : List<ScheduleVO>, val joinList : List<MeetingVO>, val interestList : List<MeetingVO> ) : Fragment() {
 
     private var showAllItems = false // 플래그 추가
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,15 +33,18 @@ class MymeetingFragment(private val myscheduleList : List<ScheduleVO>, val joinL
 
         // 모임 일정 , 더보기
         val rv_M_Meeting_Schedule = view.findViewById<RecyclerView>(R.id.rv_M_Meeting_Schedule)
-        val Img_M_Meeting_Shcedule_more = view.findViewById<ImageView>(R.id.Img_M_Meeting_Shcedule_more)
+        val Img_M_Meeting_Shcedule_more = view.findViewById<ImageView>(R.id.Img_M_Meeting_Schedule_more)
+        val img_M_Meeting_Schedule_close = view.findViewById<ImageView>(R.id.img_M_Meeting_Schedule_close)
 
         // 가입한 모임, 더보기
         val rv_M_Meeting_join = view.findViewById<RecyclerView>(R.id.rv_M_Meeting_join)
         val Img_M_Meeting_join_more = view.findViewById<ImageView>(R.id.Img_M_Meeting_join_more)
+        val Img_M_Meeting_join_close = view.findViewById<ImageView>(R.id.Img_M_Meeting_join_close)
 
         // 관심 모임, 더보기
         val rv_M_Meeting_interest = view.findViewById<RecyclerView>(R.id.rv_M_Meeting_interest)
         val Img_M_Meeting_interest_more = view.findViewById<ImageView>(R.id.Img_M_Meeting_interest_more)
+        val Img_M_Meeting_interest_close = view.findViewById<ImageView>(R.id.Img_M_Meeting_interest_close)
 
 
         // 모임 일정, 가입한 모임, 관심 모임 어댑터
@@ -122,31 +126,92 @@ class MymeetingFragment(private val myscheduleList : List<ScheduleVO>, val joinL
         }
 
         Img_M_Meeting_Shcedule_more.setOnClickListener {
-            showAllItems = !showAllItems // 플래그 업데이트
-            myschedule_adapter.setShowAllItems(showAllItems) // 어댑터에 플래그 전달
+            showAllItems = true // 모든 항목 표시
+            myschedule_adapter.setShowAllItems(showAllItems) // 어댑터 업데이트
 
-            // 더보기 버튼 숨김 처리
-            Img_M_Meeting_Shcedule_more.visibility = if (showAllItems) View.INVISIBLE else View.VISIBLE
+            // 버튼 가시성 업데이트
+            Img_M_Meeting_Shcedule_more.visibility = View.INVISIBLE
+            img_M_Meeting_Schedule_close.visibility = View.VISIBLE
+        }
+
+        img_M_Meeting_Schedule_close.setOnClickListener {
+            showAllItems = false // 두 개의 항목만 표시
+            myschedule_adapter.setShowAllItems(showAllItems) // 어댑터 업데이트
+
+            // 버튼 가시성 업데이트
+            img_M_Meeting_Schedule_close.visibility = View.INVISIBLE
+            Img_M_Meeting_Shcedule_more.visibility = View.VISIBLE
         }
 
         Img_M_Meeting_join_more.setOnClickListener {
-            showAllItems = !showAllItems // 플래그 업데이트
+            showAllItems = true // 플래그 업데이트
             join_adapter.setShowAllItems(showAllItems) // 어댑터에 플래그 전달
 
             // 더보기 버튼 숨김 처리
-            Img_M_Meeting_join_more.visibility = if (showAllItems) View.INVISIBLE else View.VISIBLE
+            Img_M_Meeting_join_more.visibility = View.INVISIBLE
+            Img_M_Meeting_join_close.visibility = View.VISIBLE
+        }
+
+        Img_M_Meeting_join_close.setOnClickListener {
+            showAllItems = false // 플래그 업데이트
+            join_adapter.setShowAllItems(showAllItems) // 어댑터에 플래그 전달
+
+            // 더보기 버튼 숨김 처리
+            Img_M_Meeting_join_close.visibility = View.INVISIBLE
+            Img_M_Meeting_join_more.visibility = View.VISIBLE
         }
 
         Img_M_Meeting_interest_more.setOnClickListener {
-            showAllItems = !showAllItems // 플래그 업데이트
+            showAllItems = true // 플래그 업데이트
             interest_adapter.setShowAllItems(showAllItems) // 어댑터에 플래그 전달
 
             // 더보기 버튼 숨김 처리
-            Img_M_Meeting_interest_more.visibility = if (showAllItems) View.INVISIBLE else View.VISIBLE
+            Img_M_Meeting_interest_more.visibility = View.INVISIBLE
+            Img_M_Meeting_interest_close.visibility = View.VISIBLE
+        }
+
+        Img_M_Meeting_interest_close.setOnClickListener {
+            showAllItems = false // 플래그 업데이트
+            interest_adapter.setShowAllItems(showAllItems) // 어댑터에 플래그 전달
+
+            // 더보기 버튼 숨김 처리
+            Img_M_Meeting_interest_close.visibility = View.INVISIBLE
+            Img_M_Meeting_interest_more.visibility = View.VISIBLE
         }
 
         return view
     }
+
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        // 호기심탐험가
+//        // 관심 모임 개수 확인
+//        val interestedClubsCount = interestList.size
+//
+//        // 사용자 ID
+//        val userId = "" // 현재 사용자의 ID를 얻는 방법에 따라 달라짐
+//
+//        // 관심 모임 개수가 5개 이상이면 BadgeManager의 함수 호출
+//        if (interestedClubsCount >= 5) {
+//            BadgeManagerSingleton.instance.updateForInterestedClubs(userId, interestedClubsCount)
+//        }
+//
+//
+//        // 새싹모임러, 이구역모임왕
+//        val joinedMeetingCount = joinList.size
+//
+//        // 가입한 모임 개수에 따라 BadgeManager의 함수 호출
+//        val isFirstJoin = joinedMeetingCount == 1 // 첫 번째 가입인 경우
+//        if (isFirstJoin) {
+//            BadgeManagerSingleton.instance.updateForNewJoin(userId, joinedMeetingCount, isFirstJoin)
+//        }
+//
+//        if (joinedMeetingCount >= 5) {
+//            BadgeManagerSingleton.instance.updateForNewJoin(userId, joinedMeetingCount, false)
+//        }
+//    }
 
 
 }

@@ -1,27 +1,26 @@
 package com.example.senimoapplication.MainPage.adapter_main
 
 import android.content.Context
-import android.provider.ContactsContract.Data
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.dDate
-import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.myScheduleDate
 
-class MyScheduleAdapter(val context: Context, val layout: Int, val data : ArrayList<MyScheduleVO>) :
+class MyScheduleAdapter(val context: Context, val layout: Int, val data: ArrayList<ScheduleVO>) :
 RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
 
     // 클릭 리스너 인터페이스 정의
     interface OnItemClickListener {
-        fun onItemClick(schedule: MyScheduleVO)
+        fun onItemClick(schedule: ScheduleVO)
     }
 
     private var itemClickListener : OnItemClickListener? = null
@@ -45,6 +44,7 @@ RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
 
         init {
             Img_M_Meeting.setOnClickListener {
+                Log.d("MyScheduleAdapter", "Item clicked: ${data[adapterPosition].scheTitle}")
                 // 클릭 리스너 호출
                 itemClickListener?.onItemClick(data[adapterPosition])
             }
@@ -63,7 +63,7 @@ RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
 
     override fun onBindViewHolder(holder: MyScheduleAdapter.ViewHolder, position: Int) {
 
-        val mySchedule = data[position]
+        val schedule = data[position]
 
         // Glide를 사용하여 이미지 로드 및 표시
         val imageUri = data[position].scheImg
@@ -75,7 +75,7 @@ RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
             .into(holder.Img_M_Meeting)
 
         holder.tv_M_ScheduleTitle.text = data[position].scheTitle
-        val contentText = mySchedule.scheContent
+        val contentText = schedule.scheContent
 
         if (contentText.length > 14) {
             val truncatedText = contentText.substring(0, 14) + "..."

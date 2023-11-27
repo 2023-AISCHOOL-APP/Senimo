@@ -22,7 +22,11 @@ import com.example.senimoapplication.Club.VO.getPostResVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
+import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
+import com.example.senimoapplication.MainPage.VO_main.UserBadgeResponse
+import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
+import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import com.example.senimoapplication.server.Token.TokenValidationResponse
 import okhttp3.MultipartBody
@@ -52,7 +56,7 @@ interface ApiService {
     fun uploadImage(@Part image: MultipartBody.Part) : Call<ResponseBody>
 
     @GET("/getLatestSchedule")
-    fun getLatestSchedule(@Query("userId") userId: String?): Call<List<MyScheduleVO>>
+    fun getLatestSchedule(@Query("userId") userId: String?): Call<List<ScheduleVO>>
 
 //    @Multipart
 //    @POST("/db/postImg")
@@ -167,6 +171,32 @@ interface ApiService {
     fun quitClub(@Field("club_code") clubCode: String?,
                  @Field("user_id") userId: String?
     ) : Call<QuitClubResVO>
+
+
+    @GET("/getUserBadges")
+    fun getUserBadges(@Query("userId") userId: String?): Call<UserBadgeResponse>
+
+    @POST("/editMyProfile")
+    fun updateUserProfile(@Body profile: MyPageVO): Call<getMyPageVO>
+
+    @GET("/getUserProfile")
+    fun getUserProfile(@Query("userId") userId: String?): Call<MyPageVO>
+
+
+
+    @FormUrlEncoded
+    @POST("/writePost")
+    fun writePost(@Field("user_id") userId: String,
+                  @Field("club_code") clubCode: String,
+                  @Field("post_content") postContent: String?,
+                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
+
+//    @Multipart
+//    @POST("/postCreateMeeting")
+//    fun createMeeting(
+//        @Part("meeting") meeting: MeetingVO, // JSON 형식의 MeetingVO @part 매개변수는 RequestBody , //서버 측에서는 이 "meeting" 파트를 찾아 그 내용을 읽고 처리
+//        @Part image: MultipartBody.Part? // 이미지 파일 데이터를 전달하는 역할
+//    ): Call<MeetingVO>
 
     // 게시판 작성하기
     @Multipart

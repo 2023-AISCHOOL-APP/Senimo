@@ -64,7 +64,7 @@
         android:layout_marginTop="2dp"
         android:fontFamily="@font/pretendard_semibold"
         android:text="국지호"
-        android:textColor="#000000"
+        android:textColor="@color/txt_black"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="@+id/tvUserLevelPhoto"
         app:layout_constraintTop_toBottomOf="@+id/tvUserLevelPhoto" />
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_medium"
         android:text="11월 13일 오후 3:12"
-        android:textColor="@color/txt_gray70"
+        android:textColor="@color/txt_gray80"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/tvUserNamePhoto"
         app:layout_constraintTop_toBottomOf="@+id/tvUserNamePhoto" />
