@@ -63,7 +63,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/textView56"
+                android:id="@+id/tvScheduleTitleM"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -83,7 +83,7 @@
                 android:text="0"
                 android:textColor="@color/txt_gray70"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toStartOf="@+id/textView56"
+                app:layout_constraintEnd_toStartOf="@+id/tvScheduleTitleM"
                 app:layout_constraintTop_toBottomOf="@+id/etmlUserIntroS" />
 
             <View
@@ -96,7 +96,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView56" />
+                app:layout_constraintTop_toBottomOf="@id/tvScheduleTitleM" />
 
             <TextView
                 android:id="@+id/textView52"

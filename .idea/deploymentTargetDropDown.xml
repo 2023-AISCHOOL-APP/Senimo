@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="deploymentTargetDropDown">
-    <targetSelectedWithDropDown>
+    <runningDeviceTargetSelectedWithDropDown>
       <Target>
-        <type value="QUICK_BOOT_TARGET" />
+        <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\gjaischool\.android\avd\senimo_Pixel_3a_API_34.avd" />
-            <value value="C:\Users\gjaischool1\.android\avd\newSenimo.avd" />
+            <value value="C:\Users\gjaischool1\.android\avd\Pixel_3_API_34.avd" />
           </Key>
         </deviceKey>
       </Target>
-    </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-11-26T14:52:29.904541800Z" />
-    <timeTargetWasSelectedWithDropDown value="2023-11-23T18:34:02.926178100Z" />
+    </runningDeviceTargetSelectedWithDropDown>
+    <timeTargetWasSelectedWithDropDown value="2023-11-27T08:48:31.160378500Z" />
   </component>
 </project>

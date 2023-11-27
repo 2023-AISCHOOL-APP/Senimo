@@ -21,6 +21,7 @@ import com.example.senimoapplication.Club.VO.WriteReviewResVO
 import com.example.senimoapplication.Club.VO.getPostResVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
+import com.example.senimoapplication.MainPage.VO_main.CombinedDataResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
@@ -110,18 +111,8 @@ interface ApiService {
     @POST("/checkUserId")
     fun checkId(@Field("user_id") userId: String): Call<SignUpResVO>
 
-    @FormUrlEncoded
     @POST("/makeSche")
-    fun createSchedule(
-        @Field("club_code") clubCode: String,
-        @Field("sche_title") scheTitle: String,
-        @Field("sche_content") scheContent: String,
-        @Field("sche_date") scheDate: String,
-        @Field("sche_location") scheLocation: String,
-        @Field("max_num") maxNum: Int,
-        @Field("fee") scheFee: Int,
-        @Field("sche_img") scheImg: String?
-    ): Call<MakeScheResVo>
+    fun createSchedule(@Body scheduleVO: ScheduleVO): Call<MakeScheResVo>
 
     @Multipart
     @POST("/modifyMeeting")
@@ -223,12 +214,16 @@ interface ApiService {
     @POST("/deletePost")
     fun deletePost(@Field("post_code") postCode: String): Call<DeletePostResVO>
 
+    @GET("/getCombinedData/{user_id}")
+    fun getCombinedData(@Path("user_id") userId: String?) : Call<CombinedDataResVO>
+
     @POST("/writeReview")
     fun writeReview(@Body writeReviewResVO: WriteReviewResVO): Call<WriteReviewResVO>
 
     @FormUrlEncoded
     @POST("/deleteSche")
     fun deleteSche(@Field("sche_code") scheCode: String?): Call<DeleteScheResVO>
+
 }
 
 
