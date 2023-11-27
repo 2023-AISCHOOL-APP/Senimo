@@ -14,6 +14,7 @@ import com.example.senimoapplication.Club.Activity_club.PostActivity
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.getPostResVO
 import com.example.senimoapplication.Club.adapter.PostAdapter
+import com.example.senimoapplication.Common.PostUpdateListener
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentBoardBinding
@@ -25,7 +26,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class BoardFragment : Fragment() {
+class BoardFragment : Fragment(), PostUpdateListener {
     lateinit var binding: FragmentBoardBinding
     var clickedMeeting: MeetingVO? = null
     private var isScrolling = false
@@ -62,6 +63,12 @@ class BoardFragment : Fragment() {
         return view
     }
 
+    override fun onUpdatePost() {
+        // 삭제 이벤트 발생 시, 여기에서 원하는 작업을 수행합니다.
+        // 예: 게시글 목록 다시 가져오기 등
+        fetchPostList()
+    }
+
     private fun fetchPostList() {
         clubCode = clickedMeeting?.club_code.toString()
         val service = Server(requireContext()).service
@@ -73,7 +80,7 @@ class BoardFragment : Fragment() {
                     val jsonResponse = Gson().toJson(postList) // Convert to JSON string
                     Log.d("게시글 리스트", jsonResponse)
                     if (postList != null) {
-                        val postAdapter = PostAdapter(requireContext(), R.layout.post_list, postList)
+                        val postAdapter = PostAdapter(requireContext(), R.layout.post_list, postList, this@BoardFragment)
                         binding.rvBoard.adapter = postAdapter
                         binding.rvBoard.layoutManager = LinearLayoutManager(requireContext())
                         binding.tvAnnounceMain.visibility = GONE

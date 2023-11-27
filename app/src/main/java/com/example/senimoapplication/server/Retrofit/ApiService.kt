@@ -6,6 +6,8 @@ import com.example.senimoapplication.Club.VO.AllSchedulesResVO
 import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
+import com.example.senimoapplication.Club.VO.GalleryVO
+import com.example.senimoapplication.Club.VO.DeletePostResVO
 import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
 import com.example.senimoapplication.Club.VO.JoinClubResVO
@@ -15,6 +17,7 @@ import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.VO.WritePostResVO
+import com.example.senimoapplication.Club.VO.WriteReviewResVO
 import com.example.senimoapplication.Club.VO.getPostResVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
@@ -120,8 +123,11 @@ interface ApiService {
         @Field("sche_img") scheImg: String?
     ): Call<MakeScheResVo>
 
+    @Multipart
     @POST("/modifyMeeting")
-    fun modifyMeeting(@Body meetingVO: MeetingVO): Call<modifyResult>
+    fun modifyMeeting(@Part("modifyMeeting") meetingVO: MeetingVO,
+                  @Part image: MultipartBody.Part?
+    ) : Call<MeetingVO>
 
     @FormUrlEncoded
     @POST("/updateInterestedClub")
@@ -139,11 +145,8 @@ interface ApiService {
     @POST("/deleteMember")
     fun deleteMember(@Body deleteMemberVO: DeleteMemberVO): Call<JsonObject>
 
-    @POST("/scheduleInfo/{scheCode}")
-    fun scheduleInfo(@Path("scheCode") scheCode: String) : Call<ScheduleVO>
-
-    @POST("/getScheduleMembers/{scheCode}")
-    fun getScheduleMembers(@Path("scheCode") scheCode: String): Call<AllScheduleMemberResVO>
+    @GET("/getScheduleMembers/{sche_code}")
+    fun getScheduleMembers(@Path("sche_code") scheCode: String): Call<AllScheduleMemberResVO>
 
     @FormUrlEncoded
     @POST("/joinSche")
@@ -194,26 +197,34 @@ interface ApiService {
 //        @Part("meeting") meeting: MeetingVO, // JSON 형식의 MeetingVO @part 매개변수는 RequestBody , //서버 측에서는 이 "meeting" 파트를 찾아 그 내용을 읽고 처리
 //        @Part image: MultipartBody.Part? // 이미지 파일 데이터를 전달하는 역할
 //    ): Call<MeetingVO>
+
+    // 게시판 작성하기
     @Multipart
     @POST("/writePost")
     fun writePost(@Part("writePostResVO") writePostResVO: WritePostResVO,
                   @Part image: MultipartBody.Part?
     ) : Call<WritePostResVO>
 
-//    @FormUrlEncoded
-//    @POST("/writePost")
-//    fun writePost(@Field("user_id") userId: String,
-//                  @Field("club_code") clubCode: String,
-//                  @Field("post_content") postContent: String?,
-//                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
+    // 여러 개의 사진을 업로드하는 메소드
+    @Multipart
+    @POST("/uploadPhotos")
+    fun uploadPhotos(
+        @Part("galleryInfo") galleryVO: GalleryVO,
+        @Part photos: List<MultipartBody.Part>
+    ): Call<GalleryVO>
 
-
-
-    @GET("getPostContent/{club_code}")
+    @GET("/getPostContent/{club_code}")
     fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>
 
-    @GET("getReview/{post_code}")
+    @GET("/getReview/{post_code}")
     fun getReview(@Path("post_code") postCode: String?): Call<getReviewResVO>
+
+    @FormUrlEncoded
+    @POST("/deletePost")
+    fun deletePost(@Field("post_code") postCode: String): Call<DeletePostResVO>
+
+    @POST("/writeReview")
+    fun writeReview(@Body writeReviewResVO: WriteReviewResVO): Call<WriteReviewResVO>
 }
 
 

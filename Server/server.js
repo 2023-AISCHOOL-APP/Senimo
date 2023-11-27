@@ -20,6 +20,8 @@ const getScheduleMembers = require('./routes/getScheduleMembers')
 const boardRouter = require('./routes/board')
 const scheduleInfo = require('./routes/scheduleInfo')
 const editMyProfile = require('./routes/editMyProfile')
+const galleryRouter = require('./routes/gallery')
+
 
 app.use(cors())
 
@@ -48,6 +50,7 @@ app.use('/', deleteMember)
 app.use('/', boardRouter)
 app.use('/', scheduleInfo)
 app.use('/', editMyProfile)
+app.use('/',galleryRouter)
 
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');

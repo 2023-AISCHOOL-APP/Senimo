@@ -4,7 +4,7 @@ const conn = require('../config/database');
 const config = require('../config/config')
 
 // 일정 참가 회원 목록
-router.post('/getScheduleMembers/:sche_code', (req, res) => {
+router.get('/getScheduleMembers/:sche_code', (req, res) => {
   console.log('request값 확인',req.params);
   const sche_code = req.params.sche_code; 
   const findMemberQuery = `
@@ -21,7 +21,7 @@ router.post('/getScheduleMembers/:sche_code', (req, res) => {
       }
 
       if (results.length > 0) {
-          console.log("안드로이드로 보내는 값", results);
+          console.log("일정 참가 목록", results);
           res.status(200).json({ data: results });
       } else {
           res.status(404).json({ error: "Schedule members not found." });

@@ -30,11 +30,7 @@ class ClubActivity : AppCompatActivity() {
         setContentView(R.layout.activity_club)
 
         // Intent관리
-        val joinedMemberCnt = intent.getStringExtra("joinedMemberCnt")
-        val selectedSchecode = intent.getStringExtra("previousSchedule")
-        if (joinedMemberCnt != null || selectedSchecode != null) {
-            navigateToHomeFragment(joinedMemberCnt, selectedSchecode)
-        }
+        val clickedMeeting = intent.getParcelableExtra<MeetingVO>("clickedMeeting")
 
         var viewPager = findViewById(R.id.viewPager) as ViewPager
         var tabLayout = findViewById(R.id.tabLayout) as TabLayout
@@ -53,7 +49,7 @@ class ClubActivity : AppCompatActivity() {
         val tvClubName = findViewById<TextView>(R.id.tvClubName)
 
         // 모임명 표시
-        val clickedMeeting = intent.getParcelableExtra<MeetingVO>("clickedMeeting")
+
         if (clickedMeeting != null) {
             Log.d("ClubActivity", clickedMeeting.toString())
             val title = clickedMeeting.title
@@ -89,7 +85,7 @@ class ClubActivity : AppCompatActivity() {
         var cnt = 0
         img.setOnClickListener {
             cnt++
-            val clickedMeeting = intent.getParcelableExtra<MeetingVO>("clickedMeeting")
+
             val userId = clickedMeeting?.userId.toString()
             val clubCode = clickedMeeting?.club_code.toString()
 
@@ -105,19 +101,6 @@ class ClubActivity : AppCompatActivity() {
                 updateInterestStatus(params)
             }
         }
-    }
-    private fun navigateToHomeFragment(joinedMemberCnt: String?, selectedSchecode: String?) {
-
-        val homeFragment = HomeFragment().apply {
-            arguments = Bundle().apply {
-                putString("JOINED_MEMBER_COUNT", joinedMemberCnt)
-                putString("SELECTED_SCHE_CODE", selectedSchecode)
-            }
-        }
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentClubHome, homeFragment)
-            .commit()
     }
 
     fun updateInterestStatus(@FieldMap params: Map<String, String>) {

@@ -95,6 +95,7 @@ class CreateMeetingActivity : AppCompatActivity() {
             // 인원 수
             binding.tvMAllMember.text = intent_meetingVO.allMember.toString()
             setClubMembers { updatedMembers -> binding.tvMAllMember.text = updatedMembers.toString() }
+
             // 뒤로가기 버튼
             binding.ImgMBackbtnToFrag2.setOnClickListener { finish() }
 
@@ -127,7 +128,11 @@ class CreateMeetingActivity : AppCompatActivity() {
             // 수정 내용 취합 및 전송
             binding.btnSetMeeting.setOnClickListener {
                 val selectedGu = binding.spMGulist.selectedItem.toString()
+                val userData = PreferenceManager.getUser(this)
                 if (selectedKeyword != null) {
+                    // imageName이 null인지 체크하고 값을 설정
+                    val finalImageUri = if (imageName != null) imageName.toString() else intent_meetingVO.imageUri
+                    Log.d("finalImageUri",finalImageUri.toString())
                     val meetingVO =
                         MeetingVO(
                             gu = selectedGu,
@@ -136,21 +141,26 @@ class CreateMeetingActivity : AppCompatActivity() {
                             keyword = selectedKeyword!!,
                             attendance = intent_meetingVO.attendance,
                             allMember = binding.tvMAllMember.text.toString().toInt(),
-                            imageUri = imageName.toString(), // 이미지 URI 사용
+                            imageUri = finalImageUri, // 이미지 URI 사용
                             club_code = intent_meetingVO.club_code, // db에서 uuid로 생성된 값으로 저장되서 MeetingVO형식 맞추기위해 사용한값
-                            userId = UserData.userId // 로그인한 사용자 id 정보 받아와야함
+                            userId = userData?.user_id // 로그인한 사용자 id 정보 받아와야함
                         )
                     Log.d("click 모임 수정 정보 전송", meetingVO.toString())
-
-                    modifyMeeting(meetingVO)
+                    imageUri?.let{
+                        val imagePart = ImageUploader(this).prepareImagePart(it)
+                        modifyMeeting(meetingVO,imagePart)
+                        Log.d("click 모임 수정 정보 전송완료", imagePart.toString())
+                    } ?: run {
+                        // 이미지 URI가 없는 경우에는 일정 정보만 전송
+                        modifyMeeting(meetingVO,null)
+                    }
                 }
             }
 
-        } //ddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+        } // 모임생성
         else {
             Log.d("시작부분 확인", "else로 시작")
-            // 모임 일정 등록
-            // 모임 이미지 선택
+            // 모임 생성 하기
             val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     imageUri = uri
@@ -267,6 +277,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                 binding.tvMAllMember.text = updatedMembers.toString()
             }
 
+            // 뒤로가기 버튼
             binding.ImgMBackbtnToFrag2.setOnClickListener {
                 val intent = Intent(this@CreateMeetingActivity, MainActivity::class.java)
                 intent.putExtra("selected_tab", "M_tab2")
@@ -306,7 +317,7 @@ class CreateMeetingActivity : AppCompatActivity() {
             }
         }
     }
-    // 모임 멤버 설정 함수
+    // 모임 멤버 인원 설정 함수
     fun setClubMembers(onMemberChanged: (Int) -> Unit) {
         var meetingMembers: Int = 10
         binding.imgMPlus.setOnClickListener {
@@ -320,26 +331,7 @@ class CreateMeetingActivity : AppCompatActivity() {
             onMemberChanged(updatedMembers)
         }
 
-        binding.ImgMBackbtnToFrag2.setOnClickListener {
-            val intent = Intent(this@CreateMeetingActivity, MainActivity::class.java)
-            intent.putExtra("selected_tab", "M_tab2")
-            startActivity(intent)
-            finish()
-        }
     }
-
-    // 결과를 설정하고 현재 액티비티를 종료
-//                val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
-//                intent.putExtra("meetingVO", meetingVO)
-//                // setResult(RESULT_OK, intent)
-//                startActivity(intent)
-
-    // 로그로 모임 정보 출력
-//                Log.d("CreateMeetingActivity", "새로운 모임 생성: $meetingVO")
-//                Toast.makeText(this@CreateMeetingActivity,"모임이 생성되었습니다",Toast.LENGTH_SHORT).show()
-//            } else {
-//                Toast.makeText(this@CreateMeetingActivity, "모임 생성에 실패하셨습니다", Toast.LENGTH_SHORT).show()
-//            }
 
 
     // 키워드 클릭 리스너
@@ -433,19 +425,24 @@ class CreateMeetingActivity : AppCompatActivity() {
     }
 
     // 모임 수정 처리 함수
-    private fun modifyMeeting(meetingVO: MeetingVO) {
+    private fun modifyMeeting(meetingVO: MeetingVO,imagePart: MultipartBody.Part?) {
         val service = Server(this).service
-        service.modifyMeeting(meetingVO).enqueue(object : Callback<modifyResult> {
-            override fun onResponse(call: Call<modifyResult>, response: Response<modifyResult>) {
+        service.modifyMeeting(meetingVO,imagePart).enqueue(object : Callback<MeetingVO> {
+            override fun onResponse(call: Call<MeetingVO>, response: Response<MeetingVO>) {
                 if (response.isSuccessful) {
                     val modifyResult = response.body()
-                    if (modifyResult != null && modifyResult.result) {
+                    if (modifyResult != null) {
                         Log.d("ModifyMeeting", "Response: ${response.body()}")
+
+                        // 서버 응답에서 반환된 이미지 경로를 사용하여 MeetingVO 객체 업데이트
+                        val updatedMeetingVO = meetingVO.copy(
+                            imageUri = modifyResult.imageUri
+                        )
                         Toast.makeText(this@CreateMeetingActivity, "모임 정보가 수정되었습니다.", Toast.LENGTH_SHORT).show()
 
                         // 성공적으로 수정됐을 때 결과 반환
                         val returnIntent = Intent()
-                        returnIntent.putExtra("CreateMeeting", meetingVO) // 수정된 MeetingVO 객체 반환
+                        returnIntent.putExtra("CreateMeeting", updatedMeetingVO) // 수정된 MeetingVO 객체 반환
                         setResult(Activity.RESULT_OK, returnIntent)
                         finish()
                     } else {
@@ -456,12 +453,16 @@ class CreateMeetingActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<modifyResult>, t: Throwable) {
+            override fun onFailure(call: Call<MeetingVO>, t: Throwable) {
                 Log.d("ModifyMeeting", "서버 연결 실패: ${t.message}")
                 Toast.makeText(this@CreateMeetingActivity, "서버 연결 실패: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
+
+}
+
+private fun <T> Call<T>.enqueue(callback: Callback<MeetingVO>) {
 
 }

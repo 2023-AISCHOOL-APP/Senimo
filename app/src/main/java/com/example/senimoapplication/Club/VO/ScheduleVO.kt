@@ -3,6 +3,7 @@ package com.example.senimoapplication.Club.VO
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import org.jetbrains.annotations.Nullable
 
 data class ScheduleVO(
     @SerializedName("sche_code")

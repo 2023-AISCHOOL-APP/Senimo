@@ -14,16 +14,14 @@ import com.bumptech.glide.Glide
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.senimoapplication.Club.VO.AllScheduleMemberResVO
 import android.widget.Toast
-import com.example.senimoapplication.Club.VO.AllSchedulesResVO
+import androidx.activity.result.registerForActivityResult
 import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Club.adapter.ScheduleMemberAdapter
-import com.example.senimoapplication.Club.fragment.HomeFragment
 import com.example.senimoapplication.Club.fragment.MemberManager
-import com.example.senimoapplication.Club.fragment.ScheduleManager
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showActivityDialogBox
@@ -36,7 +34,6 @@ import com.example.senimoapplication.server.Token.PreferenceManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.example.senimoapplication.server.Token.UserData
 
 class ScheduleActivity : AppCompatActivity() {
     private lateinit var scheduleMemberAdapter: ScheduleMemberAdapter
@@ -60,7 +57,6 @@ class ScheduleActivity : AppCompatActivity() {
         val UserData = PreferenceManager.getUser(this)
         userId = UserData?.user_id
 
-
         // Intent 데이터 관리
         clickedSchedule = intent.getParcelableExtra("ScheduleInfo")
         clickedMeeting = intent.getParcelableExtra("clubInfo")
@@ -68,7 +64,6 @@ class ScheduleActivity : AppCompatActivity() {
         staffList = intent.getStringArrayListExtra("staffList")
         scheCode = clickedSchedule?.scheCode
 
-        // view 관리
         // view 관리
         binding.tvClubName2.text = clubName
         val color = ContextCompat.getColor(this, R.color.white)
@@ -78,6 +73,7 @@ class ScheduleActivity : AppCompatActivity() {
         displayScheduleInfo(clickedSchedule)
         // 일정 참여 멤버 목록 가져오기
         getScheduleMembers()
+
 
         // 뒤로가기 아이콘
         binding.icBack.setOnClickListener {
@@ -89,6 +85,7 @@ class ScheduleActivity : AppCompatActivity() {
             Log.d("ScheduleActivity", "Finishing ScheduleActivity")
             finish()
         }
+
 
         // 앱바 - 게시물 관리 기능 추가
         if(staffList?.contains(userId)==true){
@@ -123,7 +120,6 @@ class ScheduleActivity : AppCompatActivity() {
         } else {
             binding.icMore.visibility = INVISIBLE
         }
-
     }
 
     private fun displayMyScheduleInfo(schedule : ScheduleVO?) {
@@ -160,6 +156,47 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
 
+    // 일정 정보 가져오기
+//    private fun getSchedule() {
+//        val server = Server(this)
+//        val scheduleManager = ScheduleManager(server)
+//
+//        scheCode?.let { code ->
+//            ScheduleManager(server).scheduleInfo(code, object : Callback<ScheduleResponse> {
+//                override fun onResponse(
+//                    call: Call<ScheduleResponse>,
+//                    response: Response<ScheduleResponse>
+//                ) {
+//                    Log.d("getScheduleInfo", "통신시작")
+//                    if (response.isSuccessful) {
+//                        thisSchedule = response.body()
+//                        Log.d("getScheduleInfo", "1.통신 성공 : ${thisSchedule}")
+//                        if (thisSchedule != null) {
+//                            Log.d("getScheduleInfo", "2. null이 아닌 경우 ${thisSchedule}")
+//                            binding.tvScheduleName.text = thisSchedule?.scheTitle
+//                            binding.tvScheduleIntro.text = thisSchedule?.scheContent
+//                            binding.tvScheduleTime.text = formatDate("${thisSchedule?.scheDate}")
+//                            binding.tvScheduleLoca.text = thisSchedule?.scheLocation
+//                            binding.tvScheduleFee.text = "${thisSchedule?.fee}원"
+//                            binding.tvScheduleMember.text =
+//                                "${thisSchedule?.attendUserCnt}/${thisSchedule?.maxNum}명"
+//                            Glide.with(this@ScheduleActivity)
+//                                .load(thisSchedule?.scheImg)
+//                                .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
+//                                .error(R.drawable.basic_club) // 로딩 실패 시 표시될 이미지
+//                                .into(binding.imgCSchedule)
+//                        } else {
+//                            Log.d("getScheduleInfo", "일정 정보 가져오기 실패")
+//                        }
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<ScheduleResponse>, t: Throwable) {
+//                    Log.d("getScheduleInfo", "스택 트레이스 :", t)
+//                }
+//            })
+//        }
+//    }
 
     // 일정 참석 회원 목록 가져오기 (참가 상태에 따라 회원목록, 참가자 수 변경)
     private fun getScheduleMembers() {

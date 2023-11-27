@@ -13,18 +13,23 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.Activity_club.PostActivity
 import com.example.senimoapplication.Club.VO.CommentVO
+import com.example.senimoapplication.Club.VO.DeletePostResVO
 import com.example.senimoapplication.Club.VO.PostVO
+import com.example.senimoapplication.Club.VO.WriteReviewResVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
+import com.example.senimoapplication.Common.PostUpdateListener
 import com.example.senimoapplication.Common.formatDate
-import com.example.senimoapplication.Common.showActivityDialogBox
+import com.example.senimoapplication.Common.showPostDialogBox
 import com.example.senimoapplication.R
 import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.PreferenceManager
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.gson.Gson
 import retrofit2.Call
@@ -32,7 +37,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>) : RecyclerView.Adapter<PostAdapter.ViewHolder> (){
+class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>, val listener: PostUpdateListener) : RecyclerView.Adapter<PostAdapter.ViewHolder> (){
 
     val inflater = LayoutInflater.from(context)
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -105,7 +110,38 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
         })
     }
 
+    companion object{
+        fun deletePostData(activity: Activity, postCode: String, listener: PostUpdateListener) {
+            val service = Server(activity).service
+            val call = service.deletePost(postCode)
+            call.enqueue(object : Callback<DeletePostResVO> {
+                override fun onResponse(
+                    call: Call<DeletePostResVO>,
+                    response: Response<DeletePostResVO>
+                ) {
+                    Log.d("게시글 삭제", response.toString())
+                    if (response.isSuccessful) {
+                        val deletePostRes = response.body()
+                        if (deletePostRes != null && deletePostRes.rows == "success") {
+                            Log.d("deletePost", "${postCode} 삭제 성공")
+                            // 삭제 성공 시, 인터페이스를 통해 삭제 이벤트 전달
+                            listener.onUpdatePost()
+                        } else {
+                            Log.d("deletePost", "${postCode} 삭제 실패")
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<DeletePostResVO>, t: Throwable) {
+                    Log.e("deletePost", "deletePost 네트워크 요청 실패", t)
+                }
+
+            })
+        }
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val postCode = data[position].postCode
 
         // 기본 세팅
         holder.rvComment.visibility = GONE
@@ -133,6 +169,12 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
             .error(R.drawable.ic_profile_circle) // 로딩 실패 시 표시될 이미지
             .into(holder.userProfileImg)
 
+        Glide.with(context)
+            .load(userImgUrl)
+            .placeholder(R.drawable.ic_loading6) // 로딩 중 표시될 이미지
+            .error(R.drawable.ic_profile_circle) // 로딩 실패 시 표시될 이미지
+            .into(holder.CommentuserProfileImg)
+
         holder.tvContent.text = data[position].postContent
         holder.tvUserName.text = data[position].userName
         when(data[position].clubRole){
@@ -151,6 +193,15 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
         }
         holder.tvDateTime.text = formatDate(data[position].createdDt)
 
+        val userData = PreferenceManager.getUser(context)
+        val loginedUserId = userData?.user_id
+        val postUserId = data[position].userId
+        if (loginedUserId == postUserId) {
+            holder.imgPostMore.visibility == VISIBLE
+        } else {
+            holder.imgPostMore.visibility = GONE
+        }
+
         holder.imgPostMore.setOnClickListener { view->
             val popupMenu = PopupMenu(view.context, view)
             val menuInflater = popupMenu.menuInflater
@@ -168,7 +219,7 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
 
                     R.id.menu_option2 -> {
                         // 게시물 삭제
-                        showActivityDialogBox(view.context as Activity,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.")
+                        showPostDialogBox(view.context as Activity,"게시물을 삭제하시겠어요?", "삭제하기", "게시물이 삭제되었습니다.", postCode, listener)
                         true
                     }
 
@@ -182,7 +233,7 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
 
         holder.tvCommentCnt.text = data[position].reviewCount.toString()
 
-        val postCode = data[position].postCode
+        // 리뷰 데이터 가져호는 함수 실행
         fetchReviewData(holder, postCode)
 
         // 게시물 내용, 더보기 버튼, 댓글을 눌렀을 때 게시물 확장하는 코드
@@ -212,6 +263,46 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>)
                 isContentVisible = !isContentVisible
             }
         }
+
+        holder.tvCommentSend.setOnClickListener {
+            val userData = PreferenceManager.getUser(context)
+            val userId = userData?.user_id
+            val postCode = data[position].postCode
+            val reviewContent = holder.etComment.text.toString()
+            val writeReviewResVO = WriteReviewResVO(userId = userId, postCode = postCode, reviewContent = reviewContent)
+
+            writeReview(writeReviewResVO)
+            holder.etComment.text.clear()
+            listener.onUpdatePost()
+        }
+    }
+
+    fun writeReview(writeReviewResVO: WriteReviewResVO) {
+        val service = Server(context).service
+        val call = service.writeReview(writeReviewResVO)
+        call.enqueue(object : Callback<WriteReviewResVO> {
+            override fun onResponse(
+                call: Call<WriteReviewResVO>,
+                response: Response<WriteReviewResVO>
+            ) {
+                if (response.isSuccessful) {
+                    val writeReviewRes = response.body()
+                    if (writeReviewRes != null) {
+                        Log.d("댓글 등록", writeReviewRes.toString())
+                        Toast.makeText(context, "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.d("댓글 등록", "댓글 등록 실패")
+                    }
+                } else {
+                    Log.d("댓글 등록", "응답 실패함")
+                }
+            }
+
+            override fun onFailure(call: Call<WriteReviewResVO>, t: Throwable) {
+                Log.e("댓글 등록 요청", "댓글 등록 요청 실패", t)
+            }
+
+        })
     }
 }
 
