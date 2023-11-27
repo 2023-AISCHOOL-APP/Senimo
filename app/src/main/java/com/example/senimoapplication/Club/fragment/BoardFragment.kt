@@ -14,7 +14,7 @@ import com.example.senimoapplication.Club.Activity_club.PostActivity
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.getPostResVO
 import com.example.senimoapplication.Club.adapter.PostAdapter
-import com.example.senimoapplication.Common.PostDeleteListener
+import com.example.senimoapplication.Common.PostUpdateListener
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentBoardBinding
@@ -26,7 +26,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class BoardFragment : Fragment(), PostDeleteListener {
+class BoardFragment : Fragment(), PostUpdateListener {
     lateinit var binding: FragmentBoardBinding
     var clickedMeeting: MeetingVO? = null
     private var isScrolling = false
@@ -63,7 +63,7 @@ class BoardFragment : Fragment(), PostDeleteListener {
         return view
     }
 
-    override fun onDeletePost() {
+    override fun onUpdatePost() {
         // 삭제 이벤트 발생 시, 여기에서 원하는 작업을 수행합니다.
         // 예: 게시글 목록 다시 가져오기 등
         fetchPostList()

@@ -39,7 +39,7 @@ GROUP BY
     k.keyword_name
 ORDER BY 
     attend_user_cnt DESC
-LIMIT 20;`
+LIMIT 30;`
   
 
   conn.query(query, (err, rows) => {
@@ -57,6 +57,7 @@ LIMIT 20;`
 router.get('/getLatestSchedule', (req,res) => {
   const user_id = req.query.userId;
   console.log("아이디다",user_id)
+  console.log("전체다",req.query)
   // SQL 쿼리를 실행
   const query = `
   SELECT 

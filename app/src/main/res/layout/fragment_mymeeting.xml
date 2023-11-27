@@ -12,8 +12,10 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -48,11 +50,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <ImageView
-                android:id="@+id/Img_M_Meeting_Shcedule_more"
+                android:id="@+id/Img_M_Meeting_Schedule_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/ic_more"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/rv_M_Meeting_Schedule"
+                app:layout_constraintTop_toBottomOf="@+id/rv_M_Meeting_Schedule" />
+
+            <ImageView
+                android:id="@+id/img_M_Meeting_Schedule_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_sche_close"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@+id/rv_M_Meeting_Schedule"
                 app:layout_constraintStart_toStartOf="@+id/rv_M_Meeting_Schedule"
                 app:layout_constraintTop_toBottomOf="@+id/rv_M_Meeting_Schedule" />
@@ -70,7 +83,7 @@
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Img_M_Meeting_Shcedule_more" />
+                app:layout_constraintTop_toBottomOf="@+id/Img_M_Meeting_Schedule_more" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_M_Meeting_join"
@@ -88,6 +101,16 @@
                 android:src="@drawable/ic_more"
                 app:layout_constraintEnd_toEndOf="@+id/rv_M_Meeting_join"
                 app:layout_constraintStart_toStartOf="@+id/rv_M_Meeting_join"
+                app:layout_constraintTop_toBottomOf="@+id/rv_M_Meeting_join" />
+
+            <ImageView
+                android:id="@+id/Img_M_Meeting_join_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sche_close"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_M_Meeting_join" />
 
             <TextView
@@ -123,6 +146,16 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/rv_M_Meeting_interest"
                 app:layout_constraintStart_toStartOf="@+id/rv_M_Meeting_interest"
+                app:layout_constraintTop_toBottomOf="@+id/rv_M_Meeting_interest" />
+
+            <ImageView
+                android:id="@+id/Img_M_Meeting_interest_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sche_close"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_M_Meeting_interest" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,7 +28,7 @@
         android:layout_marginStart="20dp"
         android:fontFamily="@font/pretendard_semibold"
         android:text="국지호"
-        android:textColor="#000000"
+        android:textColor="@color/txt_black"
         android:textSize="19sp"
         app:layout_constraintBottom_toBottomOf="@+id/userProfile"
         app:layout_constraintStart_toEndOf="@+id/userProfile"

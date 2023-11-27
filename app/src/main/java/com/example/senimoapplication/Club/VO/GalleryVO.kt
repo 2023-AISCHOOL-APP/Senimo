@@ -2,17 +2,23 @@ package com.example.senimoapplication.Club.VO
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-class GalleryVO (
+class GalleryVO(
     @SerializedName("user_img")
-    val userImg: String = "",
+    val userImg: String?= null,
     @SerializedName("club_role")
     val clubRole: Int = 0,
     @SerializedName("user_name")
-    val userName: String = "",
+    val userName: String? =null,
     @SerializedName("uploaded_dt")
     val uploadedDt: String = "",
     @SerializedName("img_name")
-    val imgUri: Int = 0
+    val imgUri: Int = 0,
+    @SerializedName("img_thumb_name")
+    val imgThumbName: List<String?>,
+    @SerializedName("club_code")
+    var clubcode: String?= null,
+    @SerializedName("user_id")
+    var userId: String? = null
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {

@@ -24,6 +24,7 @@ import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.MainPage.adapter_main.MyScheduleAdapter
+import com.example.senimoapplication.server.Token.PreferenceManager
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,10 +85,12 @@ class HomeMainFragment : Fragment() {
             override fun onItemClick(schedule: ScheduleVO) {
                 // 클릭된 아이템에 대한 처리
                 val intent = Intent(requireContext(), ScheduleActivity::class.java)
-                intent.putExtra("scheduleData", schedule)
+                intent.putExtra("ScheduleInfo", schedule)
+                Log.d("scheduleData1","Sending data: $schedule")
                 startActivity(intent)
             }
         })
+
 
         // 모임 RecyclerView 어댑터 생성 및 설정
         adapter = MeetingAdapter(requireContext(), R.layout.meeting_list, MeetingList)
@@ -316,7 +319,8 @@ class HomeMainFragment : Fragment() {
     }
 
     private fun fetchLatestSchedule() {
-        val userId = "T2"
+        val userData = PreferenceManager.getUser(requireContext())
+        val userId =  userData?.user_id
         val service = Server(requireContext()).service
         service.getLatestSchedule(userId).enqueue(object : Callback<List<ScheduleVO>> {
             override fun onResponse(
@@ -346,7 +350,7 @@ class HomeMainFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<List<MyScheduleVO>>, t: Throwable) {
+            override fun onFailure(call: Call<List<ScheduleVO>>, t: Throwable) {
                 // 네트워크 요청 실패 시 처리
                 Log.e("HomeMainFragment5", "네트워크 요청 실패", t)
             }

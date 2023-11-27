@@ -93,7 +93,7 @@
                 android:background="@drawable/et_underline"
                 android:ems="10"
                 android:fontFamily="@font/pretendard_medium"
-                android:hint="이름을 입력해주세요"
+                android:hint="이름을 입력해주세요."
                 android:inputType="text"
                 android:lineSpacingExtra="10sp"
                 android:lineSpacingMultiplier="1.2"
@@ -128,7 +128,7 @@
                 android:background="@drawable/et_underline"
                 android:ems="10"
                 android:fontFamily="@font/pretendard_medium"
-                android:hint="남성 / 여성"
+                android:hint="ex) 남/여"
                 android:inputType="text"
                 android:lineSpacingExtra="10sp"
                 android:lineSpacingMultiplier="1.2"
@@ -147,7 +147,7 @@
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="이름"
                 android:textColor="@color/txt_gray50"
-                android:textSize="13sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_M_EditMypageImg" />
 
@@ -159,7 +159,7 @@
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="거주지"
                 android:textColor="@color/txt_gray50"
-                android:textSize="13sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/et_M_UserBirth"
                 app:layout_constraintTop_toBottomOf="@+id/et_M_UserBirth" />
 
@@ -171,7 +171,7 @@
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="소개글"
                 android:textColor="@color/txt_gray50"
-                android:textSize="13sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/rv_M_EditGu"
                 app:layout_constraintTop_toBottomOf="@+id/rv_M_EditGu" />
 
@@ -203,7 +203,7 @@
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="출생년도"
                 android:textColor="@color/txt_gray50"
-                android:textSize="13sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/et_M_UserName"
                 app:layout_constraintTop_toBottomOf="@+id/et_M_UserName" />
 
@@ -214,7 +214,7 @@
                 android:fontFamily="@font/pretendard_semibold"
                 android:text="성별"
                 android:textColor="@color/txt_gray50"
-                android:textSize="13sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/et_M_Gender"
                 app:layout_constraintTop_toTopOf="@+id/textView40" />
 
