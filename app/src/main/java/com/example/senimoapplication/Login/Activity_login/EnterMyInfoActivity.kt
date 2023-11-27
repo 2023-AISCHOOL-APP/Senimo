@@ -7,13 +7,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.Login.adapter.DongAdapter
 import com.example.senimoapplication.Login.adapter.GuAdapter
