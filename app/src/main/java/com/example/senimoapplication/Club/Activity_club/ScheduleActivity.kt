@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.senimoapplication.Club.VO.AllScheduleMemberResVO
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.DeleteScheResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
@@ -25,6 +26,7 @@ import com.example.senimoapplication.Club.fragment.MemberManager
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showActivityDialogBox
+import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.databinding.ActivityScheduleBinding
@@ -90,15 +92,33 @@ class ScheduleActivity : AppCompatActivity() {
 
         // 뒤로가기 아이콘
         binding.icBack.setOnClickListener {
-            val returnIntent = Intent()
+            val returnIntent = Intent(this@ScheduleActivity, ClubActivity::class.java)
             clickedSchedule?.joinedMembers = joinedMemberList?.size ?: 0
             returnIntent.putExtra("ScheduleInfo", clickedSchedule)
+            returnIntent.putExtra("clickedMeeting", clickedMeeting)
             setResult(Activity.RESULT_OK, returnIntent)
             Log.d("ScheduleInfo","보내기:${clickedSchedule?.joinedMembers}")
             Log.d("ScheduleActivity", "Finishing ScheduleActivity")
             startActivity(returnIntent)
             finish()
         }
+
+        // 디바이스 뒤로가기 버튼
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val returnIntent = Intent(this@ScheduleActivity, ClubActivity::class.java)
+                clickedSchedule?.joinedMembers = joinedMemberList?.size ?: 0
+                returnIntent.putExtra("ScheduleInfo", clickedSchedule)
+                returnIntent.putExtra("clickedMeeting", clickedMeeting)
+                setResult(Activity.RESULT_OK, returnIntent)
+                Log.d("ScheduleInfo","보내기:${clickedSchedule?.joinedMembers}")
+                Log.d("ScheduleActivity", "Finishing ScheduleActivity")
+                Log.d("ScheduleActivity", "${clickedMeeting}")
+                startActivity(returnIntent)
+                finish()
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, callback)
 
 
         // 앱바 - 게시물 관리 기능 추가
