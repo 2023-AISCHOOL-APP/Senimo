@@ -56,6 +56,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         val UserData = PreferenceManager.getUser(this)
         userId = UserData?.user_id
+        Log.d("ScheduleActivity", "유저 확인$userId")
 
         // Intent 데이터 관리
         clickedSchedule = intent.getParcelableExtra("ScheduleInfo")
@@ -73,7 +74,18 @@ class ScheduleActivity : AppCompatActivity() {
 
         displayScheduleInfo(clickedSchedule)
         // 일정 참여 멤버 목록 가져오기
+
         getScheduleMembers()
+
+
+        // 기본 버튼 동작
+        binding.btnJoinSchedule.text = "일정 참가하기"
+        binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape_main)
+        binding.btnJoinSchedule.setTextColor(ContextCompat.getColor(this@ScheduleActivity, R.color.white))
+        binding.btnJoinSchedule.setOnClickListener {
+            joinSche(userId, scheCode)
+            Log.d("joinSchedule", "참가하기 버튼 $userId, $scheCode")
+        }
 
 
         // 뒤로가기 아이콘
@@ -84,6 +96,7 @@ class ScheduleActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK, returnIntent)
             Log.d("ScheduleInfo","보내기:${clickedSchedule?.joinedMembers}")
             Log.d("ScheduleActivity", "Finishing ScheduleActivity")
+            startActivity(returnIntent)
             finish()
         }
 
@@ -102,7 +115,11 @@ class ScheduleActivity : AppCompatActivity() {
                         R.id.menu_option1 -> {
                             // 일정 수정
                             val intent = Intent(this, MakeScheduleActivity::class.java)
+                            intent.putExtra("clickedSchedule", clickedSchedule)
+                            intent.putExtra("title", "일정 수정")
                             startActivity(intent)
+                            finish()
+
                             true
                         }
 
@@ -112,7 +129,6 @@ class ScheduleActivity : AppCompatActivity() {
                             intent.putExtra("clickedMeeting", clickedMeeting)
                             startActivity(intent)
                             showActivityDialogBox(this, "일정을 삭제하시겠어요?", "삭제하기", "일정이 삭제되었습니다.")
-                            finish()
                             true
                         }
 
@@ -125,23 +141,6 @@ class ScheduleActivity : AppCompatActivity() {
         } else {
             binding.icMore.visibility = INVISIBLE
         }
-    }
-
-    private fun displayMyScheduleInfo(schedule : ScheduleVO?) {
-        Log.d("ScheduleData", "Title: ${schedule?.scheTitle}, Content: ${schedule?.scheContent}, Image URL: ${schedule?.scheImg}")
-        binding.tvClubName2.text = schedule?.clubName
-        binding.tvScheduleName.text = schedule?.scheTitle
-        binding.tvScheduleIntro.text = schedule?.scheContent
-        binding.tvScheduleTime.text = formatDate("${schedule?.scheDate}")
-        binding.tvScheduleLoca.text = schedule?.scheLoca
-        binding.tvScheduleFee.text = "${schedule?.scheFee}원"
-        binding.tvScheduleMember.text = "${schedule?.joinedMembers}/${schedule?.maxNum}명"
-        Log.d("cnt","${schedule?.joinedMembers}")
-        Glide.with(this)
-            .load(schedule?.scheImg)
-            .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
-            .error(R.drawable.basic_club) // 로딩 실패 시 표시될 이미지
-            .into(binding.imgCSchedule)
     }
 
     private fun displayScheduleInfo(scheduleInfo : ScheduleVO?){
@@ -192,6 +191,7 @@ class ScheduleActivity : AppCompatActivity() {
                                         binding.btnJoinSchedule.setTextColor(ContextCompat.getColor(this@ScheduleActivity, R.color.main))
                                         binding.btnJoinSchedule.setOnClickListener {
                                             cancelJoinSche(nonNullUserId, scheCode)
+                                            Log.d("joinSchedule", "참가취소 버튼 $nonNullUserId, $scheCode")
                                         }
                                     } else {
                                         binding.btnJoinSchedule.text = "일정 참가하기"
@@ -199,6 +199,7 @@ class ScheduleActivity : AppCompatActivity() {
                                         binding.btnJoinSchedule.setTextColor(ContextCompat.getColor(this@ScheduleActivity, R.color.white))
                                         binding.btnJoinSchedule.setOnClickListener {
                                             joinSche(nonNullUserId, scheCode)
+                                            Log.d("joinSchedule", "참가하기 버튼 $nonNullUserId, $scheCode")
                                         }
 
                                     }
@@ -218,6 +219,7 @@ class ScheduleActivity : AppCompatActivity() {
                                                 intent.putExtra("selected_tab", "M_tab4")
                                                 intent.putExtra("selected_user", "${clickedSchedule.userId}")
                                                 startActivity(intent)
+                                                finish()
                                             }
                                         })
                                 )

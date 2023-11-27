@@ -95,103 +95,6 @@ class MainActivity : AppCompatActivity() {
         }
       }
 
-      // 모임 일정 리스트 가데이터
-      val myscheduleList: List<ScheduleVO> = listOf(
-
-        ScheduleVO(
-          "",
-          "모임명",
-          "가나다라마바사아자차카타파하",
-          "",
-          "2023-11-22T12:00:08.123Z",
-          "광주 동구 제봉로 대성학원 3층",
-          30000,
-          26,
-          20,
-          ""
-        ),
-        ScheduleVO(
-          "",
-          "모임명",
-          "시험 공부 준비합시다~!!",
-          "",
-          "2023-11-22T12:00:08.123Z",
-          "광주 동구 제봉로 대성학원 3층",
-          20000,
-          10,
-          30,
-          ""
-        ),
-        ScheduleVO(
-          "",
-          "모임명",
-          "빼빼로 만들자~",
-          "광주역 3번출구에서 만나요!!!!",
-          "2023-12-22T12:00:08.123Z",
-          "광주역앞10,",
-          15000,
-          10,
-          6,
-          ""
-        )
-
-        // 변수가 서로 다름 지금 지혜누나는 fee를 loca 위치에 써놓고, attendance에 모집중 모집마감이라 써져있음 ,"모임명",추가함 schedulvo에 club_code 추가해서
-
-      )
-
-      // 가입한 모임 리스트 가데이터
-      val joinList: List<MeetingVO> = listOf(
-        MeetingVO(
-          "동구",
-          "가나다라마바사아자차카타파하",
-          "같이 골프 합시다~",
-          "운동",
-          7,
-          20,
-          R.drawable.golf_img.toString(),
-          ""
-        ),
-        MeetingVO(
-          "북구",
-          "동명동 티 타임dddddddddddddddddddd",
-          "우리 같이 차 마셔요~ddddddddddddddddddddd",
-          "취미",
-          5,
-          10,
-          R.drawable.tea_img.toString(),
-          ""
-        ),
-        MeetingVO(
-          "광산구",
-          "열정 모임!!",
-          "열정만 있다면 모두 가능합니다~",
-          "자기계발",
-          8,
-          10,
-          R.drawable.tea_img.toString(),
-          ""
-        ),
-
-        )
-
-
-      // 관심 모임 리스트 가데이터
-      val interestList: List<MeetingVO> = listOf(
-        MeetingVO("남구", "운암동 수영 모임", "헤엄 헤엄~", "운동", 8, 30, R.drawable.tea_img.toString(), ""),
-        MeetingVO("북구", "동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5, 10, R.drawable.tea_img.toString(), ""),
-        MeetingVO(
-          "광산구",
-          "열정 모임!!",
-          "열정만 있다면 모두 가능합니다~",
-          "자기계발",
-          8,
-          10,
-          R.drawable.tea_img.toString(),
-          ""
-        ),
-      )
-
-
       // 환경설정 아이콘
       binding.imgMSettingbtn.setOnClickListener {
         val intent = Intent(this@MainActivity, SettingActivity::class.java)
@@ -216,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         R.id.M_tab2 -> {
           supportFragmentManager.beginTransaction().replace(
             R.id.fl,
-            MymeetingFragment(myscheduleList, joinList, interestList)
+            MymeetingFragment()
           ).commit()
 
           // 여기서 TextView의 텍스트 변경과 ImageView 숨기기

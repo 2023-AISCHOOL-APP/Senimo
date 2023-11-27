@@ -83,6 +83,8 @@ class HomeFragment : Fragment() {
         }
 
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -118,7 +120,7 @@ class HomeFragment : Fragment() {
     }
     override fun onResume() {
         super.onResume()
-        fetchScheduleData()
+        // fetchScheduleData()
     }
 
     // 클럽 전체 회원 목록 새로고침
@@ -251,7 +253,7 @@ class HomeFragment : Fragment() {
                             intent.putExtra("clubInfo", clickedMeeting)
                             intent.putExtra("clubName", clubName)
                             intent.putStringArrayListExtra("staffList", ArrayList(staffList))
-                            Log.d("HomeFragment", "Launching ScheduleActivity")
+                            Log.d("HomeFragment", "${clickedMeeting},${clickedSchedule},${clubName}")
                             startForResultSchedule.launch(intent)
                         } else {
                             // 여기서 showAlertDialogBox 함수를 호출할 때 Context를 전달합니다.
