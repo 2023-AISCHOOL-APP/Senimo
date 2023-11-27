@@ -29,7 +29,7 @@ router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
         conn.beginTransaction(err => {
             if (err) {
                 return res.status(500).json({ error: '트랜잭션 시작 오류: ' + err.message });
-                console.log("트랜잭션 시작 오류",err.message);
+                console.log("meeting트랜잭션 시작 오류",err.message);
             }
 
             // JSON 문자열을 객체로 변환
@@ -45,6 +45,7 @@ router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
                 console.log("0단계 : keywordcode 찾기",err.message);
             }
             const keyword_code = results[0].keyword_code;
+
             // 1단계: 모임 생성
             const insertClubQuery = `
                 INSERT INTO tb_club (user_id, club_name, club_introduce, max_cnt, club_location, keyword_code, club_img) 
@@ -71,40 +72,60 @@ router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
                     }
 
                     const club_code = codeResults[0].club_code;
-
+                    console.log("2단계 생성된 클럽코드", club_code)
+                    console.log("2단계 유저아이디",user_id)
                     // 3단계: 모임장으로 클럽 가입
                     const insertJoinQuery = `
                         INSERT INTO tb_join (club_code, user_id, club_role) VALUES (?, ?, 1);
                     `;
                     conn.query(insertJoinQuery, [club_code, user_id], (err, joinResult) => {
                         if (err) {
+                            console.error("모임장 가입 실패: ", err);
                             return conn.rollback(() => {
                                 res.status(500).json({ error: '모임장 가입 오류: ' + err.message });
                                 console.log(" 3단계: 모임장으로 클럽 가입",err.message);
                             });
                         }
+                        console.log("3단계까지는 무사 완료")
 
-                        // 트랜잭션 커밋
-                        conn.commit(err => {
-                            if (err) {
-                                return conn.rollback(() => {
-                                    res.status(500).json({ error: '트랜잭션 커밋 오류: ' + err.message });
-                                    console.log(" 트랜잭션 커밋",err.message);
-                                });
-                            }
-
-                            // 성공 응답
-                            res.json({
-                                message: '모임이 성공적으로 생성되었습니다.',
-                                club_code,
-                                club_name,
-                                club_introduce,
-                                max_cnt,
-                                club_location,
-                                keyword_name,
-                                club_img: `${config.baseURL}/uploads/${club_img}`
+                        // 4단계 모임인원수 조회
+                    const selectJoinMemberQuery = `SELECT COUNT(user_id) AS joined_members FROM tb_join WHERE club_code = ?; `;
+                    conn.query(selectJoinMemberQuery,[club_code], (err, selectResult) => {
+                        if (err) {
+                            console.error("모임인원수 조회실패",err);
+                            return conn.rollback(() => {
+                                res.status(500).json({ error: '모임인원수 조회실패: ' + err.message });
+                                console.log(" 4단계: 모임인원수 조회실패",err.message);
                             });
-                            console.log("성공적으로 모임을 생성하였습니다.",res)
+                        }
+
+                        const attend_user_cnt = selectResult[0].joined_members;
+                    
+
+                            // 트랜잭션 커밋
+                            conn.commit(err => {
+                                if (err) {
+                                    console.error("커밋 실패: ", err);
+                                    return conn.rollback(() => {
+                                        res.status(500).json({ error: '트랜잭션 커밋 오류: ' + err.message });
+                                        console.log(" 트랜잭션 커밋",err.message);
+                                    });
+                                }
+
+                                // 성공 응답
+                                res.json({
+                                    message: '모임이 성공적으로 생성되었습니다.',
+                                    club_code,
+                                    club_name,
+                                    club_introduce,
+                                    max_cnt,
+                                    club_location,
+                                    keyword_name,
+                                    attend_user_cnt,
+                                    club_img: `${config.baseURL}/uploads/${club_img}`
+                                }); 
+                                console.log("성공적으로 모임을 생성하였습니다.")
+                            });
                         });
                     });
                 });

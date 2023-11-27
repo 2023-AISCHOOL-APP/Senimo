@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.senimoapplication.Club.Activity_club.MakeScheduleActivity
 import com.example.senimoapplication.Club.Activity_club.ScheduleActivity
 import com.example.senimoapplication.Club.VO.AllMemberResVO
@@ -37,6 +38,7 @@ import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentHomeBinding
 import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.PreferenceManager
 import com.example.senimoapplication.server.Token.UserData
 import com.google.gson.JsonObject
 import retrofit2.Call
@@ -50,7 +52,7 @@ class HomeFragment : Fragment() {
     var clickedMeeting: MeetingVO? = null // MeetingVO? 타입으로 선언
     var createMeeting: MeetingVO? = null
     val memberList: ArrayList<MemberVO> = ArrayList()
-    val userId = UserData.userId
+    var userId :String? =null
     var clubCode: String? = null
     var staffList : List<String> = emptyList()
     var joinedList : List<String> = emptyList()
@@ -69,8 +71,7 @@ class HomeFragment : Fragment() {
     // 클럽 전체 회원 목록 새로고침
     fun refreshMemberList(view: View?) {
         if (view != null && userId != null) {
-            clickedMeeting =
-                activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
+            clickedMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
             val server = Server(requireContext())
             val memberManager = MemberManager(server)
             clubCode = clickedMeeting?.club_code
@@ -105,6 +106,7 @@ class HomeFragment : Fragment() {
                                         intent.putExtra("title", "모임 정보 수정")
                                         intent.putExtra("btnTitle", "모임 정보 수정하기")
                                         startForResult.launch(intent)
+                                        //activity?.supportFragmentManager?.beginTransaction()?.remove(this@HomeFragment)?.commit()
                                         Log.d("click", "모임 수정페이지로 값을 전송합니다. ${clickedMeeting}")
                                     }
 
@@ -161,6 +163,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        userId = PreferenceManager.getUser(requireContext())?.user_id
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
         // intent 데이터 관리
@@ -324,7 +327,7 @@ class HomeFragment : Fragment() {
             Log.d("fetchClubInfo_createMeeting", createMeeting.toString())
             //MeetingVO(gu=광산구, title=헬스클럽, content=인생은 100세 시대 운동을 하자!!, keyword=자기계발, attendance=0, allMember=20, imageUri=https://improved-sadly-snake.ngrok-free.app/uploads/IMG_20231119_094239.jpg, club_code=, userId=)
             displayMeetingInfo(createMeeting!!)
-            //createMeeting = null // createMeeting 초기화해서 모임정보 눌렀을떄 안겹치게
+            createMeeting = null // createMeeting 초기화해서 모임정보 눌렀을떄 안겹치게
         } else {
             clickedMeeting?.let { meeting ->
                 val clubCode = meeting.club_code
@@ -382,6 +385,8 @@ class HomeFragment : Fragment() {
             .load(meeting.imageUri) // MeetingVO 객체의 imageUri
             .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
             .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
+//            .diskCacheStrategy(DiskCacheStrategy.NONE) // 캐시 무시
+//            .skipMemoryCache(true) // 메모리 캐시 무시
             .into(binding.clubImage) // 이미지를 표시할 ImageView
     }
 
