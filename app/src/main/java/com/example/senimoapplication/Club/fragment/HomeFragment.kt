@@ -27,7 +27,6 @@ import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
-import com.example.senimoapplication.Club.VO.ScheduleResponse
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.adapter.MemberAdapter
@@ -429,8 +428,4 @@ class ScheduleManager(private val server: Server) {
         call.enqueue(callback)
     }
 
-    fun scheduleInfo(scheCode: String, callback: Callback<ScheduleResponse>) {
-        val call = server.service.scheduleInfo(scheCode)
-        call.enqueue(callback)
-    }
 }

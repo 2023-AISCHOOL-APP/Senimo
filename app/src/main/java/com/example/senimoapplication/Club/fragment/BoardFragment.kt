@@ -19,6 +19,7 @@ import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentBoardBinding
 import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.PreferenceManager
 import com.example.senimoapplication.server.Token.UserData
 import com.google.gson.Gson
 import retrofit2.Call
@@ -41,7 +42,8 @@ class BoardFragment : Fragment(), PostDeleteListener {
         binding = FragmentBoardBinding.inflate(inflater, container, false)
         val view = binding.root
         clickedMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
-        val userId = UserData.userId.toString()
+        Log.d("보드프래그먼트 받아온값", clickedMeeting.toString())
+        val userId = PreferenceManager.getUser(requireContext())?.user_id.toString()
 
         binding.rvBoard.setOnClickListener {
             binding.imgFloatingNewpost.visibility = INVISIBLE
@@ -78,9 +80,10 @@ class BoardFragment : Fragment(), PostDeleteListener {
                 if (response.isSuccessful) {
                     val postList: List<PostVO>? = response.body()?.data
                     val jsonResponse = Gson().toJson(postList) // Convert to JSON string
+                    Log.d("게시글 리스트1", postList.toString())
                     Log.d("게시글 리스트", jsonResponse)
                     if (postList != null) {
-                        val postAdapter = PostAdapter(requireContext(), R.layout.post_list, postList, this@BoardFragment)
+                        val postAdapter = PostAdapter(requireContext(), R.layout.post_list, postList, this@BoardFragment,clickedMeeting)
                         binding.rvBoard.adapter = postAdapter
                         binding.rvBoard.layoutManager = LinearLayoutManager(requireContext())
                         binding.tvAnnounceMain.visibility = GONE

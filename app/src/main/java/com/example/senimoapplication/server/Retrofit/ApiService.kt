@@ -28,6 +28,7 @@ import com.example.senimoapplication.server.Token.TokenValidationResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import com.google.gson.JsonObject
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -178,6 +179,13 @@ interface ApiService {
                   @Part image: MultipartBody.Part?
     ) : Call<WritePostResVO>
 
+    @Multipart
+    @POST("/updatePost") // 서버의 게시물 수정
+    fun updatePost(
+        @Part("postVO") postVO: PostVO,// 수정된 게시물 내용
+        @Part imagePart: MultipartBody.Part? // 첨부 이미지 (optional)
+    ): Call<PostVO>
+
     // 여러 개의 사진을 업로드하는 메소드
     @Multipart
     @POST("/uploadPhotos")
@@ -185,7 +193,7 @@ interface ApiService {
         @Part("galleryInfo") galleryVO: GalleryVO,
         @Part photos: List<MultipartBody.Part>
     ): Call<GalleryVO>
-}
+
 //    @FormUrlEncoded
 //    @POST("/writePost")
 //    fun writePost(@Field("user_id") userId: String,
@@ -203,6 +211,8 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/deletePost")
     fun deletePost(@Field("post_code") postCode: String): Call<DeletePostResVO>
+
+
 }
 
 

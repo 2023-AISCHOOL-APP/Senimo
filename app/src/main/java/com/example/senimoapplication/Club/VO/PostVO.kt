@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
-class PostVO (
+data class PostVO (
     @SerializedName("post_code")
     val postCode: String = "",
     @SerializedName("user_img")
@@ -16,13 +16,14 @@ class PostVO (
     @SerializedName("post_content")
     val postContent: String = "",
     @SerializedName("post_img")
-    val postImg: String = "",
+    val postImg: String? = null,
     @SerializedName("club_role")
     val clubRole: Int = 0,
     @SerializedName("review_count")
     val reviewCount: Int = 0,
     @SerializedName("user_id")
-    val userId: String = ""
+    val userId: String = "",
+
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         postCode = parcel.readString() ?: "",
@@ -62,6 +63,7 @@ class PostVO (
         }
     }
 }
+
 
 data class getPostResVO(
     val data: List<PostVO>
