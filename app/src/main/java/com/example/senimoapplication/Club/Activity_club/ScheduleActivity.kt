@@ -255,7 +255,7 @@ class ScheduleActivity : AppCompatActivity() {
                     if (joinScheRes != null && joinScheRes.rows == "success") {
                         // 버튼이 "일정 참가하기" 상태일 때
                         getScheduleMembers()
-                        binding.tvScheduleMember.text = "${joinedMemberList?.size}"
+                        binding.tvScheduleMember.text = "${joinedMemberList?.size}/${clickedSchedule?.maxNum}명"
                         Toast.makeText(this@ScheduleActivity, "참가 신청 완료", Toast.LENGTH_SHORT).show()
                         binding.btnJoinSchedule.text = "일정 참가 취소하기"
                         binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape)
@@ -282,6 +282,7 @@ class ScheduleActivity : AppCompatActivity() {
                     val cancelJoinScheRes = response.body()
                     if (cancelJoinScheRes != null && cancelJoinScheRes.rows == "success") {
                         getScheduleMembers()
+                        binding.tvScheduleMember.text = "${joinedMemberList?.size}/${clickedSchedule?.maxNum}명"
                         Toast.makeText(this@ScheduleActivity, "일정 참가 취소가 완료되었습니다.", Toast.LENGTH_SHORT).show()
                         binding.btnJoinSchedule.text = "일정 참가하기"
                         binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape_main)

@@ -19,12 +19,9 @@ router.get('/getScheduleMembers/:sche_code', (req, res) => {
           return res.status(500).json({ error: err.message });
       }
 
-      if (results.length > 0) {
+      if (results.length >= 0) {
           console.log("일정 참가 목록", results);
           res.status(200).json({ data: results });
-      } else {
-        console.log("일정 참가자 없음", results);
-          res.status(404).json({ error: "Schedule members not found." });
       }
   });
 });

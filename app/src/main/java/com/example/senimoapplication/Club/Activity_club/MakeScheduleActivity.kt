@@ -45,15 +45,20 @@ class MakeScheduleActivity : ComponentActivity() {
     val view = binding.root
     setContentView(view)
 
-    binding.icBack.setOnClickListener {
-      val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
-      startActivity(intent)
-      finish()
-    }
     //Intent 관리 (From 일정 수정 버튼)
     val clickedSchedule = intent.getParcelableExtra<ScheduleVO>("clickedSchedule")
     val title = intent.getStringExtra("title")
     Log.d("clickedSchedule","받아온 값 확인 $clickedSchedule, $title")
+
+    binding.timePicker.visibility = GONE
+    binding.calendarView.visibility = GONE
+
+    binding.icBack.setOnClickListener {
+      val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
+      intent.putExtra("clubCodeFromMakeSchedule", clickedSchedule?.clubCode)
+      startActivity(intent)
+      finish()
+    }
 
 
     // Intent값이 있는 경우 : 일정 수정하기
@@ -72,12 +77,20 @@ class MakeScheduleActivity : ComponentActivity() {
       binding.tvLetterCnt2.text = binding.etScheduleIntro.text.length.toString()
 
       // 선택된 날짜 캘린더 뷰에 표시
+
       val defaultDateString = DivideDateTime(clickedSchedule.scheDate).first
       binding.btnScheduleDate.text = defaultDateString
       val date = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).parse(defaultDateString)
       val calendar = Calendar.getInstance()
       calendar.time = date
       binding.calendarView.date = calendar.timeInMillis
+      binding.btnScheduleDate.setOnClickListener {
+        binding.calendarView.visibility = VISIBLE
+        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+          val selectedDate = "$year-${month + 1}-$dayOfMonth"
+          binding.btnScheduleDate.text = "$selectedDate"
+        }
+      }
 
       // 선택된 시간 타임피커에 표시
       val defaultTimeString = DivideDateTime(clickedSchedule.scheDate).second
@@ -88,10 +101,25 @@ class MakeScheduleActivity : ComponentActivity() {
       binding.timePicker.currentHour = calendar.get(Calendar.HOUR_OF_DAY)
       binding.timePicker.currentMinute = calendar.get(Calendar.MINUTE)
 
+      binding.btnScheduleTime.setOnClickListener {
+        binding.timePicker.visibility = VISIBLE
+        binding.calendarView.visibility = GONE
+        binding.timePicker.setOnTimeChangedListener { view, hourOfDay, minute ->
+          val selectedHour = if (hourOfDay > 12) {
+            hourOfDay - 12 // 오후 시간을 12시간 형식으로 변환
+          } else if (hourOfDay == 0) {
+            12 // 자정 시간을 12시간 형식으로 변환
+          } else {
+            hourOfDay // 오전 시간은 그대로 유지
+          }
+          val amPm = if (hourOfDay >= 12) "오후" else "오전" // 오전/오후 정보
+          val selectedTime = String.format("%s %02d:%02d", amPm, selectedHour, minute)
+          binding.btnScheduleTime.text = selectedTime
+        }
+      }
     } else {
 
       // 일정 등록 (기본 화면)
-
       val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         // Callback is invoked after the user selects a media item or closes the
         // photo picker.
@@ -117,7 +145,6 @@ class MakeScheduleActivity : ComponentActivity() {
       // 일정 제목 - 입력 글자 수 제한
       var isTitleLimitExceeded = false
       var isIntroLimitExceeded = false
-
       binding.etScheduleName.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
           val currentLength = charSequence?.length ?: 0
@@ -188,29 +215,26 @@ class MakeScheduleActivity : ComponentActivity() {
             hourOfDay // 오전 시간은 그대로 유지
           }
           val amPm = if (hourOfDay >= 12) "오후" else "오전" // 오전/오후 정보
-          val selectedTime = "$amPm $selectedHour:$minute"
+          val selectedTime = String.format("%s %02d:%02d", amPm, selectedHour, minute)
           binding.btnScheduleTime.text = selectedTime
         }
       }
     }
 
-    // 장소 클릭하면 캘린터, 타임 피커 숨기기
+    // 장소 클릭하면 캘린더, 타임 피커 숨기기
     binding.etScheduleLoca.setOnClickListener {
       binding.timePicker.visibility = GONE
       binding.calendarView.visibility = GONE
     }
 
     // 버튼 누르면 인원 수 변경 시키기 (일정 참가자수 상한선 : 50명)
-
     val incrementAmount = 5 // 증가 또는 감소할 인원 수
-
     binding.imgPlus.setOnClickListener {
       if (members + incrementAmount <= 50) {
         members += incrementAmount
         binding.tvAllMember.text = members.toString()
       }
     }
-
     binding.imgMinus.setOnClickListener {
       if (members - incrementAmount >= 0) {
         members -= incrementAmount
@@ -218,10 +242,9 @@ class MakeScheduleActivity : ComponentActivity() {
       }
     }
 
-    // timePicker의 시간을 24시간제로 바꿈
-    //binding.timePicker.setIs24HourView(true)
-    binding.btnSetSchedule.setOnClickListener {
 
+    // 일정 등록/수정하기 버튼
+    binding.btnSetSchedule.setOnClickListener {
       val clubCode = clickedSchedule!!.clubCode
       val scheTitle = binding.etScheduleName.text.toString()
       val scheContent = binding.etScheduleIntro.text.toString()
@@ -238,7 +261,8 @@ class MakeScheduleActivity : ComponentActivity() {
     }
   }
 
-  // calendarView, timePicker에서 선택된 날짜와 시간을 결합하여 하나의 문자열로 반환하는 함수
+
+
   private fun getCombinedDateTime(): String {
     // Calendar 객체를 사용하여 현재 시간을 가져옴
     val selectedDate = Calendar.getInstance().apply {
@@ -285,16 +309,7 @@ class MakeScheduleActivity : ComponentActivity() {
   }
 
   // 서버에 새로운 일정을 생성하는 함수
-  fun makeSche(
-    clubCode: String,
-    scheTitle: String,
-    scheContent: String,
-    scheDate: String,
-    scheLocation: String,
-    maxNum: Int,
-    scheFee: Int,
-    scheImg: String?
-  ) {
+  fun makeSche(clubCode: String, scheTitle: String, scheContent: String, scheDate: String, scheLocation: String, maxNum: Int, scheFee: Int, scheImg: String?) {
     val service = Server(this).service
     val scheduleVO = ScheduleVO("", clubCode, scheTitle, scheContent, scheDate, scheLocation, scheFee, maxNum, 0, scheImg)
     val call = service.createSchedule(scheduleVO)
@@ -310,7 +325,6 @@ class MakeScheduleActivity : ComponentActivity() {
             // 성공적으로 처리되었을 때의 동작을 수행
             Toast.makeText(this@MakeScheduleActivity, "일정이 등록되었습니다", Toast.LENGTH_SHORT).show()
             val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
-            //clickedSchedule = intent.getParcelableExtra("ScheduleInfo") 받는 값 참고 : ScheduleVO?
             intent.putExtra("clickedMeeting",scheduleVO)
             startActivity(intent)
             finish()

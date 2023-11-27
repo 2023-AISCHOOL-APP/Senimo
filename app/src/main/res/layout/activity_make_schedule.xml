@@ -391,7 +391,7 @@
                 android:insetBottom="0dp"
                 android:paddingTop="13dp"
                 android:paddingBottom="13dp"
-                android:text="일정 등록"
+                android:text="일정 등록하기"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:visibility="visible"
