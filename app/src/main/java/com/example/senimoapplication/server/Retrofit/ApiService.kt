@@ -120,9 +120,6 @@ interface ApiService {
         @Field("sche_img") scheImg: String?
     ): Call<MakeScheResVo>
 
-//    @POST("/modifyMeeting")
-//    fun modifyMeeting(@Body meetingVO: MeetingVO): Call<modifyResult>
-
     @Multipart
     @POST("/modifyMeeting")
     fun modifyMeeting(@Part("modifyMeeting") meetingVO: MeetingVO,
@@ -186,14 +183,6 @@ interface ApiService {
         @Part("galleryInfo") galleryVO: GalleryVO,
         @Part photos: List<MultipartBody.Part>
     ): Call<GalleryVO>
-}
-//    @FormUrlEncoded
-//    @POST("/writePost")
-//    fun writePost(@Field("user_id") userId: String,
-//                  @Field("club_code") clubCode: String,
-//                  @Field("post_content") postContent: String?,
-//                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
-
 
     @GET("/getPostContent/{club_code}")
     fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>
