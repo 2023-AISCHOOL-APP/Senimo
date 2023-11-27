@@ -2,6 +2,7 @@ package com.example.senimoapplication.MainPage.fragment_main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +14,16 @@ import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.adapter.ScheduleAdapter
 import com.example.senimoapplication.MainPage.Activity_main.CreateMeetingActivity
+import com.example.senimoapplication.MainPage.VO_main.CombinedDataResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.MeetingListBinding
+import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.PreferenceManager
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MymeetingFragment(private val myscheduleList : List<ScheduleVO>, val joinList : List<MeetingVO>, val interestList : List<MeetingVO> ) : Fragment() {
 
@@ -25,6 +32,39 @@ class MymeetingFragment(private val myscheduleList : List<ScheduleVO>, val joinL
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // 로그인한 사용자 정보 불러오기
+        val userData = PreferenceManager.getUser(requireContext())
+        val userId = userData?.user_id
+
+        if(userId != null){
+            val server = Server(requireContext())
+            MyMeetingsManager(server).getCombinedData(userId, object : Callback<CombinedDataResVO> {
+                override fun onResponse(
+                    call: Call<CombinedDataResVO>, response: Response<CombinedDataResVO>) {
+                    Log.d("getCombinedData", "통신 시작: ")
+                    if(response.isSuccessful){
+                        val fetchdata = response.body()
+                        Log.d("getCombinedData", "${fetchdata}")
+                    }
+                }
+
+                override fun onFailure(call: Call<CombinedDataResVO>, t: Throwable) {
+                    Log.d("getCombinedData", "스택 트레이스: ", t)
+                }
+            })
+        }
+
+        // 내 모임 정보 가져오기(통신) : 모임 일정(ScheduleVO), 가입한 모임(MeetingVO, 관심 모임(MeetingVO)
+
+
+
+
+
+
+
+
+
+
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_mymeeting, container, false)
 
@@ -148,5 +188,12 @@ class MymeetingFragment(private val myscheduleList : List<ScheduleVO>, val joinL
         return view
     }
 
+}
 
+class MyMeetingsManager(private val server: Server) {
+    // 내가 참가하는 일정 데이터 가져오기
+    fun getCombinedData(userId: String?, callback: Callback<CombinedDataResVO>){
+        val call = server.service.getCombinedData(userId)
+        call.enqueue(callback)
+    }
 }

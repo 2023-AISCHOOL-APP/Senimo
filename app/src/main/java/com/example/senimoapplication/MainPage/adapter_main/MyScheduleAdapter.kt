@@ -10,18 +10,19 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.dDate
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.myScheduleDate
 
-class MyScheduleAdapter(val context: Context, val layout: Int, val data : ArrayList<MyScheduleVO>) :
+class MyScheduleAdapter(val context: Context, val layout: Int, val data : ArrayList<ScheduleVO>) :
 RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
 
     // 클릭 리스너 인터페이스 정의
     interface OnItemClickListener {
-        fun onItemClick(schedule: MyScheduleVO)
+        fun onItemClick(schedule: ScheduleVO)
     }
 
     private var itemClickListener : OnItemClickListener? = null

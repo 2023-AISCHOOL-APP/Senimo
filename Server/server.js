@@ -18,7 +18,7 @@ const deleteMember = require('./routes/deleteMember')
 const getSchedules = require('./routes/getSchedules')
 const getScheduleMembers = require('./routes/getScheduleMembers')
 const boardRouter = require('./routes/board')
-
+const getCombinedData = require('./routes/getCombinedData')
 
 app.use(cors())
 
@@ -45,7 +45,7 @@ app.use('/', getSchedules)
 app.use('/', getScheduleMembers)
 app.use('/', deleteMember)
 app.use('/', boardRouter)
-
+app.use('/', getCombinedData)
 
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');

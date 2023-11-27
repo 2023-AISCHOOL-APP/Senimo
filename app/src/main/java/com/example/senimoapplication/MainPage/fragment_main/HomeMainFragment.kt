@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.MainPage.Activity_main.SearchActivity
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.Activity_club.ScheduleActivity
+import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.server.Retrofit.ApiService
@@ -36,7 +37,7 @@ class HomeMainFragment : Fragment() {
     private lateinit var adapter: MeetingAdapter
     private lateinit var myScheduleAdapter: MyScheduleAdapter
     val MeetingList: ArrayList<MeetingVO> = ArrayList()
-    val myScheduleList: ArrayList<MyScheduleVO> = ArrayList()
+    val myScheduleList: ArrayList<ScheduleVO> = ArrayList()
     private lateinit var apiService: ApiService
 
     private var isScrolling = false
@@ -80,7 +81,7 @@ class HomeMainFragment : Fragment() {
         rv_M_MySchedule.layoutManager = LinearLayoutManager(requireContext())
 
         myScheduleAdapter.setOnClickListener(object : MyScheduleAdapter.OnItemClickListener {
-            override fun onItemClick(schedule: MyScheduleVO) {
+            override fun onItemClick(schedule: ScheduleVO) {
                 // 클릭된 아이템에 대한 처리
                 val intent = Intent(requireContext(), ScheduleActivity::class.java)
                 intent.putExtra("scheduleData", schedule)
@@ -317,10 +318,10 @@ class HomeMainFragment : Fragment() {
     private fun fetchLatestSchedule() {
         val userId = "T2"
         val service = Server(requireContext()).service
-        service.getLatestSchedule(userId).enqueue(object : Callback<List<MyScheduleVO>> {
+        service.getLatestSchedule(userId).enqueue(object : Callback<List<ScheduleVO>> {
             override fun onResponse(
-                call: Call<List<MyScheduleVO>>,
-                response: Response<List<MyScheduleVO>>
+                call: Call<List<ScheduleVO>>,
+                response: Response<List<ScheduleVO>>
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let { latestSchedules ->

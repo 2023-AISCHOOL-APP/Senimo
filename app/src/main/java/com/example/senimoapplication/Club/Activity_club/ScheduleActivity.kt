@@ -75,6 +75,7 @@ class ScheduleActivity : AppCompatActivity() {
         staffList = intent.getStringArrayListExtra("staffList")
         scheCode = clickedSchedule?.scheCode
 
+
         // view 관리
         binding.tvClubName2.text = clubName
         val color = ContextCompat.getColor(this, R.color.white)
@@ -118,7 +119,11 @@ class ScheduleActivity : AppCompatActivity() {
 
                         R.id.menu_option2 -> {
                             // 일정 삭제
+                            val intent = Intent(this, ClubActivity::class.java)
+                            intent.putExtra("clickedMeeting", clickedMeeting)
+                            startActivity(intent)
                             showActivityDialogBox(this, "일정을 삭제하시겠어요?", "삭제하기", "일정이 삭제되었습니다.")
+                            finish()
                             true
                         }
 
@@ -148,49 +153,6 @@ class ScheduleActivity : AppCompatActivity() {
             .error(R.drawable.basic_club) // 로딩 실패 시 표시될 이미지
             .into(binding.imgCSchedule)
     }
-
-
-    // 일정 정보 가져오기
-//    private fun getSchedule() {
-//        val server = Server(this)
-//        val scheduleManager = ScheduleManager(server)
-//
-//        scheCode?.let { code ->
-//            ScheduleManager(server).scheduleInfo(code, object : Callback<ScheduleResponse> {
-//                override fun onResponse(
-//                    call: Call<ScheduleResponse>,
-//                    response: Response<ScheduleResponse>
-//                ) {
-//                    Log.d("getScheduleInfo", "통신시작")
-//                    if (response.isSuccessful) {
-//                        thisSchedule = response.body()
-//                        Log.d("getScheduleInfo", "1.통신 성공 : ${thisSchedule}")
-//                        if (thisSchedule != null) {
-//                            Log.d("getScheduleInfo", "2. null이 아닌 경우 ${thisSchedule}")
-//                            binding.tvScheduleName.text = thisSchedule?.scheTitle
-//                            binding.tvScheduleIntro.text = thisSchedule?.scheContent
-//                            binding.tvScheduleTime.text = formatDate("${thisSchedule?.scheDate}")
-//                            binding.tvScheduleLoca.text = thisSchedule?.scheLocation
-//                            binding.tvScheduleFee.text = "${thisSchedule?.fee}원"
-//                            binding.tvScheduleMember.text =
-//                                "${thisSchedule?.attendUserCnt}/${thisSchedule?.maxNum}명"
-//                            Glide.with(this@ScheduleActivity)
-//                                .load(thisSchedule?.scheImg)
-//                                .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
-//                                .error(R.drawable.basic_club) // 로딩 실패 시 표시될 이미지
-//                                .into(binding.imgCSchedule)
-//                        } else {
-//                            Log.d("getScheduleInfo", "일정 정보 가져오기 실패")
-//                        }
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<ScheduleResponse>, t: Throwable) {
-//                    Log.d("getScheduleInfo", "스택 트레이스 :", t)
-//                }
-//            })
-//        }
-//    }
 
     // 일정 참석 회원 목록 가져오기 (참가 상태에 따라 회원목록, 참가자 수 변경)
     private fun getScheduleMembers() {

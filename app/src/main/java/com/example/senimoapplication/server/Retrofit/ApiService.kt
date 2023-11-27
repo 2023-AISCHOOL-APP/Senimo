@@ -19,6 +19,7 @@ import com.example.senimoapplication.Club.VO.WritePostResVO
 import com.example.senimoapplication.Club.VO.getPostResVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
+import com.example.senimoapplication.MainPage.VO_main.CombinedDataResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
@@ -51,7 +52,7 @@ interface ApiService {
     fun uploadImage(@Part image: MultipartBody.Part) : Call<ResponseBody>
 
     @GET("/getLatestSchedule")
-    fun getLatestSchedule(@Query("userId") userId: String?): Call<List<MyScheduleVO>>
+    fun getLatestSchedule(@Query("userId") userId: String?): Call<List<ScheduleVO>>
 
 //    @Multipart
 //    @POST("/db/postImg")
@@ -105,18 +106,8 @@ interface ApiService {
     @POST("/checkUserId")
     fun checkId(@Field("user_id") userId: String): Call<SignUpResVO>
 
-    @FormUrlEncoded
     @POST("/makeSche")
-    fun createSchedule(
-        @Field("club_code") clubCode: String,
-        @Field("sche_title") scheTitle: String,
-        @Field("sche_content") scheContent: String,
-        @Field("sche_date") scheDate: String,
-        @Field("sche_location") scheLocation: String,
-        @Field("max_num") maxNum: Int,
-        @Field("fee") scheFee: Int,
-        @Field("sche_img") scheImg: String?
-    ): Call<MakeScheResVo>
+    fun createSchedule(@Body scheduleVO: ScheduleVO): Call<MakeScheResVo>
 
     @POST("/modifyMeeting")
     fun modifyMeeting(@Body meetingVO: MeetingVO): Call<modifyResult>
@@ -195,6 +186,10 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/deletePost")
     fun deletePost(@Field("post_code") postCode: String): Call<DeletePostResVO>
+
+    @GET("/getCombinedData/{user_id}")
+    fun getCombinedData(@Path("user_id") userId: String?) : Call<CombinedDataResVO>
+
 }
 
 

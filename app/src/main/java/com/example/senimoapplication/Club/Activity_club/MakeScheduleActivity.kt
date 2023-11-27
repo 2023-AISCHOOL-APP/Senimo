@@ -255,6 +255,7 @@ class MakeScheduleActivity : ComponentActivity() {
       set(Calendar.SECOND, 0)
     }
 
+    Log.d("scheDate", " 날짜 데이터 확인${combinedDateTime}")
     // 결합된 날짜와 시간을 UTC 시간대 형식으로 변환하여 문자열로 반환
     return sdf.format(combinedDateTime.time)
   }
@@ -285,16 +286,9 @@ class MakeScheduleActivity : ComponentActivity() {
     scheImg: String?
   ) {
     val service = Server(this).service
-    val call = service.createSchedule(
-      clubCode,
-      scheTitle,
-      scheContent,
-      scheDate,
-      scheLocation,
-      maxNum,
-      scheFee,
-      scheImg
-    )
+    val scheduleVO = ScheduleVO("", clubCode, scheTitle, scheContent, scheDate, scheLocation, scheFee, maxNum, 0, scheImg)
+    val call = service.createSchedule(scheduleVO)
+
     call.enqueue(object : Callback<MakeScheResVo> {
       override fun onResponse(call: Call<MakeScheResVo>, response: Response<MakeScheResVo>) {
         Log.d("makeSche", response.toString())
@@ -305,7 +299,9 @@ class MakeScheduleActivity : ComponentActivity() {
             // 서버 응답이 성공이면
             // 성공적으로 처리되었을 때의 동작을 수행
             Toast.makeText(this@MakeScheduleActivity, "일정이 등록되었습니다", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this@MakeScheduleActivity, ScheduleActivity::class.java)
+            val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
+            //clickedSchedule = intent.getParcelableExtra("ScheduleInfo") 받는 값 참고 : ScheduleVO?
+            intent.putExtra("clickedMeeting",scheduleVO)
             startActivity(intent)
             finish()
           } else {

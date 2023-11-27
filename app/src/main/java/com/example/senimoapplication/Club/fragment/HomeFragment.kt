@@ -26,7 +26,6 @@ import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
-import com.example.senimoapplication.Club.VO.ScheduleResponse
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.adapter.MemberAdapter
@@ -99,6 +98,8 @@ class HomeFragment : Fragment() {
         createMeeting = activity?.intent?.getParcelableExtra("CreateMeeting")
         Log.d("getclickedMeetinghome", clickedMeeting.toString())
 
+        clubCode = activity?.intent?.getStringExtra("clubCodeFromMakeSchedule")
+
         fetchClubInfo()
 
         // 클럽 회원 목록 가져오기 (초기 세팅)
@@ -160,9 +161,10 @@ class HomeFragment : Fragment() {
 
                                     binding.btnNewSchedule.setOnClickListener {
                                         val intent = Intent(view.context, MakeScheduleActivity::class.java)
-                                        val clubCode = clickedMeeting?.club_code.toString()
-                                        intent.putExtra("club_code", clubCode)
-                                        view.context?.startActivity(intent)
+                                        val clubCode = code
+                                        intent.putExtra("club_code", code)
+                                        Log.d("club_code", code)
+                                        view.context.startActivity(intent)
                                     }
                                 } else {
                                     binding.tvMoveEdit.visibility = INVISIBLE
@@ -422,11 +424,6 @@ class MemberManager(private val server: Server) {
 class ScheduleManager(private val server: Server) {
     fun getSchedules(clubCode: String, callback: Callback<AllSchedulesResVO>) {
         val call = server.service.getSchedules(clubCode)
-        call.enqueue(callback)
-    }
-
-    fun scheduleInfo(scheCode: String, callback: Callback<ScheduleResponse>) {
-        val call = server.service.scheduleInfo(scheCode)
         call.enqueue(callback)
     }
 }
