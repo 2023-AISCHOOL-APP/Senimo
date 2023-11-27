@@ -59,7 +59,7 @@ fun showActivityDialogBox(activity: Activity, message: String?, okay: String?, s
     dialog.show()
 }
 
-fun showPostDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?, postCode: String, listener: PostDeleteListener) {
+fun showPostDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?, postCode: String, listener: PostUpdateListener) {
     val dialog = Dialog(activity)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)
