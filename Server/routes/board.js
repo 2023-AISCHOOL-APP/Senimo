@@ -49,11 +49,11 @@ router.post('/writePost', upload.single('picture') ,(req, res) => {
 router.get('/getPostContent/:club_code', (req, res) => {
   console.log('getPostContent', req.body);
   let club_code = req.params.club_code
-
+  
   const getPostSql = `
     select 
       tp.post_code, 
-      tu.user_img, 
+      concat('${config.baseURL}/uploads/', tu.user_img) as user_img, 
       tu.user_name, 
       tp.created_dt, 
       tp.post_content, 
@@ -76,7 +76,7 @@ router.get('/getPostContent/:club_code', (req, res) => {
 
     if (results.length > 0) {
         console.log("안드로이드로 보내는 post content 값", results);
-        res.status(200).json({ data: results });
+        res.status(200).json({ data: results, });
     } else {
         res.status(404).json({ error: "post content not found." });
     }
@@ -89,7 +89,7 @@ router.get('/getReview/:post_code', (req, res) => {
   let post_code = req.params.post_code
 
   const getReviewSql = `
-    select b.user_img, b.user_name, a.review_content, a.reviewed_dt
+    select concat('${config.baseURL}/uploads/', b.user_img) as user_img, b.user_name, a.review_content, a.reviewed_dt
     from tb_review a
     left join tb_user b on a.user_id = b.user_id
     where a.post_code = ?;
@@ -122,6 +122,26 @@ router.post('/deletePost', (req, res) => {
       res.json({ rows: 'failed' });
     } else {
       console.log('게시글 삭제 성공');
+      res.json({ rows: 'success' });
+    }
+  })
+})
+
+router.post('/writeReview', (req, res) => {
+  console.log('댓글 등록 라우터 : ', req.body);
+  const { user_id, post_code, review_content } = req.body;
+
+  const writeReviewSql = `
+    insert into tb_review (user_id, post_code, review_content) values (?,?,?)
+  `
+
+  conn.query(writeReviewSql, [ user_id, post_code, review_content], (err, rows) => {
+    console.log('댓글 : ', rows);
+    if (err) {
+      console.error('댓글 등록 실패 : ', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('댓글 등록 성공');
       res.json({ rows: 'success' });
     }
   })
