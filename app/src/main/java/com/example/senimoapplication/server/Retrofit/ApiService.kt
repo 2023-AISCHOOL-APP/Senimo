@@ -8,11 +8,11 @@ import com.example.senimoapplication.Club.VO.ClubInfoVO
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.GalleryVO
 import com.example.senimoapplication.Club.VO.DeletePostResVO
+import com.example.senimoapplication.Club.VO.DeleteScheResVO
 import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
 import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
-import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
@@ -23,7 +23,6 @@ import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
-import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import com.example.senimoapplication.server.Token.TokenValidationResponse
 import okhttp3.MultipartBody
@@ -196,6 +195,10 @@ interface ApiService {
 
     @POST("/writeReview")
     fun writeReview(@Body writeReviewResVO: WriteReviewResVO): Call<WriteReviewResVO>
+
+    @FormUrlEncoded
+    @POST("/deleteSche")
+    fun deleteSche(@Field("sche_code") scheCode: String?): Call<DeleteScheResVO>
 }
 
 
