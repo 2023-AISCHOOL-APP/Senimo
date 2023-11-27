@@ -17,11 +17,13 @@ import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.fragment.HomeFragment
 import com.example.senimoapplication.Club.fragment.MemberManager
+import com.example.senimoapplication.Common.showAlertDialogBox
 import com.example.senimoapplication.Common.showDeleteDialogBox
 import com.example.senimoapplication.Common.showLeaderUpdateDialogBox
 import com.example.senimoapplication.Common.showUpdateDialogBox
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.R
+import com.example.senimoapplication.server.Token.PreferenceManager
 import com.example.senimoapplication.server.Token.UserData.userId
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -38,6 +40,8 @@ class MemberAdapter(
 ) : RecyclerView.Adapter<MemberAdapter.ViewHolder>() {
 
     val inflater = LayoutInflater.from(context)
+    val userData = PreferenceManager.getUser(context)
+    var userId = userData?.user_id
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvUserName: TextView
@@ -67,14 +71,17 @@ class MemberAdapter(
             1 -> {
                 holder.tvUserLevel.text = "모임장"
                 holder.tvUserLevel.setBackgroundResource(R.drawable.user_level_leader)
+
             }
             2 -> {
                 holder.tvUserLevel.text = "운영진"
                 holder.tvUserLevel.setBackgroundResource(R.drawable.user_level_oper)
+
             }
             3 -> {
                 holder.tvUserLevel.text = "일반"
                 holder.tvUserLevel.setBackgroundResource(R.drawable.user_level_basic)
+                holder.btnMore.visibility = INVISIBLE
             }
         }
 
@@ -92,7 +99,9 @@ class MemberAdapter(
             context.startActivity(intent)
         }
 
-        Log.d("member:","${clubLeader}")
+
+
+        Log.d("leader:","${clubLeader}")
         if(userId == clubLeader){
             holder.btnMore.visibility = VISIBLE
             holder.btnMore.setOnClickListener { view ->
@@ -132,9 +141,15 @@ class MemberAdapter(
                             true
                         }
                         R.id.member_option4 -> {
-                            Log.d("memberAdatper_menu:","tab4")
-                            showDeleteDialogBox(view.context,"이 회원을 모임에서 내보낼까요?","내보내기","회원을 내보냈습니다",user, clubCode,fragment)
-                            Log.d("getclickedMeetinghome:","회원 탈퇴")
+
+                            if(data[position].userId == clubLeader){
+                                showAlertDialogBox(view.context, "모임장은 내보낼 수 없습니다","확인")
+                            }else{
+                                Log.d("getclickedMeetinghome:","강제 회원 탈퇴")
+                                showDeleteDialogBox(view.context,"이 회원을 모임에서 내보낼까요?","내보내기","회원을 내보냈습니다",user, clubCode,fragment)
+                            }
+
+
                             true
                         }
                         else -> false
@@ -146,8 +161,6 @@ class MemberAdapter(
         }else{
             holder.btnMore.visibility = INVISIBLE
         }
-
-
     }
 
     override fun getItemCount(): Int {

@@ -24,7 +24,7 @@ const galleryRouter = require('./routes/gallery')
 app.use(cors())
 
 app.set('port', process.env.PORT || 3333);
-// ngrok tunnel --label edge=edghts_2YKdAEOOgOIr0zDkBYxQMo8mcyg http://localhost:80
+//ngrok tunnel --label edge=edghts_2YKdAEOOgOIr0zDkBYxQMo8mcyg http://localhost:80
 //app.set('port', process.env.PORT || 80);
 
 app.use(bodyParser.json());
@@ -47,6 +47,7 @@ app.use('/', getScheduleMembers)
 app.use('/', deleteMember)
 app.use('/', boardRouter)
 app.use('/',galleryRouter)
+
 
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');

@@ -3,6 +3,7 @@ package com.example.senimoapplication.Club.VO
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import org.jetbrains.annotations.Nullable
 
 data class ScheduleVO(
     @SerializedName("sche_code")
@@ -22,7 +23,7 @@ data class ScheduleVO(
     @SerializedName("max_num")
     val maxNum: Int =0,
     @SerializedName("joined_members")
-    val joinedMembers: Int= 0,
+    var joinedMembers: Int= 0,
     @SerializedName("sche_img")
     var scheImg: String? = null
 )  : Parcelable {
@@ -37,8 +38,6 @@ data class ScheduleVO(
         maxNum = parcel.readInt(),
         joinedMembers = parcel.readInt(),
         scheImg = parcel.readString() ?:""
-
-
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
