@@ -2,12 +2,15 @@ package com.example.senimoapplication.Club.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
@@ -46,7 +49,7 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
         val tvScheduleLoca : TextView // 장소
         val tvScheduleFee : TextView // 회비
         val tvScheduleDate : TextView // 일시
-
+        val image : ImageView
         init {
 
             tvClubScheduleName = view.findViewById(R.id.tv_C_ScheduleName)
@@ -56,6 +59,7 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
             tvScheduleLoca = view.findViewById(R.id.tvRealLoca)
             tvScheduleFee = view.findViewById(R.id.tvRealFee)
             tvScheduleDate = view.findViewById(R.id.tvRealTime)
+            image = view.findViewById(R.id.Img_M_Meeting)
         }
 
     }
@@ -96,6 +100,12 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
         holder.tvScheduleFee.text = "${data[position].scheFee}원"
         holder.tvScheduleDay.text = dDate(data[position].scheDate)
         holder.tvScheduleState.text = if (data[position].maxNum <= data[position].joinedMembers) "모집마감" else "모집중"
+        Log.d("일정불러올 사진",data[position].scheImg.toString())
+        Glide.with(context)
+            .load(data[position].scheImg)
+            .placeholder(R.drawable.ic_loading6) // 로딩 중 표시될 이미지
+            .error(R.drawable.ic_meeting_profile) // 로딩 실패 시 표시될 이미지
+            .into(holder.image)
 
         if (schecode == data[position].scheCode){
             holder.tvScheduleMemNum.text = "${cnt}/${data[position].maxNum.toString()}"

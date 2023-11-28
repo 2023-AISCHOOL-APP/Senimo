@@ -2,6 +2,27 @@ const express = require('express')
 const router = express.Router()
 const conn = require('../config/database');
 const config = require('../config/config')
+const fs = require('fs');
+const multer = require('multer');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+const { UPLOADS_PATH } = require('../config/config');
+
+// multer 설정
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      // 파일이 저장될 경로
+      cb(null, `${UPLOADS_PATH}`);
+  },
+  filename: function (req, file, cb) {
+      // 파일 저장시 사용할 이름
+      const uniqueFilename = uuidv4() + '-' + file.originalname;
+      cb(null, uniqueFilename);
+      console.log("사진이름: ", uniqueFilename);
+  }
+});
+
+const upload = multer({ storage: storage });
 
 // 일정 정보 조회
 router.get('/get/Sche_intro/:sche_code', (req, res) => {
@@ -30,14 +51,18 @@ router.get('/get/Sche_intro/:sche_code', (req, res) => {
 });
 
 // 일정 생성
-router.post('/makeSche', (req, res) => {
+router.post('/makeSche',upload.single('picture'), (req, res) => {
   console.log('makeSche router', req.body);
-  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img } = req.body
+  const makeSche = JSON.parse(req.body.makeSche)
+  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img } = makeSche
   const formattedDate = new Date(sche_date)
+
+  // 파일이 업로드된 경우, 파일명을 사용
+  const scheImgFilename = req.file ? req.file.filename : null;
 
   const makeScheSql = `insert into tb_schedule (club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, sche_img)
     values(?,?,?,?,?,?,?,?)`
-  conn.query(makeScheSql, [club_code, sche_title, sche_content, formattedDate, sche_location, max_num, fee, sche_img], (err, rows) => {
+  conn.query(makeScheSql, [club_code, sche_title, sche_content, formattedDate, sche_location, max_num, fee, scheImgFilename], (err, rows) => {
     console.log('일정 생성 : ', rows);
     if (err) {
       console.error('일정 생성 실패 : ', err);
@@ -48,6 +73,61 @@ router.post('/makeSche', (req, res) => {
     }
   });
 })
+
+// 일정수정
+router.post('/updateSche', upload.single('picture'), (req,res)=> {
+  const getOldImagePathQuery =`select sche_img from tb_schedule where sche_code = ?`;
+  conn.query(getOldImagePathQuery,[sche_code], (err,results) => {
+    if (err) {
+      return res.status(500).send('Database error: ' +err.message);
+  }
+  oldImagePath = results[0]?.post_img;
+  
+  let newImagePath;
+
+  // 기존 이미지가 있고, 새 이미지가 업로드된 경우 기존 이미지 삭제
+  if (imageChanged && req.file) {
+    // 새 이미지 업로드 처리
+    newImagePath = req.file.filename;
+
+    // 기존 이미지 삭제
+      if(oldImagePath){
+          fs.unlink(path.join(`${UPLOADS_PATH}/${oldImagePath}`), (err) => {
+            if (err) console.error('Failed to delete old image:', err);
+        });
+      }
+    } else {
+      //기존 이미지 유지
+      newImagePath = oldImagePath;
+    }
+
+    // 게시글 업데이트 
+    console.log("newImagePath : ",newImagePath)
+    const updateQuery = `
+    UPDATE tb_schedule
+    SET sche_title = ?, sche_content = ?, sche_date = ?, max_num = ?,  fee = ?, sche_img = ?
+    WHERE sche_code = ?;`;
+    conn.query(updateQuery,[sche_title,sche_content,max_num,fee,sche_img,sche_code], (err,result) => {
+      if (err) {
+        // 파일 삭제 로직
+      if (req.file) {
+      const filePath = `${UPLOADS_PATH}/${req.file.filename}`;
+      fs.unlink(filePath, err => {
+      if (err) console.error('Failed to delete uploaded file:', err);
+      });
+    }
+    return res.status(500).json({ error: err.message });
+      console.log("실패")
+
+    } else {
+      res.status(200).json({ 
+      club_img: `${config.baseURL}/uploads/${newImagePath}`})
+      console.log("수정완료")
+    }
+    })
+  }); //getOldImagePathQueryv
+}); //updateSche
+
 
 // 일정 참가
 router.post('/joinSche', (req, res) => {
