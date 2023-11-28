@@ -38,9 +38,8 @@ class EnterMyInfoActivity : AppCompatActivity() {
     val view = binding.root
     setContentView(view)
 
-    val guList = arrayListOf<String>("광주 전체","광산구","남구","동구","북구","서구")
+    val guList = arrayListOf<String>("광산구","남구","동구","북구","서구")
 
-    val gwangjuDistricts = ArrayList<String>()
     val gwangsanList = arrayListOf<String>("고룡동","광산동","남산동","내산동","대산동","덕림동","도덕동","도산동","도천동","도호동","동림동","동산동","동호동","두정동","등임동","명도동",
                                             "명화동","박호동","복룡동","본덕동","북산동","비아동","사호동","산막동","산수동","산월동","산정동","삼거동","삼도동","서봉동","선동","선암동","소촌동","송대동",
                                             "송산동","송정동","송촌동","송치동","송학동","수완동","신가동","신동","신룡동","신창동","신촌동","쌍암동","안청동","양동","양산동","어룡동","연산동","오산동",
@@ -56,14 +55,9 @@ class EnterMyInfoActivity : AppCompatActivity() {
     val westList = arrayListOf<String>("광천동","금호동","내방동","농성동","덕흥동","동천동","마륵동","매월동","벽진동","상무동","서창동","세하동","쌍촌동","양동","용두동","유촌동","치평동",
                                         "풍암동","화정동")
 
-    gwangjuDistricts.addAll(gwangsanList)
-    gwangjuDistricts.addAll(southList)
-    gwangjuDistricts.addAll(eastList)
-    gwangjuDistricts.addAll(northList)
-    gwangjuDistricts.addAll(westList)
 
     val GuAdapter = GuAdapter(R.layout.gu_list, guList, applicationContext)
-    DongAdapter = DongAdapter(R.layout.dong_list, gwangjuDistricts, applicationContext)
+    DongAdapter = DongAdapter(R.layout.dong_list, gwangsanList, applicationContext)
 
     binding.rvGu.adapter = GuAdapter
     binding.rvGu.layoutManager = LinearLayoutManager(this@EnterMyInfoActivity)
@@ -81,9 +75,6 @@ class EnterMyInfoActivity : AppCompatActivity() {
 
         // rvGu의 아이템을 클릭할 때마다 DongAdapter를 새로 업데이트
         when (item) {
-          "광주 전체" -> {
-            DongAdapter.updateData(gwangjuDistricts)
-          }
           "광산구" -> {
             DongAdapter.updateData(gwangsanList)
           }
@@ -101,7 +92,7 @@ class EnterMyInfoActivity : AppCompatActivity() {
           }
           else -> {
             // 기본적으로 gwangjuDistricts를 보여줌
-            DongAdapter.updateData(gwangjuDistricts)
+            DongAdapter.updateData(gwangsanList)
           }
         }
         binding.rvDong.smoothScrollToPosition(0)
