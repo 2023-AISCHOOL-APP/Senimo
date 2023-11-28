@@ -22,7 +22,9 @@ import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Common.DivideDateTime
 import com.example.senimoapplication.databinding.ActivityMakeScheduleBinding
+import com.example.senimoapplication.server.ImageUploader
 import com.example.senimoapplication.server.Server
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,7 +52,7 @@ class MakeScheduleActivity : ComponentActivity() {
     val clickedSchedule = intent.getParcelableExtra<ScheduleVO>("clickedSchedule")
     val title = intent.getStringExtra("title")
     val intentClubCode = intent.getStringExtra("club_code")
-    Log.d("clickedSchedule","받아온 값 확인 $clickedSchedule, $title")
+    Log.d("clickedSchedule","받아온 값 확인 $clickedSchedule, $title,$clickedSchedule")
 
     binding.timePicker.visibility = GONE
     binding.calendarView.visibility = GONE
@@ -68,6 +70,7 @@ class MakeScheduleActivity : ComponentActivity() {
       binding.tvScheduleTitleM.text = title
     }
     if (clickedSchedule != null){
+      Log.d("일정생성", "일정수정")
       binding.etScheduleName.text = Editable.Factory.getInstance().newEditable(clickedSchedule.scheTitle)
       binding.etScheduleIntro.text = Editable.Factory.getInstance().newEditable(clickedSchedule.scheContent)
       binding.etScheduleLoca.text = Editable.Factory.getInstance().newEditable(clickedSchedule.scheLoca)
@@ -77,6 +80,7 @@ class MakeScheduleActivity : ComponentActivity() {
       Glide.with(this).load(clickedSchedule.scheImg).into(binding.imgButton)
       binding.tvLetterCnt.text = binding.etScheduleName.text.length.toString()
       binding.tvLetterCnt2.text = binding.etScheduleIntro.text.length.toString()
+
 
       // 선택된 날짜 캘린더 뷰에 표시
 
@@ -134,8 +138,8 @@ class MakeScheduleActivity : ComponentActivity() {
         // 함수 새로 만들어야함
         // makeSche(intentClubCode?:"", scheTitle, scheContent, scheDate, scheLocation, maxNum, scheFee, scheImg)
       }
-    } else {
-
+    } else { // 일정 생성
+      Log.d("일정생성", "일정생성")
       // 일정 등록 (기본 화면)
       val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         // Callback is invoked after the user selects a media item or closes the
@@ -262,21 +266,31 @@ class MakeScheduleActivity : ComponentActivity() {
 
     // 일정 등록하기 버튼
     binding.btnSetSchedule.setOnClickListener {
-      val scheTitle = binding.etScheduleName.text.toString()
-      val scheContent = binding.etScheduleIntro.text.toString()
-      val scheDate = getUserSelectedDateTime()
-      val scheLocation = binding.etScheduleLoca.text.toString()
-      val maxNum = binding.tvAllMember.text.toString().toInt()
-      val scheFee = binding.etScheduleFee.text.toString().toInt()
-      val scheImg = imageName.toString()
-
-      Log.d("datecheck", "${scheDate}")
+        Log.d("등록버튼",binding.etScheduleName.text.toString())
+        val scheduleVO = ScheduleVO(
+        clubCode = intentClubCode.toString(),
+        scheTitle = binding.etScheduleName.text.toString(),
+        scheContent = binding.etScheduleIntro.text.toString(),
+        // getCombinedDateTime() 함수를 사용하여 날짜와 시간을 결합하여 scheDate 변수에 할당
+        scheDate = getUserSelectedDateTime(),
+        scheLoca = binding.etScheduleLoca.text.toString(),
+        maxNum = binding.tvAllMember.text.toString().toInt(),
+        scheFee = binding.etScheduleFee.text.toString().toInt(),
+        scheImg = imageName.toString()
+      )
+      Log.d("스케줄 보내는값", scheduleVO.toString())
+      // 이미지 URI가 있으면 이미지와 함께 일정 정보 전송
+      imageUri?.let {
+        val imagePart = ImageUploader(this).prepareImagePart(it)
+        makeSche(scheduleVO, imagePart)
+      } ?: run {
+        // 이미지 URI가 없는 경우에는 일정 정보만 전송
+        makeSche(scheduleVO,null)
+      }
+      Log.d("scheDate", scheduleVO.scheDate)
       // makeSche 함수를 호출하여 일정을 생성하고 필요한 매개변수들을 전달
-      makeSche(intentClubCode?:"", scheTitle, scheContent, scheDate, scheLocation, maxNum, scheFee, scheImg)
     }
   }
-
-
 
   private fun getUserSelectedDateTime(): String {
     val selectedDate = binding.btnScheduleDate.text.toString() // 사용자가 선택한 날짜
@@ -312,25 +326,23 @@ class MakeScheduleActivity : ComponentActivity() {
   }
 
   // 서버에 새로운 일정을 생성하는 함수
-  fun makeSche(clubCode: String, scheTitle: String, scheContent: String, scheDate: String, scheLocation: String, maxNum: Int, scheFee: Int, scheImg: String?) {
+  fun makeSche(scheduleVO: ScheduleVO, imagePart: MultipartBody.Part?) {
     val service = Server(this).service
-    val scheduleVO = ScheduleVO("", clubCode, scheTitle, scheContent, scheDate, scheLocation, scheFee, maxNum, 0, scheImg?:"")
-    val call = service.createSchedule(scheduleVO)
-
+    val call = service.createSchedule(scheduleVO,imagePart)
     call.enqueue(object : Callback<MakeScheResVo> {
       override fun onResponse(call: Call<MakeScheResVo>, response: Response<MakeScheResVo>) {
         Log.d("makeSche", response.toString())
         if (response.isSuccessful) {
           val makeScheRes = response.body()
           if (makeScheRes != null && makeScheRes.rows == "success") {
-            Log.d("clubCode", clubCode)
+            Log.d("clubCode", scheduleVO.clubCode)
             // 서버 응답이 성공이면
             // 성공적으로 처리되었을 때의 동작을 수행
             Toast.makeText(this@MakeScheduleActivity, "일정이 등록되었습니다", Toast.LENGTH_SHORT).show()
             val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
             intent.putExtra("clickedMeeting",scheduleVO)
             startActivity(intent)
-            Log.d("makeschedule", scheDate)
+            Log.d("makeschedule", scheduleVO.scheDate)
 
             finish()
           } else {

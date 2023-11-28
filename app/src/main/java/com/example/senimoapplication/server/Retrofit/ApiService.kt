@@ -114,8 +114,14 @@ interface ApiService {
     @POST("/checkUserId")
     fun checkId(@Field("user_id") userId: String): Call<SignUpResVO>
 
+//    @POST("/makeSche")
+//    fun createSchedule(@Body scheduleVO: ScheduleVO): Call<MakeScheResVo>
+
+    @Multipart
     @POST("/makeSche")
-    fun createSchedule(@Body scheduleVO: ScheduleVO): Call<MakeScheResVo>
+    fun createSchedule(@Part ("makeSche")scheduleVO: ScheduleVO,
+                       @Part image: MultipartBody.Part?
+    ): Call<MakeScheResVo>
 
     @Multipart
     @POST("/modifyMeeting")
