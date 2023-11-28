@@ -54,10 +54,10 @@ class EnterMyInfoActivity : AppCompatActivity() {
                                         "충효동","태령동","풍향동","화암동","효령동")
     val westList = arrayListOf<String>("광천동","금호동","내방동","농성동","덕흥동","동천동","마륵동","매월동","벽진동","상무동","서창동","세하동","쌍촌동","양동","용두동","유촌동","치평동",
                                         "풍암동","화정동")
-
+    val emptyDongList = arrayListOf<String>()
 
     val GuAdapter = GuAdapter(R.layout.gu_list, guList, applicationContext)
-    DongAdapter = DongAdapter(R.layout.dong_list, gwangsanList, applicationContext)
+    DongAdapter = DongAdapter(R.layout.dong_list, emptyDongList, applicationContext)
 
     binding.rvGu.adapter = GuAdapter
     binding.rvGu.layoutManager = LinearLayoutManager(this@EnterMyInfoActivity)
