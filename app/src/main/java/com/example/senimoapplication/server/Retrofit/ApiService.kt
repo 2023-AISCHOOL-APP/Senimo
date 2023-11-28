@@ -124,7 +124,13 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/updateInterestedClub")
-    fun updateInterestStatus(@FieldMap params: Map<String, String>): Call<InterestedResVO>
+    fun updateInterestStatus(@Field ("club_code") clubCode : String,
+                             @Field ("user_id") userId :String): Call<InterestedResVO>
+
+    @FormUrlEncoded
+    @POST("/initialInterestedClub")
+    fun initialInterestedClub(@Field ("club_code") clubCode : String,
+                             @Field ("user_id") userId :String): Call<InterestedResVO>
 
     @POST("/getAllMembers/{clubCode}")
     fun getAllMembers(@Path("clubCode") clubCode: String): Call<AllMemberResVO>
