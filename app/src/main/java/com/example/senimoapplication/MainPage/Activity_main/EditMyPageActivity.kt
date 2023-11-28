@@ -54,7 +54,7 @@ class EditMyPageActivity : AppCompatActivity() {
             Log.d("EditMyPageActivity", "가져온 데이터: $userData")
 
             Glide.with(this)
-                .load(imageName)
+                .load(userData.user_img)
                 .placeholder(R.drawable.animation_loading)
                 .error(R.drawable.ic_profile_circle)
                 .centerCrop()
@@ -78,9 +78,9 @@ class EditMyPageActivity : AppCompatActivity() {
 
 
 //        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
-//        // 인텐트에서 소개글 길이 받기
-//        val introLength = intent.getIntExtra("introLength", 0)
-//        binding.tvMLetterCntMyPage.text = introLength.toString()
+        // 인텐트에서 소개글 길이 받기
+        val introLength = intent.getIntExtra("introLength", 0)
+        binding.tvMLetterCntMyPage.text = introLength.toString()
 
         // 사진 1장 선택
         val pickMediaMain = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -94,7 +94,7 @@ class EditMyPageActivity : AppCompatActivity() {
                 imageUri = uri // 클래스 수준 변수에 URI 저장
                 imageName = getFileName(uri)
                 Glide.with(this)
-                    .load(imageName)
+                    .load(uri)
                     .error(R.drawable.ic_profile_circle) // 로드 실패 시 기본 이미지
                     .into(binding.imgMEditMypageImg)
 
@@ -103,7 +103,7 @@ class EditMyPageActivity : AppCompatActivity() {
             }
         }
 
-//        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
+//        var myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
 //        // 뷰에 데이터 설정
 //        Glide.with(this).load(myProfile.img).into(binding.imgMEditMypageImg)
 //        binding.etMUserName.setText(myProfile.name)
@@ -301,28 +301,28 @@ class EditMyPageActivity : AppCompatActivity() {
             call.enqueue(object : retrofit2.Callback<getMyPageVO> {
                 override fun onResponse(call: Call<getMyPageVO>, response: Response<getMyPageVO>) {
                     if (response.isSuccessful) {
-                        // val returnIntent = Intent()
-                        val updateProfile = MyPageVO(
-                            img = imageUriString,
-                            name = updatedName,
-                            gu = selectedGu,
-                            dong = selectedDong,
-                            birth = updatedBirth,
-                            gender = updatedGender,
-                            intro = updatedIntro,
-                            userId = userId.toString()
-                            // badges = listOf() // 뱃지 정보는 현재 상황에 맞게 설정
-                        )
-//                        returnIntent.putExtra("updatedProfileData", updateProfile)
-//                        setResult(Activity.RESULT_OK, returnIntent)
+                         val returnIntent = Intent()
+//                        val updateProfile = MyPageVO(
+//                            img = imageUriString,
+//                            name = updatedName,
+//                            gu = selectedGu,
+//                            dong = selectedDong,
+//                            birth = updatedBirth,
+//                            gender = updatedGender,
+//                            intro = updatedIntro,
+//                            userId = userId.toString()
+//                            // badges = listOf() // 뱃지 정보는 현재 상황에 맞게 설정
+//                        )
+                        returnIntent.putExtra("updatedProfileData", updateProfile)
+                        setResult(Activity.RESULT_OK, returnIntent)
                         Log.d("EditInfo","보내기:${updateProfile}")
                     } else {
-                        Log.e("EditMyPageActivity", "Request not successful. Response code: ${response.code()}")
+                        Log.e("EditInfo", "Request not successful. Response code: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<getMyPageVO>, t: Throwable) {
-                    Log.e("EditMyPageActivity", "updatedProfileData 네트워크 요청실패", t)
+                    Log.e("EditProfile", "updatedProfileData 네트워크 요청실패", t)
                 }
 
             })
