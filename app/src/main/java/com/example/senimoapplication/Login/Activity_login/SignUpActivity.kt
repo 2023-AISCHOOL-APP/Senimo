@@ -73,7 +73,6 @@ class SignUpActivity : AppCompatActivity() {
         intent.putExtra("user_Id", userId)
         intent.putExtra("user_Pw", userPw)
         startActivity(intent)
-        overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right)
         finish()
       } else {
         // 사용자에게 유효한 데이터 입력 요청 메시지 표시

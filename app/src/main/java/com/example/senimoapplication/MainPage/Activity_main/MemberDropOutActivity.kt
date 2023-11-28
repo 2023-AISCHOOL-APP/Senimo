@@ -1,14 +1,13 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import com.example.senimoapplication.Login.Activity_login.IntroActivity
-import com.example.senimoapplication.Login.Activity_login.LoginActivity
+import androidx.activity.OnBackPressedCallback
+import com.example.senimoapplication.Common.showDropOutDialogBox
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityMemberDropOutBinding
+import com.example.senimoapplication.server.Token.PreferenceManager
 
 class MemberDropOutActivity : AppCompatActivity() {
 
@@ -22,6 +21,11 @@ class MemberDropOutActivity : AppCompatActivity() {
         binding = ActivityMemberDropOutBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val userData = PreferenceManager.getUser(this)
+        val userName = userData?.user_name.toString()
+
+        binding.tvDropOutUserName.text = userName
 
         // 초기 상태 설정
         binding.imgMCheck.setImageResource(R.drawable.ic_checkbox_gray30)
@@ -41,11 +45,14 @@ class MemberDropOutActivity : AppCompatActivity() {
         }
 
         binding.btnSetDropout.setOnClickListener {
+            // 클릭 시 showBoardDialogBox 함수 호출
             if(isMainBackground) {
-                val intent = Intent(this@MemberDropOutActivity,IntroActivity::class.java)
-                startActivity(intent)
-                finish()
-                Toast.makeText(this@MemberDropOutActivity,"탈퇴되었습니다.",Toast.LENGTH_SHORT).show()
+                showDropOutDialogBox(
+                this@MemberDropOutActivity,
+                "시니모를 탈퇴하시겠어요?",
+                "탈퇴하기",
+                "회원탈퇴가 완료되었습니다."
+            )
             }
 
         }
@@ -55,5 +62,14 @@ class MemberDropOutActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@MemberDropOutActivity,SettingActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, callback)
     }
 }

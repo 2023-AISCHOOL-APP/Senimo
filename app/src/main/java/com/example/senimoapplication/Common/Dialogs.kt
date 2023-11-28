@@ -328,3 +328,32 @@ fun showAlertDialogBox(context: Context, message: String?, okay: String?) {
     dialog.show()
 }
 
+// 로그아웃 다이얼로그
+fun showDropOutDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?) {
+    val dialog = Dialog(activity)
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.setCancelable(false)
+    dialog.setContentView(R.layout.layout_custom_dialog)
+    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+    val tvMessage: TextView = dialog.findViewById(R.id.tvMessage)
+    val btnOkay: Button = dialog.findViewById(R.id.btnOkay)
+    val btnCancel: Button = dialog.findViewById(R.id.btnCancel)
+
+    tvMessage.text = message
+    btnOkay.text = okay
+    btnOkay.setOnClickListener {
+        Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
+        dialog.dismiss()
+        PreferenceManager.clearToken(activity)
+        // 회원탈퇴 후 처리 (예: 로그인 화면으로 이동)
+        val intent = Intent(activity, IntroActivity::class.java)
+        activity.startActivity(intent)
+    }
+    btnCancel.setOnClickListener {
+        dialog.dismiss()
+    }
+
+    dialog.show()
+}
+
