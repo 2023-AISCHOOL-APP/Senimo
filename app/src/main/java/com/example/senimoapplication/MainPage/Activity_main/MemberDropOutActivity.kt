@@ -1,16 +1,13 @@
 package com.example.senimoapplication.MainPage.Activity_main
 
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.Common.showDropOutDialogBox
-import com.example.senimoapplication.Login.Activity_login.IntroActivity
-import com.example.senimoapplication.Login.Activity_login.LoginActivity
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityMemberDropOutBinding
+import com.example.senimoapplication.server.Token.PreferenceManager
 
 class MemberDropOutActivity : AppCompatActivity() {
 
@@ -24,6 +21,11 @@ class MemberDropOutActivity : AppCompatActivity() {
         binding = ActivityMemberDropOutBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val userData = PreferenceManager.getUser(this)
+        val userName = userData?.user_name.toString()
+
+        binding.tvDropOutUserName.text = userName
 
         // 초기 상태 설정
         binding.imgMCheck.setImageResource(R.drawable.ic_checkbox_gray30)
