@@ -21,6 +21,7 @@ const boardRouter = require('./routes/board')
 const getCombinedData = require('./routes/getCombinedData')
 const editMyProfile = require('./routes/editMyProfile')
 const galleryRouter = require('./routes/gallery')
+const initialInterestedClub = require('./routes/initialInterestedClub')
 
 
 app.use(cors())
@@ -38,7 +39,7 @@ app.use('/', appMainRouter)
 app.use('/', clubMainRouter)
 app.use('/', scheduleRouter)
 app.use('/', userRouter)
-app.use('/',createMeeting)
+app.use('/', createMeeting)
 app.use('/', modifyMeeting)
 app.use('/', updateInterestedClub)
 app.use('/', getAllMembers)
@@ -52,6 +53,7 @@ app.use('/', boardRouter)
 app.use('/', getCombinedData)
 app.use('/', editMyProfile)
 app.use('/', galleryRouter)
+app.use('/', initialInterestedClub)
 
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');

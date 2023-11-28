@@ -103,7 +103,6 @@ class HomeFragment : Fragment() {
         fetchClubInfo()
 
         // 클럽 회원 목록 가져오기 (초기 세팅)
-        clickedMeeting = activity?.intent?.getParcelableExtra("clickedMeeting")
         clubCode = clickedMeeting?.club_code
         clubName = clickedMeeting?.title
         clubLeader = clickedMeeting?.userId
@@ -114,10 +113,6 @@ class HomeFragment : Fragment() {
 
         return view
 
-    }
-    override fun onResume() {
-        super.onResume()
-        // fetchScheduleData()
     }
 
     // 클럽 전체 회원 목록 새로고침
