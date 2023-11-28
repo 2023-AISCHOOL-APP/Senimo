@@ -131,7 +131,7 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
             data.size // 플래그에 따라 항목 수가 달라집니다.
         } else {
             // 최대 2개까지만 표시
-            min(2, data.size)
+            min(3, data.size)
         }
     }
 
