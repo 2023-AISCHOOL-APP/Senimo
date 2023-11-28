@@ -62,7 +62,7 @@ router.post('/makeSche',upload.single('picture'), (req, res) => {
 
   const makeScheSql = `insert into tb_schedule (club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, sche_img)
     values(?,?,?,?,?,?,?,?)`
-  conn.query(makeScheSql, [club_code, sche_title, sche_content, formattedDate, sche_location, max_num, fee, sche_img], (err, rows) => {
+  conn.query(makeScheSql, [club_code, sche_title, sche_content, formattedDate, sche_location, max_num, fee, scheImgFilename], (err, rows) => {
     console.log('일정 생성 : ', rows);
     if (err) {
       console.error('일정 생성 실패 : ', err);

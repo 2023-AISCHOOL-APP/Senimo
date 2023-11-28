@@ -14,7 +14,7 @@ router.get('/getUserProfile', (req, res) => {
 
     // 데이터베이스에서 사용자 정보를 검색하는 쿼리
     const query = `
-    SELECT user_name, gender, birth_year, user_gu, user_dong, user_introduce, CONCAT('${config.baseURL}/uploads/', user_img) AS user_img
+    SELECT user_id, user_name, gender, birth_year, user_gu, user_dong, user_introduce, CONCAT('${config.baseURL}/uploads/', user_img) AS user_img
     FROM tb_user
     WHERE user_id = ?;
 `;
