@@ -27,6 +27,7 @@ import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.UserBadgeResponse
+import com.example.senimoapplication.MainPage.VO_main.UserDropOutResVO
 import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
@@ -113,8 +114,14 @@ interface ApiService {
     @POST("/checkUserId")
     fun checkId(@Field("user_id") userId: String): Call<SignUpResVO>
 
+//    @POST("/makeSche")
+//    fun createSchedule(@Body scheduleVO: ScheduleVO): Call<MakeScheResVo>
+
+    @Multipart
     @POST("/makeSche")
-    fun createSchedule(@Body scheduleVO: ScheduleVO): Call<MakeScheResVo>
+    fun createSchedule(@Part ("makeSche")scheduleVO: ScheduleVO,
+                       @Part image: MultipartBody.Part?
+    ): Call<MakeScheResVo>
 
     @Multipart
     @POST("/modifyMeeting")
@@ -240,7 +247,9 @@ interface ApiService {
     @POST("/deleteSche")
     fun deleteSche(@Field("sche_code") scheCode: String?): Call<DeleteScheResVO>
 
-
+    @FormUrlEncoded
+    @POST("userDropOut")
+    fun userDropOut(@Field("user_id") userId: String?): Call<UserDropOutResVO>
 }
 
 

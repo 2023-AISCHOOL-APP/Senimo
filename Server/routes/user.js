@@ -140,4 +140,22 @@ router.post('/checkUserId', (req, res) => {
   });
 })
 
+// 회원 탈퇴
+router.post('/userDropOut', (req, res) => {
+  console.log('일정 삭제 라우터', req.body);
+  const { user_id } = req.body;
+
+  const dropOutSql = `delete from tb_user where user_id = ?`
+
+  conn.query(dropOutSql, [user_id], (err, rows) => {
+    if (err) {
+      console.error('회원 탈퇴 실패', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('회원 탈퇴 성공');
+      res.json({ rows: 'success' });
+    }
+  })
+})
+
 module.exports = router;

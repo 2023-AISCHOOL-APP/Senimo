@@ -52,8 +52,7 @@ fun showActivityDialogBox(
     tvMessage.text = message
     btnOkay.text = okay
     btnOkay.setOnClickListener {
-        // 일정 삭제 함수 호출
-        onDeleteSchedule.invoke()
+        onDeleteSchedule.invoke() // 일정 삭제 함수 호출
         Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
     }
@@ -328,8 +327,8 @@ fun showAlertDialogBox(context: Context, message: String?, okay: String?) {
     dialog.show()
 }
 
-// 로그아웃 다이얼로그
-fun showDropOutDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?) {
+// 회원탈퇴 다이얼로그
+fun showDropOutDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?, onUserDropOut: () -> Unit) {
     val dialog = Dialog(activity)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)
@@ -343,12 +342,10 @@ fun showDropOutDialogBox(activity: Activity, message: String?, okay: String?, su
     tvMessage.text = message
     btnOkay.text = okay
     btnOkay.setOnClickListener {
+        onUserDropOut.invoke() // 회원 탈퇴 함수 호출
         Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
         PreferenceManager.clearToken(activity)
-        // 회원탈퇴 후 처리 (예: 로그인 화면으로 이동)
-        val intent = Intent(activity, IntroActivity::class.java)
-        activity.startActivity(intent)
     }
     btnCancel.setOnClickListener {
         dialog.dismiss()

@@ -27,7 +27,8 @@ data class ScheduleVO(
     @SerializedName("sche_img")
     var scheImg: String? = null,
     @SerializedName("club_name")
-    var clubName : String? = null
+    var clubName : String? = null,
+    val imageChanged: Boolean = false
 
 )  : Parcelable {
     constructor(parcel: Parcel) : this(

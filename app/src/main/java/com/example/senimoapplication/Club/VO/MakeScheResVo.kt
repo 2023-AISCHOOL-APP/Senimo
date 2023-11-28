@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName
 data class MakeScheResVo (
   @SerializedName("rows")
   val rows: String,
-
   @SerializedName("sche_code")
   val scheCode : String?,
   @SerializedName("club_code")
@@ -23,5 +22,5 @@ data class MakeScheResVo (
   @SerializedName("fee")
   val scheFee: Int?,
   @SerializedName("sche_img")
-  val scheImg: String?
+  val scheImg: String? =null
 )
