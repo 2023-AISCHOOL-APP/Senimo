@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
       // 파일 저장시 사용할 이름
       const uniqueFilename = uuidv4() + '-' + file.originalname;
       cb(null, uniqueFilename);
-      console.log("사진이름: ", uniqueFilename);
+      // console.log("사진이름: ", uniqueFilename);
   }
 });
 
@@ -26,7 +26,7 @@ const upload = multer({ storage: storage });
 
 // 게시물 등록
 router.post('/writePost', upload.single('picture') ,(req, res) => {
-  console.log('writePost router', req.body);
+  // console.log('writePost router', req.body);
   const writePost = JSON.parse(req.body.writePostResVO)
   const { user_id, club_code, post_content} = writePost
 
@@ -37,7 +37,7 @@ router.post('/writePost', upload.single('picture') ,(req, res) => {
     values(?,?,?,?)`
 
   conn.query(writePostSql, [user_id, club_code, post_content, postImgFilename], (err, rows) => {
-    console.log('게시글 : ', rows);
+    // console.log('게시글 : ', rows);
     if (err) {
       console.error('게시글 등록 실패 : ', err);
       res.json({ rows: 'failed' });
@@ -50,8 +50,8 @@ router.post('/writePost', upload.single('picture') ,(req, res) => {
 
 // 게시물 수정
 router.post('/updatePost',upload.single('picture'), (req,res) => {
-  console.log('게시물 수정 받아온값 : ', req.body);
-  console.log('게시물 수정 받아온값 : ', req.file);
+  // console.log('게시물 수정 받아온값 : ', req.body);
+  // console.log('게시물 수정 받아온값 : ', req.file);
   // {
   //   fieldname: 'picture',
   //   originalname: '1000000034.jpg',
@@ -64,7 +64,7 @@ router.post('/updatePost',upload.single('picture'), (req,res) => {
   // }
   const postData = JSON.parse(req.body.postVO);
   const {post_code,post_content,post_img,user_id,imageChanged} = postData;
-  console.log('게시물 수정 받아온값 : ', post_img);
+  // console.log('게시물 수정 받아온값 : ', post_img);
   let oldImagePath = null;// 변수를 외부에 정의
 
   const getOldImagePathQuery = `select post_img from tb_post where post_code = ?`;
@@ -95,7 +95,7 @@ router.post('/updatePost',upload.single('picture'), (req,res) => {
 
     // 게시글 업데이트
     
-    console.log("newImagePath : ",newImagePath)
+    // console.log("newImagePath : ",newImagePath)
     const updateQuery =`
     update tb_post
     set post_content = ?,  post_img = ?
@@ -128,7 +128,7 @@ router.post('/updatePost',upload.single('picture'), (req,res) => {
 
 // 게시글 리스트 가져오기
 router.get('/getPostContent/:club_code', (req, res) => {
-  console.log('getPostContent', req.body);
+  // console.log('getPostContent', req.body);
   let club_code = req.params.club_code
   
   const getPostSql = `
@@ -156,7 +156,7 @@ router.get('/getPostContent/:club_code', (req, res) => {
     }
 
     if (results.length > 0) {
-        console.log("안드로이드로 보내는 post content 값", results);
+        // console.log("안드로이드로 보내는 post content 값", results);
         res.status(200).json({ data: results, });
     } else {
         res.status(404).json({ error: "post content not found." });
@@ -166,7 +166,7 @@ router.get('/getPostContent/:club_code', (req, res) => {
 
 // 댓글 리스트 가져오기
 router.get('/getReview/:post_code', (req, res) => {
-  console.log('getReview', req.body);
+  // console.log('getReview', req.body);
   let post_code = req.params.post_code
 
   const getReviewSql = `
@@ -182,7 +182,7 @@ router.get('/getReview/:post_code', (req, res) => {
     }
 
     if (results.length > 0) {
-        console.log("안드로이드로 보내는 review content 값", results);
+        // console.log("안드로이드로 보내는 review content 값", results);
         res.status(200).json({ data: results });
     } else {
         res.status(404).json({ error: "review content not found." });

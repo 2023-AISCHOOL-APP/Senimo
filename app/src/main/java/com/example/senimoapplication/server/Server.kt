@@ -14,7 +14,7 @@ class Server(private val context: Context) {
 
         Retrofit.Builder()
              //.baseUrl("https://improved-sadly-snake.ngrok-free.app") // 원격서버 URL
-            .baseUrl("http://172.16.11.223:3333") // 도운IP 같은 와이파로 접근할때
+            .baseUrl("http://192.168.70.44:3333") // 도운IP 같은 와이파로 접근할때
            // .baseUrl("http://192.168.70.69:3333") // 희준IP
             //.baseUrl("http://192.168.70.151:3333") // 지혜IP
             .client(client)
