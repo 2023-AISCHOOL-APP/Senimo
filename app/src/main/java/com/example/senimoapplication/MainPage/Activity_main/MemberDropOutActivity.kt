@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import com.example.senimoapplication.Common.showDropOutDialogBox
 import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.Login.Activity_login.LoginActivity
 import com.example.senimoapplication.R
@@ -22,11 +23,13 @@ class MemberDropOutActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.btnSetDropout.setOnClickListener {
-            val intent = Intent(this@MemberDropOutActivity,IntroActivity::class.java)
-            startActivity(intent)
-            finish()
-            Toast.makeText(this@MemberDropOutActivity,"탈퇴되었습니다.",Toast.LENGTH_SHORT).show()
-
+            // 클릭 시 showBoardDialogBox 함수 호출
+            showDropOutDialogBox(
+                this@MemberDropOutActivity,
+                "시니모를 탈퇴하시겠어요?",
+                "탈퇴하기",
+                "회원탈퇴가 완료되었습니다."
+            )
         }
 
         binding.imgMBackbtnToSetting.setOnClickListener {
