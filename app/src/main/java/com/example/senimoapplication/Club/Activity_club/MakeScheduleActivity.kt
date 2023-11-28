@@ -122,17 +122,21 @@ class MakeScheduleActivity : ComponentActivity() {
 
       // 일정 수정하기 버튼
       binding.btnSetSchedule.setOnClickListener {
+        val scheCode = clickedSchedule.scheCode
+        val clubCode = clickedSchedule.clubCode
         val scheTitle = binding.etScheduleName.text.toString()
         val scheContent = binding.etScheduleIntro.text.toString()
         val scheDate = getUserSelectedDateTime()
         val scheLocation = binding.etScheduleLoca.text.toString()
         val maxNum = binding.tvAllMember.text.toString().toInt()
+        val joinedMembers = clickedSchedule.joinedMembers
         val scheFee = binding.etScheduleFee.text.toString().toInt()
         val scheImg = imageName.toString()
+        val clubName = clickedSchedule.clubName
 
         Log.d("datecheck", "${scheDate}")
         // 함수 새로 만들어야함
-        // makeSche(intentClubCode?:"", scheTitle, scheContent, scheDate, scheLocation, maxNum, scheFee, scheImg)
+        updateSche(scheCode,clubCode, scheTitle, scheContent, scheDate, scheLocation, scheFee, maxNum, joinedMembers, scheImg, clubName)
       }
     } else {
 
@@ -236,6 +240,20 @@ class MakeScheduleActivity : ComponentActivity() {
           binding.btnScheduleTime.text = selectedTime
         }
       }
+
+      // 일정 등록하기 버튼
+      binding.btnSetSchedule.setOnClickListener {
+        val scheTitle = binding.etScheduleName.text.toString()
+        val scheContent = binding.etScheduleIntro.text.toString()
+        val scheDate = getUserSelectedDateTime()
+        val scheLocation = binding.etScheduleLoca.text.toString()
+        val maxNum = binding.tvAllMember.text.toString().toInt()
+        val scheFee = binding.etScheduleFee.text.toString().toInt()
+        val scheImg = imageName.toString()
+
+        Log.d("datecheck", "${scheDate}")
+        makeSche(intentClubCode?:"", scheTitle, scheContent, scheDate, scheLocation, maxNum, scheFee, scheImg)
+      }
     }
 
     // 장소 클릭하면 캘린더, 타임 피커 숨기기
@@ -259,21 +277,6 @@ class MakeScheduleActivity : ComponentActivity() {
       }
     }
 
-
-    // 일정 등록하기 버튼
-    binding.btnSetSchedule.setOnClickListener {
-      val scheTitle = binding.etScheduleName.text.toString()
-      val scheContent = binding.etScheduleIntro.text.toString()
-      val scheDate = getUserSelectedDateTime()
-      val scheLocation = binding.etScheduleLoca.text.toString()
-      val maxNum = binding.tvAllMember.text.toString().toInt()
-      val scheFee = binding.etScheduleFee.text.toString().toInt()
-      val scheImg = imageName.toString()
-
-      Log.d("datecheck", "${scheDate}")
-      // makeSche 함수를 호출하여 일정을 생성하고 필요한 매개변수들을 전달
-      makeSche(intentClubCode?:"", scheTitle, scheContent, scheDate, scheLocation, maxNum, scheFee, scheImg)
-    }
   }
 
 
@@ -346,4 +349,38 @@ class MakeScheduleActivity : ComponentActivity() {
       }
     })
   }
+
+  // 일정 업데이트 함수
+  fun updateSche(scheCode:String,clubCode: String, scheTitle: String, scheContent: String, scheDate: String, scheLocation: String, scheFee: Int, maxNum: Int, joinedMembers: Int, scheImg: String?, clubName: String?) {
+    val service = Server(this).service
+    val scheduleVO = ScheduleVO(scheCode,clubCode, scheTitle, scheContent,scheDate, scheLocation, scheFee,maxNum,joinedMembers,scheImg, clubName)
+    val call = service.updateSchedule(scheduleVO)
+
+    call.enqueue(object : Callback<MakeScheResVo> {
+      override fun onResponse(call: Call<MakeScheResVo>, response: Response<MakeScheResVo>) {
+        if (response.isSuccessful) {
+          val makeScheRes = response.body()
+          if (makeScheRes != null && makeScheRes.rows == "success") {
+            Toast.makeText(this@MakeScheduleActivity, "일정이 등록되었습니다", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
+            intent.putExtra("clickedMeeting", scheduleVO)
+            startActivity(intent)
+            finish()
+          } else {
+            Toast.makeText(this@MakeScheduleActivity, "서버 오류: 일정 등록 실패", Toast.LENGTH_SHORT).show()
+            Log.d("makeschedule", "Server responded but not success: ${response.body()?.rows}")
+          }
+        } else {
+          Toast.makeText(this@MakeScheduleActivity, "응답 실패: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+          Log.d("makeschedule", "Response unsuccessful")
+        }
+      }
+
+      override fun onFailure(call: Call<MakeScheResVo>, t: Throwable) {
+        Toast.makeText(this@MakeScheduleActivity, "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+        Log.e("makeschedule", "Network request failed", t)
+      }
+    })
+  }
+
 }

@@ -33,11 +33,6 @@ RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
-//        val Img_M_Meeting : ImageView // 내 일정 사진
-//        val tv_M_ScheduleTitle : TextView // 내 일정명
-//        val tv_M_ScheduleContent : TextView // 내 일정 소개글
-//        val tv_M_ScheduleDday : TextView // 내 일정 D-Day
-//        val tv_M_ScheduleDate : TextView // 내 일정 일시
         val Img_M_Meeting: ImageView = view.findViewById(R.id.Img_M_Meeting)
         val tv_M_ScheduleTitle: TextView = view.findViewById(R.id.tv_M_ScheduleTitle)
         val tv_M_ScheduleContent: TextView = view.findViewById(R.id.tv_M_ScheduleContent)
@@ -50,11 +45,6 @@ RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
                 // 클릭 리스너 호출
                 itemClickListener?.onItemClick(data[adapterPosition])
             }
-//            Img_M_Meeting = view.findViewById(R.id.Img_M_Meeting)
-//            tv_M_ScheduleTitle = view.findViewById(R.id.tv_M_ScheduleTitle)
-//            tv_M_ScheduleContent = view.findViewById(R.id.tv_M_ScheduleContent)
-//            tv_M_ScheduleDday = view.findViewById(R.id.tv_M_ScheduleDday)
-//            tv_M_ScheduleDate = view.findViewById(R.id.tv_M_ScheduleDate)
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup,viewType: Int): MyScheduleAdapter.ViewHolder {
@@ -76,9 +66,17 @@ RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
             .error(R.drawable.ic_meeting_profile) // 로딩 실패 시 표시될 이미지
             .into(holder.Img_M_Meeting)
 
-        holder.tv_M_ScheduleTitle.text = data[position].scheTitle
-        val contentText = schedule.scheContent
+        // 제목
+        val title = schedule.scheTitle
+        if(title.length > 13){
+            val truncatedText = title.substring(0, 14) + "..."
+            holder.tv_M_ScheduleContent.text = truncatedText
+        } else {
+            holder.tv_M_ScheduleContent.text = title
+        }
 
+        // 내용
+        val contentText = schedule.scheContent
         if (contentText.length > 14) {
             val truncatedText = contentText.substring(0, 14) + "..."
             holder.tv_M_ScheduleContent.text = truncatedText

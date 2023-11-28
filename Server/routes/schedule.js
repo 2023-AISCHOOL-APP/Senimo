@@ -104,4 +104,30 @@ router.post('/deleteSche', (req, res) => {
   })
 })
 
+
+// 일정 업데이트
+router.post('/updateSche', (req, res) => {
+  console.log('updateSche router', req.body);
+  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img, club_name } = req.body
+  const formattedDate = new Date(sche_date)
+
+  const updateScheSql = `update tb_schedule
+  set sche_title = ?, sche_content = ?, sche_date = ?, sche_location = ?, max_num = ?, fee = ?, sche_img = ?
+  where sche_code = ? ;`
+
+  conn.query(updateScheSql, [sche_title, sche_content, formattedDate, sche_location, max_num, fee, sche_img, sche_code], (err, rows) => {
+    console.log('일정 생성 : ', rows);
+    if (err) {
+      console.error('일정 생성 실패 : ', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('일정등록 성공');
+      res.json({ rows: 'success' });
+    }
+  });
+})
+
+
+
+
 module.exports = router;

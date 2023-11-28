@@ -49,7 +49,6 @@ class HomeMainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
         // RecyclerView 구현하기
         val view = inflater.inflate(R.layout.fragment_home_main, container, false)
 
@@ -68,13 +67,6 @@ class HomeMainFragment : Fragment() {
         val img_M_Selfimprovement = view.findViewById<ImageView>(R.id.img_M_Selfimprovement)
         val img_M_Financial = view.findViewById<ImageView>(R.id.img_M_Financial)
 
-        // MyScheduleVO 객체 생성
-        // val mySchedule = MyScheduleVO(R.drawable.tea_img,"충장로 먹부림 모임", "일이삼사오육칠팔구십십일십이십삼십사", "2023-11-18T12:00:08.123Z")
-
-        // MyScheduleVO 객체를 리스트에 추가
-        // val myScheduleList = ArrayList<MyScheduleVO>()
-        // myScheduleList.add(mySchedule)
-
         // 내 일정 RecyclerView 어댑터 생성 및 설정
         myScheduleAdapter = MyScheduleAdapter(requireContext(), R.layout.myschedule_list, myScheduleList)
 
@@ -86,11 +78,10 @@ class HomeMainFragment : Fragment() {
                 // 클릭된 아이템에 대한 처리
                 val intent = Intent(requireContext(), ScheduleActivity::class.java)
                 intent.putExtra("ScheduleInfo", schedule)
-                Log.d("scheduleData1","Sending data: $schedule")
+                intent.putExtra("clubName", schedule.clubName )
                 startActivity(intent)
             }
         })
-
 
         // 모임 RecyclerView 어댑터 생성 및 설정
         adapter = MeetingAdapter(requireContext(), R.layout.meeting_list, MeetingList)
@@ -100,15 +91,6 @@ class HomeMainFragment : Fragment() {
         // 모든 모임 목록을 보이게 하기
         adapter.setShowAllItems(true)
 
-        // 모임 가데이터
-//        MeetingList.add(MeetingVO("동구","동명동 골프 모임", "같이 골프 합시다~", "운동", 7,20,R.drawable.golf_img.toString()))
-//        MeetingList.add(MeetingVO("북구","동명동 티 타임", "우리 같이 차 마셔요~", "취미", 5,10,R.drawable.tea_img.toString()))
-//        MeetingList.add(MeetingVO("남구","운암동 수영 모임", "헤엄 헤엄~", "운동", 8,30,R.drawable.tea_img.toString()))
-//        MeetingList.add(MeetingVO("광산구","열정 모임!!", "열정만 있다면 모두 가능합니다~", "자기계발", 8,10,R.drawable.tea_img.toString()))
-        // adapter.notifyDataSetChanged() // 어댑터 새로고침
-
-
-        //fetchMeetings() Q: 왜 clickedMeetinghome에서 userId값을 못불러올까
         // 메인페이지 인기 모임클릭 시 모임 홈 페이지로 이동
         rv_M_PopularMeeting.addOnItemTouchListener(
             RecyclerItemClickListener(
@@ -126,28 +108,6 @@ class HomeMainFragment : Fragment() {
                     }
                 })
         )
-
-
-        // 카테고리 클릭 시 SearchActivity로 이동
-//        img_M_Excercise.setOnClickListener {
-//            startSearchActivity("운동")
-//        }
-//        img_M_Hobby.setOnClickListener {
-//            // val intent = Intent(requireContext(), ClubActivity::class.java)
-//            startSearchActivity("취미")
-//        }
-//        img_M_Concert.setOnClickListener {
-//            startSearchActivity("전시","공연")
-//        }
-//        img_M_Trip.setOnClickListener {
-//            startSearchActivity("여행")
-//        }
-//        img_M_Selfimprovement.setOnClickListener {
-//            startSearchActivity("자기계발")
-//        }
-//        img_M_Financial.setOnClickListener {
-//            startSearchActivity("재테크")
-//        }
 
         // 카테고리 클릭 시 모임 홈 페이지로 이동
         img_M_Excercise.setOnClickListener {
@@ -219,14 +179,11 @@ class HomeMainFragment : Fragment() {
             intent.putExtra("isFromSearchBar", true) // 검색 바에서 온 것임을 나타내는 플래그
             startActivity(intent)
             activity?.finish()
-
-
         }
 
         Img_M_Schecule_Circle.setOnClickListener {
             cl_M_ScheduleBar.visibility = View.VISIBLE
         }
-
 
         // 스크롤 중에 터치 이벤트가 감지될 때
         sv_M_frag1.setOnTouchListener { _, _ ->
@@ -264,49 +221,36 @@ class HomeMainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchMeetings() // 여기에서 데이터 로딩을 호출합니다.
+        fetchMeetings()
         fetchLatestSchedule()
     }
 
     private fun fetchMeetings() {
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("http://192.168.70.234:3000") // 실제 서버 주소
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//        val retrofit = Server().retrofit
-
-
-        // 서버에 요청을 보낼 '전화기'를 만들어요.
         val service = Server(requireContext()).service
-        // '전화'를 걸어요. 서버에 데이터를 달라고 요청해요.
         service.getMeetings().enqueue(object : Callback<List<MeetingVO>> {
-            // 서버에서 답이 오면 이 부분이 실행돼요.
+
             override fun onResponse(
                 call: Call<List<MeetingVO>>,
                 response: Response<List<MeetingVO>>
             ) {
                 Log.d("ody1", response.toString())
-                // 서버 응답이 null인지 확인합니다.
+
                 if (response.isSuccessful) {
                     Log.d("ody2", response.body().toString())
                     response.body()?.let { meetings ->
-                        // null이 아니면 기존 목록을 지우고 새 데이터로 채웁니다.
                         MeetingList.clear()
                         MeetingList.addAll(meetings)
                         if (::adapter.isInitialized) {
-                            adapter.notifyDataSetChanged()// 어댑터에 데이터 변경을 알립니다.
+                            adapter.notifyDataSetChanged()
 
                             Log.d("ody3", MeetingList.toString())
                         }
                     } ?: run {
-                        // 응답이 null이면 사용자에게 알려줄 수 있는 방법을 사용하세요.
-                        // 예를 들어, Toast 메시지를 표시합니다.
-//                        Toast.makeText(context, "모임 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+
                         Log.d("HomeMainFragment", "모임 정보가 없습니다.")
                     }
                 } else {
-                    // HTTP 상태 코드가 성공 범위가 아닌 경우 오류 메시지를 표시합니다.
-//                    Toast.makeText(context, "요청에 실패했습니다: ${response.code()}", Toast.LENGTH_SHORT).show()
+
                     Log.e("HomeMainFragment", "통신은 성공했으나 요청에 실패했습니다: ${response.code()}")
                 }
             }
@@ -329,29 +273,24 @@ class HomeMainFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let { latestSchedules ->
-                        // 여기서 latestSchedules에 대한 처리를 합니다.
-                        // 예: myScheduleList에 데이터 추가 후 어댑터에 알림
-                         myScheduleList.clear()
-                         myScheduleList.addAll(latestSchedules)
+
+                        myScheduleList.clear()
+                        myScheduleList.addAll(latestSchedules)
                         if (::myScheduleAdapter.isInitialized) {
-                            myScheduleAdapter.notifyDataSetChanged()// 어댑터에 데이터 변경을 알립니다.
+                            myScheduleAdapter.notifyDataSetChanged()
 
                             Log.d("myScheduleList", latestSchedules.toString())
                             Log.d("myScheduleList", myScheduleList.toString())
                         } } ?: run {
-                        // 응답이 null이면 사용자에게 알려줄 수 있는 방법을 사용하세요.
-                        // 예를 들어, Toast 메시지를 표시합니다.
-                        // Toast.makeText(context, "모임 정보가 없습니다.", Toast.LENGTH_SHORT).show()
-                        Log.d("HomeMainFragment5", "모임 정보가 없습니다.")
+                        Log.d("myScheduleList", "모임 정보가 없습니다.")
                     }
                 }else {
-                    // 서버로부터 응답이 있으나, 오류 발생
+
                     Log.e("HomeMainFragment5", "응답 실패 : ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<List<ScheduleVO>>, t: Throwable) {
-                // 네트워크 요청 실패 시 처리
                 Log.e("HomeMainFragment5", "네트워크 요청 실패", t)
             }
         })

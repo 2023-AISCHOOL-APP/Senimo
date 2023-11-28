@@ -116,6 +116,9 @@ interface ApiService {
     @POST("/makeSche")
     fun createSchedule(@Body scheduleVO: ScheduleVO): Call<MakeScheResVo>
 
+    @POST("/updateSche")
+    fun updateSchedule(@Body scheduleVO: ScheduleVO): Call<MakeScheResVo>
+
     @Multipart
     @POST("/modifyMeeting")
     fun modifyMeeting(@Part("modifyMeeting") meetingVO: MeetingVO,
@@ -171,7 +174,6 @@ interface ApiService {
                  @Field("user_id") userId: String?
     ) : Call<QuitClubResVO>
 
-
     @GET("/getUserBadges")
     fun getUserBadges(@Query("userId") userId: String?): Call<UserBadgeResponse>
 
@@ -180,8 +182,6 @@ interface ApiService {
 
     @GET("/getUserProfile")
     fun getUserProfile(@Query("userId") userId: String?): Call<MyPageVO>
-
-
 
     @FormUrlEncoded
     @POST("/writePost")
@@ -240,7 +240,8 @@ interface ApiService {
     @POST("/deleteSche")
     fun deleteSche(@Field("sche_code") scheCode: String?): Call<DeleteScheResVO>
 
-
+    @GET("/getMeeting/{sche_code}")
+    fun getMeeting(@Path("sche_code") scheCode: String): Call<MeetingVO>
 }
 
 

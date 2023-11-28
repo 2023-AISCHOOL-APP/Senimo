@@ -85,6 +85,9 @@ class MymeetingFragment() : Fragment() {
                                     val clickedSchedule = myscheduleList[position]
                                     val intent = Intent(requireContext(), ScheduleActivity::class.java)
                                     intent.putExtra("ScheduleInfo", clickedSchedule)
+                                    Log.d("ScheduleActivity","보내는 값확인 $clickedSchedule")
+                                    intent.putExtra("clubName", clickedSchedule.clubName)
+                                    Log.d("내모임", "${clickedSchedule}")
                                     startActivity(intent)
                                 }
                             })

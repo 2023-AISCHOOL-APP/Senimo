@@ -21,7 +21,7 @@ const boardRouter = require('./routes/board')
 const getCombinedData = require('./routes/getCombinedData')
 const editMyProfile = require('./routes/editMyProfile')
 const galleryRouter = require('./routes/gallery')
-const initialInterestedClub = require('./routes/initialInterestedClub')
+const initialInterestedClub = require('./routes/InitialInterestedClub')
 const updatePosts = require('./routes/board')
 
 app.use(cors())
