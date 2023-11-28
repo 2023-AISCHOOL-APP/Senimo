@@ -3,7 +3,9 @@ package com.example.senimoapplication.MainPage.Activity_main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.Common.showSettingDialogBox
+import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivitySettingBinding
 
@@ -53,5 +55,15 @@ class SettingActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@SettingActivity, MainActivity::class.java)
+                intent.putExtra("selected_tab", "M_tab4")
+                startActivity(intent)
+                finish()
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, callback)
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.Login.Activity_login.LoginActivity
 import com.example.senimoapplication.R
@@ -33,5 +34,14 @@ class MemberDropOutActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@MemberDropOutActivity,SettingActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, callback)
     }
 }
