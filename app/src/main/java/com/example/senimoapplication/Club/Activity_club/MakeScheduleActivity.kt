@@ -26,6 +26,7 @@ import com.example.senimoapplication.server.Server
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -48,6 +49,7 @@ class MakeScheduleActivity : ComponentActivity() {
     //Intent 관리 (From 일정 수정 버튼)
     val clickedSchedule = intent.getParcelableExtra<ScheduleVO>("clickedSchedule")
     val title = intent.getStringExtra("title")
+    val intentClubCode = intent.getStringExtra("club_code")
     Log.d("clickedSchedule","받아온 값 확인 $clickedSchedule, $title")
 
     binding.timePicker.visibility = GONE
@@ -116,6 +118,21 @@ class MakeScheduleActivity : ComponentActivity() {
           val selectedTime = String.format("%s %02d:%02d", amPm, selectedHour, minute)
           binding.btnScheduleTime.text = selectedTime
         }
+      }
+
+      // 일정 수정하기 버튼
+      binding.btnSetSchedule.setOnClickListener {
+        val scheTitle = binding.etScheduleName.text.toString()
+        val scheContent = binding.etScheduleIntro.text.toString()
+        val scheDate = getUserSelectedDateTime()
+        val scheLocation = binding.etScheduleLoca.text.toString()
+        val maxNum = binding.tvAllMember.text.toString().toInt()
+        val scheFee = binding.etScheduleFee.text.toString().toInt()
+        val scheImg = imageName.toString()
+
+        Log.d("datecheck", "${scheDate}")
+        // 함수 새로 만들어야함
+        // makeSche(intentClubCode?:"", scheTitle, scheContent, scheDate, scheLocation, maxNum, scheFee, scheImg)
       }
     } else {
 
@@ -243,55 +260,41 @@ class MakeScheduleActivity : ComponentActivity() {
     }
 
 
-    // 일정 등록/수정하기 버튼
+    // 일정 등록하기 버튼
     binding.btnSetSchedule.setOnClickListener {
-      val clubCode = clickedSchedule!!.clubCode
       val scheTitle = binding.etScheduleName.text.toString()
       val scheContent = binding.etScheduleIntro.text.toString()
-      // getCombinedDateTime() 함수를 사용하여 날짜와 시간을 결합하여 scheDate 변수에 할당
-      val scheDate = getCombinedDateTime()
+      val scheDate = getUserSelectedDateTime()
       val scheLocation = binding.etScheduleLoca.text.toString()
       val maxNum = binding.tvAllMember.text.toString().toInt()
       val scheFee = binding.etScheduleFee.text.toString().toInt()
       val scheImg = imageName.toString()
 
-      Log.d("scheDate", scheDate)
+      Log.d("datecheck", "${scheDate}")
       // makeSche 함수를 호출하여 일정을 생성하고 필요한 매개변수들을 전달
-      makeSche(clubCode, scheTitle, scheContent, scheDate, scheLocation, maxNum, scheFee, scheImg)
+      makeSche(intentClubCode?:"", scheTitle, scheContent, scheDate, scheLocation, maxNum, scheFee, scheImg)
     }
   }
 
 
 
-  private fun getCombinedDateTime(): String {
-    // Calendar 객체를 사용하여 현재 시간을 가져옴
-    val selectedDate = Calendar.getInstance().apply {
-      // CalendarView에서 선택된 날짜의 milliseconds를 가져와 selectedDate에 설정
-      timeInMillis = binding.calendarView.date
+  private fun getUserSelectedDateTime(): String {
+    val selectedDate = binding.btnScheduleDate.text.toString() // 사용자가 선택한 날짜
+    val selectedTime = binding.btnScheduleTime.text.toString() // 사용자가 선택한 시간
+    val dateTimeString = "$selectedDate $selectedTime"
+
+    // 선택된 날짜와 시간을 원하는 형식으로 변환
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd a hh:mm", Locale.KOREAN)
+    val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+    try {
+      val date = inputFormat.parse(dateTimeString)
+      return outputFormat.format(date)
+    } catch (e: ParseException) {
+      e.printStackTrace()
     }
 
-    // Calendar 객체를 사용하여 선택된 시간을 가져옴
-    val selectedTime = Calendar.getInstance().apply {
-      set(Calendar.HOUR_OF_DAY, binding.timePicker.hour)
-      set(Calendar.MINUTE, binding.timePicker.minute)
-    }
-
-    // 선택된 날짜와 시간을 결합하여 하나의 Calendar 객체로 생성
-    val combinedDateTime = Calendar.getInstance().apply {
-      set(Calendar.YEAR, selectedDate.get(Calendar.YEAR))
-      set(Calendar.MONTH, selectedDate.get(Calendar.MONTH))
-      set(Calendar.DAY_OF_MONTH, selectedDate.get(Calendar.DAY_OF_MONTH))
-      set(Calendar.HOUR_OF_DAY, selectedTime.get(Calendar.HOUR_OF_DAY))
-      set(Calendar.MINUTE, selectedTime.get(Calendar.MINUTE))
-      set(Calendar.SECOND, 0)
-    }
-
-    // SimpleDateFormat을 사용하여 "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" 형식으로 변환
-    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-    sdf.timeZone = TimeZone.getTimeZone("UTC")
-
-    // 날짜와 시간을 합친 값을 "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" 형식으로 반환
-    return sdf.format(combinedDateTime.time)
+    return "" // 변환 실패 시 빈 문자열 반환
   }
 
   private fun getFileName(uri: Uri): String? {
@@ -311,7 +314,7 @@ class MakeScheduleActivity : ComponentActivity() {
   // 서버에 새로운 일정을 생성하는 함수
   fun makeSche(clubCode: String, scheTitle: String, scheContent: String, scheDate: String, scheLocation: String, maxNum: Int, scheFee: Int, scheImg: String?) {
     val service = Server(this).service
-    val scheduleVO = ScheduleVO("", clubCode, scheTitle, scheContent, scheDate, scheLocation, scheFee, maxNum, 0, scheImg)
+    val scheduleVO = ScheduleVO("", clubCode, scheTitle, scheContent, scheDate, scheLocation, scheFee, maxNum, 0, scheImg?:"")
     val call = service.createSchedule(scheduleVO)
 
     call.enqueue(object : Callback<MakeScheResVo> {
@@ -327,17 +330,19 @@ class MakeScheduleActivity : ComponentActivity() {
             val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
             intent.putExtra("clickedMeeting",scheduleVO)
             startActivity(intent)
+            Log.d("makeschedule", scheDate)
+
             finish()
           } else {
             // 서버 응답은 성공했지만 'rows'가 'success'가 아닌 경우
-            Log.d("makeSche", "not success")
+            Log.d("makeschedule", "not success")
           }
         }
       }
 
       override fun onFailure(call: Call<MakeScheResVo>, t: Throwable) {
         // 네트워크 요청 실패 시
-        Log.e("MakeScheduleActivity", "makeSche 네트워크 요청 실패", t)
+        Log.e("makeschedule", "makeSche 네트워크 요청 실패", t)
       }
     })
   }
