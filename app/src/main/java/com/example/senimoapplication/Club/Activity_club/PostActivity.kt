@@ -70,6 +70,8 @@ class PostActivity : AppCompatActivity() {
             }
 
             binding.btnNewPost.setOnClickListener {
+                val imageChanged = imageName != null
+                Log.d("모임수정 여부:",imageChanged.toString())
                 // 수정된 내용을 서버에 전송하는 로직 구현
                 val finalImageUri = if (imageName != null) imageName.toString() else clickedPost.postImg
                 Log.d("모임수정 정보:",finalImageUri.toString())
@@ -78,6 +80,7 @@ class PostActivity : AppCompatActivity() {
                     postContent = binding.etPostContent.text.toString(),
                     postImg = finalImageUri,
                     userId = PreferenceManager.getUser(this)?.user_id.toString(),
+                    imageChanged = imageChanged
 //                    userImg ="",
 //                    createdDt= "",
 //                    clubRole =0,
@@ -221,13 +224,6 @@ class PostActivity : AppCompatActivity() {
         call.enqueue(object : Callback<PostVO> {
             override fun onResponse(call: Call<PostVO>, response: Response<PostVO>) {
                 if (response.isSuccessful) {
-                    val updateResult = response.body()
-                    // 성공적으로 게시물이 수정된 경우 처리
-
-//                     //서버 응답에서 반환된 이미지 경로를 사용하여 PostVO 객체 업데이트
-//                    val updatedPostVO = PostVO.copy(
-//                        imageUri = updateResult?.postImg
-//                    )
                     Toast.makeText(this@PostActivity, "게시물이 수정되었습니다.", Toast.LENGTH_SHORT).show()
                 }
             }

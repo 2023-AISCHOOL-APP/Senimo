@@ -51,9 +51,20 @@ router.post('/writePost', upload.single('picture') ,(req, res) => {
 // 게시물 수정
 router.post('/updatePost',upload.single('picture'), (req,res) => {
   console.log('게시물 수정 받아온값 : ', req.body);
+  console.log('게시물 수정 받아온값 : ', req.file);
+  // {
+  //   fieldname: 'picture',
+  //   originalname: '1000000034.jpg',
+  //   encoding: '7bit',
+  //   mimetype: 'image/jpeg',
+  //   destination: 'C:/Users/gjaischool/Desktop/final_project/Senimo/Server/uploads',
+  //   filename: '7d65c6c5-99e9-4544-a584-acedc9ba88e3-1000000034.jpg',
+  //   path: 'C:\\Users\\gjaischool\\Desktop\\final_project\\Senimo\\Server\\uploads\\7d65c6c5-99e9-4544-a584-acedc9ba88e3-1000000034.jpg',
+  //   size: 145705
+  // }
   const postData = JSON.parse(req.body.postVO);
-  const {post_code,post_content,post_img,user_id} = postData;
-
+  const {post_code,post_content,post_img,user_id,imageChanged} = postData;
+  console.log('게시물 수정 받아온값 : ', post_img);
   let oldImagePath = null;// 변수를 외부에 정의
 
   const getOldImagePathQuery = `select post_img from tb_post where post_code = ?`;
@@ -63,16 +74,27 @@ router.post('/updatePost',upload.single('picture'), (req,res) => {
     }
     oldImagePath = results[0]?.post_img;
 
+    let newImagePath;
+    
     // 기존 이미지가 있고, 새 이미지가 업로드된 경우 기존 이미지 삭제
-    if (oldImagePath && req.file) {
-      fs.unlink(path.join(`${UPLOADS_PATH}/${oldImagePath}`), (err) => {
-          if (err) console.error('Failed to delete old image:', err);
-      });
-    }
-    }); //getOldImagePathQuery
+    if (imageChanged && req.file) {
+      // 새 이미지 업로드 처리
+      newImagePath = req.file.filename;
+
+      // 기존 이미지 삭제
+        if(oldImagePath){
+            fs.unlink(path.join(`${UPLOADS_PATH}/${oldImagePath}`), (err) => {
+              if (err) console.error('Failed to delete old image:', err);
+          });
+        }
+      } else {
+        //기존 이미지 유지
+        newImagePath = oldImagePath;
+      }
+    
 
     // 게시글 업데이트
-    const newImagePath = req.file ? req.file.filename : oldImagePath;
+    
     console.log("newImagePath : ",newImagePath)
     const updateQuery =`
     update tb_post
@@ -100,7 +122,7 @@ router.post('/updatePost',upload.single('picture'), (req,res) => {
       
     });
   }); // updatePosts
-
+}); //getOldImagePathQuery
     
 
 

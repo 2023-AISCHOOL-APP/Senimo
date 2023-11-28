@@ -8,7 +8,7 @@ data class PostVO (
     @SerializedName("post_code")
     val postCode: String = "",
     @SerializedName("user_img")
-    val userImg: String = "",
+    val userImg: String?= null,
     @SerializedName("user_name")
     val userName: String = "",
     @SerializedName("created_dt")
@@ -23,6 +23,7 @@ data class PostVO (
     val reviewCount: Int = 0,
     @SerializedName("user_id")
     val userId: String = "",
+    val imageChanged: Boolean = false
 
 ): Parcelable {
     constructor(parcel: Parcel) : this(
