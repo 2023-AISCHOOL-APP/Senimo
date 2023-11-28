@@ -1,11 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../config/database');
-const config = require('../config/config')
 
 // 일정 참가 회원 목록
 router.get('/getScheduleMembers/:sche_code', (req, res) => {
-  console.log('request값 확인',req.params);
+  console.log('멤버확인request값 확인',req.params);
   const sche_code = req.params.sche_code; 
   const findMemberQuery = `
   SELECT u.user_id, u.user_name, j.club_role ,u.user_img
@@ -20,11 +19,9 @@ router.get('/getScheduleMembers/:sche_code', (req, res) => {
           return res.status(500).json({ error: err.message });
       }
 
-      if (results.length > 0) {
+      if (results.length >= 0) {
           console.log("일정 참가 목록", results);
           res.status(200).json({ data: results });
-      } else {
-          res.status(404).json({ error: "Schedule members not found." });
       }
   });
 });

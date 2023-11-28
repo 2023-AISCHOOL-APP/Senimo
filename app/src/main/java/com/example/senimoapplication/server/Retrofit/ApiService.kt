@@ -13,6 +13,7 @@ import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
 import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
+import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
@@ -21,6 +22,7 @@ import com.example.senimoapplication.Club.VO.WriteReviewResVO
 import com.example.senimoapplication.Club.VO.getPostResVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
+import com.example.senimoapplication.MainPage.VO_main.CombinedDataResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
@@ -32,6 +34,7 @@ import com.example.senimoapplication.server.Token.TokenValidationResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import com.google.gson.JsonObject
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -110,18 +113,8 @@ interface ApiService {
     @POST("/checkUserId")
     fun checkId(@Field("user_id") userId: String): Call<SignUpResVO>
 
-    @FormUrlEncoded
     @POST("/makeSche")
-    fun createSchedule(
-        @Field("club_code") clubCode: String,
-        @Field("sche_title") scheTitle: String,
-        @Field("sche_content") scheContent: String,
-        @Field("sche_date") scheDate: String,
-        @Field("sche_location") scheLocation: String,
-        @Field("max_num") maxNum: Int,
-        @Field("fee") scheFee: Int,
-        @Field("sche_img") scheImg: String?
-    ): Call<MakeScheResVo>
+    fun createSchedule(@Body scheduleVO: ScheduleVO): Call<MakeScheResVo>
 
     @Multipart
     @POST("/modifyMeeting")
@@ -205,6 +198,13 @@ interface ApiService {
                   @Part image: MultipartBody.Part?
     ) : Call<WritePostResVO>
 
+    @Multipart
+    @POST("/updatePost") // 서버의 게시물 수정
+    fun updatePost(
+        @Part("postVO") postVO: PostVO,// 수정된 게시물 내용
+        @Part imagePart: MultipartBody.Part? // 첨부 이미지 (optional)
+    ): Call<PostVO>
+
     // 여러 개의 사진을 업로드하는 메소드
     @Multipart
     @POST("/uploadPhotos")
@@ -212,6 +212,7 @@ interface ApiService {
         @Part("galleryInfo") galleryVO: GalleryVO,
         @Part photos: List<MultipartBody.Part>
     ): Call<GalleryVO>
+
 
     @GET("/getPostContent/{club_code}")
     fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>
@@ -223,12 +224,17 @@ interface ApiService {
     @POST("/deletePost")
     fun deletePost(@Field("post_code") postCode: String): Call<DeletePostResVO>
 
+    @GET("/getCombinedData/{user_id}")
+    fun getCombinedData(@Path("user_id") userId: String?) : Call<CombinedDataResVO>
+
     @POST("/writeReview")
     fun writeReview(@Body writeReviewResVO: WriteReviewResVO): Call<WriteReviewResVO>
 
     @FormUrlEncoded
     @POST("/deleteSche")
     fun deleteSche(@Field("sche_code") scheCode: String?): Call<DeleteScheResVO>
+
+
 }
 
 

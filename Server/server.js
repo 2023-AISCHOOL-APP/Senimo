@@ -18,9 +18,10 @@ const deleteMember = require('./routes/deleteMember')
 const getSchedules = require('./routes/getSchedules')
 const getScheduleMembers = require('./routes/getScheduleMembers')
 const boardRouter = require('./routes/board')
+const getCombinedData = require('./routes/getCombinedData')
 const editMyProfile = require('./routes/editMyProfile')
 const galleryRouter = require('./routes/gallery')
-
+const updatePosts = require('./routes/board')
 
 app.use(cors())
 
@@ -30,8 +31,8 @@ app.set('port', process.env.PORT || 3333);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
-// app.use('/uploads', express.static("C:/Users/gjaischool/Desktop/final_project/Senimo/Server/uploads")); // 도운 이미지 경로
-app.use('/uploads', express.static("C:/Users/aischool/Desktop/Senimo/Server/uploads")); // 희준 이미지 경로
+app.use('/uploads', express.static("C:/Users/gjaischool/Desktop/final_project/Senimo/Server/uploads")); // 도운 이미지 경로
+//app.use('/uploads', express.static("C:/Users/aischool/Desktop/Senimo/Server/uploads")); // 희준 이미지 경로
 app.use('/', authController)
 app.use('/', appMainRouter)
 app.use('/', clubMainRouter)
@@ -48,8 +49,10 @@ app.use('/', getSchedules)
 app.use('/', getScheduleMembers)
 app.use('/', deleteMember)
 app.use('/', boardRouter)
-app.use('/', editMyProfile)
 app.use('/',galleryRouter)
+app.use('/',updatePosts)
+app.use('/', getCombinedData)
+app.use('/', editMyProfile)
 
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');

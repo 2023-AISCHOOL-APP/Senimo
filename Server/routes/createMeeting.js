@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
         // 파일 저장시 사용할 이름
         const uniqueFilename = uuidv4() + '-' + file.originalname;
         cb(null, uniqueFilename);
-        console.log("사진이름: ", uniqueFilename);
+        // console.log("사진이름: ", uniqueFilename);
     }
 });
 
@@ -72,8 +72,8 @@ router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
                     }
 
                     const club_code = codeResults[0].club_code;
-                    console.log("2단계 생성된 클럽코드", club_code)
-                    console.log("2단계 유저아이디",user_id)
+                    // console.log("2단계 생성된 클럽코드", club_code)
+                    // console.log("2단계 유저아이디",user_id)
                     // 3단계: 모임장으로 클럽 가입
                     const insertJoinQuery = `
                         INSERT INTO tb_join (club_code, user_id, club_role) VALUES (?, ?, 1);
@@ -86,7 +86,7 @@ router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
                                 console.log(" 3단계: 모임장으로 클럽 가입",err.message);
                             });
                         }
-                        console.log("3단계까지는 무사 완료")
+                        //console.log("3단계까지는 무사 완료")
 
                         // 4단계 모임인원수 조회
                     const selectJoinMemberQuery = `SELECT COUNT(user_id) AS joined_members FROM tb_join WHERE club_code = ?; `;

@@ -28,6 +28,7 @@ data class ScheduleVO(
     var scheImg: String? = null,
     @SerializedName("club_name")
     var clubName : String? = null
+
 )  : Parcelable {
     constructor(parcel: Parcel) : this(
         scheCode = parcel.readString() ?: "",

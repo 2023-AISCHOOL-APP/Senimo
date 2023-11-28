@@ -32,7 +32,7 @@ router.get('/get/Sche_intro/:sche_code', (req, res) => {
 // 일정 생성
 router.post('/makeSche', (req, res) => {
   console.log('makeSche router', req.body);
-  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, sche_img } = req.body
+  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img } = req.body
   const formattedDate = new Date(sche_date)
 
   const makeScheSql = `insert into tb_schedule (club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, sche_img)

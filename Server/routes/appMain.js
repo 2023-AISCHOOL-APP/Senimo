@@ -43,7 +43,7 @@ LIMIT 30;`
   
 
   conn.query(query, (err, rows) => {
-    console.log('rows :', rows);
+    // console.log('rows :', rows);
     if (err) {
       res.status(500).send('서버 에러: ' + err.message);
     } else {
@@ -56,8 +56,8 @@ LIMIT 30;`
 
 router.get('/getLatestSchedule', (req,res) => {
   const user_id = req.query.userId;
-  console.log("아이디다",user_id)
-  console.log("전체다",req.query)
+  // console.log("아이디다",user_id)
+  // console.log("전체다",req.query)
   // SQL 쿼리를 실행
   const query = `
   SELECT 

@@ -15,7 +15,9 @@ import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.dDate
 import com.example.senimoapplication.Common.myScheduleDate
 
-class MyScheduleAdapter(val context: Context, val layout: Int, val data: ArrayList<ScheduleVO>) :
+
+class MyScheduleAdapter(val context: Context, val layout: Int, val data : ArrayList<ScheduleVO>) :
+
 RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
 
     // 클릭 리스너 인터페이스 정의

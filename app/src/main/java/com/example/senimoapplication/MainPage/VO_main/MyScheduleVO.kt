@@ -29,7 +29,7 @@ class MyScheduleVO(
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-        clubName = parcel.readString() ?: "",
+
         scheTitle = parcel.readString() ?: "",
         scheContent = parcel.readString() ?: "",
         scheDate = parcel.readString() ?: "",

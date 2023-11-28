@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.senimoapplication.Club.VO.AllScheduleMemberResVO
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.DeleteScheResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
@@ -25,6 +26,7 @@ import com.example.senimoapplication.Club.fragment.MemberManager
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showActivityDialogBox
+import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.databinding.ActivityScheduleBinding
@@ -56,6 +58,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         val UserData = PreferenceManager.getUser(this)
         userId = UserData?.user_id
+        Log.d("ScheduleActivity", "유저 확인$userId")
 
         // Intent 데이터 관리
         clickedSchedule = intent.getParcelableExtra("ScheduleInfo")
@@ -63,6 +66,7 @@ class ScheduleActivity : AppCompatActivity() {
         clubName = intent.getStringExtra("clubName")
         staffList = intent.getStringArrayListExtra("staffList")
         scheCode = clickedSchedule?.scheCode
+
 
         // view 관리
         binding.tvClubName2.text = clubName
@@ -72,19 +76,49 @@ class ScheduleActivity : AppCompatActivity() {
 
         displayScheduleInfo(clickedSchedule)
         // 일정 참여 멤버 목록 가져오기
+
         getScheduleMembers()
+
+
+        // 기본 버튼 동작
+        binding.btnJoinSchedule.text = "일정 참가하기"
+        binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape_main)
+        binding.btnJoinSchedule.setTextColor(ContextCompat.getColor(this@ScheduleActivity, R.color.white))
+        binding.btnJoinSchedule.setOnClickListener {
+            joinSche(userId, scheCode)
+            Log.d("joinSchedule", "참가하기 버튼 $userId, $scheCode")
+        }
 
 
         // 뒤로가기 아이콘
         binding.icBack.setOnClickListener {
-            val returnIntent = Intent()
+            val returnIntent = Intent(this@ScheduleActivity, ClubActivity::class.java)
             clickedSchedule?.joinedMembers = joinedMemberList?.size ?: 0
             returnIntent.putExtra("ScheduleInfo", clickedSchedule)
+            returnIntent.putExtra("clickedMeeting", clickedMeeting)
             setResult(Activity.RESULT_OK, returnIntent)
             Log.d("ScheduleInfo","보내기:${clickedSchedule?.joinedMembers}")
             Log.d("ScheduleActivity", "Finishing ScheduleActivity")
+            startActivity(returnIntent)
             finish()
         }
+
+        // 디바이스 뒤로가기 버튼
+        val callback = object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                val returnIntent = Intent(this@ScheduleActivity, ClubActivity::class.java)
+                clickedSchedule?.joinedMembers = joinedMemberList?.size ?: 0
+                returnIntent.putExtra("ScheduleInfo", clickedSchedule)
+                returnIntent.putExtra("clickedMeeting", clickedMeeting)
+                setResult(Activity.RESULT_OK, returnIntent)
+                Log.d("ScheduleInfo","보내기:${clickedSchedule?.joinedMembers}")
+                Log.d("ScheduleActivity", "Finishing ScheduleActivity")
+                Log.d("ScheduleActivity", "${clickedMeeting}")
+                startActivity(returnIntent)
+                finish()
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, callback)
 
 
         // 앱바 - 게시물 관리 기능 추가
@@ -101,7 +135,11 @@ class ScheduleActivity : AppCompatActivity() {
                         R.id.menu_option1 -> {
                             // 일정 수정
                             val intent = Intent(this, MakeScheduleActivity::class.java)
+                            intent.putExtra("clickedSchedule", clickedSchedule)
+                            intent.putExtra("title", "일정 수정")
                             startActivity(intent)
+                            finish()
+
                             true
                         }
 
@@ -125,23 +163,6 @@ class ScheduleActivity : AppCompatActivity() {
         }
     }
 
-    private fun displayMyScheduleInfo(schedule : ScheduleVO?) {
-        Log.d("ScheduleData", "Title: ${schedule?.scheTitle}, Content: ${schedule?.scheContent}, Image URL: ${schedule?.scheImg}")
-        binding.tvClubName2.text = schedule?.clubName
-        binding.tvScheduleName.text = schedule?.scheTitle
-        binding.tvScheduleIntro.text = schedule?.scheContent
-        binding.tvScheduleTime.text = formatDate("${schedule?.scheDate}")
-        binding.tvScheduleLoca.text = schedule?.scheLoca
-        binding.tvScheduleFee.text = "${schedule?.scheFee}원"
-        binding.tvScheduleMember.text = "${schedule?.joinedMembers}/${schedule?.maxNum}명"
-        Log.d("cnt","${schedule?.joinedMembers}")
-        Glide.with(this)
-            .load(schedule?.scheImg)
-            .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
-            .error(R.drawable.basic_club) // 로딩 실패 시 표시될 이미지
-            .into(binding.imgCSchedule)
-    }
-
     private fun displayScheduleInfo(scheduleInfo : ScheduleVO?){
         binding.tvClubName2.text = scheduleInfo?.clubName
         binding.tvScheduleName.text = scheduleInfo?.scheTitle
@@ -157,49 +178,6 @@ class ScheduleActivity : AppCompatActivity() {
             .error(R.drawable.basic_club) // 로딩 실패 시 표시될 이미지
             .into(binding.imgCSchedule)
     }
-
-
-    // 일정 정보 가져오기
-//    private fun getSchedule() {
-//        val server = Server(this)
-//        val scheduleManager = ScheduleManager(server)
-//
-//        scheCode?.let { code ->
-//            ScheduleManager(server).scheduleInfo(code, object : Callback<ScheduleResponse> {
-//                override fun onResponse(
-//                    call: Call<ScheduleResponse>,
-//                    response: Response<ScheduleResponse>
-//                ) {
-//                    Log.d("getScheduleInfo", "통신시작")
-//                    if (response.isSuccessful) {
-//                        thisSchedule = response.body()
-//                        Log.d("getScheduleInfo", "1.통신 성공 : ${thisSchedule}")
-//                        if (thisSchedule != null) {
-//                            Log.d("getScheduleInfo", "2. null이 아닌 경우 ${thisSchedule}")
-//                            binding.tvScheduleName.text = thisSchedule?.scheTitle
-//                            binding.tvScheduleIntro.text = thisSchedule?.scheContent
-//                            binding.tvScheduleTime.text = formatDate("${thisSchedule?.scheDate}")
-//                            binding.tvScheduleLoca.text = thisSchedule?.scheLocation
-//                            binding.tvScheduleFee.text = "${thisSchedule?.fee}원"
-//                            binding.tvScheduleMember.text =
-//                                "${thisSchedule?.attendUserCnt}/${thisSchedule?.maxNum}명"
-//                            Glide.with(this@ScheduleActivity)
-//                                .load(thisSchedule?.scheImg)
-//                                .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
-//                                .error(R.drawable.basic_club) // 로딩 실패 시 표시될 이미지
-//                                .into(binding.imgCSchedule)
-//                        } else {
-//                            Log.d("getScheduleInfo", "일정 정보 가져오기 실패")
-//                        }
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<ScheduleResponse>, t: Throwable) {
-//                    Log.d("getScheduleInfo", "스택 트레이스 :", t)
-//                }
-//            })
-//        }
-//    }
 
     // 일정 참석 회원 목록 가져오기 (참가 상태에 따라 회원목록, 참가자 수 변경)
     private fun getScheduleMembers() {
@@ -233,15 +211,18 @@ class ScheduleActivity : AppCompatActivity() {
                                         binding.btnJoinSchedule.setTextColor(ContextCompat.getColor(this@ScheduleActivity, R.color.main))
                                         binding.btnJoinSchedule.setOnClickListener {
                                             cancelJoinSche(nonNullUserId, scheCode)
+                                            Log.d("joinSchedule", "참가취소 버튼 $nonNullUserId, $scheCode")
                                         }
+                                        sm_adapter.notifyDataSetChanged()
                                     } else {
                                         binding.btnJoinSchedule.text = "일정 참가하기"
                                         binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape_main)
                                         binding.btnJoinSchedule.setTextColor(ContextCompat.getColor(this@ScheduleActivity, R.color.white))
                                         binding.btnJoinSchedule.setOnClickListener {
                                             joinSche(nonNullUserId, scheCode)
+                                            Log.d("joinSchedule", "참가하기 버튼 $nonNullUserId, $scheCode")
                                         }
-
+                                        sm_adapter.notifyDataSetChanged()
                                     }
                                 }
 
@@ -259,6 +240,7 @@ class ScheduleActivity : AppCompatActivity() {
                                                 intent.putExtra("selected_tab", "M_tab4")
                                                 intent.putExtra("selected_user", "${clickedSchedule.userId}")
                                                 startActivity(intent)
+                                                finish()
                                             }
                                         })
                                 )
@@ -293,7 +275,7 @@ class ScheduleActivity : AppCompatActivity() {
                     if (joinScheRes != null && joinScheRes.rows == "success") {
                         // 버튼이 "일정 참가하기" 상태일 때
                         getScheduleMembers()
-                        binding.tvScheduleMember.text = "${joinedMemberList?.size}"
+                        binding.tvScheduleMember.text = "${joinedMemberList?.size}/${clickedSchedule?.maxNum}명"
                         Toast.makeText(this@ScheduleActivity, "참가 신청 완료", Toast.LENGTH_SHORT).show()
                         binding.btnJoinSchedule.text = "일정 참가 취소하기"
                         binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape)
@@ -320,6 +302,7 @@ class ScheduleActivity : AppCompatActivity() {
                     val cancelJoinScheRes = response.body()
                     if (cancelJoinScheRes != null && cancelJoinScheRes.rows == "success") {
                         getScheduleMembers()
+                        binding.tvScheduleMember.text = "${joinedMemberList?.size}/${clickedSchedule?.maxNum}명"
                         Toast.makeText(this@ScheduleActivity, "일정 참가 취소가 완료되었습니다.", Toast.LENGTH_SHORT).show()
                         binding.btnJoinSchedule.text = "일정 참가하기"
                         binding.btnJoinSchedule.setBackgroundResource(R.drawable.button_shape_main)
