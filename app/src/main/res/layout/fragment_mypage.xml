@@ -128,7 +128,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pretendard_medium"
-                android:text="...더보기"
+                android:text="더보기"
                 android:textColor="@color/txt_gray50"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_M_MoveEdit"
