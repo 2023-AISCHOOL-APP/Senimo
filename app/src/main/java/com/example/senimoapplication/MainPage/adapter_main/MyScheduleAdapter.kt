@@ -34,7 +34,7 @@ RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val Img_M_Meeting: ImageView = view.findViewById(R.id.Img_M_Meeting)
-        val tv_M_ScheduleTitle: TextView = view.findViewById(R.id.tv_M_ScheduleTitle)
+        val tvScheduleTitle: TextView = view.findViewById(R.id.tv_M_ScheduleTitle)
         val tv_M_ScheduleContent: TextView = view.findViewById(R.id.tv_M_ScheduleContent)
         val tv_M_ScheduleDday: TextView = view.findViewById(R.id.tv_M_ScheduleDday)
         val tv_M_ScheduleDate: TextView = view.findViewById(R.id.tv_M_ScheduleDate)
@@ -70,9 +70,9 @@ RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
         val title = schedule.scheTitle
         if(title.length > 13){
             val truncatedText = title.substring(0, 14) + "..."
-            holder.tv_M_ScheduleContent.text = truncatedText
+            holder.tvScheduleTitle.text = truncatedText
         } else {
-            holder.tv_M_ScheduleContent.text = title
+            holder.tvScheduleTitle.text = title
         }
 
         // 내용

@@ -123,8 +123,10 @@ interface ApiService {
                        @Part image: MultipartBody.Part?
     ): Call<MakeScheResVo>
 
+    @Multipart
     @POST("/updateSche")
-    fun updateSchedule(@Body scheduleVO: ScheduleVO): Call<MakeScheResVo>
+    fun updateSchedule(@Part ("updateSche")updateVO: ScheduleVO,
+                       @Part image: MultipartBody.Part?): Call<MakeScheResVo>
 
     @Multipart
     @POST("/modifyMeeting")

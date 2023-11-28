@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ScrollView
@@ -67,6 +69,12 @@ class HomeMainFragment : Fragment() {
         val img_M_Selfimprovement = view.findViewById<ImageView>(R.id.img_M_Selfimprovement)
         val img_M_Financial = view.findViewById<ImageView>(R.id.img_M_Financial)
 
+
+        if (myScheduleList.size == 0){
+            Img_M_Schecule_Circle.visibility = GONE
+        } else {
+            Img_M_Schecule_Circle.visibility = VISIBLE
+        }
         // 내 일정 RecyclerView 어댑터 생성 및 설정
         myScheduleAdapter = MyScheduleAdapter(requireContext(), R.layout.myschedule_list, myScheduleList)
 
