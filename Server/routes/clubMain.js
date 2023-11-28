@@ -16,7 +16,7 @@ router.get('/getClubInfo/:club_code', (req, res) => {
   `
 
   conn.query(query, [clubCode], (err, rows) => {
-    console.log('rows :', rows);
+    console.log('clubMainrows :', rows);
     if (err) {
       res.status(500).send('서버 에러: ' + err.message);
     } else {

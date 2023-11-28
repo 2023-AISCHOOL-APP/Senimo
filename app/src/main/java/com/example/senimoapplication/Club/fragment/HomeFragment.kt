@@ -447,4 +447,5 @@ class ScheduleManager(private val server: Server) {
         val call = server.service.getSchedules(clubCode)
         call.enqueue(callback)
     }
+
 }

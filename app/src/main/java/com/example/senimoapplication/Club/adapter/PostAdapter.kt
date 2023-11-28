@@ -27,6 +27,7 @@ import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Common.PostUpdateListener
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showPostDialogBox
+import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
@@ -37,7 +38,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>, val listener: PostUpdateListener) : RecyclerView.Adapter<PostAdapter.ViewHolder> (){
+
+class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>, val listener: PostUpdateListener, val clickedMeeting: MeetingVO?) : RecyclerView.Adapter<PostAdapter.ViewHolder> (){
+
 
     val inflater = LayoutInflater.from(context)
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -213,6 +216,9 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>,
                     R.id.menu_option1 -> {
                         // 게시물 수정
                         val intent = Intent(view.context, PostActivity::class.java)
+                        intent.putExtra("clickedPost",data[position])
+                        intent.putExtra("clickedMeeting", clickedMeeting)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         view.context.startActivity(intent)
                         true
                     }

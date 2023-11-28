@@ -1,9 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../config/database');
-const config = require('../config/config')
+const config = require('../config/config');
+const fs = require('fs');
 const multer = require('multer');
+const path = require('path');
 const { v4: uuidv4 } = require('uuid');
+const { UPLOADS_PATH } = require('../config/config');
 
 // multer 설정
 const storage = multer.diskStorage({
@@ -45,6 +48,84 @@ router.post('/writePost', upload.single('picture') ,(req, res) => {
   });
 })
 
+// 게시물 수정
+router.post('/updatePost',upload.single('picture'), (req,res) => {
+  console.log('게시물 수정 받아온값 : ', req.body);
+  console.log('게시물 수정 받아온값 : ', req.file);
+  // {
+  //   fieldname: 'picture',
+  //   originalname: '1000000034.jpg',
+  //   encoding: '7bit',
+  //   mimetype: 'image/jpeg',
+  //   destination: 'C:/Users/gjaischool/Desktop/final_project/Senimo/Server/uploads',
+  //   filename: '7d65c6c5-99e9-4544-a584-acedc9ba88e3-1000000034.jpg',
+  //   path: 'C:\\Users\\gjaischool\\Desktop\\final_project\\Senimo\\Server\\uploads\\7d65c6c5-99e9-4544-a584-acedc9ba88e3-1000000034.jpg',
+  //   size: 145705
+  // }
+  const postData = JSON.parse(req.body.postVO);
+  const {post_code,post_content,post_img,user_id,imageChanged} = postData;
+  console.log('게시물 수정 받아온값 : ', post_img);
+  let oldImagePath = null;// 변수를 외부에 정의
+
+  const getOldImagePathQuery = `select post_img from tb_post where post_code = ?`;
+  conn.query(getOldImagePathQuery, [post_code], (err,results) => {
+    if (err) {
+        return res.status(500).send('Database error: ' +err.message);
+    }
+    oldImagePath = results[0]?.post_img;
+
+    let newImagePath;
+    
+    // 기존 이미지가 있고, 새 이미지가 업로드된 경우 기존 이미지 삭제
+    if (imageChanged && req.file) {
+      // 새 이미지 업로드 처리
+      newImagePath = req.file.filename;
+
+      // 기존 이미지 삭제
+        if(oldImagePath){
+            fs.unlink(path.join(`${UPLOADS_PATH}/${oldImagePath}`), (err) => {
+              if (err) console.error('Failed to delete old image:', err);
+          });
+        }
+      } else {
+        //기존 이미지 유지
+        newImagePath = oldImagePath;
+      }
+    
+
+    // 게시글 업데이트
+    
+    console.log("newImagePath : ",newImagePath)
+    const updateQuery =`
+    update tb_post
+    set post_content = ?,  post_img = ?
+    where post_code =?;
+    `;
+    conn.query(updateQuery,[post_content,newImagePath,post_code], (err,result) => {
+        if (err) {
+            // 파일 삭제 로직
+        if (req.file) {
+        const filePath = `${UPLOADS_PATH}/${req.file.filename}`;
+        fs.unlink(filePath, err => {
+          if (err) console.error('Failed to delete uploaded file:', err);
+      });
+    }
+    return res.status(500).json({ error: err.message });
+          console.log("실패")
+
+      } else {
+          res.status(200).json({ 
+          club_img: `${config.baseURL}/uploads/${newImagePath}`})
+          console.log("수정완료")
+      }
+
+      
+    });
+  }); // updatePosts
+}); //getOldImagePathQuery
+    
+
+
 // 게시글 리스트 가져오기
 router.get('/getPostContent/:club_code', (req, res) => {
   console.log('getPostContent', req.body);
@@ -57,7 +138,7 @@ router.get('/getPostContent/:club_code', (req, res) => {
       tu.user_name, 
       tp.created_dt, 
       tp.post_content, 
-      tp.post_img, 
+      CONCAT('${config.baseURL}/uploads/', tp.post_img) AS post_img,
       tj.club_role, 
       count(tr.review_code) as review_count,
       tu.user_id

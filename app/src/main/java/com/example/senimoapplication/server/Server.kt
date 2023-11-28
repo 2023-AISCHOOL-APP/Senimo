@@ -17,6 +17,7 @@ class Server(private val context: Context) {
             //.baseUrl("http://192.168.70.207:3333") // 도운IP 같은 와이파로 접근할때
             //.baseUrl("http://192.168.70.69:3333") // 희준IP
             .baseUrl("http://192.168.70.157:3333") // 지혜IP
+
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

@@ -13,6 +13,7 @@ import com.example.senimoapplication.Club.VO.MakeScheResVo
 import com.example.senimoapplication.Club.VO.InterestedResVO
 import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
+import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
@@ -33,6 +34,7 @@ import com.example.senimoapplication.server.Token.TokenValidationResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import com.google.gson.JsonObject
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -202,6 +204,13 @@ interface ApiService {
                   @Part image: MultipartBody.Part?
     ) : Call<WritePostResVO>
 
+    @Multipart
+    @POST("/updatePost") // 서버의 게시물 수정
+    fun updatePost(
+        @Part("postVO") postVO: PostVO,// 수정된 게시물 내용
+        @Part imagePart: MultipartBody.Part? // 첨부 이미지 (optional)
+    ): Call<PostVO>
+
     // 여러 개의 사진을 업로드하는 메소드
     @Multipart
     @POST("/uploadPhotos")
@@ -209,6 +218,7 @@ interface ApiService {
         @Part("galleryInfo") galleryVO: GalleryVO,
         @Part photos: List<MultipartBody.Part>
     ): Call<GalleryVO>
+
 
     @GET("/getPostContent/{club_code}")
     fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>
@@ -229,6 +239,7 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/deleteSche")
     fun deleteSche(@Field("sche_code") scheCode: String?): Call<DeleteScheResVO>
+
 
 }
 
