@@ -23,6 +23,7 @@ const editMyProfile = require('./routes/editMyProfile')
 const galleryRouter = require('./routes/gallery')
 const initialInterestedClub = require('./routes/InitialInterestedClub')
 const updatePosts = require('./routes/board')
+const getUserRole = require('./routes/getUserRole')
 
 app.use(cors())
 
@@ -57,7 +58,7 @@ app.use('/', getCombinedData)
 app.use('/', editMyProfile)
 app.use('/', galleryRouter)
 app.use('/', initialInterestedClub)
-
+app.use('/', getUserRole)
 
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기중..');

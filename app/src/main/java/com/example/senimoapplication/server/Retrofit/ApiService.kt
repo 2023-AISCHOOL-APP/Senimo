@@ -15,6 +15,7 @@ import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
+import com.example.senimoapplication.Club.VO.RoleResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.VO.WritePostResVO
@@ -257,6 +258,11 @@ interface ApiService {
     @POST("userDropOut")
     fun userDropOut(@Field("user_id") userId: String?): Call<UserDropOutResVO>
 
+    @FormUrlEncoded
+    @POST("/getUserRole")
+    fun getUserRole(@Field("club_code") clubCode: String?,
+                 @Field("user_id") userId: String?
+    ) : Call<RoleResVO>
 }
 
 

@@ -123,6 +123,7 @@ class MymeetingFragment() : Fragment() {
                         // 모임 일정, 가입한 모임, 관심 모임 리사이클러뷰 연결하기
                         if (myscheduleList != null) {
                             val myschedule_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, myscheduleList)
+                            Log.d("getCombinedData", "데이터 확인${myscheduleList}")
                             rv_M_Meeting_Schedule.adapter = myschedule_adapter
                             myschedule_adapter.setShowAllItems(false)
                             rv_M_Meeting_Schedule.layoutManager = LinearLayoutManager(view.context)
