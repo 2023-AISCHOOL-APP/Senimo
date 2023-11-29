@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
+import com.example.senimoapplication.Common.showBadgeDialogBox
 import com.example.senimoapplication.MainPage.Activity_main.EditMyPageActivity
 import com.example.senimoapplication.MainPage.VO_main.BadgeRes
 import com.example.senimoapplication.MainPage.VO_main.BadgeVO
@@ -101,6 +103,69 @@ class MypageFragment : Fragment() {
         // 초기 데이터 로드
         fetchUserData()
 
+        // fragment_mypage.xml에 있는 배지 이미지뷰
+        for (i in 1..9) {
+            val badgeId = resources.getIdentifier("img_M_Badge$i","id", requireContext().packageName)
+            val imgMBage = view?.findViewById<ImageView>(badgeId)
+
+            imgMBage?.setOnClickListener {
+//                val badgeDrawableOnResId = resources.getIdentifier("ic_badge${i}_on", "drawable", requireContext().packageName)
+//                val badgeDrawableOffResId = resources.getIdentifier("ic_badge${i}_off", "drawable", requireContext().packageName)
+//
+//                val badgeDrawableOn = resources.getDrawable(badgeDrawableOnResId, requireContext().theme)
+//                val badgeDrawableOff = resources.getDrawable(badgeDrawableOffResId, requireContext().theme)
+
+                // 배지 상태에 따라 badgeGetInfo 설정
+                val badgeGetInfo = when (imgMBage.tag) {
+                    "on" -> "보유 중"
+                    "off" -> "획득 방법"
+                    else -> null
+                }
+
+                // 배지에 대한 정보 설정
+                val badgeNames = arrayOf(
+                    "시니모뉴비", "용기있는뉴비", "새싹모임러", "이구역모임왕", "호기심탐험가",
+                    "모임의기둥", "프로참석러", "내가바로모임장", "뱃지마스터"
+                )
+                val badgeName = badgeNames[i - 1]  // 배열 인덱스는 0부터 시작하므로 i - 1
+
+                // text1 설정
+                val text1 = if (badgeGetInfo == "보유 중") {
+                    arrayOf(
+                        "시니모에 가입하셨군요!", "오프라인 모임을 처음 참여하셨군요!", "모임에 처음 가입하셨군요!",
+                        "모임을 5개나 가입하셨군요!", "모임을 5개나 찜하셨군요!", "오프라인 모임을 5번 참여하셨군요!",
+                        "오프라인 모임을 15번 참여하셨군요!", "모임을 생성하셨군요!", "배지를 모두 얻으셨군요!"
+                    )[i - 1]
+                } else {
+                    arrayOf(
+                        "시니모에 처음 가입하시면", "처음으로 오프라인 모임에 참여하시면", "처음으로 모임에 가입하시면",
+                        "가입한 모임의 개수가 5개이시면", "5개의 모임에 찜을 하신 경우", "오프라인 모임에 5번 참여하시면",
+                        "오프라인 모임에 15번 참여하시면", "모임을 생성하시면", "8개 배지를 모두 얻으시면"
+                    )[i - 1]
+                }
+
+                // text2 설정
+                val text2 = if (badgeGetInfo == "보유 중") {
+                    arrayOf(
+                        "회원가입을 환영합니다. :)", "이제부터 당신은 용기있는뉴비!", "이제부터 당신은 새싹모임러!",
+                        "이제부터 당신은 이구역모임왕!", "이제부터 당신은 호기심탐험가!", "이제부터 당신은 모임의기둥!",
+                        "이제부터 당신은 프로참석러!", "이제부터 당신은 모임장입니다!", "이제부터 당신은 배지마스터!"
+                    )[i - 1]
+                } else {
+                    arrayOf(
+                        "시니모뉴비 배지가 주어져요.", "용기있는뉴비 배지가 주어져요.", "새싹모임러 배지가 주어져요.",
+                        "이구역모임왕 배지가 주어져요.", "호기심탐험가 배지가 주어져요.", "모임의기둥 배지가 주어져요.",
+                        "프로참석러 배지가 주어져요.", "내가바로모임장 배지가 주어져요.", "배지마스터 배지가 주어져요."
+                    )[i - 1]
+                }
+
+                // 다이얼로그 내용 변경
+                val badgeImageRes = if (badgeGetInfo == "보유 중") "ic_badge${i}_on" else "ic_badge${i}_off"
+                showBadgeDialogBox(requireActivity(), badgeImageRes, badgeName, badgeGetInfo, text1, text2)
+            }
+
+        }
+
         binding.tvMMoveEdit.setOnClickListener {
             // 프로필 편집 화면으로 이동
             val userData = PreferenceManager.getUser(requireContext())
@@ -185,6 +250,30 @@ class MypageFragment : Fragment() {
 
     // 해당하는 badge_code0가 있는 경우 배지 이미지를 변경(활성화)
     private fun updateBadgeImages(badgeList: List<BadgeVO>) {
+        // 모든 배지를 먼저 비활성화 상태로 설정
+        for (i in 1..9) {
+            val badgeImageView = binding.root.findViewById<ImageView>(
+                resources.getIdentifier("img_M_Badge$i", "id", requireContext().packageName)
+            )
+            badgeImageView.setImageResource(
+                resources.getIdentifier("ic_badge${i}_off", "drawable", requireContext().packageName)
+            )
+            badgeImageView.tag = "off"
+        }
+
+        // 사용자가 가진 배지를 활성화 상태로 설정
+        badgeList.forEach { badge ->
+            val badgeNumber = badge.badgeCode.removePrefix("badge_code").toIntOrNull() ?: return@forEach
+            val badgeImageView = binding.root.findViewById<ImageView>(
+                resources.getIdentifier("img_M_Badge$badgeNumber", "id", requireContext().packageName)
+            )
+            badgeImageView.setImageResource(
+                resources.getIdentifier("ic_badge${badgeNumber}_on", "drawable", requireContext().packageName)
+            )
+            badgeImageView.tag = "on"
+        }
+
+        // 활성화된 배지를 활성화 상태로 설정
         for (badge in badgeList) {
             when (badge.badgeCode) {
                 "badge_code01" -> {
@@ -216,5 +305,12 @@ class MypageFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun activateBadge(badgeImageView: ImageView, badgeNumber: Int) {
+        badgeImageView.setImageResource(
+            resources.getIdentifier("ic_badge${badgeNumber}_on", "drawable", requireContext().packageName)
+        )
+        badgeImageView.tag = "on"
     }
 }
