@@ -1,39 +1,26 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../config/database')
-const config = require('../config/config');
 
+router.get('/getUserBadge/:user_id', (req, res) => {
+    console.log('뱃지 라우터', req.params);
+    let user_id = req.params.user_id
 
+    const badgeSql = `select badge_get_code, badge_code, user_id from tb_user_badge where user_id = ?;`
 
-
-router.get('/getUserBadges', (req, res) => {
-    console.log("요청왔다")
-    const userId = req.query.userId;
-
-    // SQL 쿼리를 실행
-    const query = `
-    SELECT
-        b.badge_code, 
-        b.badge_name
-    FROM 
-        tb_user_badge ub
-    JOIN 
-        tb_badge b ON ub.badge_code = b.badge_code
-    WHERE 
-        ub.user_id = ?`;
-
-        conn.query(query, [userId], (err, rows) => {
-        console.log('rows :', rows);
+    conn.query(badgeSql, [user_id], (err, results) => {
+        console.log('뱃지 results :', results);
         if (err) {
-            res.status(500).send('서버 에러: ' + err.message);
+            res.status(500).json({ error: err.message });
+        }
+
+        if (results.length > 0) {
+            console.log("안드로이드로 보내는 badge data", results);
+            res.status(200).json({ badges: results });
         } else {
-            // 결과를 JSON 형태로 클라이언트에 전송합니다.
-            res.json({result:rows});
+            res.status(404).json({ error: "badge data not found." });
         }
     });
 });
-
-
-
 
 module.exports = router;

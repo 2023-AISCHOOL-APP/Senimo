@@ -1,6 +1,5 @@
 package com.example.senimoapplication.MainPage.fragment_main
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +12,8 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.MainPage.Activity_main.EditMyPageActivity
+import com.example.senimoapplication.MainPage.VO_main.BadgeRes
+import com.example.senimoapplication.MainPage.VO_main.BadgeVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
 import com.example.senimoapplication.R
@@ -89,7 +90,6 @@ class MypageFragment : Fragment() {
 
     }
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -109,6 +109,8 @@ class MypageFragment : Fragment() {
             editProfileResultLauncher.launch(intent)
             activity?.finish()
         }
+
+        getUserBadge()
 
         return view
     }
@@ -148,4 +150,66 @@ class MypageFragment : Fragment() {
         _binding = null
     }
 
+    private fun getUserBadge() {
+        val userData = PreferenceManager.getUser(requireContext())
+        val userId = userData?.user_id.toString()
+
+        val service = Server(requireContext()).service
+        val call = service.getUserBadge(userId)
+
+        call.enqueue(object : Callback<BadgeRes> {
+            override fun onResponse(call: Call<BadgeRes>, response: Response<BadgeRes>) {
+                if (response.isSuccessful) {
+                    val badgeList: List<BadgeVO>? = response.body()?.badges
+                    Log.d("MyPageFragment 뱃지 리스트1", badgeList.toString())
+                    if (badgeList != null) {
+                        updateBadgeImages(badgeList)
+                    }
+                } else {
+                    Log.d("MyPageFragment 뱃지 리스트3", "응답 실패: ${response.code()} ${response.message()}")
+                    Log.d("MyPageFragment 뱃지 리스트3", userId)
+                }
+            }
+
+            override fun onFailure(call: Call<BadgeRes>, t: Throwable) {
+                Log.e("MyPageFragment 뱃지 리스트", "뱃지 가져오기 통신 실패", t)
+            }
+
+        })
+    }
+
+    // 해당하는 badge_code0가 있는 경우 배지 이미지를 변경(활성화)
+    private fun updateBadgeImages(badgeList: List<BadgeVO>) {
+        for (badge in badgeList) {
+            when (badge.badgeCode) {
+                "badge_code01" -> {
+                    binding.imgMBadge1.setImageResource(R.drawable.ic_badge1_on)
+                }
+                "badge_code02" -> {
+                    binding.imgMBadge2.setImageResource(R.drawable.ic_badge2_on)
+                }
+                "badge_code03" -> {
+                    binding.imgMBadge3.setImageResource(R.drawable.ic_badge3_on)
+                }
+                "badge_code04" -> {
+                    binding.imgMBadge4.setImageResource(R.drawable.ic_badge4_on)
+                }
+                "badge_code05" -> {
+                    binding.imgMBadge5.setImageResource(R.drawable.ic_badge5_on)
+                }
+                "badge_code06" -> {
+                    binding.imgMBadge6.setImageResource(R.drawable.ic_badge6_on)
+                }
+                "badge_code07" -> {
+                    binding.imgMBadge7.setImageResource(R.drawable.ic_badge7_on)
+                }
+                "badge_code08" -> {
+                    binding.imgMBadge8.setImageResource(R.drawable.ic_badge8_on)
+                }
+                "badge_code09" -> {
+                    binding.imgMBadge9.setImageResource(R.drawable.ic_badge9_on)
+                }
+            }
+        }
+    }
 }
