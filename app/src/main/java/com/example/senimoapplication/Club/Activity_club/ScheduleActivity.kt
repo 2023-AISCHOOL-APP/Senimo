@@ -192,9 +192,9 @@ class ScheduleActivity : AppCompatActivity() {
                                             override fun onItemClick(view: View, position: Int) {
                                                 val clickedSchedule = scheduleMemberList[position]
                                                 // 프로필 페이지로 이동
-                                                val intent = Intent(this@ScheduleActivity, MainActivity::class.java)
-                                                intent.putExtra("selected_tab", "M_tab4")
+                                                val intent = Intent(this@ScheduleActivity, userProfileActivity::class.java)
                                                 intent.putExtra("selected_user", "${clickedSchedule.userId}")
+                                                Log.d("userProfile","일정 멤버 리스트 보내는 값 ${clickedSchedule.userId}")
                                                 startActivity(intent)
                                                 finish()
                                             }

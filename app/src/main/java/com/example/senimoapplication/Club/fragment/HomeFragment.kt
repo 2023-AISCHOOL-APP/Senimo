@@ -139,6 +139,10 @@ class HomeFragment : Fragment() {
                                 binding.rvMember.adapter = m_adapter
                                 binding.rvMember.layoutManager = LinearLayoutManager(view.context)
 
+
+
+
+
                                 // 운영진만 보이는 버튼
                                 if (userId in staffList){
                                     binding.tvMoveEdit.visibility = VISIBLE
@@ -433,6 +437,7 @@ class MemberManager(private val server: Server) {
         val call = server.service.updateMember(updateMemberVO)
         call.enqueue(callback)
     }
+
     // 멤버 내보내기 함수
     fun deleteMember(deleteMemberVO: DeleteMemberVO, callback: Callback<JsonObject>) {
         val call = server.service.deleteMember(deleteMemberVO)

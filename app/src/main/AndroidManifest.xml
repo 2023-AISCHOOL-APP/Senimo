@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- AndroidManifest.xml -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORcAGE" />
 
@@ -19,6 +19,9 @@
         android:theme="@style/Theme.SenimoApplication"
         android:usesCleartextTraffic="true"
         tools:targetApi="34">
+        <activity
+            android:name=".Club.Activity_club.userProfileActivity"
+            android:exported="false" />
         <activity
             android:name=".Login.Activity_login.SignUpActivity"
             android:exported="false" />
