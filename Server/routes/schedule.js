@@ -11,14 +11,14 @@ const { UPLOADS_PATH } = require('../config/config');
 // multer 설정
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-      // 파일이 저장될 경로
-      cb(null, `${UPLOADS_PATH}`);
+    // 파일이 저장될 경로
+    cb(null, `${UPLOADS_PATH}`);
   },
   filename: function (req, file, cb) {
-      // 파일 저장시 사용할 이름
-      const uniqueFilename = uuidv4() + '-' + file.originalname;
-      cb(null, uniqueFilename);
-      console.log("사진이름: ", uniqueFilename);
+    // 파일 저장시 사용할 이름
+    const uniqueFilename = uuidv4() + '-' + file.originalname;
+    cb(null, uniqueFilename);
+    console.log("사진이름: ", uniqueFilename);
   }
 });
 
@@ -51,7 +51,7 @@ router.get('/get/Sche_intro/:sche_code', (req, res) => {
 });
 
 // 일정 생성
-router.post('/makeSche',upload.single('picture'), (req, res) => {
+router.post('/makeSche', upload.single('picture'), (req, res) => {
   console.log('makeSche router', req.body);
   const makeSche = JSON.parse(req.body.makeSche)
   const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img } = makeSche
@@ -75,29 +75,29 @@ router.post('/makeSche',upload.single('picture'), (req, res) => {
 })
 
 // 일정 수정
-router.post('/updateSche', upload.single('picture'), (req,res)=> {
+router.post('/updateSche', upload.single('picture'), (req, res) => {
   const updateSche = JSON.parse(req.body.updateSche)
-  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img ,imageChanged} = updateSche
+  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img, imageChanged } = updateSche
   const formattedDate = new Date(sche_date)
 
-  const getOldImagePathQuery =`select sche_img from tb_schedule where sche_code = ?`;
-  conn.query(getOldImagePathQuery,[sche_code], (err,results) => {
+  const getOldImagePathQuery = `select sche_img from tb_schedule where sche_code = ?`;
+  conn.query(getOldImagePathQuery, [sche_code], (err, results) => {
     if (err) {
-      return res.status(500).send('Database error: ' +err.message);
-  }
-  oldImagePath = results[0]?.post_img;
-  
-  let newImagePath;
+      return res.status(500).send('Database error: ' + err.message);
+    }
+    oldImagePath = results[0]?.post_img;
 
-  // 기존 이미지가 있고, 새 이미지가 업로드된 경우 기존 이미지 삭제
-  if (imageChanged && req.file) {
-    // 새 이미지 업로드 처리
-    newImagePath = req.file.filename;
+    let newImagePath;
 
-    // 기존 이미지 삭제
-      if(oldImagePath){
-          fs.unlink(path.join(`${UPLOADS_PATH}/${oldImagePath}`), (err) => {
-            if (err) console.error('Failed to delete old image:', err);
+    // 기존 이미지가 있고, 새 이미지가 업로드된 경우 기존 이미지 삭제
+    if (imageChanged && req.file) {
+      // 새 이미지 업로드 처리
+      newImagePath = req.file.filename;
+
+      // 기존 이미지 삭제
+      if (oldImagePath) {
+        fs.unlink(path.join(`${UPLOADS_PATH}/${oldImagePath}`), (err) => {
+          if (err) console.error('Failed to delete old image:', err);
         });
       }
     } else {
@@ -106,28 +106,29 @@ router.post('/updateSche', upload.single('picture'), (req,res)=> {
     }
 
     // 게시글 업데이트 
-    console.log("newImagePath : ",newImagePath)
+    console.log("newImagePath : ", newImagePath)
     const updateQuery = `
     UPDATE tb_schedule
     SET sche_title = ?, sche_content = ?, sche_date = ?, max_num = ?,  fee = ?, sche_img = ?
     WHERE sche_code = ?;`;
-    conn.query(updateQuery,[sche_title,sche_content,formattedDate,max_num,fee,newImagePath,sche_code], (err,result) => {
+    conn.query(updateQuery, [sche_title, sche_content, formattedDate, max_num, fee, newImagePath, sche_code], (err, result) => {
       if (err) {
         // 파일 삭제 로직
-      if (req.file) {
-      const filePath = `${UPLOADS_PATH}/${req.file.filename}`;
-      fs.unlink(filePath, err => {
-      if (err) console.error('Failed to delete uploaded file:', err);
-      });
-    }
-    return res.status(500).json({ error: err.message });
-      console.log("실패")
+        if (req.file) {
+          const filePath = `${UPLOADS_PATH}/${req.file.filename}`;
+          fs.unlink(filePath, err => {
+            if (err) console.error('Failed to delete uploaded file:', err);
+          });
+        }
+        return res.status(500).json({ error: err.message });
+        console.log("실패")
 
-    } else {
-      res.status(200).json({ 
-      club_img: `${config.baseURL}/uploads/${newImagePath}`})
-      console.log("수정완료")
-    }
+      } else {
+        res.status(200).json({
+          club_img: `${config.baseURL}/uploads/${newImagePath}`
+        })
+        console.log("수정완료")
+      }
     })
   }); //getOldImagePathQueryv
 }); //updateSche
@@ -147,7 +148,35 @@ router.post('/joinSche', (req, res) => {
       res.json({ rows: 'failed' });
     } else {
       console.log('일정 참가 성공');
-      res.json({ rows: 'success'});
+      // 뱃지 코드 지정
+      const badge_code = 'badge_code02';
+
+      // 이미 해당 뱃지 코드와 사용자 ID의 조합이 tb_user_badge에 있는지 확인
+      const checkUserBadgeQuery = `SELECT * FROM tb_user_badge WHERE badge_code = ? AND user_id = ?;`;
+      conn.query(checkUserBadgeQuery, [badge_code, user_id], (err, results) => {
+        if (err) {
+          console.error("뱃지 조회 오류: ", err);
+          res.status(500).json({ error: '뱃지 조회 오류: ' + err.message });
+        } else {
+          if (results.length === 0) {
+            // tb_user_badge에 조합이 없으면 새로 추가
+            const insertUserBadgeQuery = `INSERT INTO tb_user_badge (badge_code, user_id) VALUES (?, ?);`;
+            conn.query(insertUserBadgeQuery, [badge_code, user_id], (err, userBadgeResult) => {
+              if (err) {
+                console.error("뱃지 저장 실패: ", err);
+                res.status(500).json({ error: '뱃지 저장 오류: ' + err.message });
+              } else {
+                res.json({ rows: 'success' });
+                console.log("뱃지 저장 성공");
+              }
+            });
+          } else {
+            // 이미 해당 조합이 존재하므로 추가하지 않고 메시지 반환
+            res.json({ rows: 'already exists' });
+            console.log("이미 해당 뱃지 코드와 사용자 ID의 조합이 존재합니다.");
+          }
+        }
+      });
     }
   });
 })
@@ -177,7 +206,7 @@ router.post('/deleteSche', (req, res) => {
 
   const deletePostSql = `delete from tb_schedule where sche_code = ?`
 
-  conn.query(deletePostSql, [ sche_code ], (err, rows) => {
+  conn.query(deletePostSql, [sche_code], (err, rows) => {
     if (err) {
       console.error('일정 삭제 실패', err);
       res.json({ rows: 'failed' });
