@@ -1,39 +1,39 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../config/database')
-const config = require('../config/config');
 
+router.get('/getUserBadge/:user_id', (req, res) => {
+    console.log('뱃지 라우터', req.params);
+    let user_id = req.params.user_id
 
+    const badgeSql = `select badge_get_code, badge_code, user_id from tb_user_badge where user_id = ?;`
+    const badgeCntSql = `select count(*) as badge_cnt from tb_user_badge where user_id = ?;`;
 
-
-router.get('/getUserBadges', (req, res) => {
-    console.log("요청왔다")
-    const userId = req.query.userId;
-
-    // SQL 쿼리를 실행
-    const query = `
-    SELECT
-        b.badge_code, 
-        b.badge_name
-    FROM 
-        tb_user_badge ub
-    JOIN 
-        tb_badge b ON ub.badge_code = b.badge_code
-    WHERE 
-        ub.user_id = ?`;
-
-        conn.query(query, [userId], (err, rows) => {
-        console.log('rows :', rows);
+    conn.query(badgeSql, [user_id], (err, badgeResults) => {
+        console.log('뱃지 results :', badgeResults);
         if (err) {
-            res.status(500).send('서버 에러: ' + err.message);
-        } else {
-            // 결과를 JSON 형태로 클라이언트에 전송합니다.
-            res.json({result:rows});
+            res.status(500).json({ error: err.message });
+            return;
         }
+
+        conn.query(badgeCntSql, [user_id], (countErr, countResults) => {
+            if (countErr) {
+                res.status(500).json({ error: countErr.message });
+                return;
+            }
+
+            const totalBadges = countResults[0].badge_cnt;
+
+            if (badgeResults.length > 0) {
+                console.log("뱃지 정보:", badgeResults);
+                console.log("뱃지 갯수:", totalBadges);
+
+                res.status(200).json({ badges: badgeResults, badgeCnt: totalBadges });
+            } else {
+                res.status(404).json({ error: "뱃지 데이터를 찾을 수 없습니다." });
+            }
+        });
     });
 });
-
-
-
 
 module.exports = router;

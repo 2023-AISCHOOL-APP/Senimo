@@ -23,11 +23,11 @@ import com.example.senimoapplication.Club.VO.WriteReviewResVO
 import com.example.senimoapplication.Club.VO.getPostResVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
+import com.example.senimoapplication.MainPage.VO_main.BadgeRes
 import com.example.senimoapplication.MainPage.VO_main.CombinedDataResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
-import com.example.senimoapplication.MainPage.VO_main.UserBadgeResponse
 import com.example.senimoapplication.MainPage.VO_main.UserDropOutResVO
 import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
 import com.example.senimoapplication.MainPage.VO_main.modifyResult
@@ -184,9 +184,6 @@ interface ApiService {
                  @Field("user_id") userId: String?
     ) : Call<QuitClubResVO>
 
-    @GET("/getUserBadges")
-    fun getUserBadges(@Query("userId") userId: String?): Call<UserBadgeResponse>
-
     @POST("/editMyProfile")
     fun updateUserProfile(@Body profile: MyPageVO): Call<getMyPageVO>
 
@@ -229,7 +226,6 @@ interface ApiService {
         @Part photos: List<MultipartBody.Part>
     ): Call<GalleryVO>
 
-
     @GET("/getPostContent/{club_code}")
     fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>
 
@@ -261,9 +257,11 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/getUserRole")
     fun getUserRole(@Field("club_code") clubCode: String?,
-                 @Field("user_id") userId: String?
-    ) : Call<RoleResVO>
-}
+                 @Field("user_id") userId: String?) : Call<RoleResVO>
+
+    @GET("/getUserBadge/{user_id}")
+    fun getUserBadge(@Path("user_id") userId: String?): Call<BadgeRes>
+
 
 
 

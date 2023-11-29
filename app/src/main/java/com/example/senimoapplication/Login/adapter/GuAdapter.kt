@@ -20,7 +20,7 @@ class GuAdapter(val layout: Int, val list: ArrayList<String>, val context: Conte
   var itemClickListener: OnItemClickListener? = null
 
   // 선택 시켜 놓을 아이템의 위치
-  var selectedPosition = 0
+  var selectedPosition = -1
 
   inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
     val tvGu = view.findViewById<TextView>(R.id.tvGu)
