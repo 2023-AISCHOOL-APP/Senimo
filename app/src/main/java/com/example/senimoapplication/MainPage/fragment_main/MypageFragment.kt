@@ -161,9 +161,14 @@ class MypageFragment : Fragment() {
             override fun onResponse(call: Call<BadgeRes>, response: Response<BadgeRes>) {
                 if (response.isSuccessful) {
                     val badgeList: List<BadgeVO>? = response.body()?.badges
+                    val badgeCount: Int = response.body()?.badgeCnt ?: 0 // badgeCnt 가져오기
                     Log.d("MyPageFragment 뱃지 리스트1", badgeList.toString())
+                    Log.d("MyPageFragment 뱃지 개수1", badgeCount.toString())
                     if (badgeList != null) {
+                        // 뱃지 이미지 변경 함수 호출
                         updateBadgeImages(badgeList)
+                        // tvMBadgeCnt에 badgeCnt 값 설정
+                        binding.tvMBadgeCnt.text = badgeCount.toString()
                     }
                 } else {
                     Log.d("MyPageFragment 뱃지 리스트3", "응답 실패: ${response.code()} ${response.message()}")

@@ -42,5 +42,6 @@ data class BadgeVO(
 }
 
 data class BadgeRes(
-  val badges: List<BadgeVO>
+  val badges: List<BadgeVO>,
+  val badgeCnt: Int
 )
