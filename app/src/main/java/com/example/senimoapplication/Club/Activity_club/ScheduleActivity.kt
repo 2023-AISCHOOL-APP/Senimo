@@ -18,6 +18,7 @@ import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.DeleteScheResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
+import com.example.senimoapplication.Club.VO.RoleResVO
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
@@ -88,7 +89,7 @@ class ScheduleActivity : AppCompatActivity() {
 
         displayScheduleInfo(clickedSchedule)
         // 일정 참여 멤버 목록 가져오기
-
+        getUserRole(clickedSchedule?.clubCode, userId)
         getScheduleMembers()
 
 
@@ -114,47 +115,6 @@ class ScheduleActivity : AppCompatActivity() {
         }
         this.onBackPressedDispatcher.addCallback(this, callback)
 
-
-        // 앱바 - 게시물 관리 기능 추가
-        if(staffList?.contains(userId)==true){
-            // 현재 로그인한 회원이 운영진인 경우
-            binding.icMore.setOnClickListener { view ->
-                val popupMenu = PopupMenu(this, view)
-                val menuInflater = popupMenu.menuInflater
-
-                menuInflater.inflate(R.menu.schedule_option_menu, popupMenu.menu)
-
-                popupMenu.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.menu_option1 -> {
-                            // 일정 수정
-                            val intent = Intent(this, MakeScheduleActivity::class.java)
-                            intent.putExtra("clickedSchedule", clickedSchedule)
-                            intent.putExtra("title", "일정 수정")
-                            startActivity(intent)
-                            finish()
-
-                            true
-                        }
-
-                        R.id.menu_option2 -> {
-                            // 일정 삭제
-                            showActivityDialogBox(this, "일정을 삭제하시겠어요?", "삭제하기", "일정이 삭제되었습니다.", scheCode){
-                                // '일정 삭제하기' 버튼 클릭 시 실행할 내용
-                                deleteSche(scheCode) // deleteSche 함수 호출
-                            }
-                            true
-                        }
-
-                        else -> false
-                    }
-                }
-                popupMenu.show()
-            }
-
-        } else {
-            binding.icMore.visibility = INVISIBLE
-        }
     }
 
     private fun displayScheduleInfo(scheduleInfo : ScheduleVO?){
@@ -387,5 +347,69 @@ class ScheduleActivity : AppCompatActivity() {
         startActivity(returnIntent)
         finish()
     }
+
+    private fun getUserRole(clubCode: String?, userId: String?) {
+        val service = Server(this).service
+        val call = service.getUserRole(clubCode, userId)
+
+        call.enqueue(object : Callback<RoleResVO> {
+            override fun onResponse(call: Call<RoleResVO>, response: Response<RoleResVO>) {
+                if (response.isSuccessful) {
+                    val roleResponse = response.body()
+                    if (roleResponse != null && roleResponse.userRole != 3) {
+                        // 현재 로그인한 회원이 운영진인 경우
+                        Log.d("getUserRole", "사용자 역할: ${roleResponse.userRole}")
+                        binding.icMore.setOnClickListener { view ->
+                            val popupMenu = PopupMenu(this@ScheduleActivity, view)
+                            val menuInflater = popupMenu.menuInflater
+                            menuInflater.inflate(R.menu.schedule_option_menu, popupMenu.menu)
+                            popupMenu.setOnMenuItemClickListener { item ->
+                                when (item.itemId) {
+                                    R.id.menu_option1 -> {
+                                        // 일정 수정
+                                        val intent = Intent(
+                                            this@ScheduleActivity,
+                                            MakeScheduleActivity::class.java
+                                        )
+                                        intent.putExtra("clickedSchedule", clickedSchedule)
+                                        intent.putExtra("title", "일정 수정")
+                                        startActivity(intent)
+                                        finish()
+                                        true
+                                    }
+                                    R.id.menu_option2 -> {
+                                        // 일정 삭제
+                                        showActivityDialogBox(
+                                            this@ScheduleActivity,
+                                            "일정을 삭제하시겠어요?",
+                                            "삭제하기",
+                                            "일정이 삭제되었습니다.",
+                                            scheCode
+                                        ) {
+                                            // '일정 삭제하기' 버튼 클릭 시 실행할 내용
+                                            deleteSche(scheCode) // deleteSche 함수 호출
+                                        }
+                                        true
+                                    }
+                                    else -> false
+                                }
+                            }
+                            popupMenu.show()
+                        }
+                    } else {
+                        binding.icMore.visibility = INVISIBLE
+                    }
+                } else {
+                    Log.d("getUserRole", "사용자 역할 조회 실패")
+                    Log.d("getUserRole", "응답 실패: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<RoleResVO>, t: Throwable) {
+                Log.e("사용자 역할 조회", "사용자 역할 조회 네트워크 요청 실패", t)
+            }
+        })
+    }
 }
+
 

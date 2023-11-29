@@ -15,6 +15,7 @@ import com.example.senimoapplication.Club.VO.JoinClubResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
 import com.example.senimoapplication.Club.VO.PostVO
 import com.example.senimoapplication.Club.VO.QuitClubResVO
+import com.example.senimoapplication.Club.VO.RoleResVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.VO.WritePostResVO
@@ -57,7 +58,7 @@ interface ApiService {
 
     @Multipart
     @POST("/upload")
-    fun uploadImage(@Part image: MultipartBody.Part) : Call<ResponseBody>
+    fun uploadImage(@Part image: MultipartBody.Part): Call<ResponseBody>
 
     @GET("/getLatestSchedule")
     fun getLatestSchedule(@Query("userId") userId: String?): Call<List<ScheduleVO>>
@@ -77,7 +78,7 @@ interface ApiService {
     fun getScheIntro(@Path("sche_code") sche_code: String): Call<ScheduleVO> // 특정 일정 ID를 사용하여 상세 정보 가져오기
 
     @GET("/getSchedules/{club_code}")
-    fun getSchedules(@Path("club_code") clubCode: String) : Call<AllSchedulesResVO>
+    fun getSchedules(@Path("club_code") clubCode: String): Call<AllSchedulesResVO>
 
     @GET("/getClubInfo/{club_code}")
     fun getClubInfo(@Path("club_code") club_code: String): Call<ClubInfoVO>
@@ -98,14 +99,16 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/signup")
-    fun signUp(@Field("user_id") userId: String,
-               @Field("user_pw") userPw: String,
-               @Field("user_name") userName: String,
-               @Field("gender") gender: String,
-               @Field("birth_year") birthYear: Int,
-               @Field("user_gu") userGu: String,
-               @Field("user_dong") userDong: String,
-               @Field("user_introduce") userIntroduce: String?): Call<SignUpResVO>
+    fun signUp(
+        @Field("user_id") userId: String,
+        @Field("user_pw") userPw: String,
+        @Field("user_name") userName: String,
+        @Field("gender") gender: String,
+        @Field("birth_year") birthYear: Int,
+        @Field("user_gu") userGu: String,
+        @Field("user_dong") userDong: String,
+        @Field("user_introduce") userIntroduce: String?
+    ): Call<SignUpResVO>
 
     @POST("/validateToken")
     fun validateToken(@Header("Authorization") token: String): Call<TokenValidationResponse>
@@ -119,30 +122,38 @@ interface ApiService {
 
     @Multipart
     @POST("/makeSche")
-    fun createSchedule(@Part ("makeSche")scheduleVO: ScheduleVO,
-                       @Part image: MultipartBody.Part?
+    fun createSchedule(
+        @Part("makeSche") scheduleVO: ScheduleVO,
+        @Part image: MultipartBody.Part?
     ): Call<MakeScheResVo>
 
     @Multipart
     @POST("/updateSche")
-    fun updateSchedule(@Part ("updateSche")updateVO: ScheduleVO,
-                       @Part image: MultipartBody.Part?): Call<MakeScheResVo>
+    fun updateSchedule(
+        @Part("updateSche") updateVO: ScheduleVO,
+        @Part image: MultipartBody.Part?
+    ): Call<MakeScheResVo>
 
     @Multipart
     @POST("/modifyMeeting")
-    fun modifyMeeting(@Part("modifyMeeting") meetingVO: MeetingVO,
-                  @Part image: MultipartBody.Part?
-    ) : Call<MeetingVO>
+    fun modifyMeeting(
+        @Part("modifyMeeting") meetingVO: MeetingVO,
+        @Part image: MultipartBody.Part?
+    ): Call<MeetingVO>
 
     @FormUrlEncoded
     @POST("/updateInterestedClub")
-    fun updateInterestStatus(@Field ("club_code") clubCode : String,
-                             @Field ("user_id") userId :String): Call<InterestedResVO>
+    fun updateInterestStatus(
+        @Field("club_code") clubCode: String,
+        @Field("user_id") userId: String
+    ): Call<InterestedResVO>
 
     @FormUrlEncoded
     @POST("/initialInterestedClub")
-    fun initialInterestedClub(@Field ("club_code") clubCode : String,
-                             @Field ("user_id") userId :String): Call<InterestedResVO>
+    fun initialInterestedClub(
+        @Field("club_code") clubCode: String,
+        @Field("user_id") userId: String
+    ): Call<InterestedResVO>
 
     @POST("/getAllMembers/{clubCode}")
     fun getAllMembers(@Path("clubCode") clubCode: String): Call<AllMemberResVO>
@@ -161,27 +172,31 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/joinSche")
-    fun joinSche(@Field("user_id") userId: String?,
-                 @Field("sche_code") scheCode: String?
-    ) : Call<JoinScheResVO>
+    fun joinSche(
+        @Field("user_id") userId: String?,
+        @Field("sche_code") scheCode: String?
+    ): Call<JoinScheResVO>
 
     @FormUrlEncoded
     @POST("/cancelJoinSche")
-    fun cancelJoinSche(@Field("user_id") userId: String?,
-                       @Field("sche_code") scheCode: String?
-    ) : Call<CancelJoinScheResVO>
+    fun cancelJoinSche(
+        @Field("user_id") userId: String?,
+        @Field("sche_code") scheCode: String?
+    ): Call<CancelJoinScheResVO>
 
     @FormUrlEncoded
     @POST("/joinClub")
-    fun joinClub(@Field("club_code") clubCode: String?,
-                 @Field("user_id") userId: String?
-    ) : Call<JoinClubResVO>
+    fun joinClub(
+        @Field("club_code") clubCode: String?,
+        @Field("user_id") userId: String?
+    ): Call<JoinClubResVO>
 
     @FormUrlEncoded
     @POST("/quitClub")
-    fun quitClub(@Field("club_code") clubCode: String?,
-                 @Field("user_id") userId: String?
-    ) : Call<QuitClubResVO>
+    fun quitClub(
+        @Field("club_code") clubCode: String?,
+        @Field("user_id") userId: String?
+    ): Call<QuitClubResVO>
 
     @POST("/editMyProfile")
     fun updateUserProfile(@Body profile: MyPageVO): Call<getMyPageVO>
@@ -191,10 +206,12 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("/writePost")
-    fun writePost(@Field("user_id") userId: String,
-                  @Field("club_code") clubCode: String,
-                  @Field("post_content") postContent: String?,
-                  @Field("post_img") postImg: String?) : Call<WritePostResVO>
+    fun writePost(
+        @Field("user_id") userId: String,
+        @Field("club_code") clubCode: String,
+        @Field("post_content") postContent: String?,
+        @Field("post_img") postImg: String?
+    ): Call<WritePostResVO>
 
 //    @Multipart
 //    @POST("/postCreateMeeting")
@@ -206,9 +223,10 @@ interface ApiService {
     // 게시판 작성하기
     @Multipart
     @POST("/writePost")
-    fun writePost(@Part("writePostResVO") writePostResVO: WritePostResVO,
-                  @Part image: MultipartBody.Part?
-    ) : Call<WritePostResVO>
+    fun writePost(
+        @Part("writePostResVO") writePostResVO: WritePostResVO,
+        @Part image: MultipartBody.Part?
+    ): Call<WritePostResVO>
 
     @Multipart
     @POST("/updatePost") // 서버의 게시물 수정
@@ -236,7 +254,7 @@ interface ApiService {
     fun deletePost(@Field("post_code") postCode: String): Call<DeletePostResVO>
 
     @GET("/getCombinedData/{user_id}")
-    fun getCombinedData(@Path("user_id") userId: String?) : Call<CombinedDataResVO>
+    fun getCombinedData(@Path("user_id") userId: String?): Call<CombinedDataResVO>
 
     @POST("/writeReview")
     fun writeReview(@Body writeReviewResVO: WriteReviewResVO): Call<WriteReviewResVO>
@@ -252,6 +270,13 @@ interface ApiService {
     @FormUrlEncoded
     @POST("userDropOut")
     fun userDropOut(@Field("user_id") userId: String?): Call<UserDropOutResVO>
+
+    @FormUrlEncoded
+    @POST("/getUserRole")
+    fun getUserRole(
+        @Field("club_code") clubCode: String?,
+        @Field("user_id") userId: String?
+    ): Call<RoleResVO>
 
     @GET("/getUserBadge/{user_id}")
     fun getUserBadge(@Path("user_id") userId: String?): Call<BadgeRes>

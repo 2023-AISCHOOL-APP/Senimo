@@ -58,7 +58,7 @@ RecyclerView.Adapter<MyScheduleAdapter.ViewHolder>(){
         val schedule = data[position]
 
         // Glide를 사용하여 이미지 로드 및 표시
-        val imageUri = data[position].scheImg
+        Log.d("getCombinewdData", "이미지값 확인 : ${data[position].scheImg}")
         Glide.with(context)
             // .load(imageUri)
             .load(data[position].scheImg)
