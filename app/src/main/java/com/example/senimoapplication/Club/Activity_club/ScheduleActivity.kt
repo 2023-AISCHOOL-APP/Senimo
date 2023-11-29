@@ -68,8 +68,20 @@ class ScheduleActivity : AppCompatActivity() {
         scheCode = clickedSchedule?.scheCode
 
 
+        // MeetingVO 가져오기
+        if(clickedMeeting == null){
+            clickedSchedule?.scheCode?.let {
+                Log.d("ScheduleActivity","scheduleVO받는값 확인${clickedSchedule?.scheCode}")
+                getMeeting(it)
+            }
+        }
+
         // view 관리
-        binding.tvClubName2.text = clubName
+        Log.d("clubName", "${clubName}, ${clubName?.length}")
+        binding.tvClubName2.text = clubName?.let {
+            if (it.length > 13) it.substring(0, 13) + "..." else it
+        } ?: "모임"
+
         val color = ContextCompat.getColor(this, R.color.white)
         binding.icMore.setColorFilter(ContextCompat.getColor(this, R.color.black), PorterDuff.Mode.SRC_IN)
 
@@ -89,33 +101,15 @@ class ScheduleActivity : AppCompatActivity() {
             Log.d("joinSchedule", "참가하기 버튼 $userId, $scheCode")
         }
 
-
         // 뒤로가기 아이콘
         binding.icBack.setOnClickListener {
-            val returnIntent = Intent(this@ScheduleActivity, ClubActivity::class.java)
-            clickedSchedule?.joinedMembers = joinedMemberList?.size ?: 0
-            returnIntent.putExtra("ScheduleInfo", clickedSchedule)
-            returnIntent.putExtra("clickedMeeting", clickedMeeting)
-            setResult(Activity.RESULT_OK, returnIntent)
-            Log.d("ScheduleInfo","보내기:${clickedSchedule?.joinedMembers}")
-            Log.d("ScheduleActivity", "Finishing ScheduleActivity")
-            startActivity(returnIntent)
-            finish()
+            returnToClubActivity()
         }
 
         // 디바이스 뒤로가기 버튼
         val callback = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
-                val returnIntent = Intent(this@ScheduleActivity, ClubActivity::class.java)
-                clickedSchedule?.joinedMembers = joinedMemberList?.size ?: 0
-                returnIntent.putExtra("ScheduleInfo", clickedSchedule)
-                returnIntent.putExtra("clickedMeeting", clickedMeeting)
-                setResult(Activity.RESULT_OK, returnIntent)
-                Log.d("ScheduleInfo","보내기:${clickedSchedule?.joinedMembers}")
-                Log.d("ScheduleActivity", "Finishing ScheduleActivity")
-                Log.d("ScheduleActivity", "${clickedMeeting}")
-                startActivity(returnIntent)
-                finish()
+                returnToClubActivity()
             }
         }
         this.onBackPressedDispatcher.addCallback(this, callback)
@@ -164,7 +158,9 @@ class ScheduleActivity : AppCompatActivity() {
     }
 
     private fun displayScheduleInfo(scheduleInfo : ScheduleVO?){
-        binding.tvClubName2.text = scheduleInfo?.clubName
+        binding.tvClubName2.text = clubName?.let {
+            if (it.length > 13) it.substring(0, 13) + "..." else it
+        } ?: "모임"
         binding.tvScheduleName.text = scheduleInfo?.scheTitle
         binding.tvScheduleIntro.text = scheduleInfo?.scheContent
         binding.tvScheduleTime.text = formatDate("${scheduleInfo?.scheDate}")
@@ -347,5 +343,49 @@ class ScheduleActivity : AppCompatActivity() {
         })
     }
 
+    // 모임 정보 가져오기
+    fun getMeeting(scheCode: String) {
+        val service = Server(this).service
+        val call = service.getMeeting(scheCode)
+
+        call.enqueue(object : Callback<MeetingVO> {
+            override fun onResponse(call: Call<MeetingVO>, response: Response<MeetingVO>) {
+                if (response.isSuccessful) {
+                    val meetingVO = response.body()
+                    Log.d("ScheduleActivity", "통신성공: ${meetingVO}")
+                    clickedMeeting = meetingVO
+
+                    binding.icBack.setOnClickListener {
+                        val intent = Intent(this@ScheduleActivity, ClubActivity::class.java)
+                        intent.putExtra("clickedMeeting", clickedMeeting)
+                        startActivity(intent)
+                        finish()
+                    }
+
+                } else {
+                    // 요청은 성공했지만 서버에서 오류 응답을 받았을 때의 처리
+                    Log.d("ScheduleActivity", "Response not successful: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<MeetingVO>, t: Throwable) {
+                // 네트워크 요청 실패 시의 처리
+                Log.e("ScheduleActivity", "네트워크 요청 실패", t)
+            }
+        })
+    }
+
+    // 뒤로가기 버튼 함수
+    private fun returnToClubActivity() {
+        val returnIntent = Intent(this@ScheduleActivity, ClubActivity::class.java)
+        clickedSchedule?.joinedMembers = joinedMemberList?.size ?: 0
+        returnIntent.putExtra("ScheduleInfo", clickedSchedule)
+        returnIntent.putExtra("clickedMeeting", clickedMeeting)
+        setResult(Activity.RESULT_OK, returnIntent)
+        Log.d("ScheduleInfo","보내기:${clickedSchedule}")
+        Log.d("ScheduleActivity", "Finishing ScheduleActivity")
+        startActivity(returnIntent)
+        finish()
+    }
 }
 

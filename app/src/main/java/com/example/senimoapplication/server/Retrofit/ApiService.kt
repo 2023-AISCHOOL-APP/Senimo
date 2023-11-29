@@ -124,6 +124,11 @@ interface ApiService {
     ): Call<MakeScheResVo>
 
     @Multipart
+    @POST("/updateSche")
+    fun updateSchedule(@Part ("updateSche")updateVO: ScheduleVO,
+                       @Part image: MultipartBody.Part?): Call<MakeScheResVo>
+
+    @Multipart
     @POST("/modifyMeeting")
     fun modifyMeeting(@Part("modifyMeeting") meetingVO: MeetingVO,
                   @Part image: MultipartBody.Part?
@@ -239,6 +244,10 @@ interface ApiService {
     @FormUrlEncoded
     @POST("/deleteSche")
     fun deleteSche(@Field("sche_code") scheCode: String?): Call<DeleteScheResVO>
+
+
+    @GET("/getMeeting/{sche_code}")
+    fun getMeeting(@Path("sche_code") scheCode: String): Call<MeetingVO>
 
     @FormUrlEncoded
     @POST("userDropOut")

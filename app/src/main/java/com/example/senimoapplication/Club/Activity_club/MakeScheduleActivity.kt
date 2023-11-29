@@ -81,6 +81,75 @@ class MakeScheduleActivity : ComponentActivity() {
       binding.tvLetterCnt.text = binding.etScheduleName.text.length.toString()
       binding.tvLetterCnt2.text = binding.etScheduleIntro.text.length.toString()
 
+      val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        // Callback is invoked after the user selects a media item or closes the
+        // photo picker.
+        if (uri != null) {
+          // 이미지를 선택한 후에 URI를 변수에 저장
+          imageUri = uri
+          imageName = getFileName(uri) // 파일이름 추출
+          Glide.with(this).load(uri).into(binding.imgButton)
+
+          Log.d("PhotoPicker", "Selected URI: $uri")
+          binding.imgButton.setImageURI(uri)
+          binding.imgButton.visibility = ImageView.VISIBLE
+          binding.imagebtnLogo.visibility = INVISIBLE // 이미지 선택 시 아이콘 사라지기
+        } else {
+          Log.d("PhotoPicker", "No media selected")
+        }
+      }
+
+      binding.imgButton.setOnClickListener {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+      }
+
+      // 일정 제목 - 입력 글자 수 제한
+      var isTitleLimitExceeded = false
+      var isIntroLimitExceeded = false
+      binding.etScheduleName.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+          val currentLength = charSequence?.length ?: 0
+          if (currentLength >= 20) {
+            Toast.makeText(this@MakeScheduleActivity, "20자 이내로 입력해주세요", Toast.LENGTH_SHORT).show()
+            // 입력이 20자를 넘으면 입력을 취소
+            binding.etScheduleName.text.delete(start, start + count)
+            isTitleLimitExceeded = true
+          } else {
+            isTitleLimitExceeded = false
+          }
+        }
+
+        override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+          val currentLength = editable?.length ?: 0
+          binding.tvLetterCnt.text = currentLength.toString()
+        }
+      })
+
+      // 일정 소개 - 입력 글자 수 제한
+      binding.etScheduleIntro.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+          val currentLength = charSequence?.length ?: 0
+          if (currentLength >= 300) {
+            Toast.makeText(this@MakeScheduleActivity, "300자 이내로 입력해주세요", Toast.LENGTH_SHORT).show()
+            binding.etScheduleIntro.text.delete(start, start + count)
+            isIntroLimitExceeded = true
+          } else {
+            isIntroLimitExceeded = false
+          }
+        }
+
+        override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+          val currentLength = editable?.length ?: 0
+          binding.tvLetterCnt2.text = currentLength.toString()
+        }
+      })
+
 
       // 선택된 날짜 캘린더 뷰에 표시
 
@@ -126,18 +195,35 @@ class MakeScheduleActivity : ComponentActivity() {
 
       // 일정 수정하기 버튼
       binding.btnSetSchedule.setOnClickListener {
-        val scheTitle = binding.etScheduleName.text.toString()
-        val scheContent = binding.etScheduleIntro.text.toString()
-        val scheDate = getUserSelectedDateTime()
-        val scheLocation = binding.etScheduleLoca.text.toString()
-        val maxNum = binding.tvAllMember.text.toString().toInt()
-        val scheFee = binding.etScheduleFee.text.toString().toInt()
-        val scheImg = imageName.toString()
+        Log.d("makeschedule","수정하기 버튼 클릭")
+        val imageChanged = imageName != null
+        val finalImageUri = if (imageName != null) imageName.toString() else clickedSchedule.scheImg
+        val updateVO = ScheduleVO(
+        scheCode = clickedSchedule.scheCode,
+        clubCode = clickedSchedule.clubCode,
+        scheTitle = binding.etScheduleName.text.toString(),
+        scheContent = binding.etScheduleIntro.text.toString(),
+        scheDate = getUserSelectedDateTime(),
+        scheLoca = binding.etScheduleLoca.text.toString(),
+        maxNum = binding.tvAllMember.text.toString().toInt(),
+        joinedMembers = clickedSchedule.joinedMembers,
+        scheFee = binding.etScheduleFee.text.toString().toInt(),
+        scheImg = finalImageUri,
+        clubName = clickedSchedule.clubName,
+        imageChanged = imageChanged
+        )
+        // 이미지 URI가 있으면 이미지와 함께 일정 정보 전송
+        imageUri?.let {
+          val imagePart = ImageUploader(this).prepareImagePart(it)
+          updateSche(updateVO, imagePart)
+        } ?: run {
+          // 이미지 URI가 없는 경우에는 일정 정보만 전송
+          updateSche(updateVO,null)
+        }
+        Log.d("makeschedule","일정 업데이트 값${updateVO}")
 
-        Log.d("datecheck", "${scheDate}")
-        // 함수 새로 만들어야함
-        // makeSche(intentClubCode?:"", scheTitle, scheContent, scheDate, scheLocation, maxNum, scheFee, scheImg)
-      }
+    }
+
     } else { // 일정 생성
       Log.d("일정생성", "일정생성")
       // 일정 등록 (기본 화면)
@@ -240,6 +326,33 @@ class MakeScheduleActivity : ComponentActivity() {
           binding.btnScheduleTime.text = selectedTime
         }
       }
+
+      // 일정 등록하기 버튼
+      binding.btnSetSchedule.setOnClickListener {
+        Log.d("등록버튼",binding.etScheduleName.text.toString())
+        val scheduleVO = ScheduleVO(
+          clubCode = intentClubCode.toString(),
+          scheTitle = binding.etScheduleName.text.toString(),
+          scheContent = binding.etScheduleIntro.text.toString(),
+          // getCombinedDateTime() 함수를 사용하여 날짜와 시간을 결합하여 scheDate 변수에 할당
+          scheDate = getUserSelectedDateTime(),
+          scheLoca = binding.etScheduleLoca.text.toString(),
+          maxNum = binding.tvAllMember.text.toString().toInt(),
+          scheFee = binding.etScheduleFee.text.toString().toInt(),
+          scheImg = imageName.toString()
+        )
+        Log.d("스케줄 보내는값", scheduleVO.toString())
+        // 이미지 URI가 있으면 이미지와 함께 일정 정보 전송
+        imageUri?.let {
+          val imagePart = ImageUploader(this).prepareImagePart(it)
+          makeSche(scheduleVO, imagePart)
+        } ?: run {
+          // 이미지 URI가 없는 경우에는 일정 정보만 전송
+          makeSche(scheduleVO,null)
+        }
+        Log.d("makeschedule", "등록하기 버튼 클릭${scheduleVO}")
+      }
+
     }
 
     // 장소 클릭하면 캘린더, 타임 피커 숨기기
@@ -264,32 +377,6 @@ class MakeScheduleActivity : ComponentActivity() {
     }
 
 
-    // 일정 등록하기 버튼
-    binding.btnSetSchedule.setOnClickListener {
-        Log.d("등록버튼",binding.etScheduleName.text.toString())
-        val scheduleVO = ScheduleVO(
-        clubCode = intentClubCode.toString(),
-        scheTitle = binding.etScheduleName.text.toString(),
-        scheContent = binding.etScheduleIntro.text.toString(),
-        // getCombinedDateTime() 함수를 사용하여 날짜와 시간을 결합하여 scheDate 변수에 할당
-        scheDate = getUserSelectedDateTime(),
-        scheLoca = binding.etScheduleLoca.text.toString(),
-        maxNum = binding.tvAllMember.text.toString().toInt(),
-        scheFee = binding.etScheduleFee.text.toString().toInt(),
-        scheImg = imageName.toString()
-      )
-      Log.d("스케줄 보내는값", scheduleVO.toString())
-      // 이미지 URI가 있으면 이미지와 함께 일정 정보 전송
-      imageUri?.let {
-        val imagePart = ImageUploader(this).prepareImagePart(it)
-        makeSche(scheduleVO, imagePart)
-      } ?: run {
-        // 이미지 URI가 없는 경우에는 일정 정보만 전송
-        makeSche(scheduleVO,null)
-      }
-      Log.d("scheDate", scheduleVO.scheDate)
-      // makeSche 함수를 호출하여 일정을 생성하고 필요한 매개변수들을 전달
-    }
   }
 
   private fun getUserSelectedDateTime(): String {
@@ -333,6 +420,7 @@ class MakeScheduleActivity : ComponentActivity() {
       override fun onResponse(call: Call<MakeScheResVo>, response: Response<MakeScheResVo>) {
         Log.d("makeSche", response.toString())
         if (response.isSuccessful) {
+          Log.d("makeschedule", "일정등록 함수 성공")
           val makeScheRes = response.body()
           if (makeScheRes != null && makeScheRes.rows == "success") {
             Log.d("clubCode", scheduleVO.clubCode)
@@ -358,4 +446,38 @@ class MakeScheduleActivity : ComponentActivity() {
       }
     })
   }
+
+  // 일정 업데이트 함수
+  fun updateSche(updateVO: ScheduleVO,imagePart: MultipartBody.Part?) {
+    val service = Server(this).service
+    val call = service.updateSchedule(updateVO,imagePart)
+
+    call.enqueue(object : Callback<MakeScheResVo> {
+      override fun onResponse(call: Call<MakeScheResVo>, response: Response<MakeScheResVo>) {
+        if (response.isSuccessful) {
+          Log.d("makeschedule", "수정 통신 시작")
+          val makeScheRes = response.body()
+          if (makeScheRes != null) {
+            Toast.makeText(this@MakeScheduleActivity, "일정이 등록되었습니다", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this@MakeScheduleActivity, ClubActivity::class.java)
+            intent.putExtra("clickedMeeting", updateVO)
+            startActivity(intent)
+            finish()
+          } else {
+            Toast.makeText(this@MakeScheduleActivity, "서버 오류: 일정 등록 실패", Toast.LENGTH_SHORT).show()
+            Log.d("makeschedule", "Server responded but not success: ${response.body()?.rows}")
+          }
+        } else {
+          Toast.makeText(this@MakeScheduleActivity, "응답 실패: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+          Log.d("makeschedule", "Response unsuccessful")
+        }
+      }
+
+      override fun onFailure(call: Call<MakeScheResVo>, t: Throwable) {
+        Toast.makeText(this@MakeScheduleActivity, "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+        Log.e("makeschedule", "Network request failed", t)
+      }
+    })
+  }
+
 }

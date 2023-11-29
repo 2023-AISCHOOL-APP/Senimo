@@ -95,7 +95,6 @@ class HomeFragment : Fragment() {
 
         // intent 데이터 관리 (메인 -> 모임홈)
         clickedMeeting = activity?.intent?.getParcelableExtra("clickedMeeting")
-        createMeeting = activity?.intent?.getParcelableExtra("CreateMeeting")
         Log.d("getclickedMeetinghome", clickedMeeting.toString())
 
         clubCode = activity?.intent?.getStringExtra("clubCodeFromMakeSchedule")

@@ -49,7 +49,6 @@ class PostActivity : AppCompatActivity() {
                 binding.imageView5.visibility = ImageView.INVISIBLE
             }
 
-
             // 사진 1장 선택
             val pickMedia =
                 registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

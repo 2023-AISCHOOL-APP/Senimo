@@ -411,7 +411,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                     Log.d("CreateMeetingm1",response.body().toString())
                     // 모임 생성 후 내 모임 창으로 이동
                     val intent = Intent(this@CreateMeetingActivity, ClubActivity::class.java)
-                    intent.putExtra("CreateMeeting", response.body())
+                    intent.putExtra("clickedMeeting", response.body())
                     // setResult(RESULT_OK, intent)
                     startActivity(intent)
                     finish()

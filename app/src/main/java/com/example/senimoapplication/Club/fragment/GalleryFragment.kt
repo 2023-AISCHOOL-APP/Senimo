@@ -35,35 +35,6 @@ class GalleryFragment : Fragment() {
     // ActivityResultLauncher를 프래그먼트의 프로퍼티로 선언
     private lateinit var pickMultipleMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        clickedMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
-
-
-
-
-        // ActivityResultLauncher 초기화
-        pickMultipleMedia =
-            registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
-                if (uris.isNotEmpty()) {
-                    Log.d("clickPhotoPicker", "Number of items selected: ${uris.size}")
-                    Log.d("clickPhotoPicker", "Number of items selected: ${uris}")
-
-                    uploadPhotosToServer(uris)
-                } else {
-                    Log.d("PhotoPicker", "No media selected")
-                }
-            }
-    }
-
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) { uris: List<Uri>? ->
-        // 여기에서 URI 리스트를 처리
-        if (uris != null) {
-
-        }
-    }
-
     // 서버에 업로드 함수
     private fun uploadPhotosToServer(uris: List<Uri>) {
         // MultipartBody.Part 리스트 준비

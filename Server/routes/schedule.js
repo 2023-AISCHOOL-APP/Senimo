@@ -74,8 +74,12 @@ router.post('/makeSche',upload.single('picture'), (req, res) => {
   });
 })
 
-// 일정수정
+// 일정 수정
 router.post('/updateSche', upload.single('picture'), (req,res)=> {
+  const updateSche = JSON.parse(req.body.updateSche)
+  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img ,imageChanged} = updateSche
+  const formattedDate = new Date(sche_date)
+
   const getOldImagePathQuery =`select sche_img from tb_schedule where sche_code = ?`;
   conn.query(getOldImagePathQuery,[sche_code], (err,results) => {
     if (err) {
@@ -107,7 +111,7 @@ router.post('/updateSche', upload.single('picture'), (req,res)=> {
     UPDATE tb_schedule
     SET sche_title = ?, sche_content = ?, sche_date = ?, max_num = ?,  fee = ?, sche_img = ?
     WHERE sche_code = ?;`;
-    conn.query(updateQuery,[sche_title,sche_content,max_num,fee,sche_img,sche_code], (err,result) => {
+    conn.query(updateQuery,[sche_title,sche_content,formattedDate,max_num,fee,newImagePath,sche_code], (err,result) => {
       if (err) {
         // 파일 삭제 로직
       if (req.file) {
@@ -183,5 +187,31 @@ router.post('/deleteSche', (req, res) => {
     }
   })
 })
+
+
+// 일정 업데이트
+router.post('/updateSche', (req, res) => {
+  console.log('updateSche router', req.body);
+  const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img, club_name } = req.body
+  const formattedDate = new Date(sche_date)
+
+  const updateScheSql = `update tb_schedule
+  set sche_title = ?, sche_content = ?, sche_date = ?, sche_location = ?, max_num = ?, fee = ?, sche_img = ?
+  where sche_code = ? ;`
+
+  conn.query(updateScheSql, [sche_title, sche_content, formattedDate, sche_location, max_num, fee, sche_img, sche_code], (err, rows) => {
+    console.log('일정 생성 : ', rows);
+    if (err) {
+      console.error('일정 생성 실패 : ', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('일정등록 성공');
+      res.json({ rows: 'success' });
+    }
+  });
+})
+
+
+
 
 module.exports = router;

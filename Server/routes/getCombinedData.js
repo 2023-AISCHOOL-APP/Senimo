@@ -8,11 +8,12 @@ router.get('/getCombinedData/:user_id', (req, res) => {
 
   // 모임 일정 가져오기: 기존 getSchedules쿼리 -> ScheduleVO
   const myScheduleQuery = `
-    SELECT s.sche_code, s.club_code, s.sche_title, s.sche_content, s.sche_date, s.sche_location, s.fee, s.max_num, COUNT(j.user_id) AS joined_members, s.sche_img
-    FROM tb_schedule s 
-    LEFT JOIN tb_sche_joined_user j ON s.sche_code = j.sche_code
-    WHERE j.user_id = ?
-    GROUP BY s.sche_code, s.club_code, s.sche_title, s.sche_content, s.sche_date, s.sche_location, s.fee, s.max_num, s.sche_img;
+  SELECT s.sche_code, s.club_code, s.sche_title, s.sche_content, s.sche_date, s.sche_location, s.fee, s.max_num, COUNT(j.user_id) AS joined_members, s.sche_img, a.club_name
+  FROM tb_schedule s 
+  LEFT JOIN tb_sche_joined_user j ON s.sche_code = j.sche_code
+  join tb_club a on s.club_code = a.club_code
+  WHERE j.user_id = ?
+  GROUP BY s.sche_code, s.club_code, s.sche_title, s.sche_content, s.sche_date, s.sche_location, s.fee, s.max_num, s.sche_img;;
   `
 
   // 내가 가입한 모임 가져오기 : 기존 getMeetings 쿼리 -> MeetingVO

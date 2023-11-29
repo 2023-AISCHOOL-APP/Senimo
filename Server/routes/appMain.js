@@ -56,8 +56,8 @@ LIMIT 30;`
 
 router.get('/getLatestSchedule', (req,res) => {
   const user_id = req.query.userId;
-  // console.log("아이디다",user_id)
-  // console.log("전체다",req.query)
+  console.log("아이디다",user_id)
+  console.log("전체다",req.query)
   // SQL 쿼리를 실행
   const query = `
   SELECT 
@@ -98,6 +98,29 @@ router.get('/getLatestSchedule', (req,res) => {
     });
 })
 
+router.get('/getMeeting/:sche_code', (req, res) => {
+  console.log('getMeeting router', req.body);
+  const scheCode = req.params.sche_code
 
+  const selectSql = `    
+  SELECT c.club_code, c.club_location, c.club_name, c.club_introduce, COUNT(j.user_id) AS attend_user_cnt, c.max_cnt, CONCAT('${config.baseURL}/uploads/', c.club_img) AS club_img ,k.keyword_name,c.user_id
+  FROM tb_schedule s
+  JOIN tb_club c ON s.club_code = c.club_code
+  LEFT JOIN tb_keyword k ON c.keyword_code = k.keyword_code
+  LEFT JOIN tb_join j ON c.club_code = j.club_code
+  WHERE s.sche_code = ?
+  GROUP BY c.club_code, c.club_location, c.club_name, c.club_introduce, c.max_cnt, c.club_img, k.keyword_name
+  `;
+
+  conn.query(selectSql, [scheCode], (err, rows) => {
+    console.log('clubMainrows :', rows);
+    if (err) {
+      res.status(500).send('서버 에러: ' + err.message);
+    } else {
+      // 결과를 JSON 형태로 클라이언트에 전송합니다.
+      res.json(rows[0]);
+    }
+  });
+});
 
 module.exports = router;
