@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.VO.CommentVO
 import com.example.senimoapplication.Common.formatDate
+import com.example.senimoapplication.Common.myChatListDate
 import com.example.senimoapplication.R
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -35,7 +36,7 @@ class CommentAdapter(val context: Context, val layout: Int, val data: List<Comme
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tvUserName.text = data[position].userName
-        holder.tvCommentDate.text = formatDate(data[position].reviewedDt)
+        holder.tvCommentDate.text = myChatListDate(data[position].reviewedDt, context)
         holder.tvComment.text = data[position].reviewContent
 
         // 댓글 유저 이미지 로드 및 표시

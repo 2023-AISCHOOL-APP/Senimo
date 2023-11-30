@@ -3,7 +3,7 @@ const router = express.Router()
 const conn = require('../config/database');
 const config = require('../config/config')
 router.get('/getSchedules/:club_code', (req, res) => {
-  console.log('result', req.body);
+  // console.log('result', req.body);
   let clubCode = req.params.club_code
 
   const query = `
@@ -19,7 +19,7 @@ router.get('/getSchedules/:club_code', (req, res) => {
     }
 
     if (results.length > 0) {
-        console.log("안드로이드로 보내는 값", results);
+        // console.log("안드로이드로 보내는 값", results);
         res.status(200).json({ data: results });
     } else {
         res.status(404).json({ error: "Club Schedule not found." });

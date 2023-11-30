@@ -20,7 +20,7 @@ router.get('/getCombinedData/:user_id', (req, res) => {
   const myClubQuery = `
   SELECT c.club_code, c.club_location, c.club_name, c.club_introduce, 
     (SELECT COUNT(*) FROM tb_join WHERE club_code = c.club_code) AS attend_user_cnt, c.max_cnt, 
-    c.club_img,k.keyword_name
+    CONCAT('${config.baseURL}/uploads/', c.club_img) AS club_img, k.keyword_name
   FROM tb_club c 
   LEFT JOIN tb_keyword k ON c.keyword_code = k.keyword_code
   WHERE c.club_code IN (SELECT club_code FROM tb_join WHERE user_id = ?)
@@ -31,7 +31,7 @@ router.get('/getCombinedData/:user_id', (req, res) => {
   // 내 관심 모임 가져오기 : MeetingVO
   const myInterestQuery = `
     SELECT c.club_location, c.club_name, c.club_introduce, k.keyword_name,
-      COUNT(j.user_id) AS attend_user_cnt, c.max_cnt, c.club_img, c.club_code, ic.user_id
+      COUNT(j.user_id) AS attend_user_cnt, c.max_cnt, CONCAT('${config.baseURL}/uploads/', c.club_img) AS club_img, c.club_code, ic.user_id
     FROM tb_interested_club ic
     JOIN tb_club c ON ic.club_code = c.club_code
     JOIN tb_keyword k ON c.keyword_code = k.keyword_code
@@ -55,11 +55,11 @@ router.get('/getCombinedData/:user_id', (req, res) => {
           return res.status(500).json({ error: err.message });
         }
 
-        console.log("안드로이드로 보내는 값", {
-          mySchedule: myScheduleResults,
-          myClub: myClubResults,
-          myInterestedClub: myInterestResults
-        });
+        // console.log("안드로이드로 보내는 값", {
+        //   mySchedule: myScheduleResults,
+        //   myClub: myClubResults,
+        //   myInterestedClub: myInterestResults
+        // });
         res.status(200).json({
           mySchedule: myScheduleResults,
           myClub: myClubResults,

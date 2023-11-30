@@ -39,7 +39,7 @@ GROUP BY
     k.keyword_name
 ORDER BY 
     attend_user_cnt DESC
-LIMIT 30;`
+LIMIT 10;`
   
 
   conn.query(query, (err, rows) => {
@@ -56,8 +56,8 @@ LIMIT 30;`
 
 router.get('/getLatestSchedule', (req,res) => {
   const user_id = req.query.userId;
-  console.log("아이디다",user_id)
-  console.log("전체다",req.query)
+  // console.log("아이디다",user_id)
+  // console.log("전체다",req.query)
   // SQL 쿼리를 실행
   const query = `
   SELECT 
@@ -88,7 +88,7 @@ router.get('/getLatestSchedule', (req,res) => {
 
   
     conn.query(query, [user_id], (err, rows) => {
-      console.log('rows :', rows);
+      // console.log('rows :', rows);
       if (err) {
         res.status(500).send('서버 에러: ' + err.message);
       } else {
@@ -99,7 +99,7 @@ router.get('/getLatestSchedule', (req,res) => {
 })
 
 router.get('/getMeeting/:sche_code', (req, res) => {
-  console.log('getMeeting router', req.body);
+  // console.log('getMeeting router', req.body);
   const scheCode = req.params.sche_code
 
   const selectSql = `    
@@ -113,7 +113,7 @@ router.get('/getMeeting/:sche_code', (req, res) => {
   `;
 
   conn.query(selectSql, [scheCode], (err, rows) => {
-    console.log('clubMainrows :', rows);
+    // console.log('clubMainrows :', rows);
     if (err) {
       res.status(500).send('서버 에러: ' + err.message);
     } else {

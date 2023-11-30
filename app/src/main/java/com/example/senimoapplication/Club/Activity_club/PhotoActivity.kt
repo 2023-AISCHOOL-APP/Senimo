@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.senimoapplication.Club.VO.GalleryVO
+import com.example.senimoapplication.Club.VO.loadGalleryVO
 import com.example.senimoapplication.Club.adapter.PhotoViewAdapter
 import com.example.senimoapplication.Common.photoUploadTime
 import com.example.senimoapplication.R
@@ -26,8 +27,8 @@ class PhotoActivity : AppCompatActivity() {
         setContentView(view)
 
         // 넘어온 데이터
-        val clickedPhoto = intent.getSerializableExtra("clickedPhoto") as? GalleryVO
-        val originData = intent.getSerializableExtra("photos") as ArrayList<GalleryVO>
+        val clickedPhoto = intent.getSerializableExtra("clickedPhoto") as? loadGalleryVO
+        val originData = intent.getSerializableExtra("photos") as ArrayList<loadGalleryVO>
         // 로그로 clickedPhoto 내용 출력
         Log.d("PhotoActivity1", "Clicked photo: ${clickedPhoto.toString()}")
 
@@ -40,7 +41,7 @@ class PhotoActivity : AppCompatActivity() {
 
 
 
-        val selectedIndex = originData.indexOfFirst { it.imgUri == clickedPhoto?.imgUri }
+        val selectedIndex = originData.indexOfFirst { it.imgThumbName == clickedPhoto?.imgThumbName }
         val adapter = PhotoViewAdapter(this,this, R.layout.photo_view_list, originData)
 
         // 뷰페이저 설정

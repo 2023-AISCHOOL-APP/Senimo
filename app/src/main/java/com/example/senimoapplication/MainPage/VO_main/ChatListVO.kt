@@ -2,11 +2,16 @@ package com.example.senimoapplication.MainPage.VO_main
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 
 class ChatListVO(
+    @SerializedName("user_img")
     val meetingImg: String = "",
+    @SerializedName("club_name")
     val meetingTitle: String = "",
+    @SerializedName("chat_content")
     val recentlyMessage: String = "",
+    @SerializedName("chat_dt")
     val time: String = "",
     val newMessagesCount: Int = 0
 ) : Parcelable {
