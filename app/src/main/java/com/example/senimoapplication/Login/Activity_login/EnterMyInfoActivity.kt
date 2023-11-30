@@ -91,7 +91,6 @@ class EnterMyInfoActivity : AppCompatActivity() {
             DongAdapter.updateData(westList)
           }
           else -> {
-            // 기본적으로 gwangjuDistricts를 보여줌
             DongAdapter.updateData(gwangsanList)
           }
         }
