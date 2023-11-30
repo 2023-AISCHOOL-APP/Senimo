@@ -220,6 +220,8 @@ class MymeetingFragment() : Fragment() {
 //    }
 
 
+
+    private fun loadChatRooms() {}
 }
 
 class MyMeetingsManager(private val server: Server) {

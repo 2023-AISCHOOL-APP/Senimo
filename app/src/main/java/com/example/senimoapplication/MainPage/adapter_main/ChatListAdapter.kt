@@ -6,9 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.compose.ui.unit.min
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.senimoapplication.Common.myChatListDate
 import com.example.senimoapplication.R
 import java.text.SimpleDateFormat
@@ -58,7 +60,7 @@ class ChatListAdapter(val context: Context, val layout: Int, val data: List<Chat
     override fun onBindViewHolder(holder: ChatListAdapter.ViewHolder, position: Int) {
         val CHATLIST_TITLE_MAX_TEXT_LENGTH = 16 // 최대 채팅 제목 수
         val CHATLIST_CONTENT_MAX_TEXT_LENGTH = 36 // 최대 채팅 내용 수
-
+        Glide.with(context).load(data[position].meetingImg).into(holder.img_M_ChatImg as ImageView)
 
         // 채팅 제목, 내용 가져오기
         val meetingTitle = data[position].meetingTitle
