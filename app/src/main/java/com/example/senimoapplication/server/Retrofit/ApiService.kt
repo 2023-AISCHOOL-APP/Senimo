@@ -22,7 +22,9 @@ import com.example.senimoapplication.Club.VO.WritePostResVO
 import com.example.senimoapplication.Club.VO.WriteReviewResVO
 import com.example.senimoapplication.Club.VO.getPostResVO
 import com.example.senimoapplication.Club.VO.getReviewResVO
+import com.example.senimoapplication.Club.VO.loadGalleryVO
 import com.example.senimoapplication.Login.VO.SignUpResVO
+import com.example.senimoapplication.MainPage.VO_main.ChatListVO
 import com.example.senimoapplication.MainPage.VO_main.BadgeRes
 import com.example.senimoapplication.MainPage.VO_main.CombinedDataResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
@@ -243,6 +245,11 @@ interface ApiService {
         @Part photos: List<MultipartBody.Part>
     ): Call<GalleryVO>
 
+
+    // 사진첩 정보 조회
+    @GET("/getGallery")
+    fun getGallery(@Query("club_code") clubCode: String) : Call<List<loadGalleryVO>>
+
     @GET("/getPostContent/{club_code}")
     fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>
 
@@ -263,6 +270,8 @@ interface ApiService {
     @POST("/deleteSche")
     fun deleteSche(@Field("sche_code") scheCode: String?): Call<DeleteScheResVO>
 
+    @GET("/loadChatRooms")
+    fun getChatRooms(@Query("userId") userId: String) : Call<List<ChatListVO>>
 
     @GET("/getMeeting/{sche_code}")
     fun getMeeting(@Path("sche_code") scheCode: String): Call<MeetingVO>
