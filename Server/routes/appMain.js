@@ -39,7 +39,7 @@ GROUP BY
     k.keyword_name
 ORDER BY 
     attend_user_cnt DESC
-LIMIT 30;`
+LIMIT 10;`
   
 
   conn.query(query, (err, rows) => {

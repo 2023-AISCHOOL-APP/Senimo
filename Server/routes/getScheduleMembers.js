@@ -4,7 +4,7 @@ const conn = require('../config/database');
 
 // 일정 참가 회원 목록
 router.get('/getScheduleMembers/:sche_code', (req, res) => {
-  console.log('멤버확인request값 확인',req.params);
+  //console.log('멤버확인request값 확인',req.params);
   const sche_code = req.params.sche_code; 
   const findMemberQuery = `
   SELECT u.user_id, u.user_name, j.club_role ,u.user_img
@@ -20,7 +20,7 @@ router.get('/getScheduleMembers/:sche_code', (req, res) => {
       }
 
       if (results.length >= 0) {
-          console.log("일정 참가 목록", results);
+          //console.log("일정 참가 목록", results);
           res.status(200).json({ data: results });
       }
   });

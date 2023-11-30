@@ -55,11 +55,11 @@ router.get('/getCombinedData/:user_id', (req, res) => {
           return res.status(500).json({ error: err.message });
         }
 
-        console.log("안드로이드로 보내는 값", {
-          mySchedule: myScheduleResults,
-          myClub: myClubResults,
-          myInterestedClub: myInterestResults
-        });
+        // console.log("안드로이드로 보내는 값", {
+        //   mySchedule: myScheduleResults,
+        //   myClub: myClubResults,
+        //   myInterestedClub: myInterestResults
+        // });
         res.status(200).json({
           mySchedule: myScheduleResults,
           myClub: myClubResults,

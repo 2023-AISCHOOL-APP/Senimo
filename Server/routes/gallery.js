@@ -9,7 +9,7 @@ const config = require('../config/config')
 //const conn = require('../config/database');
 const { UPLOADS_PATH } = require('../config/config');
 require("dotenv").config();
-
+console.log("사진",process.env.HOST)
 // 데이터베이스 연결 설정 함수
 async function connectDatabase() {
     return await mysql.createConnection({

@@ -147,7 +147,8 @@ router.get('/getPostContent/:club_code', (req, res) => {
     left join tb_join tj on tp.club_code = tj.club_code and tu.user_id = tj.user_id
     left join tb_review tr on tp.post_code = tr.post_code
     where tp.club_code = ?
-    group by tp.post_code, tu.user_img, tu.user_name, tp.created_dt, tp.post_content, tp.post_img, tj.club_role, tu.user_id;
+    group by tp.post_code, tu.user_img, tu.user_name, tp.created_dt, tp.post_content, tp.post_img, tj.club_role, tu.user_id
+    order by tp.created_dt desc;
   `
 
   conn.query(getPostSql, [club_code], (err, results) => {
@@ -173,7 +174,8 @@ router.get('/getReview/:post_code', (req, res) => {
     select concat('${config.baseURL}/uploads/', b.user_img) as user_img, b.user_name, a.review_content, a.reviewed_dt
     from tb_review a
     left join tb_user b on a.user_id = b.user_id
-    where a.post_code = ?;
+    where a.post_code = ?
+    order by a.reviewed_dt asc;
   `
 
   conn.query(getReviewSql, [post_code], (err, results) => {
@@ -192,7 +194,7 @@ router.get('/getReview/:post_code', (req, res) => {
 
 // 게시글 삭제
 router.post('/deletePost', (req, res) => {
-  console.log('게시글 삭제 라우터', req.body);
+  //console.log('게시글 삭제 라우터', req.body);
   const { post_code } = req.body;
 
   const deletePostSql = `delete from tb_post where post_code = ?`
@@ -209,7 +211,7 @@ router.post('/deletePost', (req, res) => {
 })
 
 router.post('/writeReview', (req, res) => {
-  console.log('댓글 등록 라우터 : ', req.body);
+  //console.log('댓글 등록 라우터 : ', req.body);
   const { user_id, post_code, review_content } = req.body;
 
   const writeReviewSql = `
@@ -217,7 +219,7 @@ router.post('/writeReview', (req, res) => {
   `
 
   conn.query(writeReviewSql, [ user_id, post_code, review_content], (err, rows) => {
-    console.log('댓글 : ', rows);
+    //console.log('댓글 : ', rows);
     if (err) {
       console.error('댓글 등록 실패 : ', err);
       res.json({ rows: 'failed' });

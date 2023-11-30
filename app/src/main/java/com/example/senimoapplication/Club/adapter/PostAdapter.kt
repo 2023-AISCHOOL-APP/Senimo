@@ -178,7 +178,15 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>,
             .error(R.drawable.ic_profile_circle) // 로딩 실패 시 표시될 이미지
             .into(holder.CommentuserProfileImg)
 
-        holder.tvContent.text = data[position].postContent
+
+        val content = data[position].postContent
+        holder.tvContent.text = if (content.length > 40) {
+            content.substring(0, 40) + "..."
+        } else {
+            content
+        }
+
+
         holder.tvUserName.text = data[position].userName
         when(data[position].clubRole){
             1 -> {
@@ -256,6 +264,11 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>,
                     holder.etComment.visibility = GONE
                     holder.tvCommentSend.visibility = GONE
                     holder.CommentuserProfileImg.visibility = GONE
+                    holder.tvContent.text = if (content.length > 40) {
+                        content.substring(0, 40) + "..."
+                    } else {
+                        content
+                    }
 
                 } else {
                     // 현재 상태가 GONE이면 VISIBLE로 변경
@@ -263,6 +276,7 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>,
                     holder.etComment.visibility = VISIBLE
                     holder.tvCommentSend.visibility = VISIBLE
                     holder.CommentuserProfileImg.visibility = VISIBLE
+                    holder.tvContent.text = content
                 }
 
                 // 상태 토글

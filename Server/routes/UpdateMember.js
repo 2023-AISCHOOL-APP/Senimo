@@ -4,7 +4,7 @@ const conn = require('../config/database');
 const config = require('../config/config');
 
 router.post('/updateMember', (req, res) => {
-  console.log('updateMemberRequest result', req.body);
+  //console.log('updateMemberRequest result', req.body);
   const { club_code, user_id, club_role } = req.body;
   const updateQuery = `UPDATE tb_join SET club_role = ? WHERE user_id = ? and club_code = ?;` // 회원 역할 변경
   conn.query(updateQuery,[club_role, user_id, club_code],(err, results) =>{
@@ -17,7 +17,7 @@ router.post('/updateMember', (req, res) => {
       } else {
         res.status(200).json({ success: true, message: "멤버 삭제 성공." });
       }
-      console.log('응답성공: ', results);
+      //console.log('응답성공: ', results);
     }
   });
   

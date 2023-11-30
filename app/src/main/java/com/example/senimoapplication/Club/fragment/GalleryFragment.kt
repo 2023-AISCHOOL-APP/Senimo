@@ -216,7 +216,7 @@ class GalleryFragment : Fragment() {
                     Log.d("resultGallery", galleryList.size.toString())
                     if (galleryList.isEmpty() && !isUploading) {
                         // 빈 결과에 대한 처리. 예: 사용자에게 알림 표시
-                        Toast.makeText(context, "사진첩이 비어있습니다.", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(context, "사진첩이 비어있습니다.", Toast.LENGTH_SHORT).show()
                     } else {
                         val galleryList = response.body()
                         Log.d("galleryList0", response.toString())
