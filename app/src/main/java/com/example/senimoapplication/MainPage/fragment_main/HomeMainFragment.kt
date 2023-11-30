@@ -247,8 +247,10 @@ class HomeMainFragment : Fragment() {
                 if (response.isSuccessful) {
                     Log.d("ody2", response.body().toString())
                     response.body()?.let { meetings ->
+                        // 서버로부터 받은 목록의 처음 10개 아이템만 선택
+                        val limitedList = meetings.take(10)
                         MeetingList.clear()
-                        MeetingList.addAll(meetings)
+                        MeetingList.addAll(limitedList)
                         if (::adapter.isInitialized) {
                             adapter.notifyDataSetChanged()
 
