@@ -41,6 +41,7 @@ class HomeMainFragment : Fragment() {
     private lateinit var adapter: MeetingAdapter
     private lateinit var myScheduleAdapter: MyScheduleAdapter
     val MeetingList: ArrayList<MeetingVO> = ArrayList()
+    val AllClubList: ArrayList<MeetingVO> = ArrayList()
     val myScheduleList: ArrayList<ScheduleVO> = ArrayList()
     private lateinit var apiService: ApiService
 
@@ -124,7 +125,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -134,7 +135,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -144,7 +145,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -154,7 +155,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -164,7 +165,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -174,7 +175,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -183,7 +184,7 @@ class HomeMainFragment : Fragment() {
         // 검색바 이부분은 전체모임정보가 들어가게 수정해야함(따로요청을 보내야하나?)
         Img_M_SearchBar.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))  // HomeMainFragment에서 MeetingList를 Parcel로 만들어 SearchActivity로 전달
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))  // HomeMainFragment에서 MeetingList를 Parcel로 만들어 SearchActivity로 전달
             Log.d("검색바",MeetingList.toString())
             intent.putExtra("isFromSearchBar", true) // 검색 바에서 온 것임을 나타내는 플래그
             startActivity(intent)
@@ -251,10 +252,10 @@ class HomeMainFragment : Fragment() {
                         val limitedList = meetings.take(10)
                         MeetingList.clear()
                         MeetingList.addAll(limitedList)
+                        AllClubList.addAll(meetings)
                         if (::adapter.isInitialized) {
                             adapter.notifyDataSetChanged()
-
-                            Log.d("ody3", MeetingList.toString())
+                            Log.d("oby3", AllClubList.count().toString())
                         }
                     } ?: run {
 
