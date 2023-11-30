@@ -149,7 +149,7 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         return if (remainingLines.isEmpty()) {
             truncatedFirstLine
         } else {
-            "$truncatedFirstLine ..."
+            "$truncatedFirstLine"
         }
     }
 
