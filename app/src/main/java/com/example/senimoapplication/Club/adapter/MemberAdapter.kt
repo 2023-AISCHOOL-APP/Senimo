@@ -74,11 +74,13 @@ class MemberAdapter(
                 holder.tvUserLevel.setBackgroundResource(R.drawable.user_level_leader)
 
             }
+
             2 -> {
                 holder.tvUserLevel.text = "운영진"
                 holder.tvUserLevel.setBackgroundResource(R.drawable.user_level_oper)
 
             }
+
             3 -> {
                 holder.tvUserLevel.text = "일반"
                 holder.tvUserLevel.setBackgroundResource(R.drawable.user_level_basic)
@@ -90,79 +92,121 @@ class MemberAdapter(
         Glide.with(context)
             .load(imageUrl)
             .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
-            .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
+            .error(R.drawable.ic_profile_circle) // 로딩 실패 시 표시될 이미지
             .into(holder.imgUserProfile)
 
         // 회원 정보 페이지로 이동
         holder.imgUserProfile.setOnClickListener {
             val intent = Intent(context, userProfileActivity::class.java)
             intent.putExtra("selected_user", data[position].userId)
-            Log.d("userProfile","모임 멤버 리스트 보내는 값 ${data[position].userId}")
+            Log.d("userProfile", "모임 멤버 리스트 보내는 값 ${data[position].userId}")
             context.startActivity(intent)
         }
 
 
-        Log.d("leader:","${clubLeader}")
-        if(userId == clubLeader){
-            holder.btnMore.visibility = VISIBLE
-            holder.btnMore.setOnClickListener { view ->
-                val popupMenu = PopupMenu(context, view)
-                val menuInflater = popupMenu.menuInflater
-                menuInflater.inflate(R.menu.member_option_menu, popupMenu.menu)
+        Log.d("leader:", "${clubLeader}")
+        if (userId == clubLeader) {
+            if (position == 0) {
+                holder.btnMore.visibility = INVISIBLE
+            } else {
+                holder.btnMore.visibility = VISIBLE
+                holder.btnMore.setOnClickListener { view ->
+                    val popupMenu = PopupMenu(context, view)
+                    val menuInflater = popupMenu.menuInflater
+                    menuInflater.inflate(R.menu.member_option_menu, popupMenu.menu)
 
-                popupMenu.setOnMenuItemClickListener { item ->
-                    val user = data[position].userId
-                    Log.d("member_user:","${user}")
-                    val clubCode = data[position].clubCode
-                    Log.d("member_clubCode:","${clubCode}")
-                    when (item.itemId) {
-                        R.id.member_option1 -> {
-                            Log.d("memberAdatper_menu:","tab1")
-                            // 운영진으로 전환
-                            showUpdateDialogBox(view.context, "운영진으로 임명할까요?", "임명하기", "운영진이 되었습니다", user, clubCode, 2,fragment)
-                            Log.d("getclickedMeetinghome:","운영진 위임")
-                            true
+                    popupMenu.setOnMenuItemClickListener { item ->
+                        val user = data[position].userId
+                        Log.d("member_user:", "${user}")
+                        val clubCode = data[position].clubCode
+                        Log.d("member_clubCode:", "${clubCode}")
+                        when (item.itemId) {
+                            R.id.member_option1 -> {
+                                Log.d("memberAdatper_menu:", "tab1")
+                                // 운영진으로 전환
+                                showUpdateDialogBox(
+                                    view.context,
+                                    "운영진으로 임명할까요?",
+                                    "임명하기",
+                                    "운영진이 되었습니다",
+                                    user,
+                                    clubCode,
+                                    2,
+                                    fragment
+                                )
+                                Log.d("getclickedMeetinghome:", "운영진 위임")
+                                true
 
-                        }
-
-                        R.id.member_option2 -> {
-                            Log.d("memberAdatper_menu:","tab2")
-                            // 일반회원으로 전환
-                            showUpdateDialogBox(view.context, "일반 회원으로 전환할까요?", "전환하기", "일반 회원이 되었습니다", user, clubCode, 3,fragment)
-                            Log.d("getclickedMeetinghome:","일반 전환")
-                            true
-                        }
-
-                        R.id.member_option3 -> {
-
-                            // 모임장 위임하기
-                            showLeaderUpdateDialogBox(view.context,"모임장 권한을 위임하시겠습니까?","위임하기", "권한이 위임되었습니다", user, clubCode, 1,fragment)
-                            Log.d("getclickedMeetinghome:","모임장 위임")
-
-                            true
-                        }
-                        R.id.member_option4 -> {
-
-                            if(data[position].userId == clubLeader){
-                                showAlertDialogBox(view.context, "모임장은 내보낼 수 없습니다","확인")
-                            }else{
-                                Log.d("getclickedMeetinghome:","강제 회원 탈퇴")
-                                showDeleteDialogBox(view.context,"이 회원을 모임에서 내보낼까요?","내보내기","회원을 내보냈습니다",user, clubCode,fragment)
                             }
 
+                            R.id.member_option2 -> {
+                                Log.d("memberAdatper_menu:", "tab2")
+                                // 일반회원으로 전환
+                                showUpdateDialogBox(
+                                    view.context,
+                                    "일반 회원으로 전환할까요?",
+                                    "전환하기",
+                                    "일반 회원이 되었습니다",
+                                    user,
+                                    clubCode,
+                                    3,
+                                    fragment
+                                )
+                                Log.d("getclickedMeetinghome:", "일반 전환")
+                                true
+                            }
 
-                            true
+                            R.id.member_option3 -> {
+
+                                // 모임장 위임하기
+                                showLeaderUpdateDialogBox(
+                                    view.context,
+                                    "모임장 권한을 위임하시겠습니까?",
+                                    "위임하기",
+                                    "권한이 위임되었습니다",
+                                    user,
+                                    clubCode,
+                                    1,
+                                    fragment
+                                )
+                                Log.d("getclickedMeetinghome:", "모임장 위임")
+
+                                true
+                            }
+
+                            R.id.member_option4 -> {
+
+                                if (data[position].userId == clubLeader) {
+                                    showAlertDialogBox(view.context, "모임장은 내보낼 수 없습니다", "확인")
+                                } else {
+                                    Log.d("getclickedMeetinghome:", "강제 회원 탈퇴")
+                                    showDeleteDialogBox(
+                                        view.context,
+                                        "이 회원을 모임에서 내보낼까요?",
+                                        "내보내기",
+                                        "회원을 내보냈습니다",
+                                        user,
+                                        clubCode,
+                                        fragment
+                                    )
+                                }
+
+
+                                true
+                            }
+
+                            else -> false
                         }
-                        else -> false
                     }
-                }
 
-                popupMenu.show()
+                    popupMenu.show()
+                }
             }
         }else{
             holder.btnMore.visibility = INVISIBLE
         }
     }
+
 
     override fun getItemCount(): Int {
         return data.size
