@@ -4,7 +4,7 @@ const conn = require('../config/database');
 const config = require('../config/config')
 
 router.post('/getUserRole', (req, res) => {
-  console.log('역할result', req.body);
+  //console.log('역할result', req.body);
   const { club_code, user_id } = req.body;
   const RoleQuery = `SELECT club_role FROM tb_join where club_code = ? and user_id =?`;
   

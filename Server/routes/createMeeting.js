@@ -130,13 +130,13 @@ router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
 
 // 모임 가입
 router.post('/joinClub', (req, res) => {
-	console.log('joinClub router', req.body);
+	//console.log('joinClub router', req.body);
 	const { club_code, user_id } = req.body;
 
 	const joinClubSql = `insert into tb_join (club_code, user_id) values (?,?)`;
 
 	conn.query(joinClubSql, [club_code, user_id], (err, rows) => {
-		console.log('모임 가입 : ', rows);
+		//console.log('모임 가입 : ', rows);
 		if (err) {
 			console.error('모임 가입 실패', err);
 			res.json({ rows: 'failed' });
@@ -156,7 +156,7 @@ router.post('/joinClub', (req, res) => {
 					// 뱃지 코드 지정
 					let badge_code = '';
 
-					if (clubCount === 1) {
+					if (clubCount === 1 || clubCount === 2) {
 						// 처음 모임에 가입할 때 'badge_code03' 부여
 						badge_code = 'badge_code03';
 					} else if (clubCount >= 5) {
@@ -205,7 +205,7 @@ router.post('/joinClub', (req, res) => {
 
 // 모임 탈퇴
 router.post('/quitClub', (req, res) => {
-	console.log('quitClub router', req.body);
+	//console.log('quitClub router', req.body);
 	const { club_code, user_id } = req.body
 
 	const joinClubSql = `delete from tb_join where club_code = ? and user_id = ?`

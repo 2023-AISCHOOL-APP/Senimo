@@ -4,7 +4,7 @@ const conn = require('../config/database');
 const config = require('../config/config')
 
 router.get('/getClubInfo/:club_code', (req, res) => {
-  console.log('result', req.body);
+  //console.log('result', req.body);
   let clubCode = req.params.club_code
 
   const query = `
@@ -16,7 +16,7 @@ router.get('/getClubInfo/:club_code', (req, res) => {
   `
 
   conn.query(query, [clubCode], (err, rows) => {
-    console.log('clubMainrows :', rows);
+    //console.log('clubMainrows :', rows);
     if (err) {
       res.status(500).send('서버 에러: ' + err.message);
     } else {
