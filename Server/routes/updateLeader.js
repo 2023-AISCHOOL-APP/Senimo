@@ -4,7 +4,7 @@ const conn = require('../config/database');
 const config = require('../config/config');
 
 router.post('/updateLeader', (req, res) => {
-  console.log('updateMemberRequest result', req.body);
+  //console.log('updateMemberRequest result', req.body);
   const { club_code, user_id, club_role } = req.body;
   const updateQuery = `UPDATE tb_join SET club_role = ? WHERE user_id = ? and club_code = ?;` // 회원 역할 변경
   const findLeaderQuery = `SELECT user_id FROM tb_club WHERE club_code=?;`
@@ -58,7 +58,7 @@ router.post('/updateLeader', (req, res) => {
             }
           });
         }
-        console.log('응답성공: ', results);
+        //console.log('응답성공: ', results);
       }
     });
   }

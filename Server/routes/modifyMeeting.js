@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 
 
 router.post('/modifyMeeting', upload.single('picture') ,(req, res) => {
-    console.log('result', req.body);
+    //console.log('result', req.body);
     const meetingData = JSON.parse(req.body.modifyMeeting);
     const { user_id, club_name, club_introduce, max_cnt, attend_user_cnt, club_location, keyword_name, club_img, club_code} = meetingData;
     

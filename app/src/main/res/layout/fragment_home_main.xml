@@ -207,7 +207,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/pretendard_extrabold"
-                android:text="내 지역 인기 모임"
+                android:text="인기 모임"
                 android:textColor="@color/txt_gray90"
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
