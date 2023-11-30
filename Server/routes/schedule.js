@@ -137,9 +137,9 @@ router.post('/updateSche', upload.single('picture'), (req, res) => {
 // 일정 참가
 router.post('/joinSche', (req, res) => {
   console.log('joinSche router', req.body);
-  const { user_id, sche_code } = req.body
+  const { user_id, sche_code } = req.body;
 
-  const joinScheSql = `insert into tb_sche_joined_user (user_id, sche_code) values (?,?)`
+  const joinScheSql = `insert into tb_sche_joined_user (user_id, sche_code) values (?,?)`;
 
   conn.query(joinScheSql, [user_id, sche_code], (err, rows) => {
     console.log('일정 참가 : ', rows);
@@ -148,38 +148,68 @@ router.post('/joinSche', (req, res) => {
       res.json({ rows: 'failed' });
     } else {
       console.log('일정 참가 성공');
-      // 뱃지 코드 지정
-      const badge_code = 'badge_code02';
 
-      // 이미 해당 뱃지 코드와 사용자 ID의 조합이 tb_user_badge에 있는지 확인
-      const checkUserBadgeQuery = `SELECT * FROM tb_user_badge WHERE badge_code = ? AND user_id = ?;`;
-      conn.query(checkUserBadgeQuery, [badge_code, user_id], (err, results) => {
+      // 해당 사용자의 일정 참가 수 조회
+      const countUserScheAttendancesSql = `select count(*) as attendances from tb_sche_joined_user where user_id = ?`;
+
+      conn.query(countUserScheAttendancesSql, [user_id], (err, result) => {
         if (err) {
-          console.error("뱃지 조회 오류: ", err);
-          res.status(500).json({ error: '뱃지 조회 오류: ' + err.message });
+          console.error("사용자 일정 참가 수 조회 오류: ", err);
+          res.status(500).json({ error: '사용자 일정 참가 수 조회 오류: ' + err.message });
         } else {
-          if (results.length === 0) {
-            // tb_user_badge에 조합이 없으면 새로 추가
-            const insertUserBadgeQuery = `INSERT INTO tb_user_badge (badge_code, user_id) VALUES (?, ?);`;
-            conn.query(insertUserBadgeQuery, [badge_code, user_id], (err, userBadgeResult) => {
+          const attendances = result[0].attendances;
+
+          // 뱃지 코드 지정
+          let badge_code = '';
+
+          if (attendances === 1) {
+            badge_code = 'badge_code02';
+          } else if (attendances === 5) {
+            badge_code = 'badge_code06';
+          } else if (attendances === 15) {
+            badge_code = 'badge_code07';
+          }
+
+          if (badge_code !== '') {
+            // 이미 해당 뱃지 코드와 사용자 ID의 조합이 tb_user_badge에 있는지 확인
+            const checkUserBadgeQuery = `select * from tb_user_badge where badge_code = ? and user_id = ?;`;
+
+            conn.query(checkUserBadgeQuery, [badge_code, user_id], (err, results) => {
               if (err) {
-                console.error("뱃지 저장 실패: ", err);
-                res.status(500).json({ error: '뱃지 저장 오류: ' + err.message });
+                console.error("뱃지 조회 오류: ", err);
+                res.status(500).json({ error: '뱃지 조회 오류: ' + err.message });
               } else {
-                res.json({ rows: 'success' });
-                console.log("뱃지 저장 성공");
+                if (results.length === 0) {
+                  // tb_user_badge에 조합이 없으면 새로 추가
+                  const insertUserBadgeQuery = `insert into tb_user_badge (badge_code, user_id) values (?, ?);`;
+
+                  conn.query(insertUserBadgeQuery, [badge_code, user_id], (err, userBadgeResult) => {
+                    if (err) {
+                      console.error("뱃지 저장 실패: ", err);
+                      res.status(500).json({ error: '뱃지 저장 오류: ' + err.message });
+                    } else {
+                      res.json({ rows: 'success' });
+                      console.log(`뱃지 (${badge_code}) 저장 성공`);
+                    }
+                  });
+                } else {
+                  // 이미 해당 조합이 존재하므로 추가하지 않고 메시지 반환
+                  res.json({ rows: 'success' });
+                  console.log(`이미 해당 뱃지 코드 (${badge_code})와 사용자 ID의 조합이 존재합니다.`);
+                }
               }
             });
           } else {
-            // 이미 해당 조합이 존재하므로 추가하지 않고 메시지 반환
-            res.json({ rows: 'already exists' });
-            console.log("이미 해당 뱃지 코드와 사용자 ID의 조합이 존재합니다.");
+            res.json({ rows: 'success' });
+            console.log("해당 조건에 맞는 뱃지가 없습니다.");
           }
         }
       });
     }
   });
-})
+});
+
+
 
 // 일정 탈퇴
 router.post('/cancelJoinSche', (req, res) => {

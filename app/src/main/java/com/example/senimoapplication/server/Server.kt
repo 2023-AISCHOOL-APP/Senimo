@@ -18,6 +18,7 @@ class Server(private val context: Context) {
             // .baseUrl("http://192.168.70.69:3333") // 희준IP
             .baseUrl("http://192.168.70.59:3333") // 효정IP
 //            .baseUrl("http://192.168.70.243:3333") // 지혜IP
+
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

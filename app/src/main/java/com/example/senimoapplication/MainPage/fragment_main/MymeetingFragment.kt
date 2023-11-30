@@ -188,7 +188,9 @@ class MymeetingFragment() : Fragment() {
                         }
 
                         if(interestList != null){
+
                             val interest_adapter = MeetingAdapter(requireContext(),R.layout.meeting_list, interestList)
+                            Log.d("interestMeeting","datacheck ${interestList}")
                             rv_M_Meeting_interest.adapter = interest_adapter
                             interest_adapter.setShowAllItems(false)
                             rv_M_Meeting_interest.layoutManager = LinearLayoutManager(view.context)

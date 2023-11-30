@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.senimoapplication.Club.Activity_club.userProfileActivity
 import com.example.senimoapplication.Club.VO.MemberVO
 import com.example.senimoapplication.Club.fragment.HomeFragment
 import com.example.senimoapplication.Club.fragment.MemberManager
@@ -94,11 +95,11 @@ class MemberAdapter(
 
         // 회원 정보 페이지로 이동
         holder.imgUserProfile.setOnClickListener {
-            val intent = Intent(context, MainActivity::class.java)
-            intent.putExtra("selected_tab", "M_tab4")
+            val intent = Intent(context, userProfileActivity::class.java)
+            intent.putExtra("selected_user", data[position].userId)
+            Log.d("userProfile","모임 멤버 리스트 보내는 값 ${data[position].userId}")
             context.startActivity(intent)
         }
-
 
 
         Log.d("leader:","${clubLeader}")

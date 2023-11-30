@@ -280,7 +280,7 @@ interface ApiService {
 
     @GET("/getUserBadge/{user_id}")
     fun getUserBadge(@Path("user_id") userId: String?): Call<BadgeRes>
-}
 
+}
 
 
