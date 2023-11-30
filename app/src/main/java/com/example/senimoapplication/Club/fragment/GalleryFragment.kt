@@ -1,8 +1,11 @@
 package com.example.senimoapplication.Club.fragment
 
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.OpenableColumns
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.senimoapplication.Club.VO.GalleryVO
 import com.example.senimoapplication.Club.VO.loadGalleryVO
@@ -24,6 +28,9 @@ import com.example.senimoapplication.server.ImageUploader
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,10 +42,46 @@ class GalleryFragment : Fragment() {
     private lateinit var binding: FragmentGalleryBinding
     private lateinit var adapter: GalleryAdapter
     // ActivityResultLauncher를 프래그먼트의 프로퍼티로 선언
-    private lateinit var pickMultipleMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    // private lateinit var pickMultipleMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    lateinit var clubCode : String
+
 
     var photoList: ArrayList<loadGalleryVO> = ArrayList()
     private var isUploading = false
+
+
+    // Fragment 내에서 실행할 함수
+    private fun fetchDataFromServer() {
+        // 코루틴을 사용하여 비동기 작업 실행
+        lifecycleScope.launch(Dispatchers.IO) {
+            val spf = activity?.getSharedPreferences("club", Context.MODE_PRIVATE)
+            clubCode = spf?.getString("clubcode", "null").toString()
+            // 서버에서 이미지 받아오는 코드 (여기에 작성)
+            loadGallery(clubCode)
+            Log.d("adapter동작","7")
+            // 10초 대기
+            delay(300) // 10초를 밀리초로 변환하여 지정
+
+            // 이미지 받아오기가 완료된 후에 UI 작업 수행
+            launch(Dispatchers.Main) {
+                // UI 업데이트 등을 수행 (예: RecyclerView 업데이트)
+                adapter.notifyDataSetChanged()
+                Log.d("adapter동작","8")
+                if (photoList.isEmpty()) {
+                    binding.rvGallery.visibility = View.GONE
+                    binding.tvAnnounceMainPhoto.visibility = View.VISIBLE
+                    binding.tvAnnounceSubPhoto.visibility = View.VISIBLE
+                } else {
+                    binding.rvGallery.visibility = View.VISIBLE
+                    binding.tvAnnounceMainPhoto.visibility = View.GONE
+                    binding.tvAnnounceSubPhoto.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,58 +90,55 @@ class GalleryFragment : Fragment() {
 
         Log.d("사진첩 불러오기","on1View")
         binding = FragmentGalleryBinding.inflate(inflater, container, false)
-        clickedMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
+        // clickedMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
         Log.d("이미지처음받는클럽코드..",clickedMeeting?.club_code.toString())
 
-        // ActivityResultLauncher 초기화
-        pickMultipleMedia =
-            registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
-                if (uris.isNotEmpty()) {
-                    Log.d("clickPhotoPicker", "Number of items selected: ${uris.size}")
-                    Log.d("clickPhotoPicker", "Number of items selected: ${uris}")
 
-                    uploadPhotosToServer(uris)
-                } else {
-                    Log.d("PhotoPicker", "No media selected")
-                }
-            }
+        val spf = activity?.getSharedPreferences("club", Context.MODE_PRIVATE)
+        clubCode = spf?.getString("clubcode", "null").toString()
 
+
+        // loadGallery(clubCode)
         // 여기에서 갤러리 데이터 및 어댑터를 설정합니다.
-
-
+        Log.d("photo", photoList.size.toString())
+        // loadGallery(clubCode)
+        //Thread.sleep(5000)
         adapter = GalleryAdapter(requireContext(), R.layout.photo_list, photoList)
-        loadGallery()
+
+        //updateGallery(photoList)
         // 리사이클러뷰에 어댑터 설정
+
+        binding.rvGallery.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.rvGallery.adapter = adapter
-        binding.rvGallery.layoutManager = GridLayoutManager(activity?.applicationContext, 3)
 
 
         // 포스트가 없을 경우 안내 메시지 표시
-        if (photoList.isEmpty()) {
-            binding.rvGallery.visibility = View.GONE
-            binding.tvAnnounceMainPhoto.visibility = View.VISIBLE
-            binding.tvAnnounceSubPhoto.visibility = View.VISIBLE
-        } else {
-            binding.rvGallery.visibility = View.VISIBLE
-            binding.tvAnnounceMainPhoto.visibility = View.GONE
-            binding.tvAnnounceSubPhoto.visibility = View.GONE
-        }
+
 
         // 이미지 추가 버튼 클릭 이벤트 처리
         binding.imgFloatingNewPhoto.setOnClickListener {
             Log.d("click", "버튼 클릭")
             pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
-
+        loadGallery(clubCode)
+        fetchDataFromServer()
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        loadGallery() // 프래그먼트가 준비되면 갤러리 데이터 로딩
-        Log.d("사진첩 불러오기","onView")
+    val pickMultipleMedia =
+        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
+            if (uris.isNotEmpty()) {
+                Log.d("clickPhotoPicker", "Number of items selected: ${uris.size}")
+                Log.d("clickPhotoPicker", "Number of items selected: ${uris}")
 
-    }
+                uploadPhotosToServer(uris)
+            } else {
+                Log.d("PhotoPicker", "No media selected")
+            }
+        }
+
+
+
 
     // 이미지 URI에서 파일 이름을 추출하는 함수
     fun getFileName(uri: Uri):String?{
@@ -146,7 +186,7 @@ class GalleryFragment : Fragment() {
             override fun onResponse(call: Call<GalleryVO>, response: Response<GalleryVO>) {
                 if(response.isSuccessful){
                     val Gallery = response.body()
-                    loadGallery()
+                    loadGallery(clubCode)
                     Log.d("GalleryFragment",Gallery.toString())
                     Toast.makeText(requireContext(), "사진이 등록되었습니다.", Toast.LENGTH_SHORT).show()
                 }
@@ -162,9 +202,9 @@ class GalleryFragment : Fragment() {
     }
 
     // 사진첩 정보 로드 함수
-    private fun loadGallery() { //onComplete: (() -> Unit)? = null
-        val clubCode = clickedMeeting?.club_code ?: return
-        Log.d("galleryList club_code : ",clubCode.toString())
+    private fun loadGallery(clubCode : String) { //onComplete: (() -> Unit)? = null
+        // val clubCode = clickedMeeting?.club_code ?: return
+        Log.d("galleryList club_code : ",clubCode)
         val service = Server(requireContext()).service
         val call = service.getGallery(clubCode) // 서버에 사진첩 정보 요청
 
@@ -172,6 +212,8 @@ class GalleryFragment : Fragment() {
             override fun onResponse(call: Call<List<loadGalleryVO>>, response: Response<List<loadGalleryVO>>) {
                 if (response.isSuccessful) {
                     val galleryList = response.body() ?: emptyList()
+                    Log.d("resultGallery", galleryList.size.toString())
+                    Log.d("resultGallery", galleryList.size.toString())
                     if (galleryList.isEmpty() && !isUploading) {
                         // 빈 결과에 대한 처리. 예: 사용자에게 알림 표시
                         Toast.makeText(context, "사진첩이 비어있습니다.", Toast.LENGTH_SHORT).show()
@@ -184,14 +226,19 @@ class GalleryFragment : Fragment() {
                         Log.d("galleryList2 : ", jsonResponse.toString())
 //                    Log.d("galleryList3: ", jsonResponse.toString())
                         // updateGallery(galleryList) // 받은 데이터로 UI 업데이트
-                        if (galleryList != null) {
-                            updateGallery(galleryList)
+                        Log.d("adapter동작","111111111111---")
+                            if (galleryList != null) {
+                                updateGallery(galleryList)
+                                photoList = galleryList as ArrayList<loadGalleryVO>
+                                Log.d("adapter동작","111111111111")
+
                         }
 //                        onComplete?.invoke()
 //
                     }
                 } else {
                     // 에러 처리
+                    Log.d("adapter동작","66666666666666")
                     Log.d("galleryList fail : ",response.toString())
                     Toast.makeText(requireContext(), "갤러리 정보 로드 실패", Toast.LENGTH_SHORT).show()
                 }
@@ -202,6 +249,7 @@ class GalleryFragment : Fragment() {
                 Toast.makeText(requireContext(), "갤러리 통신 실패", Toast.LENGTH_SHORT).show()
             }
         })
+
     }
 
     private fun updateGallery(galleryList: List<loadGalleryVO>) {
@@ -210,6 +258,8 @@ class GalleryFragment : Fragment() {
         // photoList = galleryList as ArrayList<loadGalleryVO>
         adapter.data.addAll(galleryList)
         adapter.notifyDataSetChanged()
+        Log.d("adapter동작","222222222")
+
     }
 
 
