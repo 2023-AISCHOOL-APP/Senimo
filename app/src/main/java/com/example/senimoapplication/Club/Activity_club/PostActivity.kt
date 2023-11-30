@@ -105,6 +105,9 @@ class PostActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+            binding.icBack.setOnClickListener {
+                finish()
+            }
 
         } else { // 게시판 생성할때
 
@@ -128,12 +131,7 @@ class PostActivity : AppCompatActivity() {
 
 
             binding.btnNewPost.setOnClickListener {
-                // 게시물 등록하고 게시판 화면으로 돌아가기
                 val clickedMeeting = intent.getParcelableExtra<MeetingVO>("clickedMeeting")
-                //val clubCode = clickedMeeting?.club_code.toString()
-//            val userId = UserData.userId.toString()
-                // val userId =  PreferenceManager.getUser(this)?.user_id.toString()//intent.getStringExtra("user_id").toString()
-                //val postContent = binding.etPostContent.text.toString()
                 val writePostResVO = WritePostResVO(
                     rows = "",
                     userId = PreferenceManager.getUser(this)?.user_id.toString(),
