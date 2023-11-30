@@ -87,36 +87,62 @@ router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
 							// 뱃지 코드 직접 지정
 							const badge_code = 'badge_code08';
 
-							// tb_user_badge에 badge_code와 user_id 저장
-							const insertUserBadgeQuery = `INSERT INTO tb_user_badge (badge_code, user_id) VALUES (?, ?);`;
-							conn.query(insertUserBadgeQuery, [badge_code, user_id], (err, userBadgeResult) => {
+							// 이미 해당 뱃지 코드와 사용자 ID의 조합이 tb_user_badge에 있는지 확인
+							const checkUserBadgeQuery = `SELECT * FROM tb_user_badge WHERE badge_code = ? AND user_id = ?;`;
+							conn.query(checkUserBadgeQuery, [badge_code, user_id], (err, results) => {
 								if (err) {
 									return conn.rollback(() => {
-										res.status(500).json({ error: '뱃지 저장 오류: ' + err.message });
+										res.status(500).json({ error: '뱃지 조회 오류: ' + err.message });
 									});
 								}
 
-								// 트랜잭션 커밋
-								conn.commit(err => {
-									if (err) {
-										return conn.rollback(() => {
-											res.status(500).json({ error: '트랜잭션 커밋 오류: ' + err.message });
-										});
-									}
+								if (results.length === 0) {
+									// tb_user_badge에 조합이 없으면 새로 추가
+									const insertUserBadgeQuery = `INSERT INTO tb_user_badge (badge_code, user_id) VALUES (?, ?);`;
+									conn.query(insertUserBadgeQuery, [badge_code, user_id], (err, userBadgeResult) => {
+										if (err) {
+											return conn.rollback(() => {
+												res.status(500).json({ error: '뱃지 저장 오류: ' + err.message });
+											});
+										}
 
-									// 성공 응답
-									res.json({
-										message: '모임이 성공적으로 생성되었습니다.',
-										club_code,
-										club_name,
-										club_introduce,
-										max_cnt,
-										club_location,
-										keyword_name,
-										attend_user_cnt,
-										club_img: `${config.baseURL}/uploads/${club_img}`
+										// 트랜잭션 커밋
+										conn.commit(err => {
+											if (err) {
+												return conn.rollback(() => {
+													res.status(500).json({ error: '트랜잭션 커밋 오류: ' + err.message });
+												});
+											}
+
+											// 성공 응답
+											res.json({
+												message: '모임이 성공적으로 생성되었습니다.',
+												club_code,
+												club_name,
+												club_introduce,
+												max_cnt,
+												club_location,
+												keyword_name,
+												attend_user_cnt,
+												club_img: `${config.baseURL}/uploads/${club_img}`
+											});
+										});
 									});
-								});
+								} else {
+									// 이미 해당 조합이 존재하므로 추가하지 않고 메시지 반환
+									conn.commit(err => {
+										if (err) {
+											return conn.rollback(() => {
+												res.status(500).json({ error: '트랜잭션 커밋 오류: ' + err.message });
+											});
+										}
+
+										res.json({
+											message: '이미 해당 뱃지 코드와 사용자 ID의 조합이 존재합니다.'
+											// (이하 응답 데이터 생략)
+										});
+									});
+								}
 							});
 						});
 					});
