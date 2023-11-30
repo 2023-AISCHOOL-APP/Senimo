@@ -60,7 +60,7 @@ router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
 						return conn.rollback(() => {
 							res.status(500).json({ error: '2단계: 생성된 클럽의 코드 조회 오류: ' + err.message });
 						});
-					}
+					}5
 
 					const club_code = codeResults[0].club_code;
 
@@ -138,8 +138,15 @@ router.post('/postCreateMeeting', upload.single('picture'), (req, res) => {
 										}
 
 										res.json({
-											message: '이미 해당 뱃지 코드와 사용자 ID의 조합이 존재합니다.'
-											// (이하 응답 데이터 생략)
+											message: '모임이 성공적으로 생성되었습니다.',
+												club_code,
+												club_name,
+												club_introduce,
+												max_cnt,
+												club_location,
+												keyword_name,
+												attend_user_cnt,
+												club_img: `${config.baseURL}/uploads/${club_img}`
 										});
 									});
 								}
