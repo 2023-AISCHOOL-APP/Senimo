@@ -23,6 +23,7 @@ const editMyProfile = require('./routes/editMyProfile')
 const galleryRouter = require('./routes/gallery')
 const initialInterestedClub = require('./routes/initialInterestedClub')
 const updatePosts = require('./routes/board')
+const chat = require('./routes/chat')
 
 app.use(cors())
 
@@ -56,6 +57,7 @@ app.use('/', getCombinedData)
 app.use('/', editMyProfile)
 app.use('/', galleryRouter)
 app.use('/', initialInterestedClub)
+app.use('/', chat)
 
 
 app.listen(app.get('port'), () => {

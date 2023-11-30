@@ -8,13 +8,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.VO.GalleryVO
+import com.example.senimoapplication.Club.VO.loadGalleryVO
 import com.example.senimoapplication.Common.photoUploadTime
 import com.example.senimoapplication.Common.showFragmentDialogBox
 import com.example.senimoapplication.R
 import org.w3c.dom.Text
 
-class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, val layout : Int, val data : ArrayList<GalleryVO>):RecyclerView.Adapter<PhotoViewAdapter.ViewHolder>(){
+class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, val layout : Int, val data : ArrayList<loadGalleryVO>):RecyclerView.Adapter<PhotoViewAdapter.ViewHolder>(){
     val inflater = LayoutInflater.from(context)
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -70,7 +72,8 @@ class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, v
             activity?.finish()
         }
 
-        holder.imgView.setImageResource(item.imgUri)
+        Glide.with(context).load(item.imgThumbName).into(holder.imgView)
+        //holder.imgView.setImageResource(item.imgThumbName)
 
         // if userid == 작성자 {
         //  holder.imgbtnDelete.visibility = view.VISIBLE
