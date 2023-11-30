@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
@@ -50,16 +51,21 @@ class MymeetingFragment() : Fragment() {
         val rv_M_Meeting_Schedule = view.findViewById<RecyclerView>(R.id.rv_M_Meeting_Schedule)
         val Img_M_Meeting_Shcedule_more = view.findViewById<ImageView>(R.id.Img_M_Meeting_Schedule_more)
         val img_M_Meeting_Schedule_close = view.findViewById<ImageView>(R.id.img_M_Meeting_Schedule_close)
+        val tv_M_ScheduleEmpty = view.findViewById<TextView>(R.id.tv_M_ScheduleEmpty)
 
         // 가입한 모임, 더보기
         val rv_M_Meeting_join = view.findViewById<RecyclerView>(R.id.rv_M_Meeting_join)
         val Img_M_Meeting_join_more = view.findViewById<ImageView>(R.id.Img_M_Meeting_join_more)
         val Img_M_Meeting_join_close = view.findViewById<ImageView>(R.id.Img_M_Meeting_join_close)
+        val tv_M_JoinEmpty = view.findViewById<TextView>(R.id.tv_M_JoinEmpty)
+
 
         // 관심 모임, 더보기
         val rv_M_Meeting_interest = view.findViewById<RecyclerView>(R.id.rv_M_Meeting_interest)
         val Img_M_Meeting_interest_more = view.findViewById<ImageView>(R.id.Img_M_Meeting_interest_more)
         val Img_M_Meeting_interest_close = view.findViewById<ImageView>(R.id.Img_M_Meeting_interest_close)
+        val tv_M_InterestEmpty = view.findViewById<TextView>(R.id.tv_M_InterestEmpty)
+
 
         if(userId != null){
             val server = Server(requireContext())
@@ -74,9 +80,50 @@ class MymeetingFragment() : Fragment() {
                         val joinList: List<MeetingVO>? = fetchdata?.myClub
                         val interestList: List<MeetingVO>? = fetchdata?.myInterestedClub
 
+                        // 모임 일정 데이터 가시성 설정
+                        if (myscheduleList.isNullOrEmpty()) {
+                            rv_M_Meeting_Schedule.visibility = View.GONE
+                            tv_M_ScheduleEmpty.visibility = View.VISIBLE
+                        } else {
+                            rv_M_Meeting_Schedule.visibility = View.VISIBLE
+                            tv_M_ScheduleEmpty.visibility = View.GONE
+                        }
+
+                        // 가입한 모임 데이터 가시성 설정
+                        if (joinList.isNullOrEmpty()) {
+                            rv_M_Meeting_join.visibility = View.GONE
+                            tv_M_JoinEmpty.visibility = View.VISIBLE
+                        } else {
+                            rv_M_Meeting_join.visibility = View.VISIBLE
+                            tv_M_JoinEmpty.visibility = View.GONE
+                        }
+
+                        // 관심 모임 데이터 가시성 설정
+                        if (interestList.isNullOrEmpty()) {
+                            rv_M_Meeting_interest.visibility = View.GONE
+                            tv_M_InterestEmpty.visibility = View.VISIBLE
+                        } else {
+                            rv_M_Meeting_interest.visibility = View.VISIBLE
+                            tv_M_InterestEmpty.visibility = View.GONE
+                        }
+
+                        // '더보기' 및 '닫기' 버튼의 가시성 설정
+                        val showScheduleMore = myscheduleList?.size ?: 0 > 3
+                        Img_M_Meeting_Shcedule_more.visibility = if (showScheduleMore) View.VISIBLE else View.INVISIBLE
+                        img_M_Meeting_Schedule_close.visibility = View.INVISIBLE
+
+                        val showJoinMore = joinList?.size ?: 0 > 3
+                        Img_M_Meeting_join_more.visibility = if (showJoinMore) View.VISIBLE else View.INVISIBLE
+                        Img_M_Meeting_join_close.visibility = View.INVISIBLE
+
+                        val showInterestMore = interestList?.size ?: 0 > 3
+                        Img_M_Meeting_interest_more.visibility = if (showInterestMore) View.VISIBLE else View.INVISIBLE
+                        Img_M_Meeting_interest_close.visibility = View.INVISIBLE
+
                         // 모임 일정, 가입한 모임, 관심 모임 리사이클러뷰 연결하기
                         if (myscheduleList != null) {
                             val myschedule_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, myscheduleList)
+                            Log.d("getCombinedData", "데이터 확인${myscheduleList}")
                             rv_M_Meeting_Schedule.adapter = myschedule_adapter
                             myschedule_adapter.setShowAllItems(false)
                             rv_M_Meeting_Schedule.layoutManager = LinearLayoutManager(view.context)
@@ -85,6 +132,9 @@ class MymeetingFragment() : Fragment() {
                                     val clickedSchedule = myscheduleList[position]
                                     val intent = Intent(requireContext(), ScheduleActivity::class.java)
                                     intent.putExtra("ScheduleInfo", clickedSchedule)
+                                    Log.d("ScheduleActivity","보내는 값확인 $clickedSchedule")
+                                    intent.putExtra("clubName", clickedSchedule.clubName)
+                                    Log.d("내모임", "${clickedSchedule}")
                                     startActivity(intent)
                                 }
                             })
@@ -138,7 +188,9 @@ class MymeetingFragment() : Fragment() {
                         }
 
                         if(interestList != null){
+
                             val interest_adapter = MeetingAdapter(requireContext(),R.layout.meeting_list, interestList)
+                            Log.d("interestMeeting","datacheck ${interestList}")
                             rv_M_Meeting_interest.adapter = interest_adapter
                             interest_adapter.setShowAllItems(false)
                             rv_M_Meeting_interest.layoutManager = LinearLayoutManager(view.context)

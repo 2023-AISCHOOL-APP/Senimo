@@ -5,7 +5,7 @@ const config = require('../config/config');
 
 // 유저 정보 가져오기
 router.get('/getUserProfile', (req, res) => {
-    console.log("요청왔다")
+    console.log("유저 정보 가져오기 라우터 :", req.body)
     const userId = req.query.userId;
 
     if (!userId) {

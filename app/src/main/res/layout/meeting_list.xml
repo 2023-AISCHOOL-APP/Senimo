@@ -21,17 +21,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/Img_M_Meeting"
                 android:layout_width="130dp"
                 android:layout_height="120dp"
                 android:adjustViewBounds="true"
-                android:background="@color/txt_gray30"
+                android:background="@color/txt_gray10"
                 android:backgroundTintMode="add"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_meeting_profile"
+                android:src="@drawable/ic_meeting_profile_gray10"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

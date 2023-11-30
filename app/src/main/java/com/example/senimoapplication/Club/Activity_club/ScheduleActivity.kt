@@ -18,6 +18,7 @@ import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.Club.VO.CancelJoinScheResVO
 import com.example.senimoapplication.Club.VO.DeleteScheResVO
 import com.example.senimoapplication.Club.VO.JoinScheResVO
+import com.example.senimoapplication.Club.VO.RoleResVO
 import com.example.senimoapplication.Club.VO.ScheduleMemberVO
 import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
@@ -68,15 +69,27 @@ class ScheduleActivity : AppCompatActivity() {
         scheCode = clickedSchedule?.scheCode
 
 
+        // MeetingVO 가져오기
+        if(clickedMeeting == null){
+            clickedSchedule?.scheCode?.let {
+                Log.d("ScheduleActivity","scheduleVO받는값 확인${clickedSchedule?.scheCode}")
+                getMeeting(it)
+            }
+        }
+
         // view 관리
-        binding.tvClubName2.text = clubName
+        Log.d("clubName", "${clubName}, ${clubName?.length}")
+        binding.tvClubName2.text = clubName?.let {
+            if (it.length > 13) it.substring(0, 13) + "..." else it
+        } ?: "모임"
+
         val color = ContextCompat.getColor(this, R.color.white)
         binding.icMore.setColorFilter(ContextCompat.getColor(this, R.color.black), PorterDuff.Mode.SRC_IN)
 
 
         displayScheduleInfo(clickedSchedule)
         // 일정 참여 멤버 목록 가져오기
-
+        getUserRole(clickedSchedule?.clubCode, userId)
         getScheduleMembers()
 
 
@@ -89,82 +102,25 @@ class ScheduleActivity : AppCompatActivity() {
             Log.d("joinSchedule", "참가하기 버튼 $userId, $scheCode")
         }
 
-
         // 뒤로가기 아이콘
         binding.icBack.setOnClickListener {
-            val returnIntent = Intent(this@ScheduleActivity, ClubActivity::class.java)
-            clickedSchedule?.joinedMembers = joinedMemberList?.size ?: 0
-            returnIntent.putExtra("ScheduleInfo", clickedSchedule)
-            returnIntent.putExtra("clickedMeeting", clickedMeeting)
-            setResult(Activity.RESULT_OK, returnIntent)
-            Log.d("ScheduleInfo","보내기:${clickedSchedule?.joinedMembers}")
-            Log.d("ScheduleActivity", "Finishing ScheduleActivity")
-            startActivity(returnIntent)
-            finish()
+            returnToClubActivity()
         }
 
         // 디바이스 뒤로가기 버튼
         val callback = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
-                val returnIntent = Intent(this@ScheduleActivity, ClubActivity::class.java)
-                clickedSchedule?.joinedMembers = joinedMemberList?.size ?: 0
-                returnIntent.putExtra("ScheduleInfo", clickedSchedule)
-                returnIntent.putExtra("clickedMeeting", clickedMeeting)
-                setResult(Activity.RESULT_OK, returnIntent)
-                Log.d("ScheduleInfo","보내기:${clickedSchedule?.joinedMembers}")
-                Log.d("ScheduleActivity", "Finishing ScheduleActivity")
-                Log.d("ScheduleActivity", "${clickedMeeting}")
-                startActivity(returnIntent)
-                finish()
+                returnToClubActivity()
             }
         }
         this.onBackPressedDispatcher.addCallback(this, callback)
 
-
-        // 앱바 - 게시물 관리 기능 추가
-        if(staffList?.contains(userId)==true){
-            // 현재 로그인한 회원이 운영진인 경우
-            binding.icMore.setOnClickListener { view ->
-                val popupMenu = PopupMenu(this, view)
-                val menuInflater = popupMenu.menuInflater
-
-                menuInflater.inflate(R.menu.schedule_option_menu, popupMenu.menu)
-
-                popupMenu.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.menu_option1 -> {
-                            // 일정 수정
-                            val intent = Intent(this, MakeScheduleActivity::class.java)
-                            intent.putExtra("clickedSchedule", clickedSchedule)
-                            intent.putExtra("title", "일정 수정")
-                            startActivity(intent)
-                            finish()
-
-                            true
-                        }
-
-                        R.id.menu_option2 -> {
-                            // 일정 삭제
-                            showActivityDialogBox(this, "일정을 삭제하시겠어요?", "삭제하기", "일정이 삭제되었습니다.", scheCode){
-                                // '일정 삭제하기' 버튼 클릭 시 실행할 내용
-                                deleteSche(scheCode) // deleteSche 함수 호출
-                            }
-                            true
-                        }
-
-                        else -> false
-                    }
-                }
-                popupMenu.show()
-            }
-
-        } else {
-            binding.icMore.visibility = INVISIBLE
-        }
     }
 
     private fun displayScheduleInfo(scheduleInfo : ScheduleVO?){
-        binding.tvClubName2.text = scheduleInfo?.clubName
+        binding.tvClubName2.text = clubName?.let {
+            if (it.length > 13) it.substring(0, 13) + "..." else it
+        } ?: "모임"
         binding.tvScheduleName.text = scheduleInfo?.scheTitle
         binding.tvScheduleIntro.text = scheduleInfo?.scheContent
         binding.tvScheduleTime.text = formatDate("${scheduleInfo?.scheDate}")
@@ -236,9 +192,9 @@ class ScheduleActivity : AppCompatActivity() {
                                             override fun onItemClick(view: View, position: Int) {
                                                 val clickedSchedule = scheduleMemberList[position]
                                                 // 프로필 페이지로 이동
-                                                val intent = Intent(this@ScheduleActivity, MainActivity::class.java)
-                                                intent.putExtra("selected_tab", "M_tab4")
+                                                val intent = Intent(this@ScheduleActivity, userProfileActivity::class.java)
                                                 intent.putExtra("selected_user", "${clickedSchedule.userId}")
+                                                Log.d("userProfile","일정 멤버 리스트 보내는 값 ${clickedSchedule.userId}")
                                                 startActivity(intent)
                                                 finish()
                                             }
@@ -347,5 +303,113 @@ class ScheduleActivity : AppCompatActivity() {
         })
     }
 
+    // 모임 정보 가져오기
+    fun getMeeting(scheCode: String) {
+        val service = Server(this).service
+        val call = service.getMeeting(scheCode)
+
+        call.enqueue(object : Callback<MeetingVO> {
+            override fun onResponse(call: Call<MeetingVO>, response: Response<MeetingVO>) {
+                if (response.isSuccessful) {
+                    val meetingVO = response.body()
+                    Log.d("ScheduleActivity", "통신성공: ${meetingVO}")
+                    clickedMeeting = meetingVO
+
+                    binding.icBack.setOnClickListener {
+                        val intent = Intent(this@ScheduleActivity, ClubActivity::class.java)
+                        intent.putExtra("clickedMeeting", clickedMeeting)
+                        startActivity(intent)
+                        finish()
+                    }
+
+                } else {
+                    // 요청은 성공했지만 서버에서 오류 응답을 받았을 때의 처리
+                    Log.d("ScheduleActivity", "Response not successful: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<MeetingVO>, t: Throwable) {
+                // 네트워크 요청 실패 시의 처리
+                Log.e("ScheduleActivity", "네트워크 요청 실패", t)
+            }
+        })
+    }
+
+    // 뒤로가기 버튼 함수
+    private fun returnToClubActivity() {
+        val returnIntent = Intent(this@ScheduleActivity, ClubActivity::class.java)
+        clickedSchedule?.joinedMembers = joinedMemberList?.size ?: 0
+        returnIntent.putExtra("ScheduleInfo", clickedSchedule)
+        returnIntent.putExtra("clickedMeeting", clickedMeeting)
+        setResult(Activity.RESULT_OK, returnIntent)
+        Log.d("ScheduleInfo","보내기:${clickedSchedule}")
+        Log.d("ScheduleActivity", "Finishing ScheduleActivity")
+        startActivity(returnIntent)
+        finish()
+    }
+
+    private fun getUserRole(clubCode: String?, userId: String?) {
+        val service = Server(this).service
+        val call = service.getUserRole(clubCode, userId)
+
+        call.enqueue(object : Callback<RoleResVO> {
+            override fun onResponse(call: Call<RoleResVO>, response: Response<RoleResVO>) {
+                if (response.isSuccessful) {
+                    val roleResponse = response.body()
+                    if (roleResponse != null && roleResponse.userRole != 3) {
+                        // 현재 로그인한 회원이 운영진인 경우
+                        Log.d("getUserRole", "사용자 역할: ${roleResponse.userRole}")
+                        binding.icMore.setOnClickListener { view ->
+                            val popupMenu = PopupMenu(this@ScheduleActivity, view)
+                            val menuInflater = popupMenu.menuInflater
+                            menuInflater.inflate(R.menu.schedule_option_menu, popupMenu.menu)
+                            popupMenu.setOnMenuItemClickListener { item ->
+                                when (item.itemId) {
+                                    R.id.menu_option1 -> {
+                                        // 일정 수정
+                                        val intent = Intent(
+                                            this@ScheduleActivity,
+                                            MakeScheduleActivity::class.java
+                                        )
+                                        intent.putExtra("clickedSchedule", clickedSchedule)
+                                        intent.putExtra("title", "일정 수정")
+                                        startActivity(intent)
+                                        finish()
+                                        true
+                                    }
+                                    R.id.menu_option2 -> {
+                                        // 일정 삭제
+                                        showActivityDialogBox(
+                                            this@ScheduleActivity,
+                                            "일정을 삭제하시겠어요?",
+                                            "삭제하기",
+                                            "일정이 삭제되었습니다.",
+                                            scheCode
+                                        ) {
+                                            // '일정 삭제하기' 버튼 클릭 시 실행할 내용
+                                            deleteSche(scheCode) // deleteSche 함수 호출
+                                        }
+                                        true
+                                    }
+                                    else -> false
+                                }
+                            }
+                            popupMenu.show()
+                        }
+                    } else {
+                        binding.icMore.visibility = INVISIBLE
+                    }
+                } else {
+                    Log.d("getUserRole", "사용자 역할 조회 실패")
+                    Log.d("getUserRole", "응답 실패: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<RoleResVO>, t: Throwable) {
+                Log.e("사용자 역할 조회", "사용자 역할 조회 네트워크 요청 실패", t)
+            }
+        })
+    }
 }
+
 

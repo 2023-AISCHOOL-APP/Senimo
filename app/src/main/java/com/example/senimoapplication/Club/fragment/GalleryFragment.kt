@@ -36,12 +36,15 @@ class GalleryFragment : Fragment() {
     private lateinit var adapter: GalleryAdapter
     // ActivityResultLauncher를 프래그먼트의 프로퍼티로 선언
     private lateinit var pickMultipleMedia: ActivityResultLauncher<PickVisualMediaRequest>
+
     var photoList: ArrayList<loadGalleryVO> = ArrayList()
     private var isUploading = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         Log.d("사진첩 불러오기","on1View")
         binding = FragmentGalleryBinding.inflate(inflater, container, false)
         clickedMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
@@ -59,17 +62,12 @@ class GalleryFragment : Fragment() {
                     Log.d("PhotoPicker", "No media selected")
                 }
             }
+
         // 여기에서 갤러리 데이터 및 어댑터를 설정합니다.
 
 
         adapter = GalleryAdapter(requireContext(), R.layout.photo_list, photoList)
         loadGallery()
-        // 갤러리 데이터 추가
-//        photoList.add(GalleryVO("dfsdfsdfs", 1, "양희준", "2023-11-22T12:00:08.123Z", R.drawable.img_sample))
-//        photoList.add(GalleryVO("dfsdfsdfs", 2, "김도운", "2023-11-22T12:00:08.123Z", R.drawable.img_sample2))
-//        photoList.add(GalleryVO("dfsdfsdfs", 2, "국지호", "2023-11-21T12:00:08.123Z'", R.drawable.img_sample3))
-//        photoList.add(GalleryVO("dfsdfsdfs", 2, "최효정", "2023-10-22T12:00:08.123Z'", R.drawable.img_sample4))
-
         // 리사이클러뷰에 어댑터 설정
         binding.rvGallery.adapter = adapter
         binding.rvGallery.layoutManager = GridLayoutManager(activity?.applicationContext, 3)

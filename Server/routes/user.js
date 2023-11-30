@@ -109,7 +109,21 @@ router.post('/signup', (req, res) => {
         res.json({ rows: 'failed' });
       } else {
         console.log('회원가입 성공');
-        res.json({ rows: 'success', user_id: user_id });
+        // 회원가입이 성공한 경우에만 실행됩니다.
+        const badge_code = 'badge_code01'; // badge_code를 'badge_code01'로 설정
+
+        // tb_user_badge에 badge_code와 user_id를 저장하는 쿼리
+        const userBadgeSql = 'INSERT INTO tb_user_badge (badge_code, user_id) VALUES (?, ?)';
+        
+        conn.query(userBadgeSql, [badge_code, user_id], (err, userBadgeRows) => {
+          if (err) {
+            console.error('뱃지 저장 오류:', err);
+            return res.status(500).json({ error: 'Badge Saving Error' });
+          }
+
+          console.log('뱃지 저장 성공:', userBadgeRows);
+          res.json({ rows: 'success', user_id: user_id });
+        });
       }
     });
   })
@@ -138,6 +152,24 @@ router.post('/checkUserId', (req, res) => {
       }
     }
   });
+})
+
+// 회원 탈퇴
+router.post('/userDropOut', (req, res) => {
+  console.log('일정 삭제 라우터', req.body);
+  const { user_id } = req.body;
+
+  const dropOutSql = `delete from tb_user where user_id = ?`
+
+  conn.query(dropOutSql, [user_id], (err, rows) => {
+    if (err) {
+      console.error('회원 탈퇴 실패', err);
+      res.json({ rows: 'failed' });
+    } else {
+      console.log('회원 탈퇴 성공');
+      res.json({ rows: 'success' });
+    }
+  })
 })
 
 module.exports = router;

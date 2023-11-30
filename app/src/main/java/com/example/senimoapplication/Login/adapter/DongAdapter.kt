@@ -16,7 +16,6 @@ class DongAdapter(val layout: Int, var list: ArrayList<String>, val context: Con
 
   val inflater = LayoutInflater.from(context)
   var selectedPosition = -1
-//  var selectedDong: String = ""
 
   interface OnItemClickListener {
     fun onItemClick(position: Int)
@@ -68,13 +67,11 @@ class DongAdapter(val layout: Int, var list: ArrayList<String>, val context: Con
   // 새로운 데이터로 어댑터를 업데이트하는 함수
   fun updateData(newList: List<String>) {
     Log.d("DongAdapter", "New List: $newList")
-//    list.clear()
-//    list.addAll(newList)
     list = ArrayList(newList)
     notifyDataSetChanged()
   }
 
-  // 선택한 동이름을 빼오기위한 함수
+  // 선택한 동이름을 추출하기 위한 함수
   fun getSelectedDongName(): String {
     return list[selectedPosition]
   }

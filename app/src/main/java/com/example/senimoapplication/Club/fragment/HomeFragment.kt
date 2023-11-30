@@ -95,7 +95,6 @@ class HomeFragment : Fragment() {
 
         // intent 데이터 관리 (메인 -> 모임홈)
         clickedMeeting = activity?.intent?.getParcelableExtra("clickedMeeting")
-        createMeeting = activity?.intent?.getParcelableExtra("CreateMeeting")
         Log.d("getclickedMeetinghome", clickedMeeting.toString())
 
         clubCode = activity?.intent?.getStringExtra("clubCodeFromMakeSchedule")
@@ -139,6 +138,10 @@ class HomeFragment : Fragment() {
                                 val m_adapter = MemberAdapter(requireContext(), R.layout.club_member_list, ArrayList(memberList), clubLeader, this@HomeFragment)
                                 binding.rvMember.adapter = m_adapter
                                 binding.rvMember.layoutManager = LinearLayoutManager(view.context)
+
+
+
+
 
                                 // 운영진만 보이는 버튼
                                 if (userId in staffList){
@@ -230,7 +233,45 @@ class HomeFragment : Fragment() {
     private fun updateScheduleUI(scheduleList: List<ScheduleVO>) {
         val s_adapter = ScheduleAdapter(requireContext(), R.layout.schedule_list, scheduleList, clickedSchedule?.joinedMembers, clickedSchedule?.scheCode)
         binding.rvSchedule.adapter = s_adapter
+        s_adapter.setShowAllItems(false)
         binding.rvSchedule.layoutManager = LinearLayoutManager(context)
+
+        // 스케줄 개수에 따라 더보기/닫기 버튼의 가시성 설정
+        when {
+            scheduleList.isEmpty() -> {
+                // 스케줄이 없을 때는 모든 버튼을 숨깁니다.
+                binding.imgClubMore.visibility = GONE
+                binding.imgClubClose.visibility = GONE
+            }
+            scheduleList.size > 3 -> {
+                // 스케줄이 4개 이상일 때만 '더보기' 버튼을 표시합니다.
+                binding.imgClubMore.visibility = VISIBLE
+                binding.imgClubClose.visibility = GONE
+            }
+            else -> {
+                // 그 외의 경우에는 모든 버튼을 숨깁니다.
+                binding.imgClubMore.visibility = GONE
+                binding.imgClubClose.visibility = GONE
+            }
+        }
+
+
+        // img_ClubMore 클릭 이벤트
+        binding.imgClubMore.setOnClickListener {
+            var showAllItems = true // 모든 항목 표시
+            s_adapter.setShowAllItems(showAllItems)
+            binding.imgClubMore.visibility = INVISIBLE
+            binding.imgClubClose.visibility = VISIBLE
+        }
+
+        // img_ClubClose 클릭 이벤트
+        binding.imgClubClose.setOnClickListener {
+            var showAllItems = false // 모든 항목 표시
+            s_adapter.setShowAllItems(showAllItems)
+            binding.imgClubMore.visibility = VISIBLE
+            binding.imgClubClose.visibility = INVISIBLE
+        }
+
         binding.rvSchedule.addOnItemTouchListener(
             RecyclerItemClickListener(requireContext(), binding.rvSchedule,
                 object : RecyclerItemClickListener.OnItemClickListener {
@@ -293,7 +334,7 @@ class HomeFragment : Fragment() {
                                     Glide.with(this@HomeFragment) // 현재 컨텍스트를 파라미터로 받습니다
                                         .load(clubInfos.clubImageUri) // MeetingVO 객체의 imageUri
                                         .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지
-                                        .error(R.drawable.golf_img) // 로딩 실패 시 표시될 이미지
+                                        .error(R.drawable.basic_club) // 로딩 실패 시 표시될 이미지
                                         .into(binding.clubImage) // 이미지를 표시할 ImageView
                                 }
                             } else {
@@ -434,6 +475,7 @@ class MemberManager(private val server: Server) {
         val call = server.service.updateMember(updateMemberVO)
         call.enqueue(callback)
     }
+
     // 멤버 내보내기 함수
     fun deleteMember(deleteMemberVO: DeleteMemberVO, callback: Callback<JsonObject>) {
         val call = server.service.deleteMember(deleteMemberVO)

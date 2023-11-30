@@ -5,12 +5,16 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
@@ -52,8 +56,7 @@ fun showActivityDialogBox(
     tvMessage.text = message
     btnOkay.text = okay
     btnOkay.setOnClickListener {
-        // 일정 삭제 함수 호출
-        onDeleteSchedule.invoke()
+        onDeleteSchedule.invoke() // 일정 삭제 함수 호출
         Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
     }
@@ -328,8 +331,8 @@ fun showAlertDialogBox(context: Context, message: String?, okay: String?) {
     dialog.show()
 }
 
-// 로그아웃 다이얼로그
-fun showDropOutDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?) {
+// 회원탈퇴 다이얼로그
+fun showDropOutDialogBox(activity: Activity, message: String?, okay: String?, successMessage : String?, onUserDropOut: () -> Unit) {
     val dialog = Dialog(activity)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setCancelable(false)
@@ -343,17 +346,74 @@ fun showDropOutDialogBox(activity: Activity, message: String?, okay: String?, su
     tvMessage.text = message
     btnOkay.text = okay
     btnOkay.setOnClickListener {
+        onUserDropOut.invoke() // 회원 탈퇴 함수 호출
         Toast.makeText(activity, successMessage, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
         PreferenceManager.clearToken(activity)
-        // 회원탈퇴 후 처리 (예: 로그인 화면으로 이동)
-        val intent = Intent(activity, IntroActivity::class.java)
-        activity.startActivity(intent)
     }
     btnCancel.setOnClickListener {
         dialog.dismiss()
     }
 
     dialog.show()
+}
+
+// 뱃지 획득여부 다이얼로그
+fun showBadgeDialogBox(activity: Activity, badgeImg: String?, badgeName: String?, badgeGetInfo: String?, text1 : String?, text2 : String?) {
+    val dialog = Dialog(activity)
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.setCancelable(false)
+    dialog.setContentView(R.layout.layout_custom_dialog_badge)
+    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+    val cvMColor : CardView = dialog.findViewById(R.id.cvMColor)
+    val imgMClosebtn : ImageView = dialog.findViewById(R.id.imgMClosebtn)
+    val imgMBadge : ImageView = dialog.findViewById(R.id.imgMBadge)
+    val tvMBadgeName : TextView = dialog.findViewById(R.id.tvMBadgeName)
+    val btnMGetInfo : Button = dialog.findViewById(R.id.btnMGetInfo)
+    val tvMText1 : TextView = dialog.findViewById(R.id.tvMText1)
+    val tvMText2 : TextView = dialog.findViewById(R.id.tvMText2)
+
+    // 배지 이미지 설정
+    val resourceId = activity.resources.getIdentifier(badgeImg, "drawable", activity.packageName)
+    imgMBadge.setImageResource(resourceId)
+
+    // 배지 상태에 따라 UI 업데이트
+    if (badgeImg != null) {
+        if (badgeImg.endsWith("_off")) {
+            val darkGrayColor = ContextCompat.getColor(activity, R.color.bg_darkgray80)
+            cvMColor.setCardBackgroundColor(darkGrayColor)
+            btnMGetInfo.text = "획득 방법"
+            btnMGetInfo.backgroundTintList = ColorStateList.valueOf(darkGrayColor)
+
+            // 닫기 버튼 이미지 변경
+            val closeIconNavy = activity.resources.getIdentifier("ic_close_dialog_navy", "drawable", activity.packageName)
+            imgMClosebtn.setImageResource(closeIconNavy)
+
+        } else if (badgeImg.endsWith("_on")) {
+            val pointColor = ContextCompat.getColor(activity, R.color.point)
+            cvMColor.setCardBackgroundColor(pointColor)
+            btnMGetInfo.text = "보유 중"
+            btnMGetInfo.backgroundTintList = ColorStateList.valueOf(pointColor)
+
+            // 닫기 버튼 이미지 변경
+            val cloaseIconPoint = activity.resources.getIdentifier("ic_close_dialog_red", "drawable", activity.packageName)
+            imgMClosebtn.setImageResource(cloaseIconPoint)
+        }
+    }
+
+    // 텍스트 설정
+    tvMBadgeName.text = badgeName
+    btnMGetInfo.text = badgeGetInfo
+    tvMText1.text = text1
+    tvMText2.text = text2
+
+    // 닫기 버튼 이벤트 설정
+    imgMClosebtn.setOnClickListener {
+        dialog.dismiss()
+    }
+
+    dialog.show()
+
 }
 
