@@ -156,7 +156,7 @@ router.post('/joinClub', (req, res) => {
 					// 뱃지 코드 지정
 					let badge_code = '';
 
-					if (clubCount === 1) {
+					if (clubCount === 1 || clubCount === 2) {
 						// 처음 모임에 가입할 때 'badge_code03' 부여
 						badge_code = 'badge_code03';
 					} else if (clubCount >= 5) {
