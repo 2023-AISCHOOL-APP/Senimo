@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
     // 파일 저장시 사용할 이름
     const uniqueFilename = uuidv4() + '-' + file.originalname;
     cb(null, uniqueFilename);
-    console.log("사진이름: ", uniqueFilename);
+    // console.log("사진이름: ", uniqueFilename);
   }
 });
 
@@ -26,11 +26,11 @@ const upload = multer({ storage: storage });
 
 // 일정 정보 조회
 router.get('/get/Sche_intro/:sche_code', (req, res) => {
-  console.log('result', req.body);
+  // console.log('result', req.body);
   // 클라이언트로부터 받은 schedule_id를 사용하여 쿼리문을 생성
   const sche_code = req.params.sche_code;
-  console.log("요청", req)
-  console.log("요청받은코드", sche_code)
+  // console.log("요청", req)
+  // console.log("요청받은코드", sche_code)
   const query = `SELECT c.club_name, CONCAT('${config.baseURL}/uploads/', a.sche_img) AS sche_img , a.sche_title, a.sche_date, a.sche_location, a.fee, 
     COUNT(b.user_id) AS attend_user_cnt, a.max_num, a.sche_content
   FROM tb_schedule a
@@ -46,13 +46,13 @@ router.get('/get/Sche_intro/:sche_code', (req, res) => {
       return res.status(500).send('Server error occurred: ' + error.message);
     }
     res.json(results[0]); // 만약 결과가 하나만 예상된다면 첫 번째 결과만 반환
-    console.log("보낸결과", results)
+    // console.log("보낸결과", results)
   });
 });
 
 // 일정 생성
 router.post('/makeSche', upload.single('picture'), (req, res) => {
-  console.log('makeSche router', req.body);
+  // console.log('makeSche router', req.body);
   const makeSche = JSON.parse(req.body.makeSche)
   const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img } = makeSche
   const formattedDate = new Date(sche_date)
@@ -63,7 +63,7 @@ router.post('/makeSche', upload.single('picture'), (req, res) => {
   const makeScheSql = `insert into tb_schedule (club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, sche_img)
     values(?,?,?,?,?,?,?,?)`
   conn.query(makeScheSql, [club_code, sche_title, sche_content, formattedDate, sche_location, max_num, fee, scheImgFilename], (err, rows) => {
-    console.log('일정 생성 : ', rows);
+    // console.log('일정 생성 : ', rows);
     if (err) {
       console.error('일정 생성 실패 : ', err);
       res.json({ rows: 'failed' });
@@ -106,7 +106,7 @@ router.post('/updateSche', upload.single('picture'), (req, res) => {
     }
 
     // 게시글 업데이트 
-    console.log("newImagePath : ", newImagePath)
+    // console.log("newImagePath : ", newImagePath)
     const updateQuery = `
     UPDATE tb_schedule
     SET sche_title = ?, sche_content = ?, sche_date = ?, max_num = ?,  fee = ?, sche_img = ?
@@ -136,7 +136,7 @@ router.post('/updateSche', upload.single('picture'), (req, res) => {
 
 // 일정 참가
 router.post('/joinSche', (req, res) => {
-  console.log('joinSche router', req.body);
+  // console.log('joinSche router', req.body);
   const { user_id, sche_code } = req.body;
 
   const joinScheSql = `insert into tb_sche_joined_user (user_id, sche_code) values (?,?)`;
@@ -195,13 +195,13 @@ router.post('/joinSche', (req, res) => {
                 } else {
                   // 이미 해당 조합이 존재하므로 추가하지 않고 메시지 반환
                   res.json({ rows: 'success' });
-                  console.log(`이미 해당 뱃지 코드 (${badge_code})와 사용자 ID의 조합이 존재합니다.`);
+                  //console.log(`이미 해당 뱃지 코드 (${badge_code})와 사용자 ID의 조합이 존재합니다.`);
                 }
               }
             });
           } else {
             res.json({ rows: 'success' });
-            console.log("해당 조건에 맞는 뱃지가 없습니다.");
+            //console.log("해당 조건에 맞는 뱃지가 없습니다.");
           }
         }
       });
@@ -213,7 +213,7 @@ router.post('/joinSche', (req, res) => {
 
 // 일정 탈퇴
 router.post('/cancelJoinSche', (req, res) => {
-  console.log('cancelJoinSche router', req.body);
+  //console.log('cancelJoinSche router', req.body);
   const { user_id, sche_code } = req.body;
 
   const cancelJoinScheSql = `delete from tb_sche_joined_user where user_id = ? and sche_code = ?`;
@@ -231,7 +231,7 @@ router.post('/cancelJoinSche', (req, res) => {
 
 // 일정 삭제
 router.post('/deleteSche', (req, res) => {
-  console.log('일정 삭제 라우터', req.body);
+  //console.log('일정 삭제 라우터', req.body);
   const { sche_code } = req.body;
 
   const deletePostSql = `delete from tb_schedule where sche_code = ?`
@@ -250,7 +250,7 @@ router.post('/deleteSche', (req, res) => {
 
 // 일정 업데이트
 router.post('/updateSche', (req, res) => {
-  console.log('updateSche router', req.body);
+  //console.log('updateSche router', req.body);
   const { sche_code, club_code, sche_title, sche_content, sche_date, sche_location, max_num, fee, joined_Members, sche_img, club_name } = req.body
   const formattedDate = new Date(sche_date)
 

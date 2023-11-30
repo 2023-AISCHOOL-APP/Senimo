@@ -66,6 +66,7 @@ dependencies {
   implementation ("com.squareup.okhttp3:logging-interceptor:4.9.1")
   implementation ("com.github.bumptech.glide:glide:4.16.0")
   implementation("androidx.recyclerview:recyclerview:1.3.2")
+  implementation("implementation 'io.socket:socket.io-client:2.0.1")
   annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0") //Glide의 어노테이션 프로세서 추가
   testImplementation("junit:junit:4.13.2")
 
