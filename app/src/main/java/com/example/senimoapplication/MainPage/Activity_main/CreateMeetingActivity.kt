@@ -65,9 +65,13 @@ class CreateMeetingActivity : AppCompatActivity() {
         setupKeywordImageViews()
         if (intent_meetingVO != null) {
             Log.d("시작부분 확인", "모임수정하는부분")
+
             // 모임 수정하기
             binding.tvMToptitle.text = title
             binding.btnSetMeeting.text = btnTitle
+            binding.tvMLetterCnt1.text = intent_meetingVO.title.length.toString()
+            binding.tvMLetterCnt2.text = intent_meetingVO.content.length.toString()
+
             setSelectedKeyword(intent_meetingVO.keyword)
             intent_meetingVO.title?.let { title ->
                 binding.etMeetingName.text = Editable.Factory.getInstance().newEditable(title)
@@ -75,6 +79,83 @@ class CreateMeetingActivity : AppCompatActivity() {
             intent_meetingVO.content?.let { content ->
                 binding.etMeetingIntro.text = Editable.Factory.getInstance().newEditable(content)
             }
+
+
+            // 모임명
+            binding.etMeetingName.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    // 입력 전 필요한 로직 (필요한 경우)
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // 입력 중 필요한 로직 (필요한 경우)
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    val currentLength = s?.length ?: 0
+                    binding.tvMLetterCnt1.text = "$currentLength"
+                    if (currentLength > 20) {
+                        binding.tvMLetterCnt1.setTextColor(
+                            ContextCompat.getColor(
+                                this@CreateMeetingActivity,
+                                R.color.point
+                            )
+                        )
+                        binding.tvMNameWarning.visibility = View.VISIBLE // 경고 메시지 표시
+                    } else {
+                        binding.tvMLetterCnt1.setTextColor(
+                            ContextCompat.getColor(
+                                this@CreateMeetingActivity,
+                                R.color.txt_gray70
+                            )
+                        )
+                        binding.tvMNameWarning.visibility = View.GONE // 경고 메시지 숨김
+                    }
+                }
+            })
+
+            // 모임 소개글
+            binding.etMeetingIntro.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    // 입력 전 필요한 로직 (필요한 경우)
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // 입력 중 필요한 로직 (필요한 경우)
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    val currentLength = s?.length ?: 0
+                    binding.tvMLetterCnt2.text = "$currentLength"
+                    if (currentLength > 300) {
+                        binding.tvMLetterCnt2.setTextColor(
+                            ContextCompat.getColor(
+                                this@CreateMeetingActivity,
+                                R.color.point
+                            )
+                        )
+                        binding.tvMIntroWarning.visibility = View.VISIBLE // 경고 메시지 표시
+                    } else {
+                        binding.tvMLetterCnt2.setTextColor(
+                            ContextCompat.getColor(
+                                this@CreateMeetingActivity,
+                                R.color.txt_gray70
+                            )
+                        )
+                        binding.tvMIntroWarning.visibility = View.GONE // 경고 메시지 숨김
+                    }
+                }
+            })
 
             // 지역 선택 스피너
             val spinner = findViewById<Spinner>(R.id.sp_M_gulist)

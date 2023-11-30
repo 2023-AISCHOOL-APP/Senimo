@@ -3,8 +3,8 @@ const config = {
     //baseURL: 'https://improved-sadly-snake.ngrok-free.app',
     //baseURL: 'http://192.168.70.44:3333',
     //baseURL: 'http://192.168.70.228:3333',
-    baseURL: 'http://192.168.70.69:3333', // 희준IP
-    //  baseURL: 'http://192.168.70.243:3333', //지혜
+    //baseURL: 'http://192.168.70.69:3333', // 희준IP
+      baseURL: 'http://192.168.70.243:3333', //지혜
     //baseURL: 'http://192.168.70.9:3333', //효정
     //baseURL: 'http://192.168.35.13',
 
