@@ -1,11 +1,14 @@
 package com.example.senimoapplication.Club.adapter
 
 import android.content.Context
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -14,7 +17,13 @@ import com.example.senimoapplication.Club.VO.loadGalleryVO
 import com.example.senimoapplication.Common.photoUploadTime
 import com.example.senimoapplication.Common.showFragmentDialogBox
 import com.example.senimoapplication.R
+import com.example.senimoapplication.server.ImageUploader
+import com.example.senimoapplication.server.Server
+import com.example.senimoapplication.server.Token.PreferenceManager
 import org.w3c.dom.Text
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, val layout : Int, val data : ArrayList<loadGalleryVO>):RecyclerView.Adapter<PhotoViewAdapter.ViewHolder>(){
     val inflater = LayoutInflater.from(context)

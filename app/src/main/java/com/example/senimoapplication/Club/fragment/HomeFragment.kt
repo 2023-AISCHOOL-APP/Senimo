@@ -106,6 +106,8 @@ class HomeFragment : Fragment() {
         clubName = clickedMeeting?.title
         clubLeader = clickedMeeting?.userId
 
+        Log.d("getclickedMeetinghome", clickedMeeting?.club_code.toString())
+        Log.d("getclickedMeetinghome", clickedMeeting?.title.toString())
         // 모임 데이터 가져오기
         fetchMemberList(view)
         fetchScheduleData()
@@ -205,7 +207,7 @@ class HomeFragment : Fragment() {
     }
 
     // 스케줄 데이터 새로고침 (통신)
-    private fun fetchScheduleData() {
+    fun fetchScheduleData() {
         val server = Server(requireContext())
         val scheduleManager = ScheduleManager(server)
         clubCode?.let { code ->

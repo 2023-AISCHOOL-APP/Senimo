@@ -29,20 +29,16 @@ import com.example.senimoapplication.MainPage.VO_main.BadgeRes
 import com.example.senimoapplication.MainPage.VO_main.CombinedDataResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
-import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.VO_main.UserDropOutResVO
 import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
-import com.example.senimoapplication.MainPage.VO_main.modifyResult
 import com.example.senimoapplication.server.Token.TokenResponse
 import com.example.senimoapplication.server.Token.TokenValidationResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import com.google.gson.JsonObject
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
-import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -248,7 +244,7 @@ interface ApiService {
 
     // 사진첩 정보 조회
     @GET("/getGallery")
-    fun getGallery(@Query("club_code") clubCode: String) : Call<List<loadGalleryVO>>
+    fun getGallery(@Query("club_code") clubCode: String?) : Call<List<loadGalleryVO>>
 
     @GET("/getPostContent/{club_code}")
     fun getPostContent(@Path("club_code") clubCode: String?): Call<getPostResVO>

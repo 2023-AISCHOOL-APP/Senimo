@@ -1,6 +1,8 @@
 package com.example.senimoapplication.Club.Activity_club
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -36,6 +38,9 @@ class ClubActivity : AppCompatActivity() {
 
         var viewPager = findViewById(R.id.viewPager) as ViewPager
         var tabLayout = findViewById(R.id.tabLayout) as TabLayout
+
+
+
 
         val fragmentAdapter = FragmentAdapter(supportFragmentManager)
         fragmentAdapter.addFragment(HomeFragment(),"모임 홈")
@@ -93,6 +98,14 @@ class ClubActivity : AppCompatActivity() {
             }
         }
         onBackPressedDispatcher.addCallback(this, callback)
+
+
+        val spf = getSharedPreferences("club", Context.MODE_PRIVATE)
+        val editor = spf?.edit()
+        editor?.putString("clubcode", clickedMeeting?.club_code)?.commit()
+
+
+
     }
 
     fun initialInterestedClub(clubCode: String, userId : String, imgLike: ImageView) {
