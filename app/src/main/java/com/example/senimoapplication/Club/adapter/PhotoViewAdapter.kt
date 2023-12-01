@@ -47,8 +47,14 @@ class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, v
     }
 
     override fun onBindViewHolder(holder: PhotoViewAdapter.ViewHolder, position: Int) {
+        val photoUserImg = data[position].userImg
+        Glide.with(context)
+            .load(photoUserImg)
+            .placeholder(R.drawable.ic_loading6) // 로딩 중 표시될 이미지
+            .error(R.drawable.ic_profile_circle) // 로딩 실패 시 표시될 이미지
+            .into(holder.imgUserProfile)
+
         val item = data[position]
-        holder.imgUserProfile.setImageResource(R.drawable.img_sample)
         when (item.clubRole){
             1 -> {
                 holder.tvUserRole.text = "모임장"
