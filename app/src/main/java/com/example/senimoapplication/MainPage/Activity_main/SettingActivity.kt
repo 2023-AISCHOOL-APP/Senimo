@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.Common.showSettingDialogBox
-import com.example.senimoapplication.Login.Activity_login.IntroActivity
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivitySettingBinding
 

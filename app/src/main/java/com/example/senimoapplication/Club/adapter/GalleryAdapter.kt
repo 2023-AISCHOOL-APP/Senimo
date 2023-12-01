@@ -7,13 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.Activity_club.PhotoActivity
-import com.example.senimoapplication.Club.VO.GalleryVO
 import com.example.senimoapplication.Club.VO.loadGalleryVO
 import com.example.senimoapplication.R
 
@@ -27,16 +23,16 @@ class GalleryAdapter(val context: Context, val layout: Int, val data: ArrayList<
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = inflater.inflate(layout, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: GalleryAdapter.ViewHolder, position: Int) {
-        //holder.img.setImageURI(data[position].imageUrl.toUri())
-        //holder.img.setImageResource(data[position].imgUri)
-        Log.d("galleryList6: ",data[position].toString())
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.d("galleryList6: ", data[position].toString())
         Glide.with(context).load(data[position].imgThumbName).into(holder.img)
+        Log.d("adapter동작","4444444444444")
+        Log.d("adapter동작중인가", data.size.toString())
         holder.img.setOnClickListener {
             val intent = Intent(context, PhotoActivity::class.java)
             intent.putExtra("clickedPhoto", data[position])

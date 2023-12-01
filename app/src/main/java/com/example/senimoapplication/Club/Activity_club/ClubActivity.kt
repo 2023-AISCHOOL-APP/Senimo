@@ -1,5 +1,6 @@
 package com.example.senimoapplication.Club.Activity_club
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -24,7 +25,6 @@ import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.FieldMap
 
 class ClubActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,6 +93,11 @@ class ClubActivity : AppCompatActivity() {
             }
         }
         onBackPressedDispatcher.addCallback(this, callback)
+
+        val spf = getSharedPreferences("club", Context.MODE_PRIVATE)
+        val editor = spf?.edit()
+        editor?.putString("clubcode", clickedMeeting?.club_code)?.commit()
+
     }
 
     fun initialInterestedClub(clubCode: String, userId : String, imgLike: ImageView) {

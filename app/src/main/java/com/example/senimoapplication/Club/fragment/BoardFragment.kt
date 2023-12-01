@@ -20,7 +20,6 @@ import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentBoardBinding
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
-import com.example.senimoapplication.server.Token.UserData
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
@@ -97,7 +96,6 @@ class BoardFragment : Fragment(), PostUpdateListener {
             override fun onFailure(call: Call<getPostResVO>, t: Throwable) {
                 Log.e("BoardFragment", "서버 통신 실패", t)
             }
-
         })
     }
 }

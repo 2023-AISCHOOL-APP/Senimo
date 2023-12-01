@@ -19,9 +19,6 @@ data class ClubInfoVO(
     val keywordName : String,
     @SerializedName("club_introduce")
     val clubIntroduce : String? = null
-
-
-
     ) : Parcelable {
     constructor(parcel: Parcel) : this(
         clubImageUri = parcel.readString() ?: "",
@@ -31,12 +28,9 @@ data class ClubInfoVO(
         keywordName = parcel.readString() ?:"",
         clubLocation = parcel.readString() ?: "",
         clubIntroduce = parcel.readString() ?:"",
-
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-//        parcel.writeString(gu)
-
         parcel.writeString(clubImageUri)
         parcel.writeInt(maxCnt)
         parcel.writeInt(joinedUserCnt)
@@ -44,7 +38,6 @@ data class ClubInfoVO(
         parcel.writeString(clubLocation)
         parcel.writeString(keywordName)
         parcel.writeString(clubIntroduce)
-
     }
 
     override fun describeContents(): Int {

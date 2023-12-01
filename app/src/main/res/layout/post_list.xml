@@ -127,18 +127,19 @@
                     android:id="@+id/tvBtnMore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/pretendard_regular"
                     android:text="더보기"
                     android:textColor="@color/txt_gray50"
                     android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_P_Content"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_P_Content" />
 
                 <TextView
                     android:id="@+id/tvCommentTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="35dp"
                     android:drawableLeft="@drawable/ic_comment"
                     android:drawablePadding="4dp"
                     android:text="댓글"

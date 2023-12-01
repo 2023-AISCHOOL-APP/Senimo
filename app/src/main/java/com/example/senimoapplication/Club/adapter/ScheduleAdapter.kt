@@ -16,7 +16,6 @@ import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.dDate
 import com.example.senimoapplication.Common.formatDate
-import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import kotlin.math.min
 
 class ScheduleAdapter(val context: Context, val layout: Int, val data: List<ScheduleVO>, val cnt : Int?=null, val schecode : String? =null ) :
@@ -51,7 +50,6 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
         val tvScheduleDate : TextView // 일시
         val image : ImageView
         init {
-
             tvClubScheduleName = view.findViewById(R.id.tv_C_ScheduleName)
             tvScheduleDay = view.findViewById(R.id.tv_C_dday)
             tvScheduleState = view.findViewById(R.id.tv_C_State)
@@ -61,7 +59,6 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
             tvScheduleDate = view.findViewById(R.id.tvRealTime)
             image = view.findViewById(R.id.Img_M_Meeting)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -77,7 +74,6 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
             min(3, data.size)
         }
         // return data.size
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -113,10 +109,8 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
             holder.tvScheduleMemNum.text = "${data[position].joinedMembers}/${data[position].maxNum.toString()}"
         }
 
-
         val state = holder.tvScheduleState.text
         val dDay = holder.tvScheduleDay.text
-
 
         // d-day 스타일 변경
         val dDayList = mutableListOf<String>()
@@ -132,7 +126,6 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
         if (dDay in dDayList){
             holder.tvScheduleDay.setBackgroundResource(R.drawable.dday_soon)
         }
-
 
         // 모집 상태 태그 스타일 변경
         if(state == "모집마감"){
@@ -156,10 +149,5 @@ RecyclerView.Adapter<ScheduleAdapter.ViewHolder>(){
         holder.itemView.setOnClickListener {
             itemClickListener?.onItemClick(position)
         }
-
-
-
     }
-
-
 }

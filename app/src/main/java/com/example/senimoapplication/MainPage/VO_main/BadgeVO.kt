@@ -13,7 +13,6 @@ data class BadgeVO(
   val userId: String = ""
 
 ): Parcelable {
-
     constructor(parcel: Parcel) : this(
       badgeGetCode = parcel.readString() ?: "",
       badgeCode = parcel.readString() ?: "",

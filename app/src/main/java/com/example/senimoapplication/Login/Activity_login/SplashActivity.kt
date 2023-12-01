@@ -19,16 +19,8 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-//        Handler().postDelayed({
-//            val intent = Intent(this@SplashActivity, IntroActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        },3000)
-
         validateAccessToken()
-
     }
-
 
     private fun validateAccessToken() {
         val accessToken = PreferenceManager.getAccessToken(this)
@@ -59,7 +51,6 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
-
     private fun navigateToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -67,12 +58,8 @@ class SplashActivity : AppCompatActivity() {
         Log.d("SharedPreferencesTest", "Loaded User Data: ${userData.toString()}")
         Log.d("SharedPreferencesTest", "Loaded User Data: ${userData?.user_id}")
         Log.d("이미지입니다 유저 아이디11",userData?.toString()!!)
-        // val userId : String? =null
-        //val UsrData = PreferenceManager.getUser((this))
-        //userId = userData?    .user_id
         finishAffinity()
     }
-
 
     private fun navigateToIntroActivity() {
         Handler().postDelayed({
@@ -81,5 +68,4 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }, 3000)
     }
-
 }

@@ -23,8 +23,6 @@ data class MeetingVO(
     var club_code: String,
     @SerializedName("user_id")
     var userId: String? = null
-
-
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         gu = parcel.readString() ?: "",
@@ -36,7 +34,6 @@ data class MeetingVO(
         imageUri = parcel.readString() ?:"",
         club_code = parcel.readString() ?:"",
         userId = parcel.readString() ?:""
-
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -63,8 +60,6 @@ data class MeetingVO(
         override fun newArray(size: Int): Array<MeetingVO?> {
             return arrayOfNulls(size)
         }
-
-
     }
 }
 

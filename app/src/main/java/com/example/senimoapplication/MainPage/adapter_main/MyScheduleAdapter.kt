@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.VO.ScheduleVO
-import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.Common.dDate
 import com.example.senimoapplication.Common.myScheduleDate

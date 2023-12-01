@@ -79,9 +79,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -106,12 +103,13 @@ class HomeFragment : Fragment() {
         clubName = clickedMeeting?.title
         clubLeader = clickedMeeting?.userId
 
+        Log.d("getclickedMeetinghome", clickedMeeting?.club_code.toString())
+        Log.d("getclickedMeetinghome", clickedMeeting?.title.toString())
         // 모임 데이터 가져오기
         fetchMemberList(view)
         fetchScheduleData()
 
         return view
-
     }
 
     // 클럽 전체 회원 목록 새로고침
@@ -138,10 +136,6 @@ class HomeFragment : Fragment() {
                                 val m_adapter = MemberAdapter(requireContext(), R.layout.club_member_list, ArrayList(memberList), clubLeader, this@HomeFragment)
                                 binding.rvMember.adapter = m_adapter
                                 binding.rvMember.layoutManager = LinearLayoutManager(view.context)
-
-
-
-
 
                                 // 운영진만 보이는 버튼
                                 if (userId in staffList){
@@ -205,7 +199,7 @@ class HomeFragment : Fragment() {
     }
 
     // 스케줄 데이터 새로고침 (통신)
-    private fun fetchScheduleData() {
+    fun fetchScheduleData() {
         val server = Server(requireContext())
         val scheduleManager = ScheduleManager(server)
         clubCode?.let { code ->
@@ -254,7 +248,6 @@ class HomeFragment : Fragment() {
                 binding.imgClubClose.visibility = GONE
             }
         }
-
 
         // img_ClubMore 클릭 이벤트
         binding.imgClubMore.setOnClickListener {
@@ -351,10 +344,7 @@ class HomeFragment : Fragment() {
                 // clickedMeeting이 null인 경우의 처리
                 Log.e("HomeFragment", "clickedMeeting이 null입니다.")
             }
-
         }
-
-
     }
 
     private fun getKeywordBackground(keyword: String): Int {
@@ -415,7 +405,6 @@ class HomeFragment : Fragment() {
             override fun onFailure(call: Call<JoinClubResVO>, t: Throwable) {
                 Log.e("HomeFragment joinClub", "joinClub 네트워크 요청 실패", t)
             }
-
         })
     }
 
@@ -444,11 +433,9 @@ class HomeFragment : Fragment() {
             override fun onFailure(call: Call<QuitClubResVO>, t: Throwable) {
                 Log.e("HomeFragment quitClub", "quitClub 네트워크 요청 실패", t)
             }
-
         })
     }
 }
-
 
 // 모임 회원 정보 통신을 위한 매니저 설정
 class MemberManager(private val server: Server) {
@@ -489,5 +476,4 @@ class ScheduleManager(private val server: Server) {
         val call = server.service.getSchedules(clubCode)
         call.enqueue(callback)
     }
-
 }

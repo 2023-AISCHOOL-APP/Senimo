@@ -7,10 +7,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.fragment.ChatFragment
 import com.example.senimoapplication.MainPage.VO_main.ChatListVO
-import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.databinding.ActivityMainBinding
 import com.example.senimoapplication.MainPage.fragment_main.ChatMainFragment
 import com.example.senimoapplication.MainPage.fragment_main.HomeMainFragment
@@ -18,7 +16,6 @@ import com.example.senimoapplication.MainPage.fragment_main.MymeetingFragment
 import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.R
 
-//import com.example.senimoapplication.server.Token.TokenManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,15 +44,21 @@ class MainActivity : AppCompatActivity() {
     val callback = object : OnBackPressedCallback(true){
       override fun handleOnBackPressed() {
         val currentTabId = binding.bnvMain.selectedItemId
-        if (currentTabId == R.id.M_tab1) {
-          if(System.currentTimeMillis() - backPressedTime >= 2000){
-            backPressedTime = System.currentTimeMillis()
-            Toast.makeText(this@MainActivity, "뒤로가기 버튼을 한번 더 누르면 앱을 종료합니다.", Toast.LENGTH_SHORT).show()
-          }else if (System.currentTimeMillis() - backPressedTime < 2000){
-            finish()
-          }
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fl)
+
+        if (currentFragment is ChatFragment) {
+          navigateBackToChatMainFragment()
         } else {
-          binding.bnvMain.selectedItemId = R.id.M_tab1
+          if (currentTabId == R.id.M_tab1) {
+            if(System.currentTimeMillis() - backPressedTime >= 2000){
+              backPressedTime = System.currentTimeMillis()
+              Toast.makeText(this@MainActivity, "뒤로가기 버튼을 한번 더 누르면 앱을 종료합니다.", Toast.LENGTH_SHORT).show()
+            } else if (System.currentTimeMillis() - backPressedTime < 2000){
+              finish()
+            }
+          } else {
+            binding.bnvMain.selectedItemId = R.id.M_tab1
+          }
         }
       }
     }
@@ -112,7 +115,6 @@ class MainActivity : AppCompatActivity() {
             HomeMainFragment()
           ).commit()
 
-
           binding.tvMToptitle.text = "시니모"
           binding.imgMAlertbtn.visibility = View.VISIBLE
           binding.imgMSettingbtn.visibility = View.INVISIBLE
@@ -130,7 +132,6 @@ class MainActivity : AppCompatActivity() {
           binding.imgMAlertbtn.visibility = View.INVISIBLE
           binding.imgMSettingbtn.visibility = View.INVISIBLE
           binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
-
         }
 
         R.id.M_tab3 -> {
@@ -143,10 +144,7 @@ class MainActivity : AppCompatActivity() {
           binding.imgMAlertbtn.visibility = View.INVISIBLE
           binding.imgMSettingbtn.visibility = View.INVISIBLE
           binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
-
-
         }
-
 
         R.id.M_tab4 -> {
           supportFragmentManager.beginTransaction().replace(
@@ -158,13 +156,11 @@ class MainActivity : AppCompatActivity() {
           binding.imgMAlertbtn.visibility = View.INVISIBLE
           binding.imgMSettingbtn.visibility = View.VISIBLE
           binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
-
         }
       }
 
       true
     }
-
   }
 
   /** 선택된 탭 이동 함수 */
@@ -180,16 +176,6 @@ class MainActivity : AppCompatActivity() {
       }
     }
   }
-
-  // 뒤로가기 버튼을 눌렀을 때 M_tab1로 이동하도록 설정
-//  override fun onBackPressed() {
-//    val currentTabId = binding.bnvMain.selectedItemId
-//    if (currentTabId != R.id.M_tab1) {
-//      binding.bnvMain.selectedItemId = R.id.M_tab1
-//    } else {
-//      super.onBackPressed()
-//    }
-//  }
 
   // ChatMainFragment 에서 ChatFragment로 이동시키게 하는 함수 만들기
   // 내 모임리스트 -> 내 모임 방
@@ -218,9 +204,7 @@ class MainActivity : AppCompatActivity() {
     ).commit()
     binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE // 버튼 숨기기
   }
-
 }
-
 
 interface OnChatItemClickListener {
   fun navigateToChatFragment(chatListVO: ChatListVO)

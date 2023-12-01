@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.senimoapplication.R
-import okhttp3.internal.addHeaderLenient
 
 
 class DongAdapter(val layout: Int, var list: ArrayList<String>, val context: Context) : RecyclerView.Adapter<DongAdapter.ViewHolder>() {

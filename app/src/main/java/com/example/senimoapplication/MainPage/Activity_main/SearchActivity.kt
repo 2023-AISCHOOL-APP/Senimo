@@ -13,7 +13,6 @@ import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.databinding.ActivitySearchBinding
-import android.os.Parcelable
 import android.text.Editable
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -22,7 +21,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 class SearchActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySearchBinding
-    lateinit var meetingList: ArrayList<MeetingVO>
+    lateinit var AllClubList: ArrayList<MeetingVO>
     private var filteredMeetingList: List<MeetingVO> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,12 +32,11 @@ class SearchActivity : AppCompatActivity() {
         setContentView(view)
 
         // Intent에서 MeetingList와 CategoryKeyword를 받아옴
-        meetingList = intent.getParcelableArrayListExtra<MeetingVO>("MeetingList") ?: ArrayList()
-        Log.d("SearchActivity", "받아온 모임 리스트: $meetingList")
+        AllClubList = intent.getParcelableArrayListExtra<MeetingVO>("AllClubList") ?: ArrayList()
+        Log.d("SearchActivity", "받아온 모임 리스트: $AllClubList")
 
         val categoryKeyword = intent.getStringExtra("CategoryKeyword") ?: ""
         Log.d("SearchActivity", "받아온 카테고리 키워드: $categoryKeyword")
-
 
         val isFromSearchBar = intent.getBooleanExtra("isFromSearchBar", false)
 
@@ -52,27 +50,23 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // 카테고리 키워드에 따라 MeetingList 필터링
-        filteredMeetingList = meetingList.filter { it.keyword == categoryKeyword }
+        filteredMeetingList = AllClubList.filter { it.keyword == categoryKeyword }
 
         // tv_M_SearchBar의 android:text 설정
         binding.tvMSearchBar.text = Editable.Factory.getInstance().newEditable(categoryKeyword)
 
         // 확인을 위한 로그
-        for (meeting in meetingList) {
-            Log.d("받아온 MeetingList", "Title: ${meeting.title}, Content: ${meeting.content}, Keyword: ${meeting.keyword}")
+        for (meeting in AllClubList) {
+            Log.d("받아온 AllClubList", "Title: ${meeting.title}, Content: ${meeting.content}, Keyword: ${meeting.keyword}")
         }
 
-//        MeetingList = intent.getParcelableArrayListExtra("MeetingList")!!
-
-        Log.d("받아온 MeetingList 전체", meetingList.toString())
+        Log.d("받아온 AllClubList 전체", AllClubList.toString())
 
         // RecyclerView 초기 설정
         val searchRecyclerView = view.findViewById<RecyclerView>(R.id.rv_M_CategoryMeeting)
         val adapter = MeetingAdapter(applicationContext, R.layout.meeting_list, filteredMeetingList)
         searchRecyclerView.adapter = adapter
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
-
-
 
         binding.ImgMSearchIcon.setOnClickListener {
             val searchText = binding.tvMSearchBar.text.toString()
@@ -81,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
 
             // 검색 텍스트를 기반으로 MeetingList 필터링
             filteredMeetingList =
-                meetingList?.filter { it.title.contains(searchText, ignoreCase = true) }
+                AllClubList?.filter { it.title.contains(searchText, ignoreCase = true) }
                     ?: emptyList()
 
             // 클릭 시, tv_M_CategoryTitle와 recyclerView를 보이도록 설정
@@ -116,7 +110,6 @@ class SearchActivity : AppCompatActivity() {
         }
         onBackPressedDispatcher.addCallback(this, callback)
 
-        // val searchRecyclerView = view.findViewById<RecyclerView>(R.id.rv_M_CategoryMeeting)
         searchRecyclerView.addOnItemTouchListener(
             RecyclerItemClickListener(
                 this@SearchActivity,
@@ -175,7 +168,5 @@ class SearchActivity : AppCompatActivity() {
 
         // 변경된 제약 조건 적용
         constraintSet.applyTo(constraintLayout)
-
     }
-
 }

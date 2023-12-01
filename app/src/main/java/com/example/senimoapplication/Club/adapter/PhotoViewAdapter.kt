@@ -9,12 +9,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.senimoapplication.Club.VO.GalleryVO
 import com.example.senimoapplication.Club.VO.loadGalleryVO
 import com.example.senimoapplication.Common.photoUploadTime
 import com.example.senimoapplication.Common.showFragmentDialogBox
 import com.example.senimoapplication.R
-import org.w3c.dom.Text
 
 class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, val layout : Int, val data : ArrayList<loadGalleryVO>):RecyclerView.Adapter<PhotoViewAdapter.ViewHolder>(){
     val inflater = LayoutInflater.from(context)
@@ -41,16 +39,22 @@ class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, v
             imgView = view.findViewById(R.id.imgView)
             imgbtnDelete = view.findViewById(R.id.imgbtnDelete)
         }
-
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewAdapter.ViewHolder {
         val view = inflater.inflate(layout, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: PhotoViewAdapter.ViewHolder, position: Int) {
+        val photoUserImg = data[position].userImg
+        Glide.with(context)
+            .load(photoUserImg)
+            .placeholder(R.drawable.ic_loading6) // 로딩 중 표시될 이미지
+            .error(R.drawable.ic_profile_circle) // 로딩 실패 시 표시될 이미지
+            .into(holder.imgUserProfile)
+
         val item = data[position]
-        holder.imgUserProfile.setImageResource(R.drawable.img_sample)
         when (item.clubRole){
             1 -> {
                 holder.tvUserRole.text = "모임장"
@@ -73,39 +77,11 @@ class PhotoViewAdapter (val activity: AppCompatActivity, val context: Context, v
         }
 
         Glide.with(context).load(item.imgThumbName).into(holder.imgView)
-        //holder.imgView.setImageResource(item.imgThumbName)
-
-        // if userid == 작성자 {
-        //  holder.imgbtnDelete.visibility = view.VISIBLE
-        // } else {
-        //  holder.imgbtnDelete.visibility = view.INVISIBLE
 
         holder.imgbtnDelete.setOnClickListener{
             showFragmentDialogBox(context,"사진을 삭제하시겠습니까?","삭제하기","사진이 삭제되었습니다.")
             // 사진 삭제
         }
-
-//        좋아요 관련 기능
-//        holder.tvLikeCnt.text = item.photoLikes.toString()
-//        var likecnt = item.photoLikes
-//        var isLiked = item.isLiked
-//
-//        holder.imgbtnLike.setOnClickListener {
-//            if (isLiked) {
-//                holder.imgbtnLike.setImageResource(R.drawable.ic_heart)
-//                isLiked = false
-//                likecnt = item.photoLikes - 1
-//            } else {
-//                holder.imgbtnLike.setImageResource(R.drawable.ic_fullheart)
-//                isLiked = true
-//                likecnt++
-//            }
-//
-//            // 변경된 좋아요 상태와 카운트를 뷰에 반영
-//            holder.tvLikeCnt.text = likecnt.toString()
-//            item.isLiked = isLiked // 아이템의 좋아요 상태 업데이트
-//            item.photoLikes = likecnt // 아이템의 좋아요 카운트 업데이트
-//        }
     }
 
     override fun getItemCount(): Int {

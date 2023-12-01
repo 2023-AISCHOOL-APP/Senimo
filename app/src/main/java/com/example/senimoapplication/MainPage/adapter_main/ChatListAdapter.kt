@@ -8,16 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.ui.unit.min
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Common.myChatListDate
 import com.example.senimoapplication.R
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
-import java.util.zip.DataFormatException
+
 
 class ChatListAdapter(val context: Context, val layout: Int, val data: List<ChatListVO>)
     : RecyclerView.Adapter<ChatListAdapter.ViewHolder>(){
@@ -74,7 +69,6 @@ class ChatListAdapter(val context: Context, val layout: Int, val data: List<Chat
             meetingTitle // 글자 수 최대 길이 이하인 경우 그대로 표시
         }
 
-
         val meetingContent_truncatedName = if ( meetingContent.length > CHATLIST_CONTENT_MAX_TEXT_LENGTH) {
             meetingContent.substring(0, CHATLIST_CONTENT_MAX_TEXT_LENGTH) + "..."
         } else {
@@ -105,31 +99,9 @@ class ChatListAdapter(val context: Context, val layout: Int, val data: List<Chat
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(data[position])
         }
-
-
-
-
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
-
-    // 시간을 상대적인 시간으로 변환하는 함수
-//    private fun formatRelativeTime(context: Context, messageTime: Long): String {
-//        val currentTime = System.currentTimeMillis()
-//        val diff = currentTime - messageTime
-//        val seconds = diff / 1000
-//        val minutes = seconds / 60
-//        val hours = minutes / 60
-//        val days = hours / 24
-//
-//        return when {
-//            seconds < 60 -> context.getString(R.string.just_now)
-//            minutes < 60 -> context.getString(R.string.minutes_ago, minutes.toInt())
-//            hours < 24 -> context.getString(R.string.hours_ago, hours.toInt())
-//            days < 2 -> context.getString(R.string.days_ago, days.toInt())
-//            else -> SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(messageTime)
-//        }
-//    }
 }

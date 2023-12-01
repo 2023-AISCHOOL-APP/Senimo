@@ -89,23 +89,12 @@ class ChatFragment : Fragment() {
 
                     Log.d("메시지 갱신처리 : ",messageVO.toString())
                     //                    // 채팅 스크롤을 가장 최근 메시지 위치로 이동
-                    //binding.rvChatting.scrollToPosition(chatMessageList.size - 1)
+                    // binding.rvChatting.scrollToPosition(chatMessageList.size - 1)
                     binding.rvChatting.smoothScrollToPosition(adapter.itemCount - 1)
                     //chatMessageList.add(ChatVO(clubCode, userImageUri, "userId", "정태녕", currentTime, message))
 //                    adapter.notifyDataSetChanged()
 
                 }
-            }
-        }
-
-        SocketManager.getSocket().on("past messages") { args ->
-            if (args[0] is String) {
-                val messagesJson = args[0] as String
-                val pastMessages = Gson().fromJson(messagesJson, Array<ChatVO>::class.java).toList()
-                chatMessageList.clear()
-                chatMessageList.addAll(pastMessages)
-                adapter.notifyItemInserted(chatMessageList.size-1)
-                binding.rvChatting.smoothScrollToPosition(adapter.itemCount - 1)
             }
         }
 
@@ -116,11 +105,8 @@ class ChatFragment : Fragment() {
             val messageJson = Gson().toJson(messageVO)
             SocketManager.getSocket().emit("chat message", roomId, messageJson)
             Log.d("메시지 송신처리 : ",message)
-            // 로컬 채팅 목록에도 메시지 추가
-//            chatMessageList.add(messageVO)
-//            adapter.notifyItemInserted(chatMessageList.size-1)
             // 채팅 스크롤을 가장 최근 메시지 위치로 이동
-            binding.rvChatting.smoothScrollToPosition(adapter.itemCount - 1)
+            binding.rvChatting.scrollToPosition(chatMessageList.size - 1)
             binding.etMessage.text.clear() // 메시지 전송 후 입력창 초기화
         }
 

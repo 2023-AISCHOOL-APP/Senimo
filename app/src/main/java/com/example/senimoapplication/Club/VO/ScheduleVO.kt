@@ -29,7 +29,6 @@ data class ScheduleVO(
     @SerializedName("club_name")
     var clubName : String? = null,
     val imageChanged: Boolean = false
-
 )  : Parcelable {
     constructor(parcel: Parcel) : this(
         scheCode = parcel.readString() ?: "",
@@ -57,8 +56,6 @@ data class ScheduleVO(
         parcel.writeInt(joinedMembers)
         parcel.writeString(scheImg)
         parcel.writeString(clubName)
-
-
     }
 
     override fun describeContents(): Int {

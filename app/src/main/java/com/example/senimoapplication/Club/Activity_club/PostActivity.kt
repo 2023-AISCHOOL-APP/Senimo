@@ -80,12 +80,6 @@ class PostActivity : AppCompatActivity() {
                     postImg = finalImageUri,
                     userId = PreferenceManager.getUser(this)?.user_id.toString(),
                     imageChanged = imageChanged
-//                    userImg ="",
-//                    createdDt= "",
-//                    clubRole =0,
-//                    userName ="",
-//                    reviewCount =0
-
                 )
                 Log.d("click 게시글 수정 정보 전송", PostVO.toString())
                 imageUri?.let {
@@ -105,9 +99,11 @@ class PostActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+            binding.icBack.setOnClickListener {
+                finish()
+            }
 
         } else { // 게시판 생성할때
-
             // 사진 1장 선택
             val pickMedia =
                 registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -126,14 +122,8 @@ class PostActivity : AppCompatActivity() {
                 pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
 
-
             binding.btnNewPost.setOnClickListener {
-                // 게시물 등록하고 게시판 화면으로 돌아가기
                 val clickedMeeting = intent.getParcelableExtra<MeetingVO>("clickedMeeting")
-                //val clubCode = clickedMeeting?.club_code.toString()
-//            val userId = UserData.userId.toString()
-                // val userId =  PreferenceManager.getUser(this)?.user_id.toString()//intent.getStringExtra("user_id").toString()
-                //val postContent = binding.etPostContent.text.toString()
                 val writePostResVO = WritePostResVO(
                     rows = "",
                     userId = PreferenceManager.getUser(this)?.user_id.toString(),
@@ -150,7 +140,6 @@ class PostActivity : AppCompatActivity() {
                     // 이미지 URI가 없는 경우에는 일정 정보만 전송
                     writePost(writePostResVO, null)
                 }
-
 
                 // 게시글 등록 후 ClubActivity로 이동
                 val intent = Intent(this@PostActivity, ClubActivity::class.java)
@@ -198,8 +187,6 @@ class PostActivity : AppCompatActivity() {
         })
     }
 
-
-
     // 이미지 URI에서 파일 이름을 추출하는 함수
     fun getFileName(uri: Uri):String?{
         var imageName: String? = null
@@ -232,5 +219,4 @@ class PostActivity : AppCompatActivity() {
             }
         })
     }
-
 }

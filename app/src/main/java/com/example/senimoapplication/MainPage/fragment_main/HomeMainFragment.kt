@@ -6,9 +6,6 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ScrollView
@@ -24,23 +21,21 @@ import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.server.Retrofit.ApiService
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
-import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.MainPage.adapter_main.MyScheduleAdapter
 import com.example.senimoapplication.server.Token.PreferenceManager
-
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-// HomeMainFragment
 class HomeMainFragment : Fragment() {
 
     // 멤버변수로 선언, adapter를 HomeMainFragment 클래스의 멤버 변수로 변수로 선언해야함
     private lateinit var adapter: MeetingAdapter
     private lateinit var myScheduleAdapter: MyScheduleAdapter
     val MeetingList: ArrayList<MeetingVO> = ArrayList()
+    val AllClubList: ArrayList<MeetingVO> = ArrayList()
     val myScheduleList: ArrayList<ScheduleVO> = ArrayList()
     private lateinit var apiService: ApiService
 
@@ -70,12 +65,6 @@ class HomeMainFragment : Fragment() {
         val img_M_Selfimprovement = view.findViewById<ImageView>(R.id.img_M_Selfimprovement)
         val img_M_Financial = view.findViewById<ImageView>(R.id.img_M_Financial)
 
-
-//        if (myScheduleList.size == 0){
-//            Img_M_Schecule_Circle.visibility = INVISIBLE
-//        } else {
-//            Img_M_Schecule_Circle.visibility = VISIBLE
-//        }
         // 내 일정 RecyclerView 어댑터 생성 및 설정
         myScheduleAdapter = MyScheduleAdapter(requireContext(), R.layout.myschedule_list, myScheduleList)
 
@@ -124,7 +113,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -134,7 +123,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -144,7 +133,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -154,7 +143,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -164,7 +153,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -174,7 +163,7 @@ class HomeMainFragment : Fragment() {
             // val filteredExerciseMeetingList = MeetingList.filter { it.keyword == categoryKeyword }
             Log.d("SearchActivity", "Category Keyword: $categoryKeyword")
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))
             intent.putExtra("CategoryKeyword", categoryKeyword)
             startActivity(intent)
             activity?.finish()
@@ -183,7 +172,7 @@ class HomeMainFragment : Fragment() {
         // 검색바 이부분은 전체모임정보가 들어가게 수정해야함(따로요청을 보내야하나?)
         Img_M_SearchBar.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
-            intent.putParcelableArrayListExtra("MeetingList", ArrayList(MeetingList))  // HomeMainFragment에서 MeetingList를 Parcel로 만들어 SearchActivity로 전달
+            intent.putParcelableArrayListExtra("AllClubList", ArrayList(AllClubList))  // HomeMainFragment에서 MeetingList를 Parcel로 만들어 SearchActivity로 전달
             Log.d("검색바",MeetingList.toString())
             intent.putExtra("isFromSearchBar", true) // 검색 바에서 온 것임을 나타내는 플래그
             startActivity(intent)
@@ -221,12 +210,9 @@ class HomeMainFragment : Fragment() {
             }
         }
 
-
-
-
-
         return view
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -237,7 +223,6 @@ class HomeMainFragment : Fragment() {
     private fun fetchMeetings() {
         val service = Server(requireContext()).service
         service.getMeetings().enqueue(object : Callback<List<MeetingVO>> {
-
             override fun onResponse(
                 call: Call<List<MeetingVO>>,
                 response: Response<List<MeetingVO>>
@@ -247,19 +232,19 @@ class HomeMainFragment : Fragment() {
                 if (response.isSuccessful) {
                     Log.d("ody2", response.body().toString())
                     response.body()?.let { meetings ->
+                        // 서버로부터 받은 목록의 처음 10개 아이템만 선택
+                        val limitedList = meetings.take(10)
                         MeetingList.clear()
-                        MeetingList.addAll(meetings)
+                        MeetingList.addAll(limitedList)
+                        AllClubList.addAll(meetings)
                         if (::adapter.isInitialized) {
                             adapter.notifyDataSetChanged()
-
-                            Log.d("ody3", MeetingList.toString())
+                            Log.d("oby3", AllClubList.count().toString())
                         }
                     } ?: run {
-
                         Log.d("HomeMainFragment", "모임 정보가 없습니다.")
                     }
                 } else {
-
                     Log.e("HomeMainFragment", "통신은 성공했으나 요청에 실패했습니다: ${response.code()}")
                 }
             }
@@ -304,5 +289,4 @@ class HomeMainFragment : Fragment() {
             }
         })
     }
-
 }

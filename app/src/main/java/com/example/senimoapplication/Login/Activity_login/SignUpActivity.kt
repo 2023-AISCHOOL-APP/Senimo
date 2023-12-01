@@ -37,7 +37,6 @@ class SignUpActivity : AppCompatActivity() {
     }
     this.onBackPressedDispatcher.addCallback(this, callback)
 
-    
     // EditText에 포커스 리스너 설정
     binding.etSignUpId.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
       if (!hasFocus) {
@@ -52,8 +51,8 @@ class SignUpActivity : AppCompatActivity() {
       }
     }
 
-    // 중복 확인 결과에 따라 다음 버튼 활성화/비활성화 설정
-   setNextButtonEnabled(false) // 초이게 비활성화 상태로 설정
+  // 중복 확인 결과에 따라 다음 버튼 활성화/비활성화 설정
+  setNextButtonEnabled(false)
 
     // id 중복 확인
     binding.btnIdCheck.setOnClickListener {
@@ -168,7 +167,6 @@ class SignUpActivity : AppCompatActivity() {
       override fun onResponse(call: Call<SignUpResVO>, response: Response<SignUpResVO>) {
         Log.d("checkId", response.toString())
 
-
         val checkIdRes = response.body()
         if (checkIdRes != null) {
           when (checkIdRes.rows) {
@@ -194,7 +192,6 @@ class SignUpActivity : AppCompatActivity() {
         } else {
           Log.d("checkId", "응답이 null입니다.")
         }
-
       }
 
       override fun onFailure(call: Call<SignUpResVO>, t: Throwable) {
@@ -202,7 +199,6 @@ class SignUpActivity : AppCompatActivity() {
         // 네트워크 요청 실패 시 다음 버튼 비활성화
         setNextButtonEnabled(false)
       }
-
     })
   }
 }
