@@ -44,19 +44,26 @@ class MainActivity : AppCompatActivity() {
     val callback = object : OnBackPressedCallback(true){
       override fun handleOnBackPressed() {
         val currentTabId = binding.bnvMain.selectedItemId
-        if (currentTabId == R.id.M_tab1) {
-          if(System.currentTimeMillis() - backPressedTime >= 2000){
-            backPressedTime = System.currentTimeMillis()
-            Toast.makeText(this@MainActivity, "뒤로가기 버튼을 한번 더 누르면 앱을 종료합니다.", Toast.LENGTH_SHORT).show()
-          }else if (System.currentTimeMillis() - backPressedTime < 2000){
-            finish()
-          }
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fl)
+
+        if (currentFragment is ChatFragment) {
+          navigateBackToChatMainFragment()
         } else {
-          binding.bnvMain.selectedItemId = R.id.M_tab1
+          if (currentTabId == R.id.M_tab1) {
+            if(System.currentTimeMillis() - backPressedTime >= 2000){
+              backPressedTime = System.currentTimeMillis()
+              Toast.makeText(this@MainActivity, "뒤로가기 버튼을 한번 더 누르면 앱을 종료합니다.", Toast.LENGTH_SHORT).show()
+            } else if (System.currentTimeMillis() - backPressedTime < 2000){
+              finish()
+            }
+          } else {
+            binding.bnvMain.selectedItemId = R.id.M_tab1
+          }
         }
       }
     }
     this.onBackPressedDispatcher.addCallback(this, callback)
+
   }
 
   /** 하단 바 네비게이션 함수 */
@@ -177,16 +184,6 @@ class MainActivity : AppCompatActivity() {
       }
     }
   }
-
-  // 뒤로가기 버튼을 눌렀을 때 M_tab1로 이동하도록 설정
-//  override fun onBackPressed() {
-//    val currentTabId = binding.bnvMain.selectedItemId
-//    if (currentTabId != R.id.M_tab1) {
-//      binding.bnvMain.selectedItemId = R.id.M_tab1
-//    } else {
-//      super.onBackPressed()
-//    }
-//  }
 
   // ChatMainFragment 에서 ChatFragment로 이동시키게 하는 함수 만들기
   // 내 모임리스트 -> 내 모임 방
