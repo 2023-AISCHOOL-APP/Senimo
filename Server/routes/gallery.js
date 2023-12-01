@@ -41,9 +41,9 @@ router.post('/uploadPhotos', upload.array('picture'), async (req, res) => {
         await conn.beginTransaction();
 
         const galleryInfo = JSON.parse(req.body.galleryInfo);
-        console.log("사진이 업로드되었습니다. :",galleryInfo)
+        //console.log("사진이 업로드되었습니다. :",galleryInfo)
         const files = req.files;
-        console.log("사진이 업로드되었습니다. :",files)
+        //console.log("사진이 업로드되었습니다. :",files)
         const { user_id, club_code } = galleryInfo;
 
         // tb_photo에 데이터 삽입
@@ -83,7 +83,7 @@ router.get('/getGallery', async (req, res) => {
     console.log("사진첩 정보조회 시작하겠습니다.");
     let conn;
     try {
-        console.log("사진첩 정보조회 시작하겠습니다1.");
+        //console.log("사진첩 정보조회 시작하겠습니다1.");
         conn = await connectDatabase(); // 데이터베이스 연결
         const club_code = req.query.club_code;
         const query = `
@@ -100,17 +100,17 @@ router.get('/getGallery', async (req, res) => {
         ORDER BY p.photo_dt DESC;
         `;
         const [results] = await conn.query(query, [club_code]);
-        console.log("사진첩 정보조회 시작하겠습니다2.");
+        //console.log("사진첩 정보조회 시작하겠습니다2.");
         if (results.length === 0) {
             res.status(200).json(results);
-            console.log("사진첩 정보조회1 :", results);
+            //console.log("사진첩 정보조회1 :", results);
         }else{
             res.json(results);
-            console.log("사진첩 정보조회2 :", results);
+            //console.log("사진첩 정보조회2 :", results);
         }
         
          // GalleryVO 정보를 클라이언트에 전송
-        console.log("사진첩 정보조회 :", results);
+        //console.log("사진첩 정보조회 :", results);
     } catch (err) {
         res.status(500).send('서버 오류: ' + err.message);
         console.log("사진첩 정보조회 실패했습니다..");

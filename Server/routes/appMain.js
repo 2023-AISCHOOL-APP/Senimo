@@ -38,8 +38,7 @@ GROUP BY
     c.club_img, 
     k.keyword_name
 ORDER BY 
-    attend_user_cnt DESC
-LIMIT 10;`
+    attend_user_cnt DESC;`
   
 
   conn.query(query, (err, rows) => {

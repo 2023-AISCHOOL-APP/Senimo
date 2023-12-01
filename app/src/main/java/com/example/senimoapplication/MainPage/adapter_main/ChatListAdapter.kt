@@ -47,7 +47,7 @@ class ChatListAdapter(val context: Context, val layout: Int, val data: List<Chat
             tv_M_ChatContent = view.findViewById(R.id.tv_M_ChatContent) // 채팅 내용
             tv_M_Time = view.findViewById(R.id.tv_M_Time) // 채팅 시간
             tv_M_New = view.findViewById(R.id.tv_M_New) // 새로 온 채팅
-            v_M_NewShape = view.findViewById(R.id.v_M_NewShape)
+            v_M_NewShape = view.findViewById(R.id.v_M_NewShape) //
         }
     }
 
@@ -60,7 +60,7 @@ class ChatListAdapter(val context: Context, val layout: Int, val data: List<Chat
     override fun onBindViewHolder(holder: ChatListAdapter.ViewHolder, position: Int) {
         val CHATLIST_TITLE_MAX_TEXT_LENGTH = 16 // 최대 채팅 제목 수
         val CHATLIST_CONTENT_MAX_TEXT_LENGTH = 36 // 최대 채팅 내용 수
-        Glide.with(context).load(data[position].meetingImg).into(holder.img_M_ChatImg as ImageView)
+        Glide.with(context).load(data[position].club_img).into(holder.img_M_ChatImg as ImageView)
 
         // 채팅 제목, 내용 가져오기
         val meetingTitle = data[position].meetingTitle

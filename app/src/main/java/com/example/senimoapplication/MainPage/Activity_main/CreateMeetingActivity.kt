@@ -497,6 +497,8 @@ class CreateMeetingActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 } else {
+                    Log.d("모임생성 에러 :", response.body().toString())
+                    Log.d("모임생성 에러 :", response.errorBody().toString())
                     //서버로부터 에러 응답을 받았을때 처리
                     Toast.makeText(this@CreateMeetingActivity,"모임이 생성에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }

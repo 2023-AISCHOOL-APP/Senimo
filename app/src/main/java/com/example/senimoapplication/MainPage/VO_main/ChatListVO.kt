@@ -6,14 +6,17 @@ import com.google.gson.annotations.SerializedName
 
 class ChatListVO(
     @SerializedName("user_img")
-    val meetingImg: String = "",
+    val userImg: String = "",
     @SerializedName("club_name")
     val meetingTitle: String = "",
     @SerializedName("chat_content")
     val recentlyMessage: String = "",
     @SerializedName("chat_dt")
     val time: String = "",
-    val newMessagesCount: Int = 0
+    val newMessagesCount: Int = 0,
+    val club_code : String = "",
+    val club_img : String = "" ,
+    val user_name : String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -24,7 +27,7 @@ class ChatListVO(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(meetingImg)
+        parcel.writeString(userImg)
         parcel.writeString(meetingTitle)
         parcel.writeString(recentlyMessage)
         parcel.writeString(time)

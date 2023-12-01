@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import com.example.senimoapplication.Club.VO.ScheduleVO
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     val view = binding.root
     // 액티비티 화면 출력
     setContentView(view)
+
+    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN) // 채팅 위로 안올라게 하는 코드
 
     setupBottomNavigation()
     handleSelectedTabFromIntent()

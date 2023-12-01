@@ -15,8 +15,10 @@ import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.adapter_main.ChatListAdapter
 import com.example.senimoapplication.R
 import com.example.senimoapplication.MainPage.VO_main.ChatListVO
+import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,6 +31,7 @@ class ChatMainFragment : Fragment() {
 
     private val chatList = mutableListOf<ChatListVO>() // ChatListVO 객체를 담을 리스트
     private lateinit var chatListAdapter: ChatListAdapter
+    var chatListVO: ArrayList<ChatListVO> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,11 +79,14 @@ class ChatMainFragment : Fragment() {
         val userId =PreferenceManager.getUser(requireContext())?.user_id
         val service = Server(requireContext()).service
         if (userId != null) {
-            service.getChatRooms(userId).enqueue(object : Callback<List<ChatListVO>> {
-                override fun onResponse(call: Call<List<ChatListVO>>, response: Response<List<ChatListVO>>) {
+            service.getChatRooms(userId).enqueue(object : Callback<ArrayList<ChatListVO>> {
+                override fun onResponse(call: Call<ArrayList<ChatListVO>>, response: Response<ArrayList<ChatListVO>>) {
                     if (response.isSuccessful) {
-                        Log.d("ChatMainFragment", "loadChatRooms 실행은 됨")
-                        Log.d("ChatMainFragment", response.body().toString())
+                        //Log.d("ChatMainFragment", "loadChatRooms 실행은 됨")
+                        chatListVO = response.body()!!
+                        Log.d("ChatMainFragment1", response.body().toString())
+                        val jsonResponse = Gson().toJson(response.body())
+                        Log.d("ChatMainFragment 받아온값", jsonResponse.toString())
                         if (response.body() != null) {
                             chatList.clear()
                             chatList.addAll(response.body()!!)
@@ -93,7 +99,7 @@ class ChatMainFragment : Fragment() {
                     }
                 }
 
-                override fun onFailure(call: Call<List<ChatListVO>>, t: Throwable) {
+                override fun onFailure(call: Call<ArrayList<ChatListVO>>, t: Throwable) {
                     // 통신 실패 처리
                 }
             })

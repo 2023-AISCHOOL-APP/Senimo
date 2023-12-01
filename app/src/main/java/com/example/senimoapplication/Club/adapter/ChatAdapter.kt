@@ -1,6 +1,7 @@
 package com.example.senimoapplication.Club.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -11,10 +12,11 @@ import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.VO.ChatVO
 import com.example.senimoapplication.Common.ChattingTime
 import com.example.senimoapplication.R
+import com.example.senimoapplication.server.Token.PreferenceManager
 import com.google.android.material.imageview.ShapeableImageView
 
 class ChatAdapter (val context: Context, val layout: Int, val data: ArrayList<ChatVO>) : RecyclerView.Adapter<ChatAdapter.ViewHolder>() {
-    val currentUserId = "asdf"
+    val currentUserId = PreferenceManager.getUser(context)?.user_id
     val inflater = LayoutInflater.from(context)
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val imgUserProfile : ShapeableImageView
@@ -39,10 +41,17 @@ class ChatAdapter (val context: Context, val layout: Int, val data: ArrayList<Ch
     }
 
     override fun onBindViewHolder(holder: ChatAdapter.ViewHolder, position: Int) {
-
+        Log.d("채팅받아온값 adapter1", data[position].toString())
+        Log.d("채팅받아온값 adapter2", data[position].userId.toString())
+        Log.d("채팅받아온값 adapter3", currentUserId.toString())
+        Log.d("채팅받아온값 adapter4", data[position].clubCode.toString())
+        Log.d("채팅받아온값 adapter5", data[position].userName.toString())
+        Log.d("채팅받아온값 adapter6", data[position].message.toString())
+        Log.d("채팅받아온값 adapter7", data[position].imageUri.toString())
         val imageUrl = data[position].imageUri
         if(data[position].userId == currentUserId) {
             // 내가 보낸 메시지
+            Log.d("채팅받아온값 내가 보낸메시지", data[position].toString())
             holder.tvMyChatTime.text = ChattingTime(data[position].messageTime)
             holder.tvChatMyMessage.text = data[position].message
 
@@ -53,6 +62,7 @@ class ChatAdapter (val context: Context, val layout: Int, val data: ArrayList<Ch
 
         }else{
             // 다른 사람이 보낸 메시지
+            Log.d("채팅받아온값 다른사람이 보낸메시지", data[position].toString())
             Glide.with(context)
                 .load(imageUrl)
                 .placeholder(R.drawable.animation_loading) // 로딩 중 표시될 이미지

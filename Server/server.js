@@ -1,7 +1,11 @@
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
+const http = require('http');
+const server = http.createServer(app);
+const socketIo = require('socket.io');
 
 const authController = require('./token/authController')
 const appMainRouter = require('./routes/appMain');
@@ -26,11 +30,12 @@ const updatePosts = require('./routes/board')
 const chatRoom = require('./routes/chatRoom')
 const getUserRole = require('./routes/getUserRole')
 const myPageRouter = require('./routes/myPage')
+// const chatRouter = require('./routes/chat')
 
 
 app.use(cors())
 
-app.set('port', process.env.PORT || 5555);
+//app.set('port', process.env.PORT || 5555);
 //ngrok tunnel --label edge=edghts_2YKdAEOOgOIr0zDkBYxQMo8mcyg http://localhost:80
 
 app.use(bodyParser.json());
@@ -65,7 +70,43 @@ app.use('/', initialInterestedClub)
 app.use('/', chatRoom)
 app.use('/', getUserRole)
 app.use('/', myPageRouter)
+// app.use('/', chatRouter)
 
-app.listen(app.get('port'), () => {
-  console.log(app.get('port'), '번 포트에서 대기중..');
-})
+// app.listen(app.get('port'), () => {
+//   console.log(app.get('port'), '번 포트에서 대기중..');
+// })
+
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+    console.log('New client connected');
+
+    socket.on('joinRoom', (roomId) => {
+      socket.join(roomId);
+      console.log('roomId 입니다',roomId);
+  });
+
+  socket.on('chat message', (roomId, message) => {
+      io.to(roomId).emit('chat message', message);
+      console.log('message 입니다',message);
+  });
+
+// // 클라이언트로부터 메시지 수신
+// socket.on('new message', (message) => {
+//     // 받은 메시지를 다른 클라이언트에게 전송
+//     console.log('Received message:', message);
+
+//     // 모든 클라이언트에 메시지 송신
+//     io.emit('chat message', message);
+// });
+
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
+
+const PORT = process.env.PORT || 5555;
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

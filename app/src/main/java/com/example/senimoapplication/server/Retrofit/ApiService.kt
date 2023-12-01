@@ -271,7 +271,7 @@ interface ApiService {
     fun deleteSche(@Field("sche_code") scheCode: String?): Call<DeleteScheResVO>
 
     @GET("/loadChatRooms")
-    fun getChatRooms(@Query("userId") userId: String) : Call<List<ChatListVO>>
+    fun getChatRooms(@Query("userId") userId: String) : Call<ArrayList<ChatListVO>>
 
     @GET("/getMeeting/{sche_code}")
     fun getMeeting(@Path("sche_code") scheCode: String): Call<MeetingVO>

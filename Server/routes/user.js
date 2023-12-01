@@ -18,7 +18,7 @@ router.post('/validateToken', normalAuth, (req, res) => { //normalAuth,
 
 // 로그인 기능
 router.post('/login', (req, res) => {
-  console.log('login router', req.body);
+  //console.log('login router', req.body);
   const { user_id, user_pw } = req.body;
   const loginSql = `SELECT * FROM tb_user WHERE user_id=?`;
 
