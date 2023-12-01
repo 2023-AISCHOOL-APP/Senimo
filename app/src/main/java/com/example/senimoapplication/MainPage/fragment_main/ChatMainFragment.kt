@@ -1,6 +1,5 @@
 package com.example.senimoapplication.MainPage.fragment_main
 
-
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.senimoapplication.Club.adapter.GalleryAdapter
-import com.example.senimoapplication.Common.myChatListDate
 import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.adapter_main.ChatListAdapter
 import com.example.senimoapplication.R
@@ -39,11 +36,6 @@ class ChatMainFragment : Fragment() {
         // 현재 시간에 가까운 ISO 8601 형식의 문자열 생성
         val currentIsoTimeSting = generateCurrentIsoTimeString()
 
-        // chatList에 ChatListVO 데이터를 추가
-//        chatList.add(ChatListVO("user1_profile.jpg", "모임 제목 1", "첫 번째 메시지 내용", "2023-11-16T12:00:08.123Z", 2))
-//        chatList.add(ChatListVO("user2_profile.jpg", "모임 제목 2", "두 번째 메시지 내용", currentIsoTimeSting, 1))
-//        chatList.add(ChatListVO("user3_profile.jpg", "모임 제목 3", "세 번째 메시지 내용", currentIsoTimeSting, 0))
-
         chatListAdapter = ChatListAdapter(requireContext(), R.layout.chat_list, chatList)
         // RecyclerView 설정
         val rv_M_ChatList = view.findViewById<RecyclerView>(R.id.rv_M_ChatList)
@@ -60,18 +52,12 @@ class ChatMainFragment : Fragment() {
 
                 // ChatFragment로 이동되었는지 확인
                 Log.d("ChatMainFragment", "ChatFragment added to fl_ChatRoom")
-
             }
-
         })
 
         return view
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        loadChatRooms() // 사용자가 프래그먼트로 돌아올 때마다 채팅방 목록을 새로고침
-//    }
     private fun loadChatRooms() {
         val userId =PreferenceManager.getUser(requireContext())?.user_id
         val service = Server(requireContext()).service

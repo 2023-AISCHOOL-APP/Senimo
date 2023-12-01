@@ -38,10 +38,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-
 class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>, val listener: PostUpdateListener, val clickedMeeting: MeetingVO?) : RecyclerView.Adapter<PostAdapter.ViewHolder> (){
-
-
     val inflater = LayoutInflater.from(context)
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val tvUserName : TextView
@@ -59,7 +56,6 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>,
         val tvCommentSend : TextView
         val tvCommentTitle : TextView
         val postCard : CardView
-
 
         init{
             tvUserName = view.findViewById(R.id.tv_P_userName)
@@ -138,7 +134,6 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>,
                 override fun onFailure(call: Call<DeletePostResVO>, t: Throwable) {
                     Log.e("deletePost", "deletePost 네트워크 요청 실패", t)
                 }
-
             })
         }
     }
@@ -178,14 +173,12 @@ class PostAdapter(val context: Context, val layout: Int, val data: List<PostVO>,
             .error(R.drawable.ic_profile_circle) // 로딩 실패 시 표시될 이미지
             .into(holder.CommentuserProfileImg)
 
-
         val content = data[position].postContent
         holder.tvContent.text = if (content.length > 40) {
             content.substring(0, 40) + "..."
         } else {
             content
         }
-
 
         holder.tvUserName.text = data[position].userName
         when(data[position].clubRole){

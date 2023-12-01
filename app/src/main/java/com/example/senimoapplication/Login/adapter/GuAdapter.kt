@@ -70,7 +70,4 @@ class GuAdapter(val layout: Int, val list: ArrayList<String>, val context: Conte
   fun getSelectedItem(): String {
     return list[selectedPosition]
   }
-
-
-
 }

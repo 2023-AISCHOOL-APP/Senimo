@@ -2,17 +2,14 @@ package com.example.senimoapplication.Club.Activity_club
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils.indexOf
 import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.example.senimoapplication.Club.VO.GalleryVO
 import com.example.senimoapplication.Club.VO.loadGalleryVO
 import com.example.senimoapplication.Club.adapter.PhotoViewAdapter
-import com.example.senimoapplication.Common.photoUploadTime
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityPhotoBinding
 
@@ -38,8 +35,6 @@ class PhotoActivity : AppCompatActivity() {
         // originData 리스트의 내용을 로그로 출력 (예: 처음 5개 항목)
         originData?.take(5)?.forEachIndexed { index, photo ->
             Log.d("PhotoActivity3", "click Photo at index $index: $photo")}
-
-
 
         val selectedIndex = originData.indexOfFirst { it.imgThumbName == clickedPhoto?.imgThumbName }
         val adapter = PhotoViewAdapter(this,this, R.layout.photo_view_list, originData)
@@ -114,9 +109,6 @@ class PhotoActivity : AppCompatActivity() {
         })
 
         itemTouchHelper.attachToRecyclerView(binding.rvPhoto)
-
-
-
     }
 }
 

@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.senimoapplication.Club.VO.CommentVO
-import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.myChatListDate
 import com.example.senimoapplication.R
 import com.google.android.material.imageview.ShapeableImageView

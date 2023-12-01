@@ -4,8 +4,6 @@ package com.example.senimoapplication.Club.fragment
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.OpenableColumns
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
@@ -45,10 +42,8 @@ class GalleryFragment : Fragment() {
     // private lateinit var pickMultipleMedia: ActivityResultLauncher<PickVisualMediaRequest>
     lateinit var clubCode : String
 
-
     var photoList: ArrayList<loadGalleryVO> = ArrayList()
     private var isUploading = false
-
 
     // Fragment 내에서 실행할 함수
     private fun fetchDataFromServer() {
@@ -80,9 +75,6 @@ class GalleryFragment : Fragment() {
         }
     }
 
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,10 +85,8 @@ class GalleryFragment : Fragment() {
         // clickedMeeting = activity?.intent?.getParcelableExtra<MeetingVO>("clickedMeeting")
         Log.d("이미지처음받는클럽코드..",clickedMeeting?.club_code.toString())
 
-
         val spf = activity?.getSharedPreferences("club", Context.MODE_PRIVATE)
         clubCode = spf?.getString("clubcode", "null").toString()
-
 
         // loadGallery(clubCode)
         // 여기에서 갤러리 데이터 및 어댑터를 설정합니다.
@@ -107,13 +97,8 @@ class GalleryFragment : Fragment() {
 
         //updateGallery(photoList)
         // 리사이클러뷰에 어댑터 설정
-
         binding.rvGallery.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.rvGallery.adapter = adapter
-
-
-        // 포스트가 없을 경우 안내 메시지 표시
-
 
         // 이미지 추가 버튼 클릭 이벤트 처리
         binding.imgFloatingNewPhoto.setOnClickListener {
@@ -136,9 +121,6 @@ class GalleryFragment : Fragment() {
                 Log.d("PhotoPicker", "No media selected")
             }
         }
-
-
-
 
     // 이미지 URI에서 파일 이름을 추출하는 함수
     fun getFileName(uri: Uri):String?{
@@ -215,16 +197,12 @@ class GalleryFragment : Fragment() {
                     Log.d("resultGallery", galleryList.size.toString())
                     Log.d("resultGallery", galleryList.size.toString())
                     if (galleryList.isEmpty() && !isUploading) {
-                        // 빈 결과에 대한 처리. 예: 사용자에게 알림 표시
-//                        Toast.makeText(context, "사진첩이 비어있습니다.", Toast.LENGTH_SHORT).show()
                     } else {
                         val galleryList = response.body()
                         Log.d("galleryList0", response.toString())
                         Log.d("galleryList1", galleryList?.get(0)?.imgThumbName.toString())
                         val jsonResponse = Gson().toJson(galleryList)
-                        //Log.d("galleryList1: ",galleryList[0].imgThumbName.toString())
                         Log.d("galleryList2 : ", jsonResponse.toString())
-//                    Log.d("galleryList3: ", jsonResponse.toString())
                         // updateGallery(galleryList) // 받은 데이터로 UI 업데이트
                         Log.d("adapter동작","111111111111---")
                             if (galleryList != null) {
@@ -233,8 +211,6 @@ class GalleryFragment : Fragment() {
                                 Log.d("adapter동작","111111111111")
 
                         }
-//                        onComplete?.invoke()
-//
                     }
                 } else {
                     // 에러 처리
@@ -249,7 +225,6 @@ class GalleryFragment : Fragment() {
                 Toast.makeText(requireContext(), "갤러리 통신 실패", Toast.LENGTH_SHORT).show()
             }
         })
-
     }
 
     private fun updateGallery(galleryList: List<loadGalleryVO>) {
@@ -259,11 +234,5 @@ class GalleryFragment : Fragment() {
         adapter.data.addAll(galleryList)
         adapter.notifyDataSetChanged()
         Log.d("adapter동작","222222222")
-
     }
-
-
-
-    // 사진첩 조회 함수
-
 }

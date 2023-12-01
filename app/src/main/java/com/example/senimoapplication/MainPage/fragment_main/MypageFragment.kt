@@ -3,7 +3,6 @@ package com.example.senimoapplication.MainPage.fragment_main
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.Profile
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,7 +16,6 @@ import com.example.senimoapplication.MainPage.Activity_main.EditMyPageActivity
 import com.example.senimoapplication.MainPage.VO_main.BadgeRes
 import com.example.senimoapplication.MainPage.VO_main.BadgeVO
 import com.example.senimoapplication.MainPage.VO_main.MyPageVO
-import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentMypageBinding
 import com.example.senimoapplication.server.Server
@@ -43,7 +41,6 @@ class MypageFragment : Fragment() {
         } else {
             Log.e("MypageFragment", "결과가 OK가 아님. 결과 코드: ${result.resultCode}")
         }
-
     }
 
     private fun updateUIWithProfile(it: MyPageVO) {
@@ -87,9 +84,7 @@ class MypageFragment : Fragment() {
         binding.tvMUserIntroMore.setOnClickListener {
             binding.tvMUserIntro.text = fullIntroText // 전체 소개글 사용
             binding.tvMUserIntroMore.visibility = View.INVISIBLE
-
         }
-
     }
 
     override fun onCreateView(
@@ -109,12 +104,6 @@ class MypageFragment : Fragment() {
             val imgMBage = view?.findViewById<ImageView>(badgeId)
 
             imgMBage?.setOnClickListener {
-//                val badgeDrawableOnResId = resources.getIdentifier("ic_badge${i}_on", "drawable", requireContext().packageName)
-//                val badgeDrawableOffResId = resources.getIdentifier("ic_badge${i}_off", "drawable", requireContext().packageName)
-//
-//                val badgeDrawableOn = resources.getDrawable(badgeDrawableOnResId, requireContext().theme)
-//                val badgeDrawableOff = resources.getDrawable(badgeDrawableOffResId, requireContext().theme)
-
                 // 배지 상태에 따라 badgeGetInfo 설정
                 val badgeGetInfo = when (imgMBage.tag) {
                     "on" -> "보유 중"
@@ -163,7 +152,6 @@ class MypageFragment : Fragment() {
                 val badgeImageRes = if (badgeGetInfo == "보유 중") "ic_badge${i}_on" else "ic_badge${i}_off"
                 showBadgeDialogBox(requireActivity(), badgeImageRes, badgeName, badgeGetInfo, text1, text2)
             }
-
         }
 
         binding.tvMMoveEdit.setOnClickListener {
@@ -205,7 +193,6 @@ class MypageFragment : Fragment() {
                 override fun onFailure(call: Call<MyPageVO>, t: Throwable) {
                     Log.e("MypageFragment", "네트워크 요청 실패", t)
                 }
-
             })
         } ?: Log.e("MypageFragment", "User ID is null")
     }
@@ -244,7 +231,6 @@ class MypageFragment : Fragment() {
             override fun onFailure(call: Call<BadgeRes>, t: Throwable) {
                 Log.e("MyPageFragment 뱃지 리스트", "뱃지 가져오기 통신 실패", t)
             }
-
         })
     }
 

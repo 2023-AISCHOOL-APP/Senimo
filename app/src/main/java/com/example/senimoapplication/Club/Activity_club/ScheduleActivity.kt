@@ -27,11 +27,8 @@ import com.example.senimoapplication.Club.fragment.MemberManager
 import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.Common.formatDate
 import com.example.senimoapplication.Common.showActivityDialogBox
-import com.example.senimoapplication.Login.Activity_login.IntroActivity
-import com.example.senimoapplication.MainPage.Activity_main.MainActivity
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.databinding.ActivityScheduleBinding
-import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
 import retrofit2.Call

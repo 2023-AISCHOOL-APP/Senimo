@@ -22,12 +22,10 @@ class ScheduleMemberVO (
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-//        parcel.writeString(gu)
         parcel.writeString(userId)
         parcel.writeString(userName)
         parcel.writeInt(clubRole)
         parcel.writeString(userImg)
-
     }
 
     override fun describeContents(): Int {

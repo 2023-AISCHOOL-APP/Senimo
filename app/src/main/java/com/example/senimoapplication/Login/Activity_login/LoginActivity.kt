@@ -38,12 +38,6 @@ class LoginActivity : AppCompatActivity() {
     this.onBackPressedDispatcher.addCallback(this, callback)
 
     binding.btnLoginL.setOnClickListener {
-
-      // 임시로 서버가 안될때 그다음페이지로 넘어가게 넣어놓음
-//      val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//      startActivity(intent)
-//      finishAffinity()
-      //
       val userId = binding.etLoginId.text.toString()
       val userPw = binding.etLoginPw.text.toString()
       loginUser(userId, userPw)
@@ -57,7 +51,6 @@ class LoginActivity : AppCompatActivity() {
   }
 
   fun loginUser(userId: String, userPw: String){
-
     val service = Server(this).service
     val call = service.loginUser(userId, userPw)
     call.enqueue(object : Callback<TokenResponse> {
@@ -85,14 +78,6 @@ class LoginActivity : AppCompatActivity() {
             } else {
               Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
             }
-//          val LoginResVO = response.body()
-//          if (LoginResVO != null && LoginResVO.rows == "success") {
-//            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
-//            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//            startActivity(intent)
-//            finishAffinity()
-//          } else {
-//            Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
           }
         } else {
           Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
@@ -104,29 +89,4 @@ class LoginActivity : AppCompatActivity() {
       }
     })
   }
-
-
-//  fun refreshTokenIfNeeded() {
-//    val refreshToken = PreferenceManager.getRefreshToken(context)
-//    refreshToken?.let {
-//      val service = Server().service
-//      val call = service.refreshToken(it)
-//      call.enqueue(object : Callback<TokenResponse> {
-//        override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-//          if (response.isSuccessful) {
-//            response.body()?.let { tokenResponse ->
-//              PreferenceManager.setAccessToken(context, tokenResponse.accessToken)
-//            }
-//          } else {
-//            // 토큰 재발급 실패 처리
-//          }
-//        }
-//
-//        override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-//          // 네트워크 실패 처리
-//        }
-//      })
-//    }
-//  }
-
 }

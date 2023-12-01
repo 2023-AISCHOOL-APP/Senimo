@@ -6,6 +6,7 @@ import com.example.senimoapplication.server.Token.AuthInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 class Server(private val context: Context) {
     val retrofit: Retrofit by lazy {
         val client = OkHttpClient.Builder()

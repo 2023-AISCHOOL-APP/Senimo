@@ -138,7 +138,6 @@ class EnterMyInfoActivity : AppCompatActivity() {
       finish()
     }
 
-
     // 회원 소개글 글자 수 제한
     binding.etmlUserIntroS.addTextChangedListener(object : TextWatcher {
       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -159,7 +158,6 @@ class EnterMyInfoActivity : AppCompatActivity() {
         }
       }
     })
-
   }
 
   // 서버와 통신하여 회원가입하는 함수

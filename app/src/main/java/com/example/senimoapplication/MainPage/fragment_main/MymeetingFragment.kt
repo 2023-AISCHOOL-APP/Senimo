@@ -1,6 +1,5 @@
 package com.example.senimoapplication.MainPage.fragment_main
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,7 +20,6 @@ import com.example.senimoapplication.MainPage.VO_main.CombinedDataResVO
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.R
-import com.example.senimoapplication.databinding.MeetingListBinding
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
 import retrofit2.Call
@@ -32,7 +30,6 @@ import retrofit2.Response
 class MymeetingFragment() : Fragment() {
 
     private var showAllItems = false // 플래그 추가
-    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,7 +37,6 @@ class MymeetingFragment() : Fragment() {
         // 로그인한 사용자 정보 불러오기
         val userData = PreferenceManager.getUser(requireContext())
         val userId = userData?.user_id
-
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_mymeeting, container, false)
@@ -59,13 +55,11 @@ class MymeetingFragment() : Fragment() {
         val Img_M_Meeting_join_close = view.findViewById<ImageView>(R.id.Img_M_Meeting_join_close)
         val tv_M_JoinEmpty = view.findViewById<TextView>(R.id.tv_M_JoinEmpty)
 
-
         // 관심 모임, 더보기
         val rv_M_Meeting_interest = view.findViewById<RecyclerView>(R.id.rv_M_Meeting_interest)
         val Img_M_Meeting_interest_more = view.findViewById<ImageView>(R.id.Img_M_Meeting_interest_more)
         val Img_M_Meeting_interest_close = view.findViewById<ImageView>(R.id.Img_M_Meeting_interest_close)
         val tv_M_InterestEmpty = view.findViewById<TextView>(R.id.tv_M_InterestEmpty)
-
 
         if(userId != null){
             val server = Server(requireContext())
@@ -237,41 +231,8 @@ class MymeetingFragment() : Fragment() {
             // activity?.finish()
         }
 
-
         return view
     }
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        // 호기심탐험가
-//        // 관심 모임 개수 확인
-//        val interestedClubsCount = interestList.size
-//
-//        // 사용자 ID
-//        val userId = "" // 현재 사용자의 ID를 얻는 방법에 따라 달라짐
-//
-//        // 관심 모임 개수가 5개 이상이면 BadgeManager의 함수 호출
-//        if (interestedClubsCount >= 5) {
-//            BadgeManagerSingleton.instance.updateForInterestedClubs(userId, interestedClubsCount)
-//        }
-//
-//
-//        // 새싹모임러, 이구역모임왕
-//        val joinedMeetingCount = joinList.size
-//
-//        // 가입한 모임 개수에 따라 BadgeManager의 함수 호출
-//        val isFirstJoin = joinedMeetingCount == 1 // 첫 번째 가입인 경우
-//        if (isFirstJoin) {
-//            BadgeManagerSingleton.instance.updateForNewJoin(userId, joinedMeetingCount, isFirstJoin)
-//        }
-//
-//        if (joinedMeetingCount >= 5) {
-//            BadgeManagerSingleton.instance.updateForNewJoin(userId, joinedMeetingCount, false)
-//        }
-//    }
-
-
 
     private fun loadChatRooms() {}
 }

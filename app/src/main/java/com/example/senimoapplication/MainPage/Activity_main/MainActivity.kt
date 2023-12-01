@@ -7,10 +7,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import com.example.senimoapplication.Club.VO.ScheduleVO
 import com.example.senimoapplication.Club.fragment.ChatFragment
 import com.example.senimoapplication.MainPage.VO_main.ChatListVO
-import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.databinding.ActivityMainBinding
 import com.example.senimoapplication.MainPage.fragment_main.ChatMainFragment
 import com.example.senimoapplication.MainPage.fragment_main.HomeMainFragment
@@ -18,7 +16,6 @@ import com.example.senimoapplication.MainPage.fragment_main.MymeetingFragment
 import com.example.senimoapplication.MainPage.fragment_main.MypageFragment
 import com.example.senimoapplication.R
 
-//import com.example.senimoapplication.server.Token.TokenManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -66,7 +63,6 @@ class MainActivity : AppCompatActivity() {
       }
     }
     this.onBackPressedDispatcher.addCallback(this, callback)
-
   }
 
   /** 하단 바 네비게이션 함수 */
@@ -119,7 +115,6 @@ class MainActivity : AppCompatActivity() {
             HomeMainFragment()
           ).commit()
 
-
           binding.tvMToptitle.text = "시니모"
           binding.imgMAlertbtn.visibility = View.VISIBLE
           binding.imgMSettingbtn.visibility = View.INVISIBLE
@@ -137,7 +132,6 @@ class MainActivity : AppCompatActivity() {
           binding.imgMAlertbtn.visibility = View.INVISIBLE
           binding.imgMSettingbtn.visibility = View.INVISIBLE
           binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
-
         }
 
         R.id.M_tab3 -> {
@@ -150,10 +144,7 @@ class MainActivity : AppCompatActivity() {
           binding.imgMAlertbtn.visibility = View.INVISIBLE
           binding.imgMSettingbtn.visibility = View.INVISIBLE
           binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
-
-
         }
-
 
         R.id.M_tab4 -> {
           supportFragmentManager.beginTransaction().replace(
@@ -165,13 +156,11 @@ class MainActivity : AppCompatActivity() {
           binding.imgMAlertbtn.visibility = View.INVISIBLE
           binding.imgMSettingbtn.visibility = View.VISIBLE
           binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE
-
         }
       }
 
       true
     }
-
   }
 
   /** 선택된 탭 이동 함수 */
@@ -215,9 +204,7 @@ class MainActivity : AppCompatActivity() {
     ).commit()
     binding.imgMBackbtnToFrag1.visibility = View.INVISIBLE // 버튼 숨기기
   }
-
 }
-
 
 interface OnChatItemClickListener {
   fun navigateToChatFragment(chatListVO: ChatListVO)

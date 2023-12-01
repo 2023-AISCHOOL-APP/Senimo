@@ -33,7 +33,6 @@ class EditMyPageActivity : AppCompatActivity() {
     private var imageUri: Uri? = null // 클래스 수준 변수로 선언
     private var imageName: String? = null // 선택된 이미지의 이름을 저장
 
-
     lateinit var GuAdapter : GuAdapter
     lateinit var DongAdapter: DongAdapter
     lateinit var binding: ActivityEditMyPageBinding
@@ -76,8 +75,6 @@ class EditMyPageActivity : AppCompatActivity() {
             Log.e("EditMyPageActivity", "No user data available")
         }
 
-
-//        myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
         // 인텐트에서 소개글 길이 받기
         val introLength = intent.getIntExtra("introLength", 0)
         binding.tvMLetterCntMyPage.text = introLength.toString()
@@ -88,8 +85,6 @@ class EditMyPageActivity : AppCompatActivity() {
             // photo picker.
             if (uri != null) {
                 Log.d("PhotoPicker_main","Selected URI: $uri")
-//                binding.imgMEditPhoto.setImageURI(uri)
-//                binding.imgMEditPhoto.visibility = ImageView.VISIBLE
 
                 imageUri = uri // 클래스 수준 변수에 URI 저장
                 imageName = getFileName(uri)
@@ -102,15 +97,6 @@ class EditMyPageActivity : AppCompatActivity() {
                 Log.d("PhotoPicker_main", "No media selected")
             }
         }
-
-//        var myProfile = intent.getParcelableExtra<MyPageVO>("myProfileData") ?: MyPageVO()
-//        // 뷰에 데이터 설정
-//        Glide.with(this).load(myProfile.img).into(binding.imgMEditMypageImg)
-//        binding.etMUserName.setText(myProfile.name)
-//        binding.etMUserBirth.setText(myProfile.birth.toString())
-//        binding.etMGender.setText(myProfile.gender)
-//        binding.etMMyPageIntro.setText(myProfile.intro)
-
 
         binding.imgMEditPhoto.setOnClickListener {
             pickMediaMain.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -144,16 +130,12 @@ class EditMyPageActivity : AppCompatActivity() {
         // 현재 선택된 동 설정
         val selectedDongIndex : Int
 
-
-
         // DongAdapter 설정
         DongAdapter = DongAdapter(R.layout.dong_list, gwangsanList, applicationContext)
         binding.rvMEditDong.adapter = DongAdapter
 
         val girdLayoutManager = GridLayoutManager(applicationContext, 2)
         binding.rvMEditDong.layoutManager = girdLayoutManager
-
-
 
         GuAdapter.itemClickListener = object : GuAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
@@ -245,8 +227,6 @@ class EditMyPageActivity : AppCompatActivity() {
             }
         })
 
-
-
         binding.btnMSave.setOnClickListener {
             // 사용자 입력 데이터 가져오기
             val updatedName = binding.etMUserName.text.toString()
@@ -286,18 +266,7 @@ class EditMyPageActivity : AppCompatActivity() {
             call.enqueue(object : retrofit2.Callback<getMyPageVO> {
                 override fun onResponse(call: Call<getMyPageVO>, response: Response<getMyPageVO>) {
                     if (response.isSuccessful) {
-                         val returnIntent = Intent()
-//                        val updateProfile = MyPageVO(
-//                            img = imageUriString,
-//                            name = updatedName,
-//                            gu = selectedGu,
-//                            dong = selectedDong,
-//                            birth = updatedBirth,
-//                            gender = updatedGender,
-//                            intro = updatedIntro,
-//                            userId = userId.toString()
-//                            // badges = listOf() // 뱃지 정보는 현재 상황에 맞게 설정
-//                        )
+                        val returnIntent = Intent()
                         returnIntent.putExtra("updatedProfileData", updateProfile)
                         setResult(Activity.RESULT_OK, returnIntent)
                         Log.d("EditInfo","보내기:${updateProfile}")
@@ -309,7 +278,6 @@ class EditMyPageActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<getMyPageVO>, t: Throwable) {
                     Log.e("EditProfile", "updatedProfileData 네트워크 요청실패", t)
                 }
-
             })
 
             val intent = Intent(this@EditMyPageActivity, MainActivity::class.java)
@@ -326,12 +294,6 @@ class EditMyPageActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-
-
-
-
-
     }
 
     // 이미지 URI에서 파일 이름을 추출하는 함수
@@ -348,8 +310,6 @@ class EditMyPageActivity : AppCompatActivity() {
         }
         return imageName
     }
-
-
 }
 
 

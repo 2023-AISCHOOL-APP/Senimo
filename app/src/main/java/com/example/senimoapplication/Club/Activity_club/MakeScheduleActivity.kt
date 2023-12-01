@@ -32,7 +32,6 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import java.util.TimeZone
 
 
 class MakeScheduleActivity : ComponentActivity() {
@@ -63,7 +62,6 @@ class MakeScheduleActivity : ComponentActivity() {
       startActivity(intent)
       finish()
     }
-
 
     // Intent값이 있는 경우 : 일정 수정하기
     if (title !=null){
@@ -150,9 +148,7 @@ class MakeScheduleActivity : ComponentActivity() {
         }
       })
 
-
       // 선택된 날짜 캘린더 뷰에 표시
-
       val defaultDateString = DivideDateTime(clickedSchedule.scheDate).first
       binding.btnScheduleDate.text = defaultDateString
       val date = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).parse(defaultDateString)
@@ -375,8 +371,6 @@ class MakeScheduleActivity : ComponentActivity() {
         binding.tvAllMember.text = members.toString()
       }
     }
-
-
   }
 
   private fun getUserSelectedDateTime(): String {
@@ -479,5 +473,4 @@ class MakeScheduleActivity : ComponentActivity() {
       }
     })
   }
-
 }

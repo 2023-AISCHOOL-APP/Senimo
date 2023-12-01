@@ -1,7 +1,5 @@
 package com.example.senimoapplication.server.Token
 
-
-
 data class TokenValidationResponse(
         val success: Boolean,
         val message: String,

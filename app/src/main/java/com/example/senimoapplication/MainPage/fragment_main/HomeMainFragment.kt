@@ -6,9 +6,6 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ScrollView
@@ -24,17 +21,14 @@ import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.server.Retrofit.ApiService
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
-import com.example.senimoapplication.MainPage.VO_main.MyScheduleVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.MainPage.adapter_main.MyScheduleAdapter
 import com.example.senimoapplication.server.Token.PreferenceManager
-
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-// HomeMainFragment
 class HomeMainFragment : Fragment() {
 
     // 멤버변수로 선언, adapter를 HomeMainFragment 클래스의 멤버 변수로 변수로 선언해야함
@@ -71,12 +65,6 @@ class HomeMainFragment : Fragment() {
         val img_M_Selfimprovement = view.findViewById<ImageView>(R.id.img_M_Selfimprovement)
         val img_M_Financial = view.findViewById<ImageView>(R.id.img_M_Financial)
 
-
-//        if (myScheduleList.size == 0){
-//            Img_M_Schecule_Circle.visibility = INVISIBLE
-//        } else {
-//            Img_M_Schecule_Circle.visibility = VISIBLE
-//        }
         // 내 일정 RecyclerView 어댑터 생성 및 설정
         myScheduleAdapter = MyScheduleAdapter(requireContext(), R.layout.myschedule_list, myScheduleList)
 
@@ -222,12 +210,9 @@ class HomeMainFragment : Fragment() {
             }
         }
 
-
-
-
-
         return view
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -238,7 +223,6 @@ class HomeMainFragment : Fragment() {
     private fun fetchMeetings() {
         val service = Server(requireContext()).service
         service.getMeetings().enqueue(object : Callback<List<MeetingVO>> {
-
             override fun onResponse(
                 call: Call<List<MeetingVO>>,
                 response: Response<List<MeetingVO>>
@@ -258,11 +242,9 @@ class HomeMainFragment : Fragment() {
                             Log.d("oby3", AllClubList.count().toString())
                         }
                     } ?: run {
-
                         Log.d("HomeMainFragment", "모임 정보가 없습니다.")
                     }
                 } else {
-
                     Log.e("HomeMainFragment", "통신은 성공했으나 요청에 실패했습니다: ${response.code()}")
                 }
             }
@@ -307,5 +289,4 @@ class HomeMainFragment : Fragment() {
             }
         })
     }
-
 }

@@ -80,7 +80,6 @@ class CreateMeetingActivity : AppCompatActivity() {
                 binding.etMeetingIntro.text = Editable.Factory.getInstance().newEditable(content)
             }
 
-
             // 모임명
             binding.etMeetingName.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
@@ -175,7 +174,6 @@ class CreateMeetingActivity : AppCompatActivity() {
             setClubMembers { updatedMembers -> binding.tvMAllMember.text = updatedMembers.toString() }
             meetingMembers = intent_meetingVO.allMember
 
-
             // 뒤로가기 버튼
             binding.ImgMBackbtnToFrag2.setOnClickListener { finish() }
 
@@ -236,7 +234,6 @@ class CreateMeetingActivity : AppCompatActivity() {
                     }
                 }
             }
-
         } // 모임생성
         else {
             Log.d("시작부분 확인", "else로 시작")
@@ -397,6 +394,7 @@ class CreateMeetingActivity : AppCompatActivity() {
             }
         }
     }
+
     // 모임 멤버 인원 설정 함수
     fun setClubMembers(onMemberChanged: (Int) -> Unit) {
         // 버튼 누르면 인원 수 변경 시키기 (일정 참가자수 상한선 : 50명)
@@ -415,9 +413,7 @@ class CreateMeetingActivity : AppCompatActivity() {
                 binding.tvMAllMember.text = meetingMembers.toString()
             }
         }
-
     }
-
 
     // 키워드 클릭 리스너
     private fun setupKeywordImageViews() {
@@ -544,10 +540,4 @@ class CreateMeetingActivity : AppCompatActivity() {
             }
         })
     }
-
-
-}
-
-private fun <T> Call<T>.enqueue(callback: Callback<MeetingVO>) {
-
 }

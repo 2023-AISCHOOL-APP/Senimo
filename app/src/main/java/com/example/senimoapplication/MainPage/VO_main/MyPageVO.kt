@@ -22,8 +22,6 @@ class MyPageVO(
     val intro: String = "",          // 소개글
     @SerializedName("user_id")
     val userId: String = "",
-    // val badges: List<Boolean> = listOf(), // 뱃지 활성화 상태 리스트 추가
-
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         img = parcel.readString() ?: "",
@@ -34,9 +32,6 @@ class MyPageVO(
         gender = parcel.readString() ?: "",
         intro = parcel.readString() ?: "",
         userId = parcel.readString() ?: "",
-
-        // badges = List(parcel.readInt()) { parcel.readByte() != 0.toByte() }  // 뱃지 리스트 읽기
-
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -48,8 +43,6 @@ class MyPageVO(
         parcel.writeString(gender)
         parcel.writeString(intro)
         parcel.writeString(userId)
-        // parcel.writeInt(badges.size) // 뱃지 리스트의 크기를 저장
-        // badges.forEach { parcel.writeByte(if (it) 1 else 0) } // 각 뱃지의 상태 저장
     }
 
     override fun describeContents(): Int {

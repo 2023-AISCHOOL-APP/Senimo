@@ -10,7 +10,6 @@ import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityUserProfileBinding
 import com.example.senimoapplication.server.Server
-import com.example.senimoapplication.server.Token.PreferenceManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,55 +34,49 @@ class userProfileActivity : AppCompatActivity() {
         binding.icBack.setOnClickListener {
             finish()
         }
-
-
-
-
-
     }
+
     // 선택한 사용자 정보 가져오기
     fun fetchUserData(userId : String?) {
-            val service = Server(this@userProfileActivity).service
-            service.getUserProfile(userId).enqueue(object : Callback<MyPageVO> {
-                override fun onResponse(call: Call<MyPageVO>, response: Response<MyPageVO>) {
-                    if(response.isSuccessful) {
-                        val userProfile = response.body()
-                        binding.tvUserName.text = userProfile?.name
-                        binding.tvUserIntro.text = userProfile?.intro
-                        binding.tvUserLoca.text = userProfile?.gu
-                        Glide.with(this@userProfileActivity)
-                            .load(userProfile?.img)
-                            .placeholder(R.drawable.animation_loading)
-                            .error(R.drawable.ic_profile_circle)
-                            .centerCrop()
-                            .into(binding.imgUser)
+        val service = Server(this@userProfileActivity).service
+        service.getUserProfile(userId).enqueue(object : Callback<MyPageVO> {
+            override fun onResponse(call: Call<MyPageVO>, response: Response<MyPageVO>) {
+                if(response.isSuccessful) {
+                    val userProfile = response.body()
+                    binding.tvUserName.text = userProfile?.name
+                    binding.tvUserIntro.text = userProfile?.intro
+                    binding.tvUserLoca.text = userProfile?.gu
+                    Glide.with(this@userProfileActivity)
+                        .load(userProfile?.img)
+                        .placeholder(R.drawable.animation_loading)
+                        .error(R.drawable.ic_profile_circle)
+                        .centerCrop()
+                        .into(binding.imgUser)
 
-                        val birthYearText = "${userProfile?.birth}"
-                        binding.tvUserBirthY.text = if (birthYearText.length > 4) { // 출생년도
-                            birthYearText.substring(0, 4) + "년생"
-                        } else {
-                            birthYearText + "년생"
-                        }
-
-                        // 성별 데이터 변환
-                        val genderTransformed = when (userProfile?.gender) {
-                            "F", "여" -> "여"
-                            "M", "남" -> "남"
-                            else -> userProfile?.gender
-                        }
-                        binding.tvUserGender.text = genderTransformed // 성별
-
-
-
+                    val birthYearText = "${userProfile?.birth}"
+                    binding.tvUserBirthY.text = if (birthYearText.length > 4) { // 출생년도
+                        birthYearText.substring(0, 4) + "년생"
                     } else {
-                        Log.e("MypageFragment", "응답실패: ${response.code()}")
+                        birthYearText + "년생"
                     }
-                }
 
-                override fun onFailure(call: Call<MyPageVO>, t: Throwable) {
-                    Log.e("MypageFragment", "네트워크 요청 실패", t)
+                    // 성별 데이터 변환
+                    val genderTransformed = when (userProfile?.gender) {
+                        "F", "여" -> "여"
+                        "M", "남" -> "남"
+                        else -> userProfile?.gender
+                    }
+                    binding.tvUserGender.text = genderTransformed // 성별
+
+                } else {
+                    Log.e("MypageFragment", "응답실패: ${response.code()}")
                 }
-            })
+            }
+
+            override fun onFailure(call: Call<MyPageVO>, t: Throwable) {
+                Log.e("MypageFragment", "네트워크 요청 실패", t)
+            }
+        })
     }
 
     // 선택한 사용자 뱃지 정보 가져오기
@@ -113,7 +106,6 @@ class userProfileActivity : AppCompatActivity() {
             override fun onFailure(call: Call<BadgeRes>, t: Throwable) {
                 Log.e("MyPageFragment 뱃지 리스트", "뱃지 가져오기 통신 실패", t)
             }
-
         })
     }
 
@@ -151,5 +143,4 @@ class userProfileActivity : AppCompatActivity() {
             }
         }
     }
-
 }

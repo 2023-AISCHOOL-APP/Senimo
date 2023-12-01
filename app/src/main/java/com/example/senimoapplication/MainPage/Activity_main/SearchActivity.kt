@@ -13,7 +13,6 @@ import com.example.senimoapplication.Common.RecyclerItemClickListener
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
 import com.example.senimoapplication.MainPage.adapter_main.MeetingAdapter
 import com.example.senimoapplication.databinding.ActivitySearchBinding
-import android.os.Parcelable
 import android.text.Editable
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -39,7 +38,6 @@ class SearchActivity : AppCompatActivity() {
         val categoryKeyword = intent.getStringExtra("CategoryKeyword") ?: ""
         Log.d("SearchActivity", "받아온 카테고리 키워드: $categoryKeyword")
 
-
         val isFromSearchBar = intent.getBooleanExtra("isFromSearchBar", false)
 
         if(!isFromSearchBar) {
@@ -62,8 +60,6 @@ class SearchActivity : AppCompatActivity() {
             Log.d("받아온 AllClubList", "Title: ${meeting.title}, Content: ${meeting.content}, Keyword: ${meeting.keyword}")
         }
 
-//        MeetingList = intent.getParcelableArrayListExtra("MeetingList")!!
-
         Log.d("받아온 AllClubList 전체", AllClubList.toString())
 
         // RecyclerView 초기 설정
@@ -71,8 +67,6 @@ class SearchActivity : AppCompatActivity() {
         val adapter = MeetingAdapter(applicationContext, R.layout.meeting_list, filteredMeetingList)
         searchRecyclerView.adapter = adapter
         searchRecyclerView.layoutManager = LinearLayoutManager(this@SearchActivity)
-
-
 
         binding.ImgMSearchIcon.setOnClickListener {
             val searchText = binding.tvMSearchBar.text.toString()
@@ -116,7 +110,6 @@ class SearchActivity : AppCompatActivity() {
         }
         onBackPressedDispatcher.addCallback(this, callback)
 
-        // val searchRecyclerView = view.findViewById<RecyclerView>(R.id.rv_M_CategoryMeeting)
         searchRecyclerView.addOnItemTouchListener(
             RecyclerItemClickListener(
                 this@SearchActivity,
@@ -175,7 +168,5 @@ class SearchActivity : AppCompatActivity() {
 
         // 변경된 제약 조건 적용
         constraintSet.applyTo(constraintLayout)
-
     }
-
 }

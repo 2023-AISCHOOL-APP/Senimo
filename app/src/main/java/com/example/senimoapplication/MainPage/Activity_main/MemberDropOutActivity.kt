@@ -64,7 +64,6 @@ class MemberDropOutActivity : AppCompatActivity() {
                     userDropOut(userId)
                 }
             }
-
         }
 
         binding.imgMBackbtnToSetting.setOnClickListener {
@@ -108,7 +107,6 @@ class MemberDropOutActivity : AppCompatActivity() {
             override fun onFailure(call: Call<UserDropOutResVO>, t: Throwable) {
                 Log.e("회원 탈퇴", "회원 탈퇴 네트워크 요청 실패", t)
             }
-
         })
     }
 }

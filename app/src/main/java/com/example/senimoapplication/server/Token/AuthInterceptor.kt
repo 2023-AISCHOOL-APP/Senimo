@@ -1,7 +1,6 @@
 package com.example.senimoapplication.server.Token
 
 import android.content.Context
-import com.example.senimoapplication.server.Token.PreferenceManager
 import okhttp3.Interceptor
 import okhttp3.Response
 

@@ -24,7 +24,6 @@ data class PostVO (
     @SerializedName("user_id")
     val userId: String = "",
     val imageChanged: Boolean = false
-
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         postCode = parcel.readString() ?: "",

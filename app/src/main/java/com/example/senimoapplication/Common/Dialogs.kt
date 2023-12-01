@@ -15,7 +15,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import com.example.senimoapplication.Club.Activity_club.ClubActivity
 import com.example.senimoapplication.Club.VO.DeleteMemberVO
 import com.example.senimoapplication.Club.VO.UpdateMemberVO
 import com.example.senimoapplication.Club.adapter.PostAdapter.Companion.deletePostData
@@ -30,8 +29,6 @@ import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-
 
 
 // 일정 관리 다이얼로그

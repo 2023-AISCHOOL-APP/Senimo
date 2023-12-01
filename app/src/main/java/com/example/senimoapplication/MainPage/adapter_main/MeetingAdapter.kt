@@ -1,8 +1,6 @@
 package com.example.senimoapplication.MainPage.adapter_main
 
 import android.content.Context
-import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.example.senimoapplication.R
 import com.example.senimoapplication.MainPage.VO_main.MeetingVO
-import kotlin.math.min
 
 class MeetingAdapter(val context: Context, val layout: Int, val data: List<MeetingVO>)
     : RecyclerView.Adapter<MeetingAdapter.ViewHolder>(){
@@ -34,7 +27,6 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
 
     private var itemClickListener : OnItemClickListener? = null
 
-
     fun setOnItemClickListener(listener: OnItemClickListener) {
         itemClickListener = listener
     }
@@ -48,9 +40,7 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         val tv_M_Keyword : TextView // 키워드
         val tv_M_attendance : TextView // 참가 인원
         val tv_M_allMember : TextView // 전체 인원
-        // val tv_M_Person : TextView
         val Img_M_Meeting : ImageView // 모임 사진
-        // val img_M_Backicon : ImageView
         init {
             tv_M_Gu = view.findViewById(R.id.tv_M_Gu)
             tv_M_Title = view.findViewById(R.id.tv_M_Title)
@@ -58,11 +48,8 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
             tv_M_Keyword = view.findViewById(R.id.tv_M_Keyword)
             tv_M_attendance = view.findViewById(R.id.tv_M_attendance)
             tv_M_allMember = view.findViewById(R.id.tv_M_allMember)
-            // tv_M_Person = view.findViewById(R.id.tv_M_attendance)
             Img_M_Meeting = view.findViewById(R.id.Img_M_Meeting)
-            // img_M_Backicon = view.findViewById(R.id.img_M_Backicon)
         }
-
     }
 
     // 1) 한 칸에 들어갈 디자인을 눈에 보이는 View로 바꿔서 ViewHolder클래스로 보내주는 기능
@@ -79,7 +66,6 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         return holder
 
     }
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
@@ -99,7 +85,6 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         holder.tv_M_Content.text = content_truncatedName
         holder.tv_M_Keyword.text = data[position].keyword
 
-
         when(data[position].keyword){
             "운동" -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword)
             "취미" -> holder.tv_M_Keyword.setBackgroundResource(R.drawable.keyword_color2)
@@ -111,9 +96,6 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
         }
         holder.tv_M_attendance.text = data[position].attendance.toString()
         holder.tv_M_allMember.text = "/${data[position].allMember.toString()}명"
-        // holder.tv_M_Person.text = data[position].person
-        // holder.Img_M_Meeting.setImageResource(R.drawable.golf_img)
-        // holder.img_M_Backicon.setImageResource(R.drawable.ic_back_black)
 
         // Glide를 사용하여 이미지 로드 및 표시
         val imageUrl = data[position].imageUri
@@ -122,18 +104,7 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
             .placeholder(R.drawable.ic_loading6) // 로딩 중 표시될 이미지
             .error(R.drawable.ic_meeting_profile) // 로딩 실패 시 표시될 이미지
             .into(holder.Img_M_Meeting)
-
-
     }
-
-//    override fun getItemCount(): Int {
-//        return if (showAllItems) {
-//            data.size // 플래그에 따라 항목 수가 달라집니다.
-//        } else {
-//            // 최대 2개까지만 표시
-//            min(3, data.size)
-//        }
-//    }
 
     override fun getItemCount(): Int {
         return data.size
@@ -156,5 +127,4 @@ class MeetingAdapter(val context: Context, val layout: Int, val data: List<Meeti
             "$truncatedFirstLine"
         }
     }
-
 }
