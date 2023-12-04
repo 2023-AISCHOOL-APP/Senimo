@@ -4,7 +4,7 @@ const conn = require('../config/database');
 const { generateTokens } = require('../token/jwt');
 const { normalAuth } = require('./auth'); // 파일 경로는 실제 경로에 맞게 수정해야 합니다.
 const bcrypt = require('bcrypt')
-
+const config = require('../config/config');
 
 router.post('/validateToken', normalAuth, (req, res) => { //normalAuth,
   // console.log("토큰검증하러왔어요 :",req);
@@ -60,7 +60,7 @@ router.post('/login', (req, res) => {
               user_gu: rows[0].user_gu,
               user_dong: rows[0].user_dong,
               user_introduce: rows[0].user_introduce,
-              user_img: rows[0].user_img
+              user_img: `${config.baseURL}/uploads/thumb/${rows[0].user_img}`
             };
 
             res.json({

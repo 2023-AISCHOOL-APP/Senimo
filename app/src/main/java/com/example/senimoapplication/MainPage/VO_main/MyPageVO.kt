@@ -22,6 +22,7 @@ class MyPageVO(
     val intro: String = "",          // 소개글
     @SerializedName("user_id")
     val userId: String = "",
+    val imageChanged: Boolean = false
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         img = parcel.readString() ?: "",

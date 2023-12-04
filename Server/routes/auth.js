@@ -32,7 +32,7 @@ async function normalAuth(req,res,next){
           user_gu: rows[0].user_gu,
           user_dong: rows[0].user_dong,
           user_introduce: rows[0].user_introduce,
-          user_img:rows[0].user_img
+          user_img:`${config.baseURL}/uploads/thumb/${rows[0].user_img}`
         }
         console.log("result는 담겼습니다.",result)
         res.locals.userInfo = result

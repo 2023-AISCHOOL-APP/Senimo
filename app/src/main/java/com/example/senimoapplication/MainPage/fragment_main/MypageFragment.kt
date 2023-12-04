@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.senimoapplication.Common.showBadgeDialogBox
 import com.example.senimoapplication.MainPage.Activity_main.EditMyPageActivity
 import com.example.senimoapplication.MainPage.VO_main.BadgeRes
@@ -20,6 +21,7 @@ import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.FragmentMypageBinding
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
+import kotlinx.coroutines.delay
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,20 +34,35 @@ class MypageFragment : Fragment() {
 
     private val INTRO_MAX_TEXT_LENGTH = 64 // 클래스 레벨로 상수 이동 : 최대 글자 수
     private var fullIntroText: String? = null
-
+    private var userProfile : MyPageVO? = null
     private val editProfileResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        Log.d("EditInfo동작2","호출은 왔나?")
+        Log.d("EditInfo동작2",result.toString())
+        Log.d("EditInfo동작2",Activity.RESULT_OK.toString())
         if (result.resultCode == Activity.RESULT_OK) {
-            fetchUserData()
+            val updatedProfileData = result.data?.getParcelableExtra<MyPageVO>("updatedProfileData")
+            Log.d("EditInfo동작2",updatedProfileData.toString())
+            updatedProfileData?.let {
+
+                Log.d("EditInfo동작1","2")
+                updateUIWithProfile(it)
+                Log.d("EditInfo동작1","3")
+                // 필요하다면 추가 작업 수행
+            }
+            //fetchUserData()
         } else {
             Log.e("MypageFragment", "결과가 OK가 아님. 결과 코드: ${result.resultCode}")
         }
     }
 
     private fun updateUIWithProfile(it: MyPageVO) {
+        Log.d("EditInfo동작1","4")
         Glide.with(this)
             .load(it.img)
+            .diskCacheStrategy(DiskCacheStrategy.NONE) // 디스크 캐시 무시
+            .skipMemoryCache(true) // 메모리 캐시 무시
             .placeholder(R.drawable.animation_loading)
             .error(R.drawable.ic_profile_circle)
             .centerCrop()
@@ -159,6 +176,8 @@ class MypageFragment : Fragment() {
             val userData = PreferenceManager.getUser(requireContext())
             val intent = Intent(requireContext(),EditMyPageActivity::class.java)
             intent.putExtra("introLength", userData?.user_introduce?.length ?: 0)
+            intent.putExtra("newprofile",userProfile)
+            Log.d("EditInfo동작1","6")
             editProfileResultLauncher.launch(intent)
             activity?.finish()
         }
@@ -168,20 +187,22 @@ class MypageFragment : Fragment() {
         return view
     }
 
-    override fun onResume() {
-        super.onResume()
-        fetchUserData() // 화면이 다시 보여질 때마다 데이터를 새로고침
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        fetchUserData() // 화면이 다시 보여질 때마다 데이터를 새로고침
+//    }
 
     // 사용자 프로필 정보 업데이트 함수
     fun fetchUserData() {
+        Log.d("EditInfo동작1","5")
         val userId = PreferenceManager.getUser(requireContext())?.user_id
         userId?.let {
             val service = Server(requireContext()).service
             service.getUserProfile(it).enqueue(object : Callback<MyPageVO>{
                 override fun onResponse(call: Call<MyPageVO>, response: Response<MyPageVO>) {
                     if(response.isSuccessful) {
-                        val userProfile = response.body()
+                        userProfile = response.body()
+                        Log.e("MypageFragment", userProfile.toString())
                         userProfile?.let { profile ->
                             updateUIWithProfile(profile)
                         }

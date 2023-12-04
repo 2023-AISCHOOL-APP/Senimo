@@ -22,8 +22,10 @@ import com.example.senimoapplication.MainPage.VO_main.MyPageVO
 import com.example.senimoapplication.MainPage.VO_main.getMyPageVO
 import com.example.senimoapplication.R
 import com.example.senimoapplication.databinding.ActivityEditMyPageBinding
+import com.example.senimoapplication.server.ImageUploader
 import com.example.senimoapplication.server.Server
 import com.example.senimoapplication.server.Token.PreferenceManager
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
 
@@ -43,6 +45,7 @@ class EditMyPageActivity : AppCompatActivity() {
         binding = ActivityEditMyPageBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        val newProfile = intent.getParcelableExtra<MyPageVO>("newprofile") //새로 업데이트 된 유저정보
 
         // PreferenceManager를 통해 현재 사용자의 데이터 가져오기
         val userData = PreferenceManager.getUser(this@EditMyPageActivity)
@@ -53,23 +56,23 @@ class EditMyPageActivity : AppCompatActivity() {
             Log.d("EditMyPageActivity", "가져온 데이터: $userData")
 
             Glide.with(this)
-                .load(userData.user_img)
+                .load(newProfile?.img)
                 .placeholder(R.drawable.animation_loading)
                 .error(R.drawable.ic_profile_circle)
                 .centerCrop()
                 .into(binding.imgMEditMypageImg)
 
-            binding.etMUserName.setText(userData?.user_name)
-            binding.etMUserBirth.setText(userData?.birth_year.toString())
+            binding.etMUserName.setText(newProfile?.name)
+            binding.etMUserBirth.setText(newProfile?.birth.toString())
 
-            val genderTransformed = when (userData?.gender) {
+            val genderTransformed = when (newProfile?.gender) {
                 "F", "여" -> "여"
                 "M", "남" -> "남"
-                else -> userData?.gender
+                else -> newProfile?.gender
             }
 
             binding.etMGender.setText(genderTransformed)
-            binding.etMMyPageIntro.setText(userData?.user_introduce)
+            binding.etMMyPageIntro.setText(newProfile?.intro)
         } ?: run {
             // userData가 null인 경우 로그 출력
             Log.e("EditMyPageActivity", "No user data available")
@@ -94,6 +97,7 @@ class EditMyPageActivity : AppCompatActivity() {
                     .into(binding.imgMEditMypageImg)
 
             } else {
+
                 Log.d("PhotoPicker_main", "No media selected")
             }
         }
@@ -125,7 +129,7 @@ class EditMyPageActivity : AppCompatActivity() {
 
         // 현재 선택된 구 설정
         // val selectedGuIndex = editGuList.indexOf(myProfile.gu)
-        val selectedGuIndex = editGuList.indexOf(userData?.user_gu)
+        val selectedGuIndex = editGuList.indexOf(newProfile?.gu)
 
         // 현재 선택된 동 설정
         val selectedDongIndex : Int
@@ -171,7 +175,7 @@ class EditMyPageActivity : AppCompatActivity() {
             GuAdapter.notifyDataSetChanged()
 
             // 사용자의 현재 구 위치에 따라 동 목록 설정
-            val currentDongList = when (userData?.user_gu) {
+            val currentDongList = when (newProfile?.gu) {
                 "광산구" -> gwangsanList
                 "남구" -> southList
                 "동구" -> eastList
@@ -184,7 +188,7 @@ class EditMyPageActivity : AppCompatActivity() {
 
             // 현재 선택된 동 위치 확인 및 설정
             // selectedDongIndex = currentDongList.indexOf(myProfile.dong)
-            selectedDongIndex = currentDongList.indexOf(userData?.user_dong)
+            selectedDongIndex = currentDongList.indexOf(newProfile?.dong)
             if (selectedDongIndex != -1) {
                 DongAdapter.selectedPosition = selectedDongIndex
                 DongAdapter.notifyDataSetChanged()
@@ -237,48 +241,37 @@ class EditMyPageActivity : AppCompatActivity() {
             // GuAdapter에서 선택된 항목 가져오기
             val selectedGu = GuAdapter.getSelectedItem()
             val selectedDong = DongAdapter.getSelectedDongName()
-            val imageUriString = imageUri?.toString() ?: "" // URI를 String으로 변환
+            // val imageUriString = imageUri?.toString() ?: "" // URI를 String으로 변환
 
             // 사용자가 입력한 데이터로 myProfile 객체를 업데이트
 
             val userData = PreferenceManager.getUser(this@EditMyPageActivity)
             val userId =  userData?.user_id
-
-            val updateProfile = MyPageVO(
-                img = imageUriString,
+            val imageChanged = imageName != null
+            val myPageVO = MyPageVO(
+                img = imageName,
                 name = updatedName,
                 gu = selectedGu,
                 dong = selectedDong,
                 birth = updatedBirth,
                 gender = updatedGender,
                 intro = updatedIntro,
-                userId = userId.toString()
+                userId = userId.toString() ,
+                imageChanged = imageChanged
                 // badges = listOf() // 뱃지 정보는 현재 상황에 맞게 설정
             )
-
+            imageUri?.let {
+                val imagePart = ImageUploader(this).prepareImagePart(it)
+                editMyprofile(myPageVO,imagePart)
+                Log.d("click 프로필 수정 정보 전송완료", imagePart.toString())
+            } ?: run {
+                editMyprofile(myPageVO,null)
+            }
             // 로그 출력
-            Log.d("EditProfile","수정된 프로필 정보 : $updateProfile ")
+            Log.d("EditProfile","수정된 프로필 정보 : $myPageVO")
 
 
-            val service = Server(this).service
-            val call = service.updateUserProfile(updateProfile)
-
-            call.enqueue(object : retrofit2.Callback<getMyPageVO> {
-                override fun onResponse(call: Call<getMyPageVO>, response: Response<getMyPageVO>) {
-                    if (response.isSuccessful) {
-                        val returnIntent = Intent()
-                        returnIntent.putExtra("updatedProfileData", updateProfile)
-                        setResult(Activity.RESULT_OK, returnIntent)
-                        Log.d("EditInfo","보내기:${updateProfile}")
-                    } else {
-                        Log.e("EditInfo", "Request not successful. Response code: ${response.code()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<getMyPageVO>, t: Throwable) {
-                    Log.e("EditProfile", "updatedProfileData 네트워크 요청실패", t)
-                }
-            })
+           /////
 
             val intent = Intent(this@EditMyPageActivity, MainActivity::class.java)
             intent.putExtra("selected_tab","M_tab4")
@@ -309,6 +302,35 @@ class EditMyPageActivity : AppCompatActivity() {
             }
         }
         return imageName
+    }
+
+    private fun editMyprofile(myPageVO:MyPageVO, imagePart : MultipartBody.Part?) {
+        val service = Server(this).service
+        val call = service.updateUserProfile(myPageVO,imagePart)
+
+        call.enqueue(object : retrofit2.Callback<getMyPageVO> {
+            override fun onResponse(call: Call<getMyPageVO>, response: Response<getMyPageVO>) {
+                if (response.isSuccessful) {
+
+                    val returnIntent = Intent()
+                    Log.d("EditMyPageActivity", "Response Data: ${response.body()?.result}")
+                    returnIntent.putExtra("updatedProfileData", response.body()?.result)
+                    setResult(Activity.RESULT_OK, returnIntent)
+
+                    Log.d("EditInfo동작1","1")
+                    Log.d("EditInfo1","보내기:${response}")
+                    Log.d("EditInfo2","보내기:${response.body()?.result}")
+                    Log.d("EditInfo","보내기:${myPageVO}")
+                    Log.d("EditInfo","보내기:${response}")
+                } else {
+                    Log.e("EditInfo", "Request not successful. Response code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<getMyPageVO>, t: Throwable) {
+                Log.e("EditInfo", "updatedProfileData 네트워크 요청실패", t)
+            }
+        })
     }
 }
 
