@@ -113,8 +113,8 @@ class GalleryFragment : Fragment() {
     val pickMultipleMedia =
         registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
             if (uris.isNotEmpty()) {
-                Log.d("clickPhotoPicker", "Number of items selected: ${uris.size}")
-                Log.d("clickPhotoPicker", "Number of items selected: ${uris}")
+               // Log.d("clickPhotoPicker", "Number of items selected: ${uris.size}")
+                //Log.d("clickPhotoPicker", "Number of items selected: ${uris}")
 
                 uploadPhotosToServer(uris)
             } else {
@@ -216,13 +216,13 @@ class GalleryFragment : Fragment() {
                     // 에러 처리
                     Log.d("adapter동작","66666666666666")
                     Log.d("galleryList fail : ",response.toString())
-                    Toast.makeText(requireContext(), "갤러리 정보 로드 실패", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "갤러리 정보 로드 실패", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<loadGalleryVO>>, t: Throwable) {
                 // 통신 실패 처리
-                Toast.makeText(requireContext(), "갤러리 통신 실패", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(requireContext(), "갤러리 통신 실패", Toast.LENGTH_SHORT).show()
             }
         })
     }

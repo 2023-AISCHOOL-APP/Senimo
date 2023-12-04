@@ -9,15 +9,16 @@ const config = require('../config/config')
 //const conn = require('../config/database');
 const { UPLOADS_PATH } = require('../config/config');
 require("dotenv").config();
+
 console.log("사진",process.env.HOST)
 // 데이터베이스 연결 설정 함수
 async function connectDatabase() {
     return await mysql.createConnection({
-        host: process.env.HOST,
-        user: process.env.USER,
-        password: process.env.PASSWORD,
-        port: 3307,
-        database: process.env.DATABASE
+        host:'project-db-stu3.smhrd.com',
+        user:'Insa4_App_final_3',
+        password:'aischool3',
+        port:3307,
+        database:'Insa4_App_final_3'
     });
 }
 
@@ -41,9 +42,9 @@ router.post('/uploadPhotos', upload.array('picture'), async (req, res) => {
         await conn.beginTransaction();
 
         const galleryInfo = JSON.parse(req.body.galleryInfo);
-        //console.log("사진이 업로드되었습니다. :",galleryInfo)
+        console.log("사진이 업로드되었습니다. :",galleryInfo)
         const files = req.files;
-        //console.log("사진이 업로드되었습니다. :",files)
+        console.log("사진이 업로드되었습니다. :",files)
         const { user_id, club_code } = galleryInfo;
 
         // tb_photo에 데이터 삽입
@@ -58,7 +59,8 @@ router.post('/uploadPhotos', upload.array('picture'), async (req, res) => {
             // 썸네일 생성 및 tb_photo_img에 데이터 삽입
             const thumbnailPath = `thumb_${file.filename}`;
             await sharp(file.path).resize(200, 200).toFile(`${UPLOADS_PATH}/thumb/${thumbnailPath}`);
-            await conn.query(`insert into tb_photo_img (img_name, img_original_name, img_thumb_name, img_size, img_ext, photo_code) values (?, ?, ?, ?, ?, ?)`, [file.filename, file.originalname, thumbnailPath, file.size, path.extname(file.originalname), photo_code]);
+            await conn.query(`insert into tb_photo_img (img_name, img_original_name, img_thumb_name, img_size, img_ext, photo_code) values (?, ?, ?, ?, ?, ?)`, 
+            [file.filename, file.originalname, thumbnailPath, file.size, path.extname(file.originalname), photo_code]);
         }
 
         await conn.commit();
@@ -91,7 +93,8 @@ router.get('/getGallery', async (req, res) => {
             CONCAT('${config.baseURL}/uploads/thumb/', pimg.img_thumb_name) AS img_thumb_name,
             u.user_name,
             j.club_role,
-            p.photo_dt
+            p.photo_dt,
+            CONCAT('${config.baseURL}/uploads/thumb/', u.user_img) AS user_img
         FROM tb_photo_img pimg
         JOIN tb_photo p ON pimg.photo_code = p.photo_code
         JOIN tb_user u ON p.user_id = u.user_id
@@ -103,17 +106,17 @@ router.get('/getGallery', async (req, res) => {
         //console.log("사진첩 정보조회 시작하겠습니다2.");
         if (results.length === 0) {
             res.status(200).json(results);
-            //console.log("사진첩 정보조회1 :", results);
+            console.log("사진첩 정보조회1 :", results);
         }else{
             res.json(results);
-            //console.log("사진첩 정보조회2 :", results);
+            console.log("사진첩 정보조회2 :", results);
         }
         
          // GalleryVO 정보를 클라이언트에 전송
         //console.log("사진첩 정보조회 :", results);
     } catch (err) {
         res.status(500).send('서버 오류: ' + err.message);
-        console.log("사진첩 정보조회 실패했습니다..");
+        console.log("사진첩 정보조회 실패했습니다.", err.message);
     } finally {
         if (conn) {
             await conn.end();

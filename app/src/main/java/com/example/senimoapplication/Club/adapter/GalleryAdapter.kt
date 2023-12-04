@@ -31,6 +31,7 @@ class GalleryAdapter(val context: Context, val layout: Int, val data: ArrayList<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Log.d("galleryList6: ", data[position].toString())
         Glide.with(context).load(data[position].imgThumbName).into(holder.img)
+        Glide.with(context).load(data[position].userImg)
         Log.d("adapter동작","4444444444444")
         Log.d("adapter동작중인가", data.size.toString())
         holder.img.setOnClickListener {

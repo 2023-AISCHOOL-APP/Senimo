@@ -178,8 +178,11 @@ interface ApiService {
         @Field("user_id") userId: String?
     ): Call<QuitClubResVO>
 
+    @Multipart
     @POST("/editMyProfile")
-    fun updateUserProfile(@Body profile: MyPageVO): Call<getMyPageVO>
+    fun updateUserProfile(@Part("profile")myPageVO: MyPageVO,
+                          @Part image: MultipartBody.Part?
+    ): Call<getMyPageVO>
 
     @GET("/getUserProfile")
     fun getUserProfile(@Query("userId") userId: String?): Call<MyPageVO>

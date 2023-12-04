@@ -9,7 +9,7 @@ object SocketManager {
 
     init {
         try {
-            mSocket = IO.socket("http://115.95.222.206:5555")
+            mSocket = IO.socket("http://192.168.70.151:5555") // 115.95.222.206
         } catch (e: URISyntaxException) {
             e.printStackTrace()
         }

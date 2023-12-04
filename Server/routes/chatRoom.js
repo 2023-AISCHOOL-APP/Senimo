@@ -27,7 +27,7 @@ router.get('/loadChatRooms', (req,res) => {
                 ch.chat_dt ,      -- 마지막 발화 시간
                 u.user_name,        -- 유저이름
                 c.club_code,		-- 클럼코드
-                concat('${config.baseURL}/uploads/', u.user_img) as user_img			-- 유저이미지
+                concat('${config.baseURL}/uploads/thumb/',u.user_img) as user_img			-- 유저이미지
             FROM 
                 tb_club c
             JOIN 

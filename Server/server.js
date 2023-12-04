@@ -40,7 +40,8 @@ app.use(cors())
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
-
+app.use(express.json()); // JSON 본문을 파싱하기 위한 설정
+app.use(express.urlencoded({ extended: true })); // URL 인코딩된 데이터를 파싱하기 위한 설정
 app.use('/uploads', express.static("C:/Users/gjaischool/Desktop/final_project/Senimo/Server/uploads")); // 도운 이미지 경로
 // app.use('/uploads', express.static("C:/Users/gjaischool1/Desktop/Final_Project/Senimo/Server/uploads")); // 지혜 이미지 경로
 //app.use('/uploads', express.static("C:/Users/aischool/Desktop/Senimo/Server/uploads")); // 희준 이미지 경로
